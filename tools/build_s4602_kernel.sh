@@ -38,7 +38,15 @@ fi
 cd "$LINUX"
 
 # ---- 1) 基线配置 + S4602 增量片段（与 CI 完全相同） ----
-cp arch/arm/configs/rv1126.generic.config .config
+# 基线 rv1126.generic.config 来自 OpenIPC/firmware（rv1109_lite_defconfig 的
+# BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE），不在 linux 树内。
+GENERIC_CFG="/tmp/rv1126.generic.config"
+if [ ! -f "$GENERIC_CFG" ]; then
+  echo "==> 下载 OpenIPC rv11xx 通用内核配置"
+  wget -q "https://raw.githubusercontent.com/OpenIPC/firmware/master/br-ext-chip-rockchip/board/rv11xx/rv1126.generic.config" -O "$GENERIC_CFG" \
+    || { echo "!! 下载失败，请将 rv1126.generic.config 放到 $GENERIC_CFG" >&2; exit 1; }
+fi
+cp "$GENERIC_CFG" .config
 MC=scripts/kconfig/merge_config.sh
 [ -f "$MC" ] || MC=scripts/merge_config.sh
 bash "$MC" -m .config "$FRAG"

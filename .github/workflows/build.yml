@@ -32,6 +32,13 @@ jobs:
       - name: Clone OpenIPC linux (rockchip-rv11xx)
         run: git clone --depth 1 --branch rockchip-rv11xx https://github.com/OpenIPC/linux.git /opt/linux
 
+      - name: Download OpenIPC rv11xx generic kernel config (baseline)
+        run: |
+          # rv1109_lite_defconfig 的 BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE 即指向此文件，
+          # 它是 OpenIPC 各 rv11xx 板的通用内核基线（不在 linux 树内，而在 firmware 仓库）。
+          wget -q "https://raw.githubusercontent.com/OpenIPC/firmware/master/br-ext-chip-rockchip/board/rv11xx/rv1126.generic.config" -O /tmp/rv1126.generic.config
+          ls -l /tmp/rv1126.generic.config
+
       - name: Build s4602 kernel (zImage)
         working-directory: /opt/linux
         env:
@@ -45,7 +52,7 @@ jobs:
           export PATH="$TOOLCHAIN_DIR:$PATH"
           # 以官方 rv1109-nand-lite 基线配置为基底，再叠加 S4602 增量片段
           # （board/s4602/s4602_kernel_fragment.config 是唯一事实源，CI 与本地脚本共用）。
-          cp arch/arm/configs/rv1126.generic.config .config
+          cp /tmp/rv1126.generic.config .config
           MC=scripts/kconfig/merge_config.sh
           [ -f "$MC" ] || MC=scripts/merge_config.sh
           bash "$MC" -m .config "$GITHUB_WORKSPACE/board/s4602/s4602_kernel_fragment.config"
@@ -53,7 +60,9 @@ jobs:
           make ARCH=arm -j"$(nproc)" zImage
 
       - name: Package FIT (zboot.img)
-        run: bash tools/make_fit.sh /opt/linux/arch/arm/boot/zImage docs/evidence/vendor-kernel.dtb firmware/zboot.img
+        run: |
+          mkdir -p firmware
+          bash tools/make_fit.sh /opt/linux/arch/arm/boot/zImage docs/evidence/vendor-kernel.dtb firmware/zboot.img
 
       - name: Download official nightly rootfs (rv1109-nand-lite)
         run: |
