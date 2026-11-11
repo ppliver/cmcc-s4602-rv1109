@@ -37,9 +37,12 @@ jobs:
         env:
           CROSS_COMPILE: arm-openipc-linux-gnueabihf-
           ARCH: arm
-          PATH: ${{ env.TOOLCHAIN_DIR }}:${{ env.PATH }}
+          TOOLCHAIN_DIR: ${{ env.TOOLCHAIN_DIR }}
         run: |
           set -e
+          # 注意：不能用 env: PATH 覆盖（${{ env.PATH }} 在 Actions 里为空，会清空系统 PATH）。
+          # 改为在脚本内追加，保留 cp/make/bash 等宿主工具。
+          export PATH="$TOOLCHAIN_DIR:$PATH"
           # 以官方 rv1109-nand-lite 基线配置为基底，再叠加 S4602 增量片段
           # （board/s4602/s4602_kernel_fragment.config 是唯一事实源，CI 与本地脚本共用）。
           cp arch/arm/configs/rv1126.generic.config .config
