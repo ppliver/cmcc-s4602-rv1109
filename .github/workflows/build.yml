@@ -61,7 +61,7 @@ jobs:
           bash "$MC" -m .config "$GITHUB_WORKSPACE/board/s4602/s4602_kernel_fragment.config"
           make ARCH=arm olddefconfig
           echo ">>> SC5338 / dependency config resolution:"
-          for s in VIDEO_V4L2 V4L2_SUBDEV_API I2C VIDEO_SC5338; do grep -E "^CONFIG_$s=" .config || echo "CONFIG_$s NOT SET"; done
+          for s in MEDIA_SUPPORT MEDIA_CONTROLLER VIDEO_V4L2 VIDEO_V4L2_SUBDEV V4L2_SUBDEV_API I2C VIDEO_SC5338; do grep -E "^CONFIG_$s=" .config || echo "CONFIG_$s NOT SET"; done
           grep -q '^CONFIG_VIDEO_SC5338=y$' .config || { echo "ERROR: SC5338 driver is not built-in (CONFIG_VIDEO_SC5338 != y). Aborting."; exit 1; }
           make ARCH=arm -j"$(nproc)" zImage
 

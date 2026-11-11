@@ -23,7 +23,7 @@ MAKEFILE_OBJ = "obj-$(CONFIG_VIDEO_SC5338) += sc5338.o"
 
 KCONFIG_BLOCK = """config VIDEO_SC5338
 \ttristate "SmartSens SC5338 sensor support"
-\tdepends on I2C && VIDEO_V4L2 && V4L2_SUBDEV_API
+\tdepends on I2C && VIDEO_V4L2
 \thelp
 \t  Support for the SmartSens SC5338 CMOS image sensor (chip id 0xce50,
 \t  2-lane MIPI CSI-2). Enables linear 2880x1620@30fps and HDR_X2
