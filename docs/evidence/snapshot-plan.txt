@@ -1,0 +1,36 @@
+# S4602 全片快照 —— MASKROM / rockusb 通道（只读，由 make_backup_plan.py 生成）
+#
+# 适用：当前半砖、进不了 "=>"、但 USB OTG 能枚举 VID 0x2207。
+# 全部是读命令；db 只把 loader 下载到 RAM，不写 flash。
+# 绝不要执行 wl / ef / gpt / prm / ul —— 那是写操作。
+# 详细 SOP：docs/FULL_BACKUP.md 第 6 节
+
+lsusb | grep 2207
+rkdeveloptool ld
+rkdeveloptool rfi              # 记录 Flash 容量，核对是否 523264 sectors
+rkdeveloptool rci              # 记录芯片信息
+rkdeveloptool rid              # 记录 Flash ID
+
+# db 的 loader 必须匹配本机 LPDDR4 512MB @ 924MHz (DDR Version V1.08 20210825)。
+# 优先用原厂 MiniLoaderAll.bin 或同型号正常机 dump；rkbin 只能作候选。
+# 把 <MiniLoaderAll.bin> 换成实际文件后再执行，不要原样粘贴。
+rkdeveloptool db <MiniLoaderAll.bin>
+rkdeveloptool td               # 连通性测试，通过才继续
+
+rkdeveloptool rl 0x0 0x10000 snap-00.bin
+rkdeveloptool rl 0x10000 0x10000 snap-01.bin
+rkdeveloptool rl 0x20000 0x10000 snap-02.bin
+rkdeveloptool rl 0x30000 0x10000 snap-03.bin
+rkdeveloptool rl 0x40000 0x10000 snap-04.bin
+rkdeveloptool rl 0x50000 0x10000 snap-05.bin
+rkdeveloptool rl 0x60000 0x10000 snap-06.bin
+rkdeveloptool rl 0x70000 0xfc00 snap-07.bin
+
+rkdeveloptool rd
+
+# ---- 覆盖说明 ----
+# 合计 0x7fc00 sectors = 0x0ff80000 B = 255.5 MiB
+# 块层读不到 0x0ff80000-0x10000000 的 512 KiB；
+# GPT 备表头 0x0ff7fe00 在可达范围内，务必确认它出现在 snap-07.bin 中。
+# 这份是「当前状态快照」，loader 区可能已被 2026-06-29 第 ⑨ 步污染，
+# 归档为 snapshot/，不要当 golden。见 FULL_BACKUP.md 第 8 节。

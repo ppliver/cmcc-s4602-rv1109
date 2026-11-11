@@ -1,0 +1,62 @@
+# 阶段 3 —— 内核启动参数（2026-11-11 按现场实证重写）
+#
+# ⚠ 本文件**不是**让你在 U-Boot 里 setenv bootargs。
+#    本机已被证明三条路都不通：
+#      1) 没有 `saveenv`（`env save` 只打印 usage），启动横幅是
+#         "Using default environment"，重启后 bootcmd/bootargs 全部恢复默认；
+#      2) `setenv bootargs` 对 root 参数**无效**：变砖记录 3643 行设了
+#         root=ubi0:rootfs rootfstype=ubifs，3706 行内核实际收到的仍是
+#         root=/dev/ubiblock0_0 rootfstype=squashfs ubi.mtd=9；
+#         日志里 7 次启动的 cmdline 全部如此；
+#      3) 「把 bootargs 写进内核 DTB chosen」也不保险 —— U-Boot 会把
+#         vendor-kernel.dtb 的 chosen 与 env 合并，并按 slot 改写 ubi.mtd。
+#
+# 正确做法：在**构建内核时**开 CONFIG_CMDLINE_FORCE=y，把完整 cmdline 写进
+# CONFIG_CMDLINE，彻底忽略 bootloader 传参。tools/build_s4602.sh 第 3 步已实现。
+# 完整推导见 docs/BOOT_FEASIBILITY.md 第 2 节。
+#
+# 本文件剩下的内容只有两件事：抄证据 + 在串口核对结果。逐条执行，不要粘贴整段。
+
+# --- 0. 抄原值进日志（只读）---
+printenv bootargs
+printenv bootcmd
+printenv mtdparts
+# 期望：bootcmd = "boot_fit;boot_android ${devtype} ${devnum};"
+#       bootargs = "storagemedia=mtd androidboot.storagemedia=mtd androidboot.mode=normal"
+# 不要改动它们。boot_fit 会从 boot 分区读自建 FIT，路径本来就对。
+
+# --- 1. 内置 cmdline 的内容（在构建机上设置，不在 U-Boot 里设）---
+# 关键项（SLOT 决定 ubi.mtd）：
+#   earlycon=uart8250,mmio32,0xff570000 console=ttyFIQ0,1500000
+#   ubi.mtd=8 或 9        ← _a=8 / _b=9，必须与刷写槽一致
+#   root=ubi0:rootfs rootfstype=ubifs
+#   mtdparts=spi-nand0:<原厂 14 分区串>
+# ⚠ CONFIG_MTD_CMDLINE_PARTS=y 依赖 mtdparts=；FORCE 之后 U-Boot 不再注入，
+#   漏掉这一项 MTD 分区不会出现、UBI attach 不了。
+# ⚠ 原厂 DTB chosen 里的 ubi.block=0,rootfs / root=/dev/ubiblock0_0 /
+#   rootfstype=squashfs 是给 squashfs rootfs 用的，OpenIPC 是 UBIFS，必须全部替换。
+
+# --- 2. RAM 里验证 FIT 格式（不改变启动参数）---
+fatload mmc 1:1 0x1000000 zboot.img.s4602
+iminfo 0x1000000
+# 必须列出 kernel / fdt 且 hash OK；magic 应为 d00dfeed。
+# 地址不能用 0x02008000：现场证明会撞
+# "KERNEL (0x02008000-0x02320e00) overlap FIT_USER"。
+bootm 0x1000000
+
+# --- 3. 启动后在串口核对（这一步才是真正的验收）---
+# a) 内核打印的 "Kernel command line" 必须是上面第 1 步的 UBIFS 参数，
+#    **不能**再出现 root=/dev/ubiblock0_0 或 rootfstype=squashfs。
+#    若仍出现 → CONFIG_CMDLINE_FORCE 没生效，回去改内核配置重新构建。
+# b) "ubi0: attached mtd<N>" 且 N 与刷写槽一致（_a=8 / _b=9）。
+# c) UBIFS mounted、init 起来、能 SSH。
+# d) 进系统后复核：
+#      cat /proc/cmdline
+#      cat /proc/mtd
+#      ipctool
+# e) majestic 出流是 L3 目标：当前 OpenIPC 内核树没有 SC5338 驱动，
+#    出不了图属已知缺口，不要误判成刷写失败反复重刷。
+
+# --- 4. 失败回滚 ---
+# 断电重启回未刷的那个原厂槽；必要时按 01-backup.txt / docs/RECOVERY.md
+# 写回备份分区。不要在没有干净备份的情况下反复试刷。

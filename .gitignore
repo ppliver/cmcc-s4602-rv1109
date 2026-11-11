@@ -1,0 +1,29 @@
+# ---- 不入库：原厂全片/分区备份（252MB，含业务数据、loader 区） ----
+移动千里眼S4602原厂固件备份/
+
+# ---- 不入库：大型二进制/镜像/解包产物 ----
+*.ubi
+*.tgz
+*.img
+*.bin
+src/firmware-master/
+out/
+*.log
+s4602变砖过程_*.txt
+
+# ---- 不入库：docs/evidence 下的分析快照（非源码，体积大） ----
+docs/evidence/*.json
+
+# ---- 不入库：CI 构建产物（通过 artifact 分发，不进 git） ----
+firmware/zboot.img
+firmware/rootfs.ubi.rv1109
+firmware/boot_a.img
+
+# ---- Python ----
+__pycache__/
+*.pyc
+.DS_Store
+
+# ---- 本地/内部 ----
+.workbuddy/
+ubifs-root/

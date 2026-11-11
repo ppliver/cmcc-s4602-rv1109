@@ -1,0 +1,58 @@
+SC5338 / 驱动源码公开检索记录（2026-11-11，GitHub code search API）
+================================================================================
+检索结论：全网公开可查的 sc5338.c 均为 Ingenic T 系（T41/T31）平台驱动，
+          没有 Rockchip 4.19 / RV1126 BSP 版 sc5338.c。
+          因此移植路径 = OpenIPC/linux 的 sc500ai.c（V4L2 骨架） + Ingenic 版寄存器表
+          + 从 S4602 原厂 vmlinux 里提取的原厂表（见 sc5338-regs-crosscheck.txt）。
+
+查询与命中（per_page=15，仅列代码文件）
+--------------------------------------------------------------------------------
+q=sc5338.c                     total=7
+  themactep/ingenic-sdk          common/sensor/t41/sc5338.c
+  OpenIPC/openingenic            kernel/sensors/t41/sc5338/sc5338.c
+  OpenIPC/openingenic            kernel/sensors/t41/sc5338/Kbuild
+  thingino/ingenic-sdk           4.4.94/sensor-src/t41/sc5338.c
+  thingino/ingenic-sdk           3.10.14/sensor-src/t41/sc5338.c
+
+q=SC5338_CHIP_ID               total=1
+  OpenIPC/openingenic            kernel/sensors/t41/sc5338/sc5338.c
+
+q=sc5338 extension:c            total=6
+  OpenIPC/openingenic / themactep/ingenic-sdk / thingino/ingenic-sdk 的 sc5338.c
+  themactep/ingenic-sdk / thingino/ingenic-sdk 的 sinfo/sensor_info.c
+
+q=0xce50 sc5338                 total=5
+  三份 sc5338.c + OpenIPC/website 的 data/sensors/smartsens.yml、
+  frontend/apps/site/src/data/sensors.json
+
+q=SC5338 chip_id                total=4   （四份 sc5338.c）
+q=sc5338 rockchip               total=0   ← 关键：无 Rockchip 版驱动
+q=Detected SC%06x sensor        total=0
+
+仓库树检索
+--------------------------------------------------------------------------------
+ZUTChenWang/rv1126_SDK (rockchip rv1126 v2.2.0 SDK, 2021-08-25)
+  git tree master recursive: 63,589 项（truncated=true）
+  含 external/camera_engine_rkaiq/iqfiles/sc500ai_YT10069_36IRC-5M-F10.xml
+  （说明 RV1126 SDK 里 rkaiq 的 IQ 文件按 sensor+模组命名，S4602 需要对应的
+   sc5338_CMK-OT1607-FV1_M12-40IRC-4MP-F16.xml —— 尚未从原厂 rootfs 取出）
+  该 SDK 树未见 sc5338.c / sc530ai.c。
+
+OpenIPC/linux 分支 rockchip-rv11xx（树快照 linux-tree-rv11xx.json, 68,270 项）
+  无 sc5338.c / smartsens 命名驱动
+  有 sc500ai.c / sc401ai.c / sc5239.c / sc430cs.c / sc200ai.c 等同族驱动
+  rv1126.generic.config：MEDIA_SUPPORT / VIDEO_V4L2 / V4L2_SUBDEV_API /
+  VIDEO_ROCKCHIP_CIF / VIDEO_ROCKCHIP_ISP / VIDEO_ROCKCHIP_ISPP 均为 y；
+  所有 CONFIG_VIDEO_SC* 均为 not set；CONFIG_VIDEO_IMX307=y；
+  CONFIG_CMDLINE_FORCE 未开（CONFIG_CMDLINE_EXTEND=y）。
+
+OpenIPC Wiki en/guide-supported-sensors.md
+  Rockchip 段只列 RV1109 / RV1126 两个芯片名，**没有列出任何 sensor**。
+
+器件规格参考
+--------------------------------------------------------------------------------
+openipc.org/cameras/sensors/sc5338p : SC5338P 4.7 MP, 2888x1628, 1/2.7", 2 um,
+                                     30 fps, MIPI CSI-2, 约 2024 年，量产中
+smartsenstech.com/en/mai_products  : SC5338P 5MP 1/2.7" 2.0um 2888Hx1628V 30fps
+                                     MIPI CSP41，DSI-2 Pro
+注意：SC5338P 与本机 SC5338（chip id 0xce50）是否同 die 未证实，型号不可互换。

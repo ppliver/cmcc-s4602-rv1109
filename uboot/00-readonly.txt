@@ -1,0 +1,29 @@
+# 阶段 0 —— 只读探测（安全，不改变设备任何状态）
+# 逐条复制到串口终端执行；'#' 开头是说明，不要整段粘贴。
+# 全部输出保存到 evidence/uboot-<时间戳>.log，或用 tools/probe_board.py 自动采集。
+#
+# 进入方式：上电瞬间持续按 Ctrl+C / 空格 / 回车打断启动，直到出现 "=>" 提示符。
+# RV1109 原厂串口常见 1500000 8N1，也有 115200；无输出先换波特率、交换 RX/TX。
+# 电平必须是 3.3V，不要接 5V。
+
+version
+printenv
+help
+bdinfo
+coninfo
+mtd list
+mtdparts
+nand info
+ubi info
+sf probe
+
+# 判读要点（把结论填进 board.yaml）：
+#  1. help 里有没有 tftp/tftpboot、nand/spinand/mtd、ubi/ubifsload、rockusb
+#  2. printenv 里 bootcmd / bootargs / mtdparts / ethaddr 原文
+#  3. nand info 里的容量、页大小、擦除块大小
+#  4. 是否存在签名校验提示（secure boot / verify / hash）
+#  5. version 里的 U-Boot 版本/编译日期：判断能否找到对应源码、是否带 UBI 命令
+#  6. help 里有无 rockusb（MASKROM 通道）；控制台完全进不去时，记录上电全日志
+#  7. 上述输出决定「要不要编译 U-Boot」—— 判据表见 docs/UBOOT.md 第 6 节。
+#     默认结论是「不编译、不覆盖」；只有 loader 损坏且无备份才考虑重建。
+# 某条命令报 "Unknown command" 属正常，记录下来即可，不要换成写命令去试。

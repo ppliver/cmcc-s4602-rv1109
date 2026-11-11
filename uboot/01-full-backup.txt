@@ -1,0 +1,60 @@
+# S4602 全片备份 —— U-Boot 通道（只读，由 make_backup_plan.py 生成）
+#
+# 前提：能进 "=>" 提示符；FAT32 SD 卡 >= 1 GiB，剩余 >= 512 MiB。
+# 逐条执行，逐条核对串口回显；任何一条报错立即停手。
+# 禁止连续粘贴多行命令（2026-06-29 的变砖就是粘贴被截断导致参数丢失）。
+# 详细 SOP：docs/FULL_BACKUP.md
+
+# ---- 前置：确认 SD 卡、几何、坏块表 ----
+mmc dev 1
+fatls mmc 1
+mtd list
+mtd bad spi-nand0
+# ↑ 把 mtd bad 的输出完整记进 meta/mtd-bad.txt。
+#   有坏块时 mtd read 会跳过且不留空洞，分块不能按偏移直接还原，见 FULL_BACKUP.md 第 3 节。
+
+# ---- 8 块 × 32 MiB：每条必须看到
+#     Reading 33554432 byte(s) ... / 33554432 bytes written ----
+# --- 块 00  off 0x00000000 -> 0x02000000 ---
+mtd read spi-nand0 0x1000000 0x00000000 0x2000000
+fatwrite mmc 1 0x1000000 full-00.bin 0x2000000
+
+# --- 块 01  off 0x02000000 -> 0x04000000 ---
+mtd read spi-nand0 0x1000000 0x02000000 0x2000000
+fatwrite mmc 1 0x1000000 full-01.bin 0x2000000
+
+# --- 块 02  off 0x04000000 -> 0x06000000 ---
+mtd read spi-nand0 0x1000000 0x04000000 0x2000000
+fatwrite mmc 1 0x1000000 full-02.bin 0x2000000
+
+# --- 块 03  off 0x06000000 -> 0x08000000 ---
+mtd read spi-nand0 0x1000000 0x06000000 0x2000000
+fatwrite mmc 1 0x1000000 full-03.bin 0x2000000
+
+# --- 块 04  off 0x08000000 -> 0x0a000000 ---
+mtd read spi-nand0 0x1000000 0x08000000 0x2000000
+fatwrite mmc 1 0x1000000 full-04.bin 0x2000000
+
+# --- 块 05  off 0x0a000000 -> 0x0c000000 ---
+mtd read spi-nand0 0x1000000 0x0a000000 0x2000000
+fatwrite mmc 1 0x1000000 full-05.bin 0x2000000
+
+# --- 块 06  off 0x0c000000 -> 0x0e000000 ---
+mtd read spi-nand0 0x1000000 0x0c000000 0x2000000
+fatwrite mmc 1 0x1000000 full-06.bin 0x2000000
+
+# --- 块 07  off 0x0e000000 -> 0x10000000 ---
+mtd read spi-nand0 0x1000000 0x0e000000 0x2000000
+fatwrite mmc 1 0x1000000 full-07.bin 0x2000000
+
+# ---- 可选 L2（含 OOB）：先用一块试布局，不要直接跑全片 ----
+# mtd read.raw.oob spi-nand0 0x1000000 0x00000000 0x20000
+# fatwrite mmc 1 0x1000000 oob-test.bin 0x22000
+# 确认布局后，每块 fatwrite 的 size 应为 0x2200000（不是 0x2000000）
+
+# ---- PC 侧校验（在主机上做，不是 U-Boot）----
+# stat -c '%n %s' full-*.bin        # 每个必须是 33554432
+# python tools/verify_full_dump.py --source chunks --dir <SD卡目录> --out snapshot/full-256M.img
+
+# 红线：本清单不含任何 mtd write / mtd erase。
+# mtd read 必须带齐 off/size，不带参数会缺省整片 0x10000000 并 data abort。

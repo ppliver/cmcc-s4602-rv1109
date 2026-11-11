@@ -1,0 +1,358 @@
+# SC5338 / 视频链路 dmesg 证据（由 tools/collect_sc5338.py 生成）
+
+## 来源
+#   qianliyan原厂固件启动信息.log (63837 B)
+#   s4602变砖过程_20260629_133651.txt (463261 B)
+
+## A. sensor 相关唯一事件（34 条，去时间戳，含出现次数）
+[  8x] qianliyan原厂固件启动信息.log:469  sc401ai 1-0030-2: driver version: 00.01.05
+[  8x] qianliyan原厂固件启动信息.log:470  sc401ai 1-0030-2: could not get sleep pinstate
+[  8x] qianliyan原厂固件启动信息.log:471  sc401ai 1-0030-2: Linked as a consumer to regulator.4
+[  8x] qianliyan原厂固件启动信息.log:472  sc401ai 1-0030-2: Linked as a consumer to regulator.2
+[  8x] qianliyan原厂固件启动信息.log:473  sc401ai 1-0030-2: Linked as a consumer to regulator.3
+[  8x] qianliyan原厂固件启动信息.log:474  sc401ai 1-0030-2: Unexpected sensor id(00ce50), ret(0)
+[  8x] qianliyan原厂固件启动信息.log:475  sc401ai 1-0030-2: Dropping the link to regulator.4
+[  8x] qianliyan原厂固件启动信息.log:476  sc401ai 1-0030-2: Dropping the link to regulator.2
+[  8x] qianliyan原厂固件启动信息.log:477  sc401ai 1-0030-2: Dropping the link to regulator.3
+[  8x] qianliyan原厂固件启动信息.log:478  sc530ai 1-0030-1: driver version: 00.01.01
+[  8x] qianliyan原厂固件启动信息.log:479  sc530ai 1-0030-1: supported_modes[0]
+[  8x] qianliyan原厂固件启动信息.log:480  sc530ai 1-0030-1: could not get sleep pinstate
+[  8x] qianliyan原厂固件启动信息.log:481  sc530ai 1-0030-1: Linked as a consumer to regulator.4
+[  8x] qianliyan原厂固件启动信息.log:482  sc530ai 1-0030-1: Linked as a consumer to regulator.2
+[  8x] qianliyan原厂固件启动信息.log:483  sc530ai 1-0030-1: Linked as a consumer to regulator.3
+[  1x] qianliyan原厂固件启动信息.log:484  sc530ai 1-0030-1: supported_modes not se
+[  8x] qianliyan原厂固件启动信息.log:488  sc530ai 1-0030-1: Unexpected sensor id(00ce50), ret(0)
+[  8x] qianliyan原厂固件启动信息.log:489  sc530ai 1-0030-1: Dropping the link to regulator.4
+[  8x] qianliyan原厂固件启动信息.log:490  sc530ai 1-0030-1: Dropping the link to regulator.2
+[  8x] qianliyan原厂固件启动信息.log:491  sc530ai 1-0030-1: Dropping the link to regulator.3
+[  8x] qianliyan原厂固件启动信息.log:492  sc5338 1-0030: driver version: 00.01.01
+[  8x] qianliyan原厂固件启动信息.log:493  sc5338 1-0030: supported_modes[0]
+[  8x] qianliyan原厂固件启动信息.log:494  sc5338 1-0030: could not get sleep pinstate
+[  8x] qianliyan原厂固件启动信息.log:495  sc5338 1-0030: Linked as a consumer to regulator.4
+[  8x] qianliyan原厂固件启动信息.log:496  sc5338 1-0030: Linked as a consumer to regulator.2
+[  8x] qianliyan原厂固件启动信息.log:497  sc5338 1-0030: Linked as a consumer to regulator.3
+[  8x] qianliyan原厂固件启动信息.log:498  sc5338 1-0030: supported_modes not set lane_num(2)
+[  8x] qianliyan原厂固件启动信息.log:499  sc5338 1-0030: Detected SC00ce50 sensor
+[  8x] qianliyan原厂固件启动信息.log:500  rockchip-mipi-dphy-rx ff4b0000.csi-dphy: match m01_f_sc5338 1-0030:bus type 4
+[  7x] qianliyan原厂固件启动信息.log:952  sc5338 1-0030: set format 2880x1620, hdr: 5
+[  7x] qianliyan原厂固件启动信息.log:956  rkcif_mipi_lvds: stream[0] start streaming
+[  7x] qianliyan原厂固件启动信息.log:958  rkcif_mipi_lvds: stream[1] start streaming
+[  7x] qianliyan原厂固件启动信息.log:967  sc5338 1-0030: start stream 2880x1620, hdr: 5
+[  7x] s4602变砖过程_20260629_133651.txt:438  sc530ai 1-0030-1: supported_modes not set lane_num(4)
+
+## B. 视频链路 / ISP 唯一事件（53 条）
+[  6x] qianliyan原厂固件启动信息.log:183  Kernel command line: user_debug=31 storagemedia=mtd androidboot.storagemedia=mtd androidboot.mode=normal  android_slotsufix=_b root=/dev/ubiblock0_0 coherent_pool=64K earlycon=uart8250,mmio32,0xff570000 console=ttyFIQ0 ubi.mtd=9 ubi.block=0,rootfs rootfstype=squashfs snd_aloop.index=7 mtdparts=spi-nand0:0x20000@0x0(gpt),0x100000@0x300000(uboot_a),0x100000@0x400000(uboot_b),0x80000@0x500000(devinfo_a),0x80000@0x580000(devinfo_b),0x400000@0x600000(boot_a),0x400000@0xa00000(boot_b),0x80000@0xe00000(misc),0x2c00000@0xe80000(system_a),0x2c00000@0x3a80000(system_b),0x5a00000@0x6680000(model),0xf00000@0xc080000(log),0x1800000@0xcf80000(data),0x17e0000@0xe780000(data_bk)
+[  8x] qianliyan原厂固件启动信息.log:259  media: Linux media interface: v0.10
+[  8x] qianliyan原厂固件启动信息.log:374  rockchip-mipi-csi2: probe success, v4l2_dev:(null)!
+[  8x] qianliyan原厂固件启动信息.log:375  iommu: Adding device ffae0000.rkcif to group 0
+[  8x] qianliyan原厂固件启动信息.log:376  rkcifhw ffae0000.rkcif: Linked as a consumer to ffae0800.iommu
+[  8x] qianliyan原厂固件启动信息.log:377  rkcifhw ffae0000.rkcif: can't request region for resource [mem 0xffae0000-0xffae7fff]
+[  8x] qianliyan原厂固件启动信息.log:378  rkcif rkcif_mipi_lvds: rkcif driver version: v00.01.0a
+[  8x] qianliyan原厂固件启动信息.log:379  rkcif rkcif_mipi_lvds: attach to cif hw node
+[  8x] qianliyan原厂固件启动信息.log:380  rkcif rkcif_mipi_lvds: rkcif wait line 0
+[  8x] qianliyan原厂固件启动信息.log:381  rkcif rkcif_mipi_lvds: Entity type for entity rockchip-mipi-csi2 was not initialized!
+[  8x] qianliyan原厂固件启动信息.log:382  rockchip-mipi-csi2: Async registered subdev
+[  8x] qianliyan原厂固件启动信息.log:383  iommu: Adding device ffb50000.rkisp to group 1
+[  8x] qianliyan原厂固件启动信息.log:384  rkisp_hw ffb50000.rkisp: Linked as a consumer to ffb51a00.iommu
+[  8x] qianliyan原厂固件启动信息.log:385  rkisp_hw ffb50000.rkisp: is_thunderboot: 0
+[  8x] qianliyan原厂固件启动信息.log:386  rkisp_hw ffb50000.rkisp: Missing rockchip,grf property
+[  8x] qianliyan原厂固件启动信息.log:387  rkisp_hw ffb50000.rkisp: can't request region for resource [mem 0xffb50000-0xffb5ffff]
+[  8x] qianliyan原厂固件启动信息.log:388  rkisp rkisp-vir0: rkisp driver version: v01.07.00
+[  8x] qianliyan原厂固件启动信息.log:389  rkisp rkisp-vir0: No memory-region-thunderboot specified
+[  8x] qianliyan原厂固件启动信息.log:390  rkisp rkisp-vir0: Entity type for entity rkisp-isp-subdev was not initialized!
+[  8x] qianliyan原厂固件启动信息.log:391  rkisp rkisp-vir0: Entity type for entity rkisp-csi-subdev was not initialized!
+[  8x] qianliyan原厂固件启动信息.log:392  rkisp rkisp-vir0: Entity type for entity rkisp-bridge-ispp was not initialized!
+[  8x] qianliyan原厂固件启动信息.log:393  iommu: Adding device ffb60000.rkispp to group 2
+[  8x] qianliyan原厂固件启动信息.log:394  rkispp_hw ffb60000.rkispp: Linked as a consumer to ffb60e00.iommu
+[  8x] qianliyan原厂固件启动信息.log:395  rkispp_hw ffb60000.rkispp: max input:0x0@0fps
+[  8x] qianliyan原厂固件启动信息.log:396  rkispp_hw ffb60000.rkispp: can't request region for resource [mem 0xffb60000-0xffb7ffff]
+[  8x] qianliyan原厂固件启动信息.log:397  rkispp_hw ffb60000.rkispp: failed to get cru reset
+[  8x] qianliyan原厂固件启动信息.log:398  rkispp rkispp-vir0: rkispp driver version: v01.07.00
+[  8x] qianliyan原厂固件启动信息.log:430  Synopsys Designware Multimedia Card Interface Driver
+[  8x] qianliyan原厂固件启动信息.log:524  rkcif rkcif_mipi_lvds: clear unready subdev num: 3
+[  8x] qianliyan原厂固件启动信息.log:525  rkcif_mipi_lvds: Async subdev notifier completed
+[  8x] qianliyan原厂固件启动信息.log:529  rkisp rkisp-vir0: clear unready subdev num: 1
+[  8x] qianliyan原厂固件启动信息.log:530  rkisp0: Async subdev notifier completed
+[  7x] qianliyan原厂固件启动信息.log:604  UBIFS (ubi12:0): media format: w5/r0 (latest is w5/r0), UUID 957E4FA7-C8FA-42DC-AE03-E956B181320B, small LPT model
+[  7x] qianliyan原厂固件启动信息.log:644  UBIFS (ubi13:0): media format: w5/r0 (latest is w5/r0), UUID B5BA5C83-7541-4804-9498-CA7BA425E99D, small LPT model
+[  7x] qianliyan原厂固件启动信息.log:685  UBIFS (ubi11:0): media format: w5/r0 (latest is w5/r0), UUID B013FE23-0B93-466E-8C67-DAB3668920B2, small LPT model
+[ 20x] qianliyan原厂固件启动信息.log:949  rkcif_mipi_lvds: static crop, S_CROP(2560x1440@160:90) type: 1
+[  7x] qianliyan原厂固件启动信息.log:957  rkcif_mipi_lvds: Allocate dummy buffer, size: 0x00492000
+[  1x] qianliyan原厂固件启动信息.log:959  rockchip-mipi-csi2 ffb10000.mipi-csi2: stream on, src_sd: 320c5041, sd_name:rockchip-mipi-dphy-rx
+[  7x] qianliyan原厂固件启动信息.log:960  rockchip-mipi-csi2 ffb10000.mipi-csi2: stream ON
+[ 14x] qianliyan原厂固件启动信息.log:961  rockchip-mipi-dphy-rx ff4b0000.csi-dphy: stream on:1
+[  7x] qianliyan原厂固件启动信息.log:962  rockchip-mipi-dphy-rx: data_rate_mbps 864
+[ 42x] qianliyan原厂固件启动信息.log:971  rkispp0: output:0x0 should euqal to input:2560x1440
+[ 35x] qianliyan原厂固件启动信息.log:980  rkispp0: scale1:0x0 out of range:
+[ 30x] qianliyan原厂固件启动信息.log:1002  rkispp0: scale0:0x0 out of range:
+[  1x] s4602变砖过程_20260629_133651.txt:834  rockchip-mipi-csi2 ffb10000.mipi-csi2: stream on, src_sd: f703ab55, sd_name:rockchip-mipi-dphy-rx
+[  7x] s4602变砖过程_20260629_133651.txt:1225  rkimgtest- Test if storage media have rockchip image
+[  3x] s4602变砖过程_20260629_133651.txt:1254  bootargs=storagemedia=mtd androidboot.storagemedia=mtd androidboot.mode=normal
+[  1x] s4602变砖过程_20260629_133651.txt:3497  rockchip-mipi-csi2 ffb10000.mipi-csi2: stream on, src_sd: af948902, sd_name:rockchip-mipi-dphy-rx
+[  1x] s4602变砖过程_20260629_133651.txt:4396  rockchip-mipi-csi2 ffb10000.mipi-csi2: stream on, src_sd: 82ed0a65, sd_name:rockchip-mipi-dphy-rx
+[  1x] s4602变砖过程_20260629_133651.txt:5790  rockchip-mipi-csi2 ffb10000.mipi-csi2: stream on, src_sd: 28160c56, sd_name:rockchip-mipi-dphy-rx
+[  1x] s4602变砖过程_20260629_133651.txt:6680  rockchip-mipi-csi2 ffb10000.mipi-csi2: stream on, src_sd: 5a5b6c13, sd_name:rockchip-mipi-dphy-rx
+[  1x] s4602变砖过程_20260629_133651.txt:7721  Cmiot login: [    5.970330] rkcif_mipi_lvds: static crop, S_CROP(2560x1440@160:90) type: 1
+[  1x] s4602变砖过程_20260629_133651.txt:7728  rockchip-mipi-csi2 ffb10000.mipi-csi2: stream on, src_sd: 80a825a6, sd_name:rockchip-mipi-dphy-rx
+
+## C. sensor 相关原始行（全部，保留时间戳与来源行号）
+qianliyan原厂固件启动信息.log:469: [    0.346213] sc401ai 1-0030-2: driver version: 00.01.05
+qianliyan原厂固件启动信息.log:470: [    0.346582] sc401ai 1-0030-2: could not get sleep pinstate
+qianliyan原厂固件启动信息.log:471: [    0.346719] sc401ai 1-0030-2: Linked as a consumer to regulator.4
+qianliyan原厂固件启动信息.log:472: [    0.346794] sc401ai 1-0030-2: Linked as a consumer to regulator.2
+qianliyan原厂固件启动信息.log:473: [    0.346862] sc401ai 1-0030-2: Linked as a consumer to regulator.3
+qianliyan原厂固件启动信息.log:474: [    0.357534] sc401ai 1-0030-2: Unexpected sensor id(00ce50), ret(0)
+qianliyan原厂固件启动信息.log:475: [    0.357802] sc401ai 1-0030-2: Dropping the link to regulator.4
+qianliyan原厂固件启动信息.log:476: [    0.357956] sc401ai 1-0030-2: Dropping the link to regulator.2
+qianliyan原厂固件启动信息.log:477: [    0.358083] sc401ai 1-0030-2: Dropping the link to regulator.3
+qianliyan原厂固件启动信息.log:478: [    0.358597] sc530ai 1-0030-1: driver version: 00.01.01
+qianliyan原厂固件启动信息.log:479: [    0.358643] sc530ai 1-0030-1: supported_modes[0]
+qianliyan原厂固件启动信息.log:480: [    0.359122] sc530ai 1-0030-1: could not get sleep pinstate
+qianliyan原厂固件启动信息.log:481: [    0.359303] sc530ai 1-0030-1: Linked as a consumer to regulator.4
+qianliyan原厂固件启动信息.log:482: [    0.359475] sc530ai 1-0030-1: Linked as a consumer to regulator.2
+qianliyan原厂固件启动信息.log:483: [    0.359618] sc530ai 1-0030-1: Linked as a consumer to regulator.3
+qianliyan原厂固件启动信息.log:484: [    0.359768] sc530ai 1-0030-1: supported_modes not se
+qianliyan原厂固件启动信息.log:488: [    0.366425] sc530ai 1-0030-1: Unexpected sensor id(00ce50), ret(0)
+qianliyan原厂固件启动信息.log:489: [    0.366700] sc530ai 1-0030-1: Dropping the link to regulator.4
+qianliyan原厂固件启动信息.log:490: [    0.366854] sc530ai 1-0030-1: Dropping the link to regulator.2
+qianliyan原厂固件启动信息.log:491: [    0.366984] sc530ai 1-0030-1: Dropping the link to regulator.3
+qianliyan原厂固件启动信息.log:492: [    0.367576] sc5338 1-0030: driver version: 00.01.01
+qianliyan原厂固件启动信息.log:493: [    0.367637] sc5338 1-0030: supported_modes[0]
+qianliyan原厂固件启动信息.log:494: [    0.368022] sc5338 1-0030: could not get sleep pinstate
+qianliyan原厂固件启动信息.log:495: [    0.368173] sc5338 1-0030: Linked as a consumer to regulator.4
+qianliyan原厂固件启动信息.log:496: [    0.368245] sc5338 1-0030: Linked as a consumer to regulator.2
+qianliyan原厂固件启动信息.log:497: [    0.368313] sc5338 1-0030: Linked as a consumer to regulator.3
+qianliyan原厂固件启动信息.log:498: [    0.368366] sc5338 1-0030: supported_modes not set lane_num(2)
+qianliyan原厂固件启动信息.log:499: [    0.375000] sc5338 1-0030: Detected SC00ce50 sensor
+qianliyan原厂固件启动信息.log:500: [    0.375078] rockchip-mipi-dphy-rx ff4b0000.csi-dphy: match m01_f_sc5338 1-0030:bus type 4
+qianliyan原厂固件启动信息.log:952: [    5.846908] sc5338 1-0030: set format 2880x1620, hdr: 5
+qianliyan原厂固件启动信息.log:956: [    5.998193] rkcif_mipi_lvds: stream[0] start streaming
+qianliyan原厂固件启动信息.log:958: [    6.000780] rkcif_mipi_lvds: stream[1] start streaming
+qianliyan原厂固件启动信息.log:967: [    6.025419] sc5338 1-0030: start stream 2880x1620, hdr: 5
+s4602变砖过程_20260629_133651.txt:423: [    0.346749] sc401ai 1-0030-2: driver version: 00.01.05
+s4602变砖过程_20260629_133651.txt:424: [    0.346984] sc401ai 1-0030-2: could not get sleep pinstate
+s4602变砖过程_20260629_133651.txt:425: [    0.347123] sc401ai 1-0030-2: Linked as a consumer to regulator.4
+s4602变砖过程_20260629_133651.txt:426: [    0.347197] sc401ai 1-0030-2: Linked as a consumer to regulator.2
+s4602变砖过程_20260629_133651.txt:427: [    0.347398] sc401ai 1-0030-2: Linked as a consumer to regulator.3
+s4602变砖过程_20260629_133651.txt:428: [    0.357801] sc401ai 1-0030-2: Unexpected sensor id(00ce50), ret(0)
+s4602变砖过程_20260629_133651.txt:429: [    0.358066] sc401ai 1-0030-2: Dropping the link to regulator.4
+s4602变砖过程_20260629_133651.txt:430: [    0.358222] sc401ai 1-0030-2: Dropping the link to regulator.2
+s4602变砖过程_20260629_133651.txt:431: [    0.358346] sc401ai 1-0030-2: Dropping the link to regulator.3
+s4602变砖过程_20260629_133651.txt:432: [    0.358875] sc530ai 1-0030-1: driver version: 00.01.01
+s4602变砖过程_20260629_133651.txt:433: [    0.358934] sc530ai 1-0030-1: supported_modes[0]
+s4602变砖过程_20260629_133651.txt:434: [    0.359395] sc530ai 1-0030-1: could not get sleep pinstate
+s4602变砖过程_20260629_133651.txt:435: [    0.359571] sc530ai 1-0030-1: Linked as a consumer to regulator.4
+s4602变砖过程_20260629_133651.txt:436: [    0.359810] sc530ai 1-0030-1: Linked as a consumer to regulator.2
+s4602变砖过程_20260629_133651.txt:437: [    0.359949] sc530ai 1-0030-1: Linked as a consumer to regulator.3
+s4602变砖过程_20260629_133651.txt:438: [    0.360031] sc530ai 1-0030-1: supported_modes not set lane_num(4)
+s4602变砖过程_20260629_133651.txt:439: [    0.367881] sc530ai 1-0030-1: Unexpected sensor id(00ce50), ret(0)
+s4602变砖过程_20260629_133651.txt:440: [    0.368081] sc530ai 1-0030-1: Dropping the link to regulator.4
+s4602变砖过程_20260629_133651.txt:441: [    0.368194] sc530ai 1-0030-1: Dropping the link to regulator.2
+s4602变砖过程_20260629_133651.txt:442: [    0.368281] sc530ai 1-0030-1: Dropping the link to regulator.3
+s4602变砖过程_20260629_133651.txt:443: [    0.368680] sc5338 1-0030: driver version: 00.01.01
+s4602变砖过程_20260629_133651.txt:444: [    0.368722] sc5338 1-0030: supported_modes[0]
+s4602变砖过程_20260629_133651.txt:445: [    0.368995] sc5338 1-0030: could not get sleep pinstate
+s4602变砖过程_20260629_133651.txt:446: [    0.369138] sc5338 1-0030: Linked as a consumer to regulator.4
+s4602变砖过程_20260629_133651.txt:447: [    0.369231] sc5338 1-0030: Linked as a consumer to regulator.2
+s4602变砖过程_20260629_133651.txt:448: [    0.369342] sc5338 1-0030: Linked as a consumer to regulator.3
+s4602变砖过程_20260629_133651.txt:449: [    0.369409] sc5338 1-0030: supported_modes not set lane_num(2)
+s4602变砖过程_20260629_133651.txt:450: [    0.375908] sc5338 1-0030: Detected SC00ce50 sensor
+s4602变砖过程_20260629_133651.txt:451: [    0.375990] rockchip-mipi-dphy-rx ff4b0000.csi-dphy: match m01_f_sc5338 1-0030:bus type 4
+s4602变砖过程_20260629_133651.txt:830: [    5.922644] sc5338 1-0030: set format 2880x1620, hdr: 5
+s4602变砖过程_20260629_133651.txt:831: [    6.071721] rkcif_mipi_lvds: stream[0] start streaming
+s4602变砖过程_20260629_133651.txt:833: [    6.074489] rkcif_mipi_lvds: stream[1] start streaming
+s4602变砖过程_20260629_133651.txt:839: [    6.101303] sc5338 1-0030: start stream 2880x1620, hdr: 5
+s4602变砖过程_20260629_133651.txt:3081: [    0.341905] sc401ai 1-0030-2: driver version: 00.01.05
+s4602变砖过程_20260629_133651.txt:3082: [    0.342112] sc401ai 1-0030-2: could not get sleep pinstate
+s4602变砖过程_20260629_133651.txt:3083: [    0.342209] sc401ai 1-0030-2: Linked as a consumer to regulator.4
+s4602变砖过程_20260629_133651.txt:3084: [    0.342269] sc401ai 1-0030-2: Linked as a consumer to regulator.2
+s4602变砖过程_20260629_133651.txt:3085: [    0.342346] sc401ai 1-0030-2: Linked as a consumer to regulator.3
+s4602变砖过程_20260629_133651.txt:3089: [    0.350489] sc401ai 1-0030-2: Unexpected sensor id(00ce50), ret(0)
+s4602变砖过程_20260629_133651.txt:3090: [    0.350641] sc401ai 1-0030-2: Dropping the link to regulator.4
+s4602变砖过程_20260629_133651.txt:3091: [    0.350704] sc401ai 1-0030-2: Dropping the link to regulator.2
+s4602变砖过程_20260629_133651.txt:3092: [    0.350752] sc401ai 1-0030-2: Dropping the link to regulator.3
+s4602变砖过程_20260629_133651.txt:3093: [    0.351024] sc530ai 1-0030-1: driver version: 00.01.01
+s4602变砖过程_20260629_133651.txt:3094: [    0.351043] sc530ai 1-0030-1: supported_modes[0]
+s4602变砖过程_20260629_133651.txt:3095: [    0.351195] sc530ai 1-0030-1: could not get sleep pinstate
+s4602变砖过程_20260629_133651.txt:3096: [    0.351273] sc530ai 1-0030-1: Linked as a consumer to regulator.4
+s4602变砖过程_20260629_133651.txt:3097: [    0.351321] sc530ai 1-0030-1: Linked as a consumer to regulator.2
+s4602变砖过程_20260629_133651.txt:3098: [    0.351366] sc530ai 1-0030-1: Linked as a consumer to regulator.3
+s4602变砖过程_20260629_133651.txt:3099: [    0.351408] sc530ai 1-0030-1: supported_modes not set lane_num(4)
+s4602变砖过程_20260629_133651.txt:3101: [    0.356593] sc530ai 1-0030-1: Unexpected sensor id(00ce50), ret(0)
+s4602变砖过程_20260629_133651.txt:3102: [    0.356726] sc530ai 1-0030-1: Dropping the link to regulator.4
+s4602变砖过程_20260629_133651.txt:3103: [    0.356823] sc530ai 1-0030-1: Dropping the link to regulator.2
+s4602变砖过程_20260629_133651.txt:3104: [    0.356900] sc530ai 1-0030-1: Dropping the link to regulator.3
+s4602变砖过程_20260629_133651.txt:3105: [    0.357238] sc5338 1-0030: driver version: 00.01.01
+s4602变砖过程_20260629_133651.txt:3106: [    0.357282] sc5338 1-0030: supported_modes[0]
+s4602变砖过程_20260629_133651.txt:3107: [    0.357543] sc5338 1-0030: could not get sleep pinstate
+s4602变砖过程_20260629_133651.txt:3108: [    0.357669] sc5338 1-0030: Linked as a consumer to regulator.4
+s4602变砖过程_20260629_133651.txt:3109: [    0.357785] sc5338 1-0030: Linked as a consumer to regulator.2
+s4602变砖过程_20260629_133651.txt:3110: [    0.357874] sc5338 1-0030: Linked as a consumer to regulator.3
+s4602变砖过程_20260629_133651.txt:3111: [    0.357934] sc5338 1-0030: supported_modes not set lane_num(2)
+s4602变砖过程_20260629_133651.txt:3112: [    0.364483] sc5338 1-0030: Detected SC00ce50 sensor
+s4602变砖过程_20260629_133651.txt:3113: [    0.364566] rockchip-mipi-dphy-rx ff4b0000.csi-dphy: match m01_f_sc5338 1-0030:bus type 4
+s4602变砖过程_20260629_133651.txt:3493: [    6.018615] sc5338 1-0030: set format 2880x1620, hdr: 5
+s4602变砖过程_20260629_133651.txt:3494: [    6.172790] rkcif_mipi_lvds: stream[0] start streaming
+s4602变砖过程_20260629_133651.txt:3496: [    6.175368] rkcif_mipi_lvds: stream[1] start streaming
+s4602变砖过程_20260629_133651.txt:3502: [    6.199320] sc5338 1-0030: start stream 2880x1620, hdr: 5
+s4602变砖过程_20260629_133651.txt:3980: [    0.346975] sc401ai 1-0030-2: driver version: 00.01.05
+s4602变砖过程_20260629_133651.txt:3981: [    0.347175] sc401ai 1-0030-2: could not get sleep pinstate
+s4602变砖过程_20260629_133651.txt:3982: [    0.347270] sc401ai 1-0030-2: Linked as a consumer to regulator.4
+s4602变砖过程_20260629_133651.txt:3983: [    0.347328] sc401ai 1-0030-2: Linked as a consumer to regulator.2
+s4602变砖过程_20260629_133651.txt:3984: [    0.347387] sc401ai 1-0030-2: Linked as a consumer to regulator.3
+s4602变砖过程_20260629_133651.txt:3989: [    0.356504] sc401ai 1-0030-2: Unexpected sensor id(00ce50), ret(0)
+s4602变砖过程_20260629_133651.txt:3990: [    0.356639] sc401ai 1-0030-2: Dropping the link to regulator.4
+s4602变砖过程_20260629_133651.txt:3991: [    0.356720] sc401ai 1-0030-2: Dropping the link to regulator.2
+s4602变砖过程_20260629_133651.txt:3992: [    0.356788] sc401ai 1-0030-2: Dropping the link to regulator.3
+s4602变砖过程_20260629_133651.txt:3993: [    0.357096] sc530ai 1-0030-1: driver version: 00.01.01
+s4602变砖过程_20260629_133651.txt:3994: [    0.357127] sc530ai 1-0030-1: supported_modes[0]
+s4602变砖过程_20260629_133651.txt:3995: [    0.357338] sc530ai 1-0030-1: could not get sleep pinstate
+s4602变砖过程_20260629_133651.txt:3996: [    0.357459] sc530ai 1-0030-1: Linked as a consumer to regulator.4
+s4602变砖过程_20260629_133651.txt:3997: [    0.357531] sc530ai 1-0030-1: Linked as a consumer to regulator.2
+s4602变砖过程_20260629_133651.txt:3998: [    0.357605] sc530ai 1-0030-1: Linked as a consumer to regulator.3
+s4602变砖过程_20260629_133651.txt:3999: [    0.357661] sc530ai 1-0030-1: supported_modes not set lane_num(4)
+s4602变砖过程_20260629_133651.txt:4000: [    0.363978] sc530ai 1-0030-1: Unexpected sensor id(00ce50), ret(0)
+s4602变砖过程_20260629_133651.txt:4001: [    0.364079] sc530ai 1-0030-1: Dropping the link to regulator.4
+s4602变砖过程_20260629_133651.txt:4002: [    0.364149] sc530ai 1-0030-1: Dropping the link to regulator.2
+s4602变砖过程_20260629_133651.txt:4003: [    0.364207] sc530ai 1-0030-1: Dropping the link to regulator.3
+s4602变砖过程_20260629_133651.txt:4004: [    0.364448] sc5338 1-0030: driver version: 00.01.01
+s4602变砖过程_20260629_133651.txt:4005: [    0.364482] sc5338 1-0030: supported_modes[0]
+s4602变砖过程_20260629_133651.txt:4006: [    0.364668] sc5338 1-0030: could not get sleep pinstate
+s4602变砖过程_20260629_133651.txt:4007: [    0.364749] sc5338 1-0030: Linked as a consumer to regulator.4
+s4602变砖过程_20260629_133651.txt:4008: [    0.364837] sc5338 1-0030: Linked as a consumer to regulator.2
+s4602变砖过程_20260629_133651.txt:4009: [    0.364903] sc5338 1-0030: Linked as a consumer to regulator.3
+s4602变砖过程_20260629_133651.txt:4010: [    0.364945] sc5338 1-0030: supported_modes not set lane_num(2)
+s4602变砖过程_20260629_133651.txt:4011: [    0.370940] sc5338 1-0030: Detected SC00ce50 sensor
+s4602变砖过程_20260629_133651.txt:4012: [    0.371020] rockchip-mipi-dphy-rx ff4b0000.csi-dphy: match m01_f_sc5338 1-0030:bus type 4
+s4602变砖过程_20260629_133651.txt:4392: [    5.841727] sc5338 1-0030: set format 2880x1620, hdr: 5
+s4602变砖过程_20260629_133651.txt:4393: [    5.990852] rkcif_mipi_lvds: stream[0] start streaming
+s4602变砖过程_20260629_133651.txt:4395: [    5.993421] rkcif_mipi_lvds: stream[1] start streaming
+s4602变砖过程_20260629_133651.txt:4401: [    6.022527] sc5338 1-0030: start stream 2880x1620, hdr: 5
+s4602变砖过程_20260629_133651.txt:5374: [    0.344430] sc401ai 1-0030-2: driver version: 00.01.05
+s4602变砖过程_20260629_133651.txt:5375: [    0.344628] sc401ai 1-0030-2: could not get sleep pinstate
+s4602变砖过程_20260629_133651.txt:5376: [    0.344725] sc401ai 1-0030-2: Linked as a consumer to regulator.4
+s4602变砖过程_20260629_133651.txt:5377: [    0.344787] sc401ai 1-0030-2: Linked as a consumer to regulator.2
+s4602变砖过程_20260629_133651.txt:5378: [    0.344845] sc401ai 1-0030-2: Linked as a consumer to regulator.3
+s4602变砖过程_20260629_133651.txt:5379: [    0.353982] sc401ai 1-0030-2: Unexpected sensor id(00ce50), ret(0)
+s4602变砖过程_20260629_133651.txt:5380: [    0.354220] sc401ai 1-0030-2: Dropping the link to regulator.4
+s4602变砖过程_20260629_133651.txt:5381: [    0.354332] sc401ai 1-0030-2: Dropping the link to regulator.2
+s4602变砖过程_20260629_133651.txt:5382: [    0.354420] sc401ai 1-0030-2: Dropping the link to regulator.3
+s4602变砖过程_20260629_133651.txt:5383: [    0.354838] sc530ai 1-0030-1: driver version: 00.01.01
+s4602变砖过程_20260629_133651.txt:5384: [    0.354880] sc530ai 1-0030-1: supported_modes[0]
+s4602变砖过程_20260629_133651.txt:5385: [    0.355155] sc530ai 1-0030-1: could not get sleep pinstate
+s4602变砖过程_20260629_133651.txt:5386: [    0.355315] sc530ai 1-0030-1: Linked as a consumer to regulator.4
+s4602变砖过程_20260629_133651.txt:5387: [    0.355411] sc530ai 1-0030-1: Linked as a consumer to regulator.2
+s4602变砖过程_20260629_133651.txt:5388: [    0.355504] sc530ai 1-0030-1: Linked as a consumer to regulator.3
+s4602变砖过程_20260629_133651.txt:5389: [    0.355571] sc530ai 1-0030-1: supported_modes not set lane_num(4)
+s4602变砖过程_20260629_133651.txt:5394: [    0.360887] sc530ai 1-0030-1: Unexpected sensor id(00ce50), ret(0)
+s4602变砖过程_20260629_133651.txt:5395: [    0.361046] sc530ai 1-0030-1: Dropping the link to regulator.4
+s4602变砖过程_20260629_133651.txt:5396: [    0.361149] sc530ai 1-0030-1: Dropping the link to regulator.2
+s4602变砖过程_20260629_133651.txt:5397: [    0.361236] sc530ai 1-0030-1: Dropping the link to regulator.3
+s4602变砖过程_20260629_133651.txt:5398: [    0.361606] sc5338 1-0030: driver version: 00.01.01
+s4602变砖过程_20260629_133651.txt:5399: [    0.361650] sc5338 1-0030: supported_modes[0]
+s4602变砖过程_20260629_133651.txt:5400: [    0.361923] sc5338 1-0030: could not get sleep pinstate
+s4602变砖过程_20260629_133651.txt:5401: [    0.362037] sc5338 1-0030: Linked as a consumer to regulator.4
+s4602变砖过程_20260629_133651.txt:5402: [    0.362154] sc5338 1-0030: Linked as a consumer to regulator.2
+s4602变砖过程_20260629_133651.txt:5403: [    0.362238] sc5338 1-0030: Linked as a consumer to regulator.3
+s4602变砖过程_20260629_133651.txt:5404: [    0.362305] sc5338 1-0030: supported_modes not set lane_num(2)
+s4602变砖过程_20260629_133651.txt:5405: [    0.368268] sc5338 1-0030: Detected SC00ce50 sensor
+s4602变砖过程_20260629_133651.txt:5406: [    0.368322] rockchip-mipi-dphy-rx ff4b0000.csi-dphy: match m01_f_sc5338 1-0030:bus type 4
+s4602变砖过程_20260629_133651.txt:5786: [    5.891400] sc5338 1-0030: set format 2880x1620, hdr: 5
+s4602变砖过程_20260629_133651.txt:5787: [    6.036117] rkcif_mipi_lvds: stream[0] start streaming
+s4602变砖过程_20260629_133651.txt:5789: [    6.038713] rkcif_mipi_lvds: stream[1] start streaming
+s4602变砖过程_20260629_133651.txt:5795: [    6.063819] sc5338 1-0030: start stream 2880x1620, hdr: 5
+s4602变砖过程_20260629_133651.txt:6267: [    0.351258] sc401ai 1-0030-2: driver version: 00.01.05
+s4602变砖过程_20260629_133651.txt:6268: [    0.351466] sc401ai 1-0030-2: could not get sleep pinstate
+s4602变砖过程_20260629_133651.txt:6269: [    0.351557] sc401ai 1-0030-2: Linked as a consumer to regulator.4
+s4602变砖过程_20260629_133651.txt:6270: [    0.351640] sc401ai 1-0030-2: Linked as a consumer to regulator.2
+s4602变砖过程_20260629_133651.txt:6271: [    0.351696] sc401ai 1-0030-2: Linked as a consumer to regulator.3
+s4602变砖过程_20260629_133651.txt:6273: [    0.360391] sc401ai 1-0030-2: Unexpected sensor id(00ce50), ret(0)
+s4602变砖过程_20260629_133651.txt:6274: [    0.360534] sc401ai 1-0030-2: Dropping the link to regulator.4
+s4602变砖过程_20260629_133651.txt:6275: [    0.360617] sc401ai 1-0030-2: Dropping the link to regulator.2
+s4602变砖过程_20260629_133651.txt:6276: [    0.360682] sc401ai 1-0030-2: Dropping the link to regulator.3
+s4602变砖过程_20260629_133651.txt:6277: [    0.360962] sc530ai 1-0030-1: driver version: 00.01.01
+s4602变砖过程_20260629_133651.txt:6278: [    0.360994] sc530ai 1-0030-1: supported_modes[0]
+s4602变砖过程_20260629_133651.txt:6279: [    0.361199] sc530ai 1-0030-1: could not get sleep pinstate
+s4602变砖过程_20260629_133651.txt:6280: [    0.361294] sc530ai 1-0030-1: Linked as a consumer to regulator.4
+s4602变砖过程_20260629_133651.txt:6281: [    0.361363] sc530ai 1-0030-1: Linked as a consumer to regulator.2
+s4602变砖过程_20260629_133651.txt:6282: [    0.361452] sc530ai 1-0030-1: Linked as a consumer to regulator.3
+s4602变砖过程_20260629_133651.txt:6283: [    0.361504] sc530ai 1-0030-1: supported_modes not set lane_num(4)
+s4602变砖过程_20260629_133651.txt:6284: [    0.367855] sc530ai 1-0030-1: Unexpected sensor id(00ce50), ret(0)
+s4602变砖过程_20260629_133651.txt:6285: [    0.368051] sc530ai 1-0030-1: Dropping the link to regulator.4
+s4602变砖过程_20260629_133651.txt:6286: [    0.368162] sc530ai 1-0030-1: Dropping the link to regulator.2
+s4602变砖过程_20260629_133651.txt:6287: [    0.368249] sc530ai 1-0030-1: Dropping the link to regulator.3
+s4602变砖过程_20260629_133651.txt:6288: [    0.368649] sc5338 1-0030: driver version: 00.01.01
+s4602变砖过程_20260629_133651.txt:6289: [    0.368690] sc5338 1-0030: supported_modes[0]
+s4602变砖过程_20260629_133651.txt:6290: [    0.368962] sc5338 1-0030: could not get sleep pinstate
+s4602变砖过程_20260629_133651.txt:6291: [    0.369089] sc5338 1-0030: Linked as a consumer to regulator.4
+s4602变砖过程_20260629_133651.txt:6292: [    0.369192] sc5338 1-0030: Linked as a consumer to regulator.2
+s4602变砖过程_20260629_133651.txt:6293: [    0.369281] sc5338 1-0030: Linked as a consumer to regulator.3
+s4602变砖过程_20260629_133651.txt:6294: [    0.369350] sc5338 1-0030: supported_modes not set lane_num(2)
+s4602变砖过程_20260629_133651.txt:6295: [    0.375837] sc5338 1-0030: Detected SC00ce50 sensor
+s4602变砖过程_20260629_133651.txt:6296: [    0.375924] rockchip-mipi-dphy-rx ff4b0000.csi-dphy: match m01_f_sc5338 1-0030:bus type 4
+s4602变砖过程_20260629_133651.txt:6676: [    5.952217] sc5338 1-0030: set format 2880x1620, hdr: 5
+s4602变砖过程_20260629_133651.txt:6677: [    6.110035] rkcif_mipi_lvds: stream[0] start streaming
+s4602变砖过程_20260629_133651.txt:6679: [    6.112580] rkcif_mipi_lvds: stream[1] start streaming
+s4602变砖过程_20260629_133651.txt:6685: [    6.141835] sc5338 1-0030: start stream 2880x1620, hdr: 5
+s4602变砖过程_20260629_133651.txt:7309: [    0.347752] sc401ai 1-0030-2: driver version: 00.01.05
+s4602变砖过程_20260629_133651.txt:7310: [    0.347921] sc401ai 1-0030-2: could not get sleep pinstate
+s4602变砖过程_20260629_133651.txt:7311: [    0.348031] sc401ai 1-0030-2: Linked as a consumer to regulator.4
+s4602变砖过程_20260629_133651.txt:7312: [    0.348086] sc401ai 1-0030-2: Linked as a consumer to regulator.2
+s4602变砖过程_20260629_133651.txt:7313: [    0.348135] sc401ai 1-0030-2: Linked as a consumer to regulator.3
+s4602变砖过程_20260629_133651.txt:7318: [    0.356612] sc401ai 1-0030-2: Unexpected sensor id(00ce50), ret(0)
+s4602变砖过程_20260629_133651.txt:7319: [    0.356750] sc401ai 1-0030-2: Dropping the link to regulator.4
+s4602变砖过程_20260629_133651.txt:7320: [    0.356834] sc401ai 1-0030-2: Dropping the link to regulator.2
+s4602变砖过程_20260629_133651.txt:7321: [    0.356903] sc401ai 1-0030-2: Dropping the link to regulator.3
+s4602变砖过程_20260629_133651.txt:7322: [    0.357226] sc530ai 1-0030-1: driver version: 00.01.01
+s4602变砖过程_20260629_133651.txt:7323: [    0.357261] sc530ai 1-0030-1: supported_modes[0]
+s4602变砖过程_20260629_133651.txt:7324: [    0.357474] sc530ai 1-0030-1: could not get sleep pinstate
+s4602变砖过程_20260629_133651.txt:7325: [    0.357570] sc530ai 1-0030-1: Linked as a consumer to regulator.4
+s4602变砖过程_20260629_133651.txt:7326: [    0.357651] sc530ai 1-0030-1: Linked as a consumer to regulator.2
+s4602变砖过程_20260629_133651.txt:7327: [    0.357722] sc530ai 1-0030-1: Linked as a consumer to regulator.3
+s4602变砖过程_20260629_133651.txt:7328: [    0.357779] sc530ai 1-0030-1: supported_modes not set lane_num(4)
+s4602变砖过程_20260629_133651.txt:7329: [    0.364170] sc530ai 1-0030-1: Unexpected sensor id(00ce50), ret(0)
+s4602变砖过程_20260629_133651.txt:7330: [    0.364333] sc530ai 1-0030-1: Dropping the link to regulator.4
+s4602变砖过程_20260629_133651.txt:7331: [    0.364422] sc530ai 1-0030-1: Dropping the link to regulator.2
+s4602变砖过程_20260629_133651.txt:7332: [    0.364487] sc530ai 1-0030-1: Dropping the link to regulator.3
+s4602变砖过程_20260629_133651.txt:7333: [    0.364817] sc5338 1-0030: driver version: 00.01.01
+s4602变砖过程_20260629_133651.txt:7334: [    0.364847] sc5338 1-0030: supported_modes[0]
+s4602变砖过程_20260629_133651.txt:7335: [    0.365052] sc5338 1-0030: could not get sleep pinstate
+s4602变砖过程_20260629_133651.txt:7336: [    0.365176] sc5338 1-0030: Linked as a consumer to regulator.4
+s4602变砖过程_20260629_133651.txt:7337: [    0.365246] sc5338 1-0030: Linked as a consumer to regulator.2
+s4602变砖过程_20260629_133651.txt:7338: [    0.365313] sc5338 1-0030: Linked as a consumer to regulator.3
+s4602变砖过程_20260629_133651.txt:7339: [    0.365366] sc5338 1-0030: supported_modes not set lane_num(2)
+s4602变砖过程_20260629_133651.txt:7340: [    0.371562] sc5338 1-0030: Detected SC00ce50 sensor
+s4602变砖过程_20260629_133651.txt:7341: [    0.371644] rockchip-mipi-dphy-rx ff4b0000.csi-dphy: match m01_f_sc5338 1-0030:bus type 4
+s4602变砖过程_20260629_133651.txt:7724: [    5.971490] sc5338 1-0030: set format 2880x1620, hdr: 5
+s4602变砖过程_20260629_133651.txt:7725: [    6.131486] rkcif_mipi_lvds: stream[0] start streaming
+s4602变砖过程_20260629_133651.txt:7727: [    6.134413] rkcif_mipi_lvds: stream[1] start streaming
+s4602变砖过程_20260629_133651.txt:7733: [    6.162313] sc5338 1-0030: start stream 2880x1620, hdr: 5
+s4602变砖过程_20260629_133651.txt:8393: [    0.345889] sc401ai 1-0030-2: driver version: 00.01.05
+s4602变砖过程_20260629_133651.txt:8394: [    0.346090] sc401ai 1-0030-2: could not get sleep pinstate
+s4602变砖过程_20260629_133651.txt:8395: [    0.346187] sc401ai 1-0030-2: Linked as a consumer to regulator.4
+s4602变砖过程_20260629_133651.txt:8396: [    0.346274] sc401ai 1-0030-2: Linked as a consumer to regulator.2
+s4602变砖过程_20260629_133651.txt:8397: [    0.346419] sc401ai 1-0030-2: Linked as a consumer to regulator.3
+s4602变砖过程_20260629_133651.txt:8402: [    0.356547] sc401ai 1-0030-2: Unexpected sensor id(00ce50), ret(0)
+s4602变砖过程_20260629_133651.txt:8403: [    0.356677] sc401ai 1-0030-2: Dropping the link to regulator.4
+s4602变砖过程_20260629_133651.txt:8404: [    0.356758] sc401ai 1-0030-2: Dropping the link to regulator.2
+s4602变砖过程_20260629_133651.txt:8405: [    0.356825] sc401ai 1-0030-2: Dropping the link to regulator.3
+s4602变砖过程_20260629_133651.txt:8406: [    0.357126] sc530ai 1-0030-1: driver version: 00.01.01
+s4602变砖过程_20260629_133651.txt:8407: [    0.357158] sc530ai 1-0030-1: supported_modes[0]
+s4602变砖过程_20260629_133651.txt:8408: [    0.357370] sc530ai 1-0030-1: could not get sleep pinstate
+s4602变砖过程_20260629_133651.txt:8409: [    0.357464] sc530ai 1-0030-1: Linked as a consumer to regulator.4
+s4602变砖过程_20260629_133651.txt:8410: [    0.357535] sc530ai 1-0030-1: Linked as a consumer to regulator.2
+s4602变砖过程_20260629_133651.txt:8411: [    0.357617] sc530ai 1-0030-1: Linked as a consumer to regulator.3
+s4602变砖过程_20260629_133651.txt:8412: [    0.357674] sc530ai 1-0030-1: supported_modes not set lane_num(4)
+s4602变砖过程_20260629_133651.txt:8413: [    0.363507] sc530ai 1-0030-1: Unexpected sensor id(00ce50), ret(0)
+s4602变砖过程_20260629_133651.txt:8414: [    0.363666] sc530ai 1-0030-1: Dropping the link to regulator.4
+s4602变砖过程_20260629_133651.txt:8415: [    0.363754] sc530ai 1-0030-1: Dropping the link to regulator.2
+s4602变砖过程_20260629_133651.txt:8416: [    0.363821] sc530ai 1-0030-1: Dropping the link to regulator.3
+s4602变砖过程_20260629_133651.txt:8417: [    0.364153] sc5338 1-0030: driver version: 00.01.01
+s4602变砖过程_20260629_133651.txt:8418: [    0.364185] sc5338 1-0030: supported_modes[0]
+s4602变砖过程_20260629_133651.txt:8419: [    0.364394] sc5338 1-0030: could not get sleep pinstate
+s4602变砖过程_20260629_133651.txt:8420: [    0.364508] sc5338 1-0030: Linked as a consumer to regulator.4
+s4602变砖过程_20260629_133651.txt:8421: [    0.364572] sc5338 1-0030: Linked as a consumer to regulator.2
+s4602变砖过程_20260629_133651.txt:8422: [    0.364639] sc5338 1-0030: Linked as a consumer to regulator.3
+s4602变砖过程_20260629_133651.txt:8423: [    0.364693] sc5338 1-0030: supported_modes not set lane_num(2)
+s4602变砖过程_20260629_133651.txt:8424: [    0.371163] sc5338 1-0030: Detected SC00ce50 sensor
+s4602变砖过程_20260629_133651.txt:8425: [    0.371248] rockchip-mipi-dphy-rx ff4b0000.csi-dphy: match m01_f_sc5338 1-0030:bus type 4

@@ -1,0 +1,46 @@
+# 阶段 1 —— 原厂固件备份（在写入任何东西之前必须完成并验证）
+#
+# 【2026-11-11 更新】本文件是 2026-06-29 现场用过的「14 分区 + 补 loader 区」最小流程，
+# 作为历史记录保留。**完整备份（全片 0x0-0x10000000）请用 01-full-backup.txt，
+# 并先读 docs/FULL_BACKUP.md**：现有备份除了缺 loader 区，还缺末尾 GPT 备表；
+# 而且 ⑨ 从 offset 0 误写过整片，补读到的 loader 区可能已被污染，需双来源比对。
+#
+# 2026-06-29 的 14 个分区备份正是这样做出来的（变砖记录 1640-1833 行），
+# 文件现在在 移动千里眼S4602原厂固件备份/ ，md5 见 docs/INCIDENT.md 第 3 节。
+#
+# 前提：能进 "=>" 控制台（当前设备是半砖，需先按 docs/RECOVERY.md 阶段 1-2 救砖）。
+# 逐条执行，任何一条报错就停。SD 卡需 FAT32、有足够空间（全部分区约 253 MiB）。
+
+# --- 切到 SD 卡 ---
+mmc dev 1
+fatls mmc 1
+
+# --- 逐分区备份：mtd read <name> <addr> <off> <size> ---
+# 装载地址 0x1000000 是现场实测可用的 RAM 区（原厂也用它，见变砖记录）。
+# 每条 fatwrite 的 size 必须与 mtd read 的长度一致，且与文件大小一致。
+# 完整 14 分区表在 board/s4602/board.yaml 的 partitions 段。
+#
+# 示例（gpt 与 uboot_a）：
+mtd read spi-nand0 0x1000000 0x0 0x20000
+fatwrite mmc 1 0x1000000 gpt.img 0x20000
+mtd read spi-nand0 0x1000000 0x300000 0x100000
+fatwrite mmc 1 0x1000000 uboot_a.img 0x100000
+# 其余 12 个分区照此重复，偏移/大小见 board.yaml 或 parameter.txt.template。
+
+# --- 【最重要】补备份 loader 区：0x0-0x300000 ---
+# 现有 14 分区备份**不包含** 0x20000-0x300000 (2944 KiB) 的 BootROM loader / SPL / ddr bin，
+# gpt.img 里只有 GPT 表头。这段一旦损坏，现有备份无法恢复，只能 MASKROM + rkbin 或编程器。
+# 救砖恢复控制台后的第一件事就是做这一步：
+mtd read spi-nand0 0x1000000 0x0 0x300000
+fatwrite mmc 1 0x1000000 loader-area.img 0x300000
+
+# --- 验证（在 PC 上做，不是 U-Boot 上）---
+# 1. 每个文件大小 == mtd read 的长度（短了说明写出被截断）
+# 2. md5sum 与 docs/INCIDENT.md 第 3 节的表核对（若是从原机重新读，应完全一致）
+# 3. python tools/inspect_vendor_backup.py 解析 GPT / FIT / UBI 卷，确认不是全 0xFF
+# 4. devinfo_a/b 只含 MAC 48:E5:33:B5:60:D6；业务设备码在 data 分区；
+#    serial#=447f56c0594ecd4e 是 CPU efuse 派生值，不在 flash 中，无需备份。
+# 5. 全部通过后才把 board.yaml 的 flash_plan.backup_verified 改成 true
+#
+# 注意：本机环境变量不持久化（Using default environment / 无 saveenv），
+# 所以 setenv 不会污染 flash，但备份时也不需要动 env。

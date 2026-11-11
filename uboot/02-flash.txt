@@ -1,0 +1,42 @@
+# 阶段 2 —— 刷写（模板，禁止直接执行）
+#
+# 真正的刷写命令必须由下面生成：
+#     python tools/make_flash_plan.py --check     # 先检查，当前应拒绝（设备半砖）
+#     python tools/make_flash_plan.py            # 通过后才生成 02-flash.generated.txt
+#
+# 2026-11-11：本机 U-Boot 已由现场日志实证，模板按实测命令集重写。
+# 详见 docs/INCIDENT.md（变砖复盘）与 docs/RECOVERY.md（正确实施路径）。
+#
+# 本机 U-Boot 2017.09 实测能力：
+#   有  mtd read/write/erase spi-nand0、tftp、fatload/fatwrite、rockusb、download、boot_fit、gpt、env
+#   无  ubi 命令（ubi part -> Unknown command）
+#   无  saveenv（env save 只打印 usage；启动为 "Using default environment"，不持久化）
+#   nand 命令无设备（nand erase -> no devices available）
+#   secure boot 关闭（## Verified-boot: 0，FIT 无签名）
+#
+# ⚠️ 此操作非常危险，可能导致不可逆的数据丢失！
+# 2026-06-29 变砖根因（务必记住）：
+#   第 8840-8842 行 `mtd write spi-nand0 0x10` 命令被截断，
+#   U-Boot 把 0x10 当 addr、off 缺省为 0、size 缺省为整片 256 MB，
+#   -> "Writing 268435456 byte(s) at offset 0x00000000" -> data abort
+#   -> 从 0 开始覆盖 gpt / loader 保留区 / uboot_a/b / boot_a/b，SPL 再也找不到 U-Boot FIT。
+#
+# 红线：
+#  1. mtd write 四参数必须齐全：<name> <addr> <off> <size>
+#     size = 文件实际字节数（rootfs.ubi.rv1109 是 0x780000 = 7,864,320 B），
+#     绝不能用分区大小 0x2c00000，更不能用缺省值。
+#  2. 每条写命令后 mtd read 回读 + cmp.b 比对，有差异立即停手。
+#  3. 逐条执行，禁止整段粘贴（上次大量 "=> => xxx" 导致命令被当成未知命令）。
+#  4. 只刷 A/B 的一个槽（建议 _a），_b 原厂完整保留作回滚。
+#  5. 必须同时替换 boot 分区的 zboot.img（内核 + S4602 DTB）与 system 分区的 rootfs.ubi。
+#     只刷 rootfs、内核仍是原厂 FIT，无论 bootargs 怎么改都起不来。
+#  6. 不碰 0x0-0x300000（loader/SPL/ddr bin）；现有备份不含这段。
+#  7. bootargs 无法靠 setenv / saveenv / DTB chosen 设置（现场 7 次启动实证），
+#     必须开内核 CONFIG_CMDLINE_FORCE 并内置完整 cmdline + mtdparts，见 03-bootargs.txt。
+#  8. zboot.img 写进 flash 前，先在 RAM 用 iminfo / bootm 验证格式能被 boot_fit 识别。
+#
+# 前置顺序（不能跳）：
+#  docs/RECOVERY.md 阶段 0 确认砖态 → 阶段 1 建立 MASKROM/rockusb 通道
+#  → 阶段 2 恢复原厂并验证能进 => → 补备份 loader 区
+#  → 更新 board.yaml 的 device_state.* 与 backup_verified
+#  → make_flash_plan.py --check 通过 → 才生成并逐条执行本阶段命令。

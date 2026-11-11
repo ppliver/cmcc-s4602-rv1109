@@ -1,0 +1,26 @@
+# Rockchip parameter.txt —— S4602 实测值（2026-06-29 串口日志 + GPT 备份交叉验证）
+# 来源：U-Boot printenv / 内核 dmesg mtdparts / 移动千里眼S4602原厂固件备份/gpt.img
+# 三方一致。注意此机用 GPT 分区表（PartType: EFI），不是传统 parameter 的 mtdparts 布局，
+# 这里仅作为分区事实的记录，不要当成可直接刷入的 parameter.txt。
+
+FIRMWARE_VER: S4602-CMCC
+MACHINE_MODEL: RV1109
+MANUFACTURER: CMCC
+TYPE: GPT
+
+# 原厂内核实际收到的 cmdline（dmesg 原文）：
+# Kernel command line: user_debug=31 storagemedia=mtd androidboot.storagemedia=mtd
+#   androidboot.mode=normal android_slotsufix=_b root=/dev/ubiblock0_0 coherent_pool=64K
+#   earlycon=uart8250,mmio32,0xff570000 console=ttyFIQ0 ubi.mtd=9
+#   ubi.block=0,rootfs rootfstype=squashfs snd_aloop.index=7 mtdparts=<下行>
+
+CMDLINE: mtdparts=spi-nand0:0x20000@0x0(gpt),0x100000@0x300000(uboot_a),0x100000@0x400000(uboot_b),0x80000@0x500000(devinfo_a),0x80000@0x580000(devinfo_b),0x400000@0x600000(boot_a),0x400000@0xa00000(boot_b),0x80000@0xe00000(misc),0x2c00000@0xe80000(system_a),0x2c00000@0x3a80000(system_b),0x5a00000@0x6680000(model),0xf00000@0xc080000(log),0x1800000@0xcf80000(data),0x17e0000@0xe780000(data_bk)
+
+# 14 个 GPT 分区，512B 扇区，总容量 256 MiB
+# 偏移 / 大小 / 备份文件 / md5 的权威表在 board/s4602/board.yaml 的 partitions 段
+# 解析方式：python tools/inspect_vendor_backup.py
+#
+# 注意保留区：
+#   0x00020000-0x00300000 (2944 KiB) = BootROM loader / SPL / ddr bin，原厂备份未覆盖
+#   0x0ff60000-0x10000000 (640 KiB)  = 末尾坏块预留
+# 救砖恢复控制台后第一件事是把 0x0-0x300000 补备份出来（见 docs/RECOVERY.md 2C）

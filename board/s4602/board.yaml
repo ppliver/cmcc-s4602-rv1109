@@ -1,0 +1,257 @@
+# S4602 现场参数账本 —— 2026-11-11 按串口日志 + 备份镜像实测更新
+# 填写依据只能是：芯片丝印、串口原始日志、printenv / mtdparts、备份镜像解析
+# 「未验证」一律保留 null；生成刷写命令前 tools/make_flash_plan.py 会检查 required 项
+#
+# 证据：qianliyan原厂固件启动信息.log / s4602变砖过程_20260629_133651.txt /
+#       移动千里眼S4602原厂固件备份/ → 详见 docs/INCIDENT.md
+
+board:
+  model: "CMCC S4602 (移动千里眼)"
+  soc: "rv1109"
+  soc_id_from_kernel: "11090000"   # rockchip-cpuinfo，确证 RV1109；DTB 写 rv1126 是共用 BSP
+  openipc_vendor: "rockchip"
+  openipc_family: "rv11xx"
+  openipc_defconfig: "rv1109_lite_defconfig"
+
+# ---- 当前设备状态（决定能否生成任何写命令）----
+device_state:
+  status: "bricked"                # 2026-06-29 起：SPL 可运行但找不到 U-Boot FIT
+  console_reachable_now: false     # 进不了 "=>" 提示符
+  vendor_restored: false           # 原厂固件尚未恢复
+  # 语义：有「干净且可恢复」的 loader 备份。仅把 0x0-0x300000 读出来不算——
+  # ⑨ 从 offset 0 误写过整片，现场补读的内容可能已污染，须按 FULL_BACKUP.md 第 8 节双来源比对
+  loader_area_backed_up: false
+  last_log: "s4602变砖过程_20260629_133651.txt:9005-9021"
+  note: "救砖并恢复原厂、且补完 loader 区备份之前，禁止生成或执行任何刷写命令"
+
+# ---- 官方基线（来自 OpenIPC 源码与 nightly 固件，不是本板实测）----
+official_baseline:
+  kernel_branch: "rockchip-rv11xx"
+  kernel_version: "4.19.111"
+  kernel_config: "br-ext-chip-rockchip/board/rv11xx/rv1126.generic.config"
+  kernel_image: "zboot.img"
+  kernel_dtb: "rv1109-38x38-v10-spi-nand-imx307.img"
+  baseline_board: "Longse RV1109 38x38 V10 SPI-NAND + IMX307 + DDR3"
+  nightly_tag: "nightly-20261110-9dc02de"
+  nightly_package: "openipc.rv1109-nand-lite.tgz"
+  ubi_peb_bytes: 131072
+  ubi_leb_bytes: 126976
+  ubi_min_io: 2048
+  ubi_volumes: ["rootfs", "rootfs_data"]
+  has_openipc_bootloader: false
+  known_boards_with_uboot_console: 0
+
+# ---- 硬件实测（2026-06-29 串口日志）----
+hardware:
+  ddr_type: "LPDDR4"               # SPL: LPDDR4 / DTB model 里的 "DDR3 Board" 是模板残留
+  ddr_size_mib: 512
+  ddr_freq_mhz: 924
+  ddr_bin_version: "DDR Version V1.08 20210825"
+  spi_nand_id: "e5 f2 e5"          # dmesg: sfc_nand id
+  spi_nand_size_mib: 256
+  sensor: "SmartSens SC5338"       # dmesg: Detected SC00ce50 sensor
+  sensor_id: "0x00ce50"            # 0x3107=0xce / 0x3108=0x50
+  sensor_i2c: "i2c1@0x30"
+  sensor_lanes: 2
+  sensor_interface: "mipi-csi2"
+  sensor_resolution: "2880x1620 RAW10"   # linear 30fps / WDR 2-frame 15fps
+  sensor_hdr_mode: "HDR_X2 = 5"          # rk-camera-module.h: NO_HDR=0, HDR_X2=5, HDR_X3=6
+  sensor_module: "CMK-OT1607-FV1 / M12-40IRC-4MP-F16"
+  sensor_materials: "docs/SC5338.md"     # 规格/DTB/驱动/寄存器表/移植清单
+  audio_codec: "ES7202 (PDM)"
+  rtc: "PCF8563 i2c4@0x51"
+  phy: "外置 PHY (stmmac/GMAC, integrated PHY? no)"  # 笔记写 YT8512B，DTB 未确证
+  phy_speed: "100Mbps full-duplex"
+  mac: "48:E5:33:B5:60:D6"
+  # CPU efuse 派生（rockchip-cpuinfo Serial / U-Boot serial#），不在 flash 分区里，无需备份
+  serial: "447f56c0594ecd4e"
+  # flash 中真正需要保护的身份字段：devinfo_a/b @0x34 的 MAC、data 分区的 sn= 业务设备码
+  business_sn_prefix: "8nF4Gk5xHjCrhN2ap92dUUHt"
+  uart_baud: 1500000
+  uart_voltage: 3.3
+  console: "ttyFIQ0"
+
+# ---- 原厂固件实测 ----
+vendor_firmware:
+  uboot: "U-Boot 2017.09 (Oct 28 2021) + SPL 2017.09-g61c5d7f (Jun 09 2023)"
+  optee: "OP-TEE 3.6.0-312-gee120571"
+  kernel: "Linux 4.19.111 #47 SMP PREEMPT (Jan 10 2024, Linaro GCC 6.3.1)"
+  rootfs: "squashfs in UBI volume rootfs, mounted via /dev/ubiblock0_0"
+  verified_boot: false             # SPL: "## Verified-boot: 0"; FIT 内有 sha256 但无公钥签名
+  fit_signed: false                # "FIT: no signed, no conf required"
+  active_slot: "_b"                # SPL: A/B-slot: _b, successful: 1
+  bootcmd: "boot_fit;boot_android ${devtype} ${devnum};"
+  bootargs: "user_debug=31 storagemedia=mtd androidboot.storagemedia=mtd androidboot.mode=normal android_slotsufix=_b root=/dev/ubiblock0_0 coherent_pool=64K earlycon=uart8250,mmio32,0xff570000 console=ttyFIQ0 ubi.mtd=9 ubi.block=0,rootfs rootfstype=squashfs snd_aloop.index=7"
+  kernel_load_addr: "0x02008000"
+  fdt_load_addr: "0x08300000"
+  fit_in_boot_partition: true
+  backup_dir: "移动千里眼S4602原厂固件备份"
+
+# ---- Flash 与分区（GPT / mtdparts / 备份三方一致）----
+flash:
+  type: "spi-nand"
+  chip_mark: null                  # 丝印未记录；仅有 sfc_nand id，不足以确定型号
+  size_mib: 256
+  mtd_size_bytes: "0x10000000"     # mtd list: 0x0-0x10000000 = 268435456 B
+  lba_sectors: 523264              # 块层容量 523264 x 512 = 0x0FF80000 = 255.5 MiB
+  lba_gap_bytes: "0x80000"         # 块层读不到的末尾 512 KiB（只有 MTD/编程器可达）
+  page_bytes: 2048
+  erase_bytes: 131072
+  oob_bytes: 128
+  gpt_backup_lba: 523263           # 从 gpt.img 的 GPT 头 backup_lba 解析
+  gpt_backup_offset: "0x0FF7FE00"  # 备表头；条目区 0x0FF7BE00，现有备份不含
+  mtdparts: "spi-nand0:0x20000@0x0(gpt),0x100000@0x300000(uboot_a),0x100000@0x400000(uboot_b),0x80000@0x500000(devinfo_a),0x80000@0x580000(devinfo_b),0x400000@0x600000(boot_a),0x400000@0xa00000(boot_b),0x80000@0xe00000(misc),0x2c00000@0xe80000(system_a),0x2c00000@0x3a80000(system_b),0x5a00000@0x6680000(model),0xf00000@0xc080000(log),0x1800000@0xcf80000(data),0x17e0000@0xe780000(data_bk)"
+  partition_table_raw: "GPT: 14 entries @ LBA2, 512B sectors; parsed by tools/inspect_vendor_backup.py"
+  # 完整备份缺口共 3,670,016 B；详见 docs/FULL_BACKUP.md
+  gap_unbacked: "loader 0x00020000-0x00300000 (2944 KiB) + 尾区 0x0FF60000-0x10000000 (640 KiB, 含 GPT 备表)"
+
+partitions:
+  gpt:
+    offset: "0x00000000"
+    size: "0x00020000"
+    mtd_index: 0
+    backup: "gpt.img"
+    md5: "52732a786a105a20d269ee769fc93134"
+  uboot_a:
+    offset: "0x00300000"
+    size: "0x00100000"
+    mtd_index: 1
+    backup: "uboot_a.img"
+    md5: "c8987b2380025e68e441be04ed11de72"
+  uboot_b:
+    offset: "0x00400000"
+    size: "0x00100000"
+    mtd_index: 2
+    backup: "uboot_b.img"
+    md5: "c8987b2380025e68e441be04ed11de72"
+  devinfo_a:
+    offset: "0x00500000"
+    size: "0x00080000"
+    mtd_index: 3
+    backup: "devinfo_a.img"
+    md5: "f90261d5c4b642bf2bba1dff352b1584"
+  devinfo_b:
+    offset: "0x00580000"
+    size: "0x00080000"
+    mtd_index: 4
+    backup: "devinfo_b.img"
+    md5: "0e5b8c68ccf5afe9cf0eb3047deec207"
+  boot_a:
+    offset: "0x00600000"
+    size: "0x00400000"
+    mtd_index: 5
+    backup: "boot_a.img"
+    md5: "e005d8a14a94ac9c5bcf165c641d0d78"
+  boot_b:
+    offset: "0x00a00000"
+    size: "0x00400000"
+    mtd_index: 6
+    backup: "boot_b.img"
+    md5: "8eccc74a60884b6a48c12021740bcf75"
+  misc:
+    offset: "0x00e00000"
+    size: "0x00080000"
+    mtd_index: 7
+    backup: "misc.img"
+    md5: "c3820feab36216484292bab0b625b530"
+  system_a:
+    offset: "0x00e80000"
+    size: "0x02c00000"
+    mtd_index: 8
+    backup: "system_a.img"
+    md5: "3e5c37fbb261ed36d52c8df1574ba429"
+  system_b:
+    offset: "0x03a80000"
+    size: "0x02c00000"
+    mtd_index: 9
+    backup: "system_b.img"
+    md5: "458bc1e356c67e1a6109e670b6974f87"
+  model:
+    offset: "0x06680000"
+    size: "0x05a00000"
+    mtd_index: 10
+    backup: "model.img"
+    md5: "615dca05939d10d7252c07c90b25bd6a"
+  log:
+    offset: "0x0c080000"
+    size: "0x00f00000"
+    mtd_index: 11
+    backup: "log.img"
+    md5: "4f28b6dffca3aaec6bad2e72f83f3fc9"
+  data:
+    offset: "0x0cf80000"
+    size: "0x01800000"
+    mtd_index: 12
+    backup: "data.img"
+    md5: "14e1eb99cb9b46b1afe89c91a9150010"
+  data_bk:
+    offset: "0x0e780000"
+    size: "0x017e0000"
+    mtd_index: 13
+    backup: "data_bk.img"
+    md5: "0fb076a1ff43ce91eaeac0b4b27ab9fa"
+
+# ---- U-Boot 能力（2026-06-29 help / printenv 实测，指变砖之前的状态）----
+uboot:
+  reuse_vendor_loader: true
+  needs_custom_uboot: false        # 实证：SPL/ddr bin 至今仍在运行，不需要重建 bootloader
+  loader_recoverable_from_backup: false  # 备份不含 0x20000-0x300000 的 SPL/ddr bin
+  console_interruptible: true     # 变砖前：Ctrl+C 可进 "=>"
+  has_tftp: true
+  has_nand: false                 # "nand erase" -> no devices available
+  has_mtd: true                   # "mtd read/write/erase spi-nand0 ..." 可用
+  has_ubi: false                  # "ubi part" -> Unknown command
+  has_ubifsload: false
+  has_fatload: true
+  has_rockusb: true               # help 里有 rockusb / download
+  has_saveenv: false              # saveenv 不存在；env save 只打印 usage
+  env_persistent: false           # 启动横幅 "Using default environment"，重启即恢复默认
+  secure_boot: false              # "## Verified-boot: 0"
+  bootcmd_original: "boot_fit;boot_android ${devtype} ${devnum};"
+  bootargs_original: "storagemedia=mtd androidboot.storagemedia=mtd androidboot.mode=normal"
+  commands_raw: "见 s4602变砖过程_20260629_133651.txt:1160-1242 (help) 与 :1243-1288 (printenv)"
+
+# ---- 引导链判定（2026-11-11 按 mkimg 源码 + 7 次 cmdline 实证，见 docs/BOOT_FEASIBILITY.md）----
+boot_chain:
+  uboot_can_boot_openipc_kernel: true    # 能；不用编译、不用替换、不用改 env
+  boot_fit_accepts_fit_only: true        # bootcmd=boot_fit，只认 FIT
+  vendor_boot_img_is_fit: true           # boot_a.img magic d00dfeed, file=Device Tree Blob v17
+  vendor_fit_template: "移动千里眼S4602原厂固件备份/boot_a.img"
+  vendor_fit_data_offset: "0x800"        # 与 mkimg 的 mkimage -E -p 0x800 一致
+  openipc_zboot_default_format: "android-boot-img"   # mkimg 默认走 make_boot_img
+  openipc_zboot_need_repack_itb: true    # 必须传 BOOT_IMG=模板 才产出 FIT
+  uboot_injects_bootargs: true           # 7 次启动实测；setenv bootargs 改不动 root=
+  injected_root: "root=/dev/ubiblock0_0 rootfstype=squashfs ubi.mtd=9 ubi.block=0,rootfs"
+  vendor_rootfs_fs: "squashfs"           # system_* 卷内 hsqs @0x41000
+  openipc_rootfs_fs: "ubifs"             # rootfs.ubi.rv1109 卷内 UBIFS
+  cmdline_force_required: true           # CONFIG_CMDLINE_FORCE=y + 内置 mtdparts 串
+  active_slot: "b"                       # android_slotsufix=_b / ubi.mtd=9 / boot_fit 读 boot_b
+  kernel_storage_config: "RK_SFC_NAND=y, MTD_UBI=y, UBIFS_FS=y, SQUASHFS=y, MTD_CMDLINE_PARTS=y"
+
+# ---- 尚未解决的 blocker（make_flash_plan.py 检查前 3 项，全 true 才放行）----
+openipc_blockers:
+  fit_image_built_and_verified: false    # 自建 FIT zboot.img 通过 iminfo 且 <= 4 MiB
+  bootargs_strategy_verified: false      # 实测 FORCE 生效、UBIFS root 挂上
+  slot_strategy_confirmed: false         # 定夺刷 _a 还是 _b，并同步 flash_plan 偏移
+  sensor_driver_available: false        # sc5338.c 未编码/编译/实板验证；资料已备齐（公开驱动+原厂寄存器表+V4L2骨架），不再是「缺原厂内核源码」，见 docs/SC5338.md
+
+# ---- 刷写目标（由 make_flash_plan.py 依据上表计算，勿手填）----
+flash_plan:
+  kernel_partition:
+    # ⚠ slot 冲突：U-Boot 当前活动槽是 _b（读 boot_b / ubi.mtd=9），这里写的是 _a。
+    #   未确定选槽机制前不要按此偏移刷；备选是直接刷 _b、把 _a 留作原厂回滚。
+    #   见 docs/BOOT_FEASIBILITY.md 4.1。
+    offset: "0x00600000"          # boot_a
+    size: "0x00400000"
+  rootfs_partition:
+    offset: "0x00e80000"          # system_a = MTD 8（若刷 _b 应改 0x03a80000 / MTD 9）
+    size: "0x02c00000"
+  load_addr: "0x1000000"          # 实测可用；0x02008000 会与 FIT kernel load 冲突
+  rootfs_image: "firmware/rootfs.ubi.rv1109"
+  rootfs_md5: "5c1849f7683f7f33bf800d2cf966249a"
+  rootfs_write_size: "0x780000"   # = 7,864,320 B，必须用真实文件长度，不是分区大小
+  # ⚠ 不能靠 setenv bootargs：现场 7 次启动证明 U-Boot 会强制注入
+  #   root=/dev/ubiblock0_0 rootfstype=squashfs。必须开内核 CONFIG_CMDLINE_FORCE
+  #   并把下面参数 + 完整 mtdparts 写进 CONFIG_CMDLINE（tools/build_s4602.sh 已实现）。
+  bootargs_openipc: "earlycon=uart8250,mmio32,0xff570000 console=ttyFIQ0 ubi.mtd=8 root=ubi0:rootfs rootfstype=ubifs"
+  backup_verified: false          # 文件 md5 已本地核对，但未验证能在设备上恢复

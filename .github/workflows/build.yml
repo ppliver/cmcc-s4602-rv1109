@@ -1,0 +1,69 @@
+name: Build OpenIPC for S4602 (RV1109)
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            python-is-python3 device-tree-compiler u-boot-tools \
+            wget xz-utils bc bison flex libssl-dev
+
+      - name: Download OpenIPC official toolchain (rockchip-rv11xx)
+        run: |
+          wget -q https://github.com/openipc/firmware/releases/download/toolchain/toolchain.rockchip-rv11xx.tgz -O /tmp/toolchain.tgz
+          mkdir -p /opt/openipc-toolchain
+          tar xzf /tmp/toolchain.tgz -C /opt/openipc-toolchain
+          echo "TOOLCHAIN_DIR=$(dirname $(find /opt/openipc-toolchain -name arm-openipc-linux-gnueabihf-gcc | head -1))" >> "$GITHUB_ENV"
+
+      - name: Clone OpenIPC linux (rockchip-rv11xx)
+        run: git clone --depth 1 --branch rockchip-rv11xx https://github.com/OpenIPC/linux.git /opt/linux
+
+      - name: Build s4602 kernel (zImage)
+        working-directory: /opt/linux
+        env:
+          CROSS_COMPILE: arm-openipc-linux-gnueabihf-
+          ARCH: arm
+          PATH: ${{ env.TOOLCHAIN_DIR }}:${{ env.PATH }}
+        run: |
+          set -e
+          # 以官方 rv1109-nand-lite 基线配置为基底，再叠加 S4602 增量片段
+          # （board/s4602/s4602_kernel_fragment.config 是唯一事实源，CI 与本地脚本共用）。
+          cp arch/arm/configs/rv1126.generic.config .config
+          MC=scripts/kconfig/merge_config.sh
+          [ -f "$MC" ] || MC=scripts/merge_config.sh
+          bash "$MC" -m .config "$GITHUB_WORKSPACE/board/s4602/s4602_kernel_fragment.config"
+          make ARCH=arm olddefconfig
+          make ARCH=arm -j"$(nproc)" zImage
+
+      - name: Package FIT (zboot.img)
+        run: bash tools/make_fit.sh /opt/linux/arch/arm/boot/zImage docs/evidence/vendor-kernel.dtb firmware/zboot.img
+
+      - name: Download official nightly rootfs (rv1109-nand-lite)
+        run: |
+          wget -q https://github.com/openipc/firmware/releases/download/nightly/openipc.rv1109-nand-lite.tgz -O /tmp/rootfs.tgz
+          tar xzf /tmp/rootfs.tgz -C /tmp
+          cp /tmp/rootfs.ubi.rv1109 firmware/rootfs.ubi.rv1109
+          ls -l firmware/zboot.img firmware/rootfs.ubi.rv1109
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: openipc-s4602-rv1109
+          path: |
+            firmware/zboot.img
+            firmware/rootfs.ubi.rv1109
+          if-no-files-found: error
