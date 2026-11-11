@@ -32,6 +32,9 @@ jobs:
       - name: Clone OpenIPC linux (rockchip-rv11xx)
         run: git clone --depth 1 --branch rockchip-rv11xx https://github.com/OpenIPC/linux.git /opt/linux
 
+      - name: Inject SC5338 sensor driver into linux tree
+        run: python3 "$GITHUB_WORKSPACE/tools/apply_kernel_patch.py" --linux /opt/linux
+
       - name: Download OpenIPC rv11xx generic kernel config (baseline)
         run: |
           # rv1109_lite_defconfig 的 BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE 即指向此文件，

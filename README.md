@@ -10,7 +10,8 @@ SPL/DDR 仍正常，但进不了 U-Boot 控制台。完整复盘见 [`docs/INCID
 构建已由 **GitHub Actions** 接管（仓库 `ppliver/cmcc-s4602-rv1109`，见 `.github/workflows/build.yml`）：
 push `main` 或手动 `workflow_dispatch` 即从官方工具链 + `OpenIPC/linux@rockchip-rv11xx` 编译内核，
 复用原厂 `vendor-kernel.dtb` 打 FIT，并下载官方 `rv1109-nand-lite` rootfs，
-产物 `zboot.img` + `rootfs.ubi.rv1109` 以 artifact 分发。SC5338 出图驱动仍待补（见 [`docs/SC5338.md`](docs/SC5338.md)）。
+产物 `zboot.img` + `rootfs.ubi.rv1109` 以 artifact 分发。**SC5338 出图驱动已编入内核**
+（CI 经 `tools/apply_kernel_patch.py` 注入 `CONFIG_VIDEO_SC5338=y`，见 [`docs/SC5338.md`](docs/SC5338.md) 第 6 节）。
 
 现有 14 个分区备份只覆盖 256 MiB 中的 252.5 MiB（98.63 %），
 缺 loader 区与 GPT 备表；且 ⑨ 从 offset 0 误写过整片，补读的内容未必干净。
@@ -43,6 +44,8 @@ SC5338 驱动，但**资料包已备齐**（[`docs/SC5338.md`](docs/SC5338.md)�
 firmware/          官方 nightly 固件 openipc.rv1109-nand-lite.tgz + 解包镜像
 src/firmware-master/  OpenIPC firmware 源码（核对打包/构建逻辑用）
 src/sensor-reference/  SC5338 参考驱动/寄存器表/内核配置（9 份下载源码/配置 + 1 份生成的 .h）
+src/kernel-patches/   SC5338 内核驱动成品：`sc5338.c`（V4L2 subdev 驱动）+ `sc5338-tables.h`（寄存器表，
+                      由 `tools/gen_sc5338_tables.py` 从参考头提取）+ 参考寄存器头 `sc5338-regs-rockchip.h`
 移动千里眼S4602原厂固件备份/  14 个原厂分区镜像，252.5 MiB（md5 见 INCIDENT.md）
 docs/PORTING.md    移植报告：证据链、差距矩阵、实施路径、红线、验收标准
 docs/BOOT_FEASIBILITY.md  能不能刷 / U-Boot 能否引导：三层判定、FIT 模板解法、bootargs 冲突、L3 缺口
@@ -70,13 +73,15 @@ uboot/             00 只读探测 → 01 分区备份(历史) / **01-full-backu
 1. 装依赖 + 下载官方 `toolchain.rockchip-rv11xx.tgz`（arm-openipc-linux-gnueabihf）。
 2. 克隆 `OpenIPC/linux@rockchip-rv11xx`，以 `rv1126.generic.config` 为基线，
    用 `scripts/kconfig/merge_config.sh` 叠加 `board/s4602/s4602_kernel_fragment.config`
-   （CMDLINE_FORCE 写死 mtdparts/bootargs、存储栈、ISP、板载外设）。
+   （CMDLINE_FORCE 写死 mtdparts/bootargs、存储栈、ISP、板载外设、**CONFIG_VIDEO_SC5338=y**）。
+   叠加前由 `tools/apply_kernel_patch.py` 把 `src/kernel-patches/sc5338.c` + `sc5338-tables.h`
+   拷入 `linux/drivers/media/i2c/` 并向 `Makefile`/`Kconfig` 注入 `VIDEO_SC5338`。
 3. 编译 `zImage`，配合原厂 `docs/evidence/vendor-kernel.dtb` 经 `tools/make_fit.sh` 打 FIT（`zboot.img`）。
 4. 下载官方 `openipc.rv1109-nand-lite.tgz` 取 `rootfs.ubi.rv1109`。
 
 **关键事实**：OpenIPC 内核按分支 HEAD 取源码，nightly rootfs 同源 → 模块 ABI 一致；
 存储/网络/ISP 均已编进内核（`=y`），故即使个别模块偏移，引导 + SSH 仍可工作。
-SC5338 出图驱动缺位，见 [`docs/SC5338.md`](docs/SC5338.md)。
+SC5338 出图驱动已编入内核（CI 注入），IQ/3A tuning XML 仍待原厂 rootfs 解包，见 [`docs/SC5338.md`](docs/SC5338.md)。
 
 本地复现（需先放好 OpenIPC 工具链到 PATH）：`bash tools/build_s4602_kernel.sh`
 
