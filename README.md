@@ -6,6 +6,7 @@ SPL/DDR 仍正常，但进不了 U-Boot 控制台。完整复盘见 [`docs/INCID
 **如何做一份真正完整的备份见 [`docs/FULL_BACKUP.md`](docs/FULL_BACKUP.md)**。
 
 **构建方向（2026-11-11 调整）：假设设备正常，先交付一份能引导、能挂载官方 nightly rootfs、进 SSH 的 OpenIPC。**
+✅ **CI 已绿**：run `42984058196` 成功，产出 artifact `openipc-s4602-rv1109`（zboot.img 3.38 MiB + rootfs.ubi.rv1109 7.5 MiB）。
 构建已由 **GitHub Actions** 接管（仓库 `ppliver/cmcc-s4602-rv1109`，见 `.github/workflows/build.yml`）：
 push `main` 或手动 `workflow_dispatch` 即从官方工具链 + `OpenIPC/linux@rockchip-rv11xx` 编译内核，
 复用原厂 `vendor-kernel.dtb` 打 FIT，并下载官方 `rv1109-nand-lite` rootfs，
