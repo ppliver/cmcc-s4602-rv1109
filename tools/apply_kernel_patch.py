@@ -27,9 +27,8 @@ KCONFIG_BLOCK = """config VIDEO_SC5338
 \thelp
 \t  Support for the SmartSens SC5338 CMOS image sensor (chip id 0xce50,
 \t  2-lane MIPI CSI-2). Enables linear 2880x1620@30fps and HDR_X2
-\t  2880x1620@15fps on the China Mobile S4602 (RV1109) camera.
-
-\t  To compile this driver as a module, choose M here. If unsure, say N.
+\t  2880x1620@15fps on the China Mobile S4602 (RV1109) camera. To compile
+\t  this driver as a module, choose M here. If unsure, say N.
 """
 
 
