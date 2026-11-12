@@ -856,6 +856,65 @@ static int yt8011_config_init(struct phy_device *phydev)
 	return 0;
 }
 
+/*
+ * CMCC S4602 定制板 YT8512B PHY 初始化。
+ * 序列逐字复制自原厂固件实际启动日志（eth0 成功 "Link is Up" 的那一次）：
+ *   reg30=0x2027 reg31=0x2026      (ext 0x2027 <- 0x2026)
+ *   reg16=0x62                    (CL22 reg 0x10 <- 0x62)
+ *   reg0 =0xa100                  (BMCR 软复位 + 100M/全双工预设)
+ *   reg30=0x2057 reg31=0x2a4f
+ *   reg30=0x1   reg31=0x1240
+ *   reg30=0x11  reg31=0x6
+ *   reg30=0x12  reg31=0xa
+ *   reg30=0x13  reg31=0xf
+ *   reg30=0x14  reg31=0x11
+ *   reg30=0x15  reg31=0x1fe
+ * 原厂固件靠这套写寄存器（etc/init.d/S10phyreg_config 用户态脚本）让 PHY 在板载
+ * RMII 走线下出链路；OpenIPC 之前既没跑这个脚本、内核驱动也没做这套写寄存器，
+ * 所以 eth0 一直 NO-CARRIER。必须放在 clk_init 之后，作为最终生效的配置。
+ *
+ * 注：同型号备份 rootfs 里的脚本该行是 "0x10 0x2"（reg16=0x2），与启动日志的 0x62
+ * 不一致。这里以实测 Link is Up 的启动日志 0x62 为准；若个别批次实测用 0x2，把
+ * 下面 0x62 改成 0x2 即可。
+ */
+static int yt8512_s4602_phy_init(struct phy_device *phydev)
+{
+	int ret;
+
+	ret = ytphy_write_ext(phydev, 0x2027, 0x2026);
+	if (ret < 0)
+		return ret;
+	ret = phy_write(phydev, 0x10, 0x62);
+	if (ret < 0)
+		return ret;
+	ret = phy_write(phydev, MII_BMCR, 0xa100);
+	if (ret < 0)
+		return ret;
+	ret = ytphy_write_ext(phydev, 0x2057, 0x2a4f);
+	if (ret < 0)
+		return ret;
+	ret = ytphy_write_ext(phydev, 0x0001, 0x1240);
+	if (ret < 0)
+		return ret;
+	ret = ytphy_write_ext(phydev, 0x0011, 0x0006);
+	if (ret < 0)
+		return ret;
+	ret = ytphy_write_ext(phydev, 0x0012, 0x000a);
+	if (ret < 0)
+		return ret;
+	ret = ytphy_write_ext(phydev, 0x0013, 0x000f);
+	if (ret < 0)
+		return ret;
+	ret = ytphy_write_ext(phydev, 0x0014, 0x0011);
+	if (ret < 0)
+		return ret;
+	ret = ytphy_write_ext(phydev, 0x0015, 0x01fe);
+	if (ret < 0)
+		return ret;
+
+	return 0;
+}
+
 static int yt8512_config_init(struct phy_device *phydev)
 {
 	int ret;
@@ -866,6 +925,13 @@ static int yt8512_config_init(struct phy_device *phydev)
 		return ret;
 
 	ret = yt8512_led_init(phydev);
+	if (ret < 0)
+		return ret;
+
+	/* CMCC S4602 定制板 PHY 初始化：逐字复制原厂固件启动日志里的写寄存器序列
+	 * （原厂靠 etc/init.d/S10phyreg_config 用户态脚本做这件事，OpenIPC 之前缺了
+	 * 它，所以 eth0 一直 NO-CARRIER）。必须放在 clk_init 之后，作为最终生效配置。 */
+	ret = yt8512_s4602_phy_init(phydev);
 	if (ret < 0)
 		return ret;
 

@@ -1,0 +1,28 @@
+# 一键复现原厂 PHY 初始化序列（来自原厂启动日志实测 Link is Up 的那次）
+# 用途：在正在运行的 OpenIPC 内核上直接写 sysfs，验证"缺这套写寄存器 = eth0 NO-CARRIER"的假设。
+# 电缆已插的前提下，跑完 carrier 应变 1。
+P=/sys/devices/platform/ffc40000.ethernet/mdio_bus/stmmac-0/stmmac-0:00/phy_registers
+echo "=== carrier BEFORE ==="; cat /sys/class/net/eth0/carrier
+echo 0x1e 0x2027 > $P
+echo 0x1f 0x2026 > $P
+echo 0x10 0x62  > $P
+echo 0x0  0xa100 > $P
+echo 0x1e 0x2057 > $P
+echo 0x1f 0x2a4f > $P
+echo 0x1e 0x1   > $P
+echo 0x1f 0x1240 > $P
+echo 0x1e 0x11  > $P
+echo 0x1f 0x6   > $P
+echo 0x1e 0x12  > $P
+echo 0x1f 0xa   > $P
+echo 0x1e 0x13  > $P
+echo 0x1f 0xf   > $P
+echo 0x1e 0x14  > $P
+echo 0x1f 0x11  > $P
+echo 0x1e 0x15  > $P
+echo 0x1f 0x1fe > $P
+sleep 4
+echo "=== carrier AFTER ==="; cat /sys/class/net/eth0/carrier
+echo "=== operstate ==="; cat /sys/class/net/eth0/operstate
+ip link show eth0
+echo "=== dmesg Link ==="; dmesg | grep -a -i "Link is"
