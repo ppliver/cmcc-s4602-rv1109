@@ -2,7 +2,7 @@
 """
 Inject the S4602 board support into an OpenIPC/linux tree (rockchip-rv11xx).
 
-Two independent fixes are applied before `make`:
+Three independent fixes are applied before `make`:
 
 1. SC5338 sensor driver -- OpenIPC/linux does not ship it, so we copy
    sc5338.c + sc5338-tables.h into drivers/media/i2c/ and wire them into the
@@ -15,6 +15,14 @@ Two independent fixes are applied before `make`:
    "cannot open mtd 9, error -19". We inject the exact table entry recovered
    byte-for-byte from the vendor 4.19.111 vmlinux (spi_nand_tbl @0xb3f674).
 
+3. Motorcomm YT8512B PHY driver -- the S4602 external RMII PHY (Qualcomm/
+   Motorcomm YT8512B, phy_id 0x00000128) is not supported by the generic
+   ieee802.3-c22 driver, and OpenIPC 4.19 has no CONFIG_MOTORCOMM_PHY (the
+   upstream driver landed in 5.13+). We copy Rockchip BSP motorcomm.c (from
+   their 5.10 tree; 4.19-compatible) into drivers/net/phy/ and wire it into
+   the Makefile + Kconfig so CONFIG_MOTORCOMM_PHY becomes a real symbol.
+   Without this, eth0 shows NO-CARRIER and never links.
+
 Usage:
   python3 tools/apply_kernel_patch.py --linux /opt/linux [--patch-dir src/kernel-patches]
 
@@ -25,6 +33,23 @@ import os
 
 DRIVER_C = "sc5338.c"
 DRIVER_H = "sc5338-tables.h"
+
+# --- Motorcomm YT8512B PHY (external RMII PHY on S4602) ---
+# Fetch from Rockchip develop-5.10 (4.19-compatible); committed under
+# src/kernel-patches/motorcomm.c. PHY_ID_YT8512B in that driver == 0x00000128,
+# exactly our board PHY, so it binds by PHY ID (DTB compatible is generic c22).
+MOTORCOMM_C = "motorcomm.c"
+MOTORCOMM_MAKE = "obj-$(CONFIG_MOTORCOMM_PHY) += motorcomm.o"
+MOTORCOMM_KCONFIG = (
+    "config MOTORCOMM_PHY\n"
+    "\ttristate \"Motorcomm PHYs\"\n"
+    "\tdepends on PHYLIB\n"
+    "\thelp\n"
+    "\t  Support for Motorcomm YT8010/YT8511/YT8512/YT8521/YT8531 PHYs.\n"
+    "\t  The China Mobile S4602 (RV1109) uses a YT8512B external RMII PHY\n"
+    "\t  (phy_id 0x00000128); without this driver the generic c22 PHY cannot\n"
+    "\t  bring the RMII link up. To compile as a module, choose M here.\n"
+)
 
 MAKEFILE_OBJ = "obj-$(CONFIG_VIDEO_SC5338) += sc5338.o"
 
@@ -165,10 +190,87 @@ def patch_spi_nand_tbl(linux):
     print("  sfc_nand.c: injected 0xE5,0xF2 (S4602 SPI-NAND) table entry")
 
 
+def inject_motorcomm(linux, patch_dir):
+    """Copy Rockchip BSP motorcomm.c into drivers/net/phy and wire Kconfig/Makefile."""
+    phy_dir = os.path.join(linux, "drivers", "net", "phy")
+    if not os.path.isdir(phy_dir):
+        raise SystemExit("ERROR: %s not found (is --linux the linux tree?)" % phy_dir)
+    src = os.path.join(patch_dir, MOTORCOMM_C)
+    if not os.path.isfile(src):
+        raise SystemExit("ERROR: missing patch file: %s" % src)
+
+    dst = os.path.join(phy_dir, MOTORCOMM_C)
+    if os.path.isfile(dst):
+        print("  motorcomm.c already present (skip copy)")
+    else:
+        with open(src, "rb") as f:
+            data = f.read()
+        with open(dst, "wb") as f:
+            f.write(data)
+        print("  copied %s -> drivers/net/phy/" % MOTORCOMM_C)
+
+    # --- Makefile ---
+    mf = os.path.join(phy_dir, "Makefile")
+    with open(mf, "r", encoding="utf-8") as f:
+        mlines = f.readlines()
+    if any(MOTORCOMM_MAKE in ln for ln in mlines):
+        print("  Makefile already references motorcomm.o (skip)")
+    else:
+        idx = None
+        for i, ln in enumerate(mlines):
+            if ln.strip().startswith("obj-$(CONFIG_MICREL_PHY)"):
+                idx = i + 1
+                break
+        if idx is None:
+            for i, ln in enumerate(mlines):
+                if ln.strip().startswith("obj-$(CONFIG_"):
+                    idx = i + 1
+        if idx is None:
+            idx = len(mlines)
+        mlines.insert(idx, MOTORCOMM_MAKE + "\n")
+        with open(mf, "w", encoding="utf-8") as f:
+            f.writelines(mlines)
+        print("  Makefile: added '%s'" % MOTORCOMM_MAKE)
+
+    # --- Kconfig ---
+    kf = os.path.join(phy_dir, "Kconfig")
+    with open(kf, "r", encoding="utf-8") as f:
+        kc = f.read()
+    if "config MOTORCOMM_PHY" in kc:
+        print("  Kconfig already has MOTORCOMM_PHY (skip)")
+        return
+    klines = kc.splitlines(keepends=True)
+    idx = None
+    for i, ln in enumerate(klines):
+        if ln.strip() == "config MICREL_PHY":
+            for j in range(i + 1, len(klines)):
+                s = klines[j].strip()
+                if s.startswith("config ") or s == "endmenu":
+                    idx = j
+                    break
+            break
+    if idx is None:
+        for i in range(len(klines) - 1, -1, -1):
+            if klines[i].strip() == "endmenu":
+                idx = i
+                break
+    if idx is None:
+        idx = len(klines)
+    if idx > 0 and klines[idx - 1].strip() != "":
+        klines.insert(idx, "\n")
+        idx += 1
+    klines.insert(idx, MOTORCOMM_KCONFIG)
+    if klines[idx + 1].strip() != "":
+        klines.insert(idx + 1, "\n")
+    with open(kf, "w", encoding="utf-8") as f:
+        f.writelines(klines)
+    print("  Kconfig: added 'config MOTORCOMM_PHY'")
+
+
 def main():
     ap = argparse.ArgumentParser(description="Inject S4602 board support into OpenIPC/linux")
     ap.add_argument("--linux", required=True, help="path to OpenIPC/linux tree")
-    ap.add_argument("--patch-dir", default=None, help="dir containing sc5338.c / sc5338-tables.h")
+    ap.add_argument("--patch-dir", default=None, help="dir containing sc5338.c / sc5338-tables.h / motorcomm.c")
     args = ap.parse_args()
 
     here = os.path.dirname(os.path.abspath(__file__))
@@ -186,6 +288,7 @@ def main():
     patch_makefile(i2c_dir)
     patch_kconfig(i2c_dir)
     patch_spi_nand_tbl(linux)
+    inject_motorcomm(linux, patch_dir)
     print("Done.")
 
 

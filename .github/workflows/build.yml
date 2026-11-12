@@ -32,11 +32,15 @@ jobs:
       - name: Clone OpenIPC linux (rockchip-rv11xx)
         run: git clone --depth 1 --branch rockchip-rv11xx https://github.com/OpenIPC/linux.git /opt/linux
 
-      - name: Inject S4602 board support into linux tree (SC5338 + SPI-NAND id)
+      - name: Inject S4602 board support into linux tree (SC5338 + SPI-NAND id + Motorcomm PHY)
         run: |
           python3 "$GITHUB_WORKSPACE/tools/apply_kernel_patch.py" --linux /opt/linux
           grep -q '0xE5, 0xF2' /opt/linux/drivers/rkflash/sfc_nand.c || { echo "ERROR: S4602 SPI-NAND id (e5 f2 e5) not injected"; exit 1; }
           grep -q 'config VIDEO_SC5338' /opt/linux/drivers/media/i2c/Kconfig || { echo "ERROR: SC5338 Kconfig not injected"; exit 1; }
+          test -f /opt/linux/drivers/net/phy/motorcomm.c || { echo "ERROR: motorcomm.c not copied"; exit 1; }
+          grep -q '^config MOTORCOMM_PHY' /opt/linux/drivers/net/phy/Kconfig || { echo "ERROR: MOTORCOMM_PHY Kconfig not injected"; exit 1; }
+          grep -q 'CONFIG_MOTORCOMM_PHY) += motorcomm.o' /opt/linux/drivers/net/phy/Makefile || { echo "ERROR: motorcomm.o Makefile entry not injected"; exit 1; }
+          grep -q 'PHY_ID_YT8512B.*0x00000128' /opt/linux/drivers/net/phy/motorcomm.c || { echo "ERROR: YT8512B PHY id missing"; exit 1; }
 
       - name: Download OpenIPC rv11xx generic kernel config (baseline)
         run: |
@@ -73,6 +77,9 @@ jobs:
             exit 1
           fi
           echo ">>> external RMII PHY driver resolution (fixes eth0 NO-CARRIER on S4602):"
+          echo "NOTE: S4602 external PHY is a Motorcomm YT8512B (phy_id 0x00000128). CONFIG_MOTORCOMM_PHY"
+          echo "      is injected by tools/apply_kernel_patch.py (Rockchip BSP motorcomm.c, 4.19-compatible)"
+          echo "      since OpenIPC 4.19 lacks it upstream. Hard-require it + GMAC + fallback PHYs."
           for s in MOTORCOMM_PHY REALTEK_PHY MICREL_PHY STMMAC_ETH DWMAC_ROCKCHIP; do grep -E "^CONFIG_$s=y$" .config || { echo "ERROR: required PHY/GMAC symbol CONFIG_$s is not built-in (y). Aborting."; exit 1; }; done
           make ARCH=arm -j"$(nproc)" zImage
 

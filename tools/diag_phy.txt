@@ -1,0 +1,19 @@
+echo __DIAG2_START__
+date
+echo "=== full GMAC/PHY dmesg from boot ==="
+dmesg | grep -iE 'stmmac|gmac|eth0|phy|mdio|ffc40000|rk_gmac' | head -60
+echo "=== busybox mii-tool -v (raw PHY regs) ==="
+busybox mii-tool -v eth0 2>&1 | head -40
+echo "=== busybox mii-tool (basic) ==="
+busybox mii-tool eth0 2>&1 | head
+echo "=== re-read phy_id ==="
+cat /sys/bus/mdio_bus/devices/stmmac-0:00/phy_id 2>/dev/null
+echo "=== phy_registers attr? ==="
+ls /sys/bus/mdio_bus/devices/stmmac-0:00/ 2>/dev/null
+echo "=== mii diag registers via mii-tool ==="
+busybox mii-tool -r eth0 2>&1 | head
+busybox mii-tool -w eth0 2>&1 | head
+echo "=== clk summary for gmac ==="
+ls /sys/kernel/debug/clk/ 2>/dev/null | head
+find /sys/kernel/debug/clk -name '*gmac*' -o -name '*mac*' 2>/dev/null | head
+echo __DIAG2_END__

@@ -1,0 +1,11 @@
+echo __D3__
+echo "=== raw PHY registers (stmmac-0:00) ==="
+od -A x -t x2 /sys/bus/mdio_bus/devices/stmmac-0:00/phy_registers 2>/dev/null | head -24
+echo "=== GMAC/RMII clock rates ==="
+for c in clk_gmac_div clk_gmac_rgmii_clkin_m0 clk_gmac_rgmii_clkin_m1 clk_gmac_src_m0 clk_gmac_rgmii_m0; do echo -n "$c = "; cat /sys/kernel/debug/clk/$c/clk_rate 2>/dev/null; echo; done
+echo "=== eth0 attached_dev / interface ==="
+cat /sys/bus/mdio_bus/devices/stmmac-0:00/attached_dev 2>/dev/null
+cat /sys/bus/mdio_bus/devices/stmmac-0:00/phy_interface 2>/dev/null
+echo "=== driver bound ==="
+ls -l /sys/bus/mdio_bus/devices/stmmac-0:00/driver 2>/dev/null
+echo __D3__

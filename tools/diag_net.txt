@@ -1,0 +1,33 @@
+echo __DIAG_START__
+date
+echo "=== mdio bus devices ==="
+ls -l /sys/bus/mdio_bus/devices/ 2>/dev/null
+ls /sys/bus/mdio_bus/devices/ 2>/dev/null
+echo "=== PHY IDs (corrected path) ==="
+for f in /sys/bus/mdio_bus/devices/*/phy_id; do echo "$f : $(cat $f 2>/dev/null)"; done
+echo "=== net interfaces ==="
+ls /sys/class/net/
+echo "=== eth0 state ==="
+cat /sys/class/net/eth0/carrier 2>/dev/null
+cat /sys/class/net/eth0/operstate 2>/dev/null
+echo "=== ip ==="
+ip -br addr 2>/dev/null || ip addr show
+ip link show eth0 2>/dev/null
+echo "=== tools ==="
+command -v ethtool; command -v mdio; command -v busybox
+echo "=== ethtool eth0 ==="
+ethtool eth0 2>/dev/null | head -25
+echo "=== ethtool -i eth0 ==="
+ethtool -i eth0 2>/dev/null
+echo "=== ethtool -d eth0 (PHY regs) ==="
+ethtool -d eth0 2>/dev/null | head -40
+echo "=== gpio sysfs ==="
+ls /sys/class/gpio/ 2>/dev/null
+echo "=== try link up ==="
+ip link set eth0 up 2>&1
+sleep 4
+echo "carrier after up: $(cat /sys/class/net/eth0/carrier 2>/dev/null)"
+echo "operstate after up: $(cat /sys/class/net/eth0/operstate 2>/dev/null)"
+echo "=== dmesg gmac/phy ==="
+dmesg | grep -iE 'stmmac|gmac|eth0|phy|mdio|ffc40000' | tail -45
+echo __DIAG_END__
