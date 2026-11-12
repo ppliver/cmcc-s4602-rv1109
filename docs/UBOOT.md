@@ -205,3 +205,40 @@ BootROM  →  TPL (ddr bin, 闭源, 初始化 DDR)
   （见 `BOOT_FEASIBILITY.md` 第 2 节）；
 - **没有 `ubi` 命令**、`nand` 无设备 → 只能用 `mtd write spi-nand0 <addr> <off> <size>`，
   且 size 必须等于文件实际字节数（这正是变砖根因，见 `INCIDENT.md`）。
+
+---
+
+## TFTP 实测结论（2026-11-12，全新机，U-Boot 阶段不可用）
+
+用户提出本机与相机同在 `192.168.6.x` 网段（本机 `192.168.6.109/24`），要求验证 TFTP。
+
+**服务端侧完全正常**：`tools/tftp_server.py` 在 UDP 69 提供只读 RRQ，
+支持 OACK / blksize / tsize / 超时重传；本机回环自测下载
+`zboot.img.s4602`（3,375,828 B）得到 2300 块 / 0.38 s / **逐位一致**
+（CRC32 `8e7267d0`），OACK 协商 `blksize=1468 tsize=3375828` 正常。
+
+**设备侧 U-Boot 无以太网设备**（三重实证）：
+
+| 步骤 | 现场回显 |
+|---|---|
+| `setenv ipaddr 192.168.6.220` / `serverip 192.168.6.109` / `netmask` | ✅ `CHECK_IP=192.168.6.220 CHECK_SERVER=192.168.6.109 CHECK_MASK=255.255.255.0` |
+| `ping 192.168.6.109` | ❌ `No ethernet found.` / `ping failed; host ... is not alive` |
+| `mii device` / `mii info` | ❌ `No such device: <NULL>` / `NULL device name!`（连 MII bus 都没注册） |
+| `printenv ethact` | `## Error: "ethact" not defined`（只有 `ethaddr=48:E5:33:DB:EF:5B`） |
+| `setenv ethact eth0` / `gmac` / `ethernet@ffc40000` 后各 `ping` | 三次全部 `No ethernet found.` |
+
+**结论**：`help` 里确有 `tftp / dhcp / bootp / ping / mii` 命令（命令层编进去了），
+但底层 `eth_device` / MII bus **一个都没注册** —— 厂商裁剪了 GMAC 驱动或其 U-Boot DTB
+把 ethernet 节点禁用了。因此 **U-Boot 阶段 TFTP 不可用**，与网段、防火墙、服务端无关。
+（备份 `uboot_a` 分区里只有 DTB 字符串 `ethernet@ffc40000` / `stmmaceth`，
+无 U-Boot 网络命令串，可作辅证。）
+
+**哪里还能用 TFTP**：原厂 Linux 启动时 `eth0: Link is Up - 100Mbps/Full`，网络栈是好的；
+但需要 `Cmiot login:` 的移动定制账号密码（4 组通用默认全失败）。若拿到凭据，
+可在 Linux shell 里用 tftp 客户端下载镜像，甚至直接从 Linux 侧刷写。
+
+**其它通道盘点**：
+- SD `fatload mmc 1`：已验证可用（8×32 MiB 备份 + 镜像加载都跑通），继续用；
+- `download` / `rockusb`：命令存在，但需 USB OTG 线 + PC 侧 `rkdeveloptool`（本机未安装）；
+- 串口 `loadb` / `loady` / `loadx` / `loads`：**help 里没有，被裁剪**。
+- `tftpput` 本来就没有；即便 U-Boot 网络可用也只能 PC→设备 RAM，不能反向导出备份。
