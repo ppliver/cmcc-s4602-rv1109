@@ -230,7 +230,7 @@ boot_chain:
 
 # ---- 尚未解决的 blocker（make_flash_plan.py 检查前 3 项，全 true 才放行）----
 openipc_blockers:
-  fit_image_built_and_verified: false    # 自建 FIT zboot.img 通过 iminfo 且 <= 4 MiB
+  fit_image_built_and_verified: true     # CI run 43177394588 产出 zboot.img.s4602：FIT 魔数 d00dfeed、3.38MiB<4MiB
   bootargs_strategy_verified: true       # 策略已实现：CONFIG_CMDLINE_FORCE=y+内置 UBIFS cmdline+mtdparts，待 L2-a 实机确认
   slot_strategy_confirmed: true          # 已定：刷 _b 槽（ubi.mtd=9），_a 留原厂回滚（回滚=从备份恢复 boot_b/system_b）
   sensor_driver_available: true          # sc5338.c 已编入 CI 内核（CONFIG_VIDEO_SC5338=y）；出图仍待 rkaiq IQ/3A XML + 实板验证
@@ -247,7 +247,7 @@ flash_plan:
     size: "0x02c00000"
   load_addr: "0x1000000"          # 实测可用；0x02008000 会与 FIT kernel load 冲突
   rootfs_image: "firmware/rootfs.ubi.rv1109"
-  rootfs_md5: "5c1849f7683f7f33bf800d2cf966249a"   # 待下载后按真实文件核对
+  rootfs_md5: "a9052a434652eb7f7d4895c61479c95e"   # CI run 43177394588 nightly rootfs.ubi.rv1109（原 11-02 值为 5c1849f7…；nightly 每日重建致 md5 漂移）
   rootfs_write_size: "0x780000"   # = 7,864,320 B，必须用真实文件长度，不是分区大小
   # 不能靠 setenv bootargs：U-Boot 强制注入 root=/dev/ubiblock0_0 rootfstype=squashfs。
   # 已用内核 CONFIG_CMDLINE_FORCE=y + 内置完整 cmdline（见 s4602_kernel_fragment.config）。
