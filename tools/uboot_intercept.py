@@ -1,18 +1,40 @@
-import serial, time, sys
+#!/usr/bin/env python3
+"""等上电 -> 截停 autoboot -> 停在 U-Boot '=>'，不自动执行任何写/启动命令。
+
+用法: python3 tools/uboot_intercept.py [等待秒数]
+  python3 tools/uboot_intercept.py 420
+
+截停策略（2026-11-12 实机校准）:
+  - bootdelay 仅 1 秒，启动横幅一帧约 2726 B；按「累积文本最后 600 字符」
+    检测会漏掉头部 DDR Version，导致一次按键都没发（v1 的 bug）。
+  - 改为在**每一帧字节**里找横幅；命中后每 0.06s 发一次空格/CTRL+C，
+    1 秒倒计时内有 ~16 次机会。未命中时不发字节，不骚扰已运行的 Linux getty。
+  - 看到 '=>' 即停手，发回车清空命令行缓冲后退出，释放 COM4 给后续命令。
+
+日志落盘到 docs/evidence/（用脚本自身相对路径，避免 Windows /tmp 解析歧义）。
+"""
+import sys
+import time
+from datetime import datetime
+from pathlib import Path
+
+import serial
 
 PORT = "COM4"
 BAUD = 1500000
-OUT  = "/tmp/s4602_uboot_boot.log"
+ROOT = Path(__file__).resolve().parents[1]
+EVID = ROOT / "docs" / "evidence"
 DURATION = float(sys.argv[1]) if len(sys.argv) > 1 else 160.0
 
 ser = serial.Serial(PORT, BAUD, bytesize=8, parity="N", stopbits=1,
                     timeout=0.15, xonxoff=False, rtscts=False, dsrdtr=False)
-ser.flushInput()
+ser.reset_input_buffer()
 buf = bytearray()
-interrupted = False
+booting = False
+prompt = False
 t0 = time.time()
-last_spam = 0.0
-got_prompt = False
+last_send = 0.0
+toggle = 0
 
 print(f"[intercept] listening on {PORT} for {DURATION:.0f}s; power-cycle the device now", flush=True)
 try:
@@ -20,42 +42,39 @@ try:
         b = ser.read(4096)
         if b:
             buf.extend(b)
-            low = buf[-400:].decode("utf-8", errors="replace").lower()
-            # 命中 autoboot 倒计时 -> 发 Ctrl-C 截停一次
-            if not interrupted and ("stop autoboot" in low or "hit key" in low or "autoboot" in low):
-                ser.write(b"\x03")
-                interrupted = True
-                print("[intercept] autoboot stop key sent (CTRL+C)", flush=True)
-            # 看到 U-Boot 提示符
-            if "=>" in low:
-                got_prompt = True
-        # 前 10s 兜底：每 0.4s 发一个空格，确保即使漏检也能截停
-        now = time.time() - t0
-        if not interrupted and now < 10.0 and now - last_spam > 0.4:
-            ser.write(b" ")
-            last_spam = now
-        # 已进入 => 且已稳定 2s，提前结束释放串口
-        if got_prompt and time.time() - t0 > 3.0:
-            ser.write(b"\r\n")
-            time.sleep(0.5)
-            b2 = ser.read(4096)
-            if b2:
-                buf.extend(b2)
-            break
-except KeyboardInterrupt:
-    pass
+            prev = b.decode("utf-8", errors="replace").replace("\r", "\\r")
+            print(f"[rx +{len(b)}] {prev[:200]}", flush=True)
+            low = b.decode("utf-8", errors="replace").lower()
+            if not booting and any(k in low for k in ("ddr version", "u-boot spl", "spl:", "bootrom", "maskrom")):
+                booting = True
+                print("[intercept] boot banner seen -> start spamming stop keys", flush=True)
+            if booting and "=>" in buf.decode("utf-8", errors="replace")[-600:]:
+                prompt = True
+                break
+            if booting and "booting fit image" in low:
+                print("[intercept] WARN: 已开始加载 FIT，本次未截住；继续等待下一次上电", flush=True)
+                booting = False
+        now = time.time()
+        if booting and now - last_send > 0.06:
+            ser.write(b"\x03" if toggle % 3 == 0 else b" ")
+            ser.flush()
+            toggle += 1
+            last_send = now
+        time.sleep(0.01)
+
+    if prompt:
+        time.sleep(0.4)
+        ser.write(b"\r\n")
+        ser.flush()
+        time.sleep(0.6)
+        b2 = ser.read(4096)
+        if b2:
+            buf.extend(b2)
 finally:
     ser.close()
 
-with open(OUT, "wb") as f:
-    f.write(buf)
-
-text = buf.decode("utf-8", errors="replace")
-lines = text.splitlines()
-print(f"[intercept] done. bytes={len(buf)} lines={len(lines)} prompt_seen={got_prompt}")
-print(f"[intercept] saved -> {OUT}")
-# 打印关键行
-for ln in lines:
-    l = ln.lower()
-    if any(k in l for k in ("=>", "u-boot", "autoboot", "spi-nand", "ddr", "spl", "boot", "hit key", "stop")):
-        print("  >>", ln[:160])
+EVID.mkdir(parents=True, exist_ok=True)
+out = EVID / ("live-uboot-intercept-" + datetime.now().strftime("%Y%m%d-%H%M%S") + ".log")
+out.write_bytes(bytes(buf))
+print(f"[intercept] done. bytes={len(buf)} prompt_seen={prompt}")
+print(f"[intercept] saved -> {out}")

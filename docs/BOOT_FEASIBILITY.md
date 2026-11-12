@@ -291,3 +291,65 @@ mtdparts=spi-nand0:<原厂 14 分区串>
 | `docs/evidence/sc5338-regs-crosscheck.txt` | 9 张表相似度矩阵；原厂 HDR 表与公开表 0.9551 同源 |
 | `src/sensor-reference/sc5338-regs-rockchip.h` | 导出的 5 组 `struct regval` 表（原厂 3 + 公开 2） |
 | `src/firmware-master/` | defconfig、`ubinize.cfg` / `ubinize_rockchip.cfg`、Makefile 打包逻辑 |
+
+---
+
+## 6. 实机验证结果（2026-11-12，全新机 COM4，零 flash 写入）
+
+方法：U-Boot 下 `fatload mmc 1 0x1000000 zboot.img.s4602` + `crc32` / `fdt header` 校验，
+再 `boot_fit 0x1000000` 从 RAM 启动（不碰 NAND）。
+完整日志 `docs/evidence/live-bootfit-full-20261112-165743.log`；
+原厂对照 `...-165013.log`。
+
+| 层 | 结论 |
+|---|---|
+| L1 FIT 引导 | ✅ `boot_fit` 接受无签名 FIT（无 hash/signature），`Linux version 4.19.111+` 启动 |
+| L2 cmdline | ✅ `CONFIG_CMDLINE_FORCE` 生效，`Kernel command line` 完全是本工程的 UBIFS + mtdparts 串，U-Boot 注入的原厂串被压掉 |
+| L3 SC5338 | ✅ 移植的 `sc5338.c` 在 OpenIPC 内核里 `Detected SCce50 sensor`（driver version 00.01.00） |
+
+### 6.1 阻塞项 A：SPI-NAND 芯片 id 缺项（rootfs 挂不上）
+
+- 现象：`sfc nor id: ff e5 f2` → `rkflash[1] is invalid`；
+  `sfc_nand id: e5 f2 e5` → `rkflash[2] is invalid`；
+  没有 `Creating 14 MTD partitions`，随后 `UBI error: cannot open mtd 9, error -19`。
+- 原厂对照：`sfc_nand id: e5 f2 e5` → `rkflash[2] init success` →
+  `14 cmdlinepart partitions found on MTD device spi-nand0` → `Creating 14 MTD partitions`。
+- 根因：`drivers/rkflash/sfc_nand.c` 的 `spi_nand_tbl[]` 无 `0xE5,0xF2` 项，
+  `sfc_nand_get_info()` 返回 NULL → `sfc_nand_init()` 返回 `FTL_UNSUPPORTED_FLASH` →
+  `ops->init()` 失败 → `rkflash_dev_init()` 报 invalid → 不注册 MTD 设备。
+- 修复：从原厂 4.19.111 vmlinux 的 `spi_nand_tbl @0xb3f674` **逐字节提取**表项，
+  由 `tools/apply_kernel_patch.py` 幂等注入 `spi_nand_tbl[]`：
+
+  ```c
+  { 0xE5, 0xF2, 0x00, 4, 0x40, 2, 1024, 0x0C, 19, 0x8, 1,
+    { 0x04, 0x14, 0xFF, 0xFF }, &sfc_nand_get_ecc_status6 },
+  ```
+
+  字段含义：256 MiB（density=19 → 2^19 sectors）、2 KiB page、128 KiB block、
+  2 planes、ECC 8 bit。`ecc_status6` 由共用同一函数指针 `0xb05f15b0` 的
+  `0x2C,0x24` 项（OpenIPC 表中明确为 `&sfc_nand_get_ecc_status6`）交叉确认。
+- 配置澄清：官方基线 `rv1126.generic.config` **本来就开了**
+  `RK_FLASH / RK_SFC_NAND / RK_SFC_NAND_MTD`；fragment 里那行 `CONFIG_RK_SFC_NAND=y`
+  只是冗余。误开的 `CONFIG_MTD_SPI_NAND=y`（通用 `drivers/mtd/spi-nand`，基线为 not set）已删除。
+
+### 6.2 阻塞项 B：ES7202 音频驱动 panic（内核 0.42s 挂死）
+
+- 现象：`enter into es7202_probe()` →
+  `Unable to handle kernel NULL pointer dereference at virtual address 00000002`，
+  `PC is at i2c_transfer_buffer_flags+0x18/0x7c`，`LR is at es7202_write+0x38/0x84`，
+  `Kernel panic - not syncing: Fatal exception`，之后 CPU 挂死、串口静默。
+- 根因：fragment 主动写了 `CONFIG_SND_SOC_ES7202=y`，而官方基线为 `is not set`；
+  原厂 DTB 有 es7202 节点，OpenIPC 版驱动在本板 probe 路径上拿到 NULL i2c client。
+  原厂内核里 `es7202_probe()` 能正常完成（`asoc-simple-card ... mapping ok`）。
+- 修复：删除该行（保持基线关闭），CI 增加硬失败自检。OpenIPC 视频流不需要这块音频 ADC。
+
+### 6.3 其它实机结论
+
+- 原厂 `Kernel command line` 含 `android_slotsufix=_b`，
+  `ubi0: attached mtd9 (name "system_b", size 44 MiB)` → **刷 `_b` 槽决策正确**。
+- OpenIPC `rootfs.ubi.rv1109` 的 `rootfs` 卷首 LEB 为 `31 18 10 06`（UBIFS_NODE_MAGIC），
+  故 `root=ubi0:rootfs rootfstype=ubifs` 正确（原厂自己的卷才是 squashfs via ubiblock）。
+- SD 卡在 8×32 MiB `fatwrite` 后 FAT 元数据有瑕疵
+  （Linux 报 `FAT-fs (mmcblk1): error, clusters badly computed`），
+  但 U-Boot 侧 `fatload` + CRC32 双向逐位一致；**刷写前建议在本机重新格式化该卡、只放两个镜像**
+  （全片备份已在 `backup/snapshot/` 有权威副本）。

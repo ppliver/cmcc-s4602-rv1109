@@ -1,4 +1,4 @@
-# 由 tools/make_flash_plan.py 生成 —— 2026-11-12T16:18:16
+# 由 tools/make_flash_plan.py 生成 —— 2026-11-12T17:24:47
 # 逐条执行，任何一条报错立即停手。禁止整段粘贴（曾导致命令被截断而变砖）。
 # 前置：docs/RECOVERY.md 阶段 2 已完成，原厂可启动，loader 区已补备份。
 # 本设备 U-Boot 实测：无 nand 设备 / 无 ubi / 无 saveenv，只能用 mtd 命令。
@@ -14,7 +14,7 @@
 # --- 1. 【非破坏】RAM 里验证 FIT，确认无误前不碰 flash ---
 # 本版 U-Boot 无 iminfo；改用 fdt + crc32（比 iminfo 更强，与本机逐位比对）。
 fatload mmc 1 0x1000000 zboot.img.s4602
-crc32 0x1000000 0x339B14          # 必须 = 996edec7
+crc32 0x1000000 0x3382D4          # 必须 = 8e7267d0
 fdt addr 0x1000000 ; fdt header ; fdt print /
 #  header: magic 0xd00dfeed, version 17；print: images/kernel@1 + fdt@1 + conf@1
 # 可选（会离开 U-Boot，需重新断电复位）：boot_fit 0x1000000
@@ -29,14 +29,14 @@ mtd read  spi-nand0 0x2000000 0x03A80000 0x780000
 crc32 0x2000000 0x780000   # 必须 = 24efa8cf（本版 cmp.b 报 Usage，用 crc32）
 
 # --- 3. 写内核 FIT 到 boot_b（size 必须 page 0x800 对齐）---
-# FIT 实际 3382036 B = 0x339B14；向上对齐到 0x33A000（补 1260 B 0xFF）
-mw.b 0x1000000 0xFF 0x33A000   # 先把目标缓冲区整体填 0xFF（尾部即对齐填充）
+# FIT 实际 3375828 B = 0x3382D4；向上对齐到 0x338800（补 1324 B 0xFF）
+mw.b 0x1000000 0xFF 0x338800   # 先把目标缓冲区整体填 0xFF（尾部即对齐填充）
 fatload mmc 1 0x1000000 zboot.img.s4602  # 再加载，只覆盖有效数据，尾部保持 0xFF
-crc32 0x1000000 0x339B14          # 必须 = 996edec7
+crc32 0x1000000 0x3382D4          # 必须 = 8e7267d0
 mtd erase spi-nand0 0x00A00000 0x00400000
-mtd write spi-nand0 0x1000000 0x00A00000 0x33A000
-mtd read  spi-nand0 0x2000000 0x00A00000 0x33A000
-crc32 0x2000000 0x339B14      # 必须 = 996edec7
+mtd write spi-nand0 0x1000000 0x00A00000 0x338800
+mtd read  spi-nand0 0x2000000 0x00A00000 0x338800
+crc32 0x2000000 0x3382D4      # 必须 = 8e7267d0
 
 # --- 4. bootargs：不要 setenv，也不要写 DTB chosen ---
 # 现场 7 次启动实证：U-Boot 会强制注入 root=/dev/ubiblock0_0 rootfstype=squashfs。
