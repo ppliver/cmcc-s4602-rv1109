@@ -1,0 +1,170 @@
+mtd list
+List of MTD devices:
+* spi-nand0
+  - device: flash@0
+  - parent: sfc@ffc90000
+  - driver: spi_nand
+  - type: NAND flash
+  - block size: 0x20000 bytes
+  - min I/O: 0x800 bytes
+  - OOB size: 128 bytes
+  - OOB available: 63 bytes
+  - ECC strength: 8 bits
+  - ECC step size: 512 bytes
+  - bitflip threshold: 8 bits
+  - 0x000000000000-0x000010000000 : "spi-nand0"
+=> mtd bad spi-nand0
+MTD device spi-nand0 bad blocks list:
+	0x0ff80000
+	0x0ffa0000
+	0x0ffc0000
+	0x0ffe0000
+=> printenv
+arch=arm
+baudrate=1500000
+board=evb_rv1126
+board_name=evb_rv1126
+boot_a_script=load ${devtype} ${devnum}:${distro_bootpart} ${scriptaddr} ${prefix}${script}; source ${scriptaddr}
+boot_extlinux=sysboot ${devtype} ${devnum}:${distro_bootpart} any ${scriptaddr} ${prefix}extlinux/extlinux.conf
+boot_prefixes=/ /boot/
+boot_script_dhcp=boot.scr.uimg
+boot_scripts=boot.scr.uimg boot.scr
+boot_targets=mmc1 mmc0 pxe dhcp 
+bootargs=storagemedia=mtd androidboot.storagemedia=mtd androidboot.mode=normal 
+bootcmd=boot_fit;boot_android ${devtype} ${devnum};
+bootcmd_dhcp=if dhcp ${scriptaddr} ${boot_script_dhcp}; then source ${scriptaddr}; fi;
+bootcmd_mmc0=setenv devnum 0; run mmc_boot
+bootcmd_mmc1=setenv devnum 1; run mmc_boot
+bootcmd_pxe=dhcp; if pxe get; then pxe boot; fi
+bootdelay=2
+cpu=armv7
+devnum=1
+devtype=mtd
+distro_bootcmd=for target in ${boot_targets}; do run bootcmd_${target}; done
+ethaddr=48:E5:33:DB:EF:5B
+fdt_addr_r=0x08300000
+kernel_addr_r=0x02008000
+mmc_boot=if mmc dev ${devnum}; then setenv devtype mmc; run scan_dev_for_boot_part; fi
+mtd_name=spi-nand0
+partitions=uuid_disk=${uuid_gpt_disk};name=loader1,start=32K,size=4000K,uuid=${uuid_gpt_loader1};name=loader2,start=8MB,size=4MB,uuid=${uuid_gpt_loader2};name=trust,size=4M,uuid=${uuid_gpt_atf};name=boot,size=112M,bootable,uuid=${uuid_gpt_boot};name=rootfs,size=-,uuid=69DAD710-2CE4-4E3C-B16C-21A1D49ABED3;
+pxefile_addr_r=0x00100000
+ramdisk_addr_r=0x0a200000
+rkimg_bootdev=if mmc dev 1 && rkimgtest mmc 1; then setenv devtype mmc; setenv devnum 1; echo Boot from SDcard;elif mmc dev 0; then setenv devtype mmc; setenv devnum 0;elif mtd_blk dev 0; then setenv devtype mtd; setenv devnum 0;elif mtd_blk dev 1; then setenv devtype mtd; setenv devnum 1;elif mtd_blk dev 2; then setenv devtype mtd; setenv devnum 2;elif rknand dev 0; then setenv devtype rknand; setenv devnum 0;elif rksfc dev 0; then setenv devtype spinand; setenv devnum 0;elif rksfc dev 1; then setenv devtype spinor; setenv devnum 1;fi; 
+scan_dev_for_boot=echo Scanning ${devtype} ${devnum}:${distro_bootpart}...; for prefix in ${boot_prefixes}; do run scan_dev_for_extlinux; run scan_dev_for_scripts; done;
+scan_dev_for_boot_part=part list ${devtype} ${devnum} -bootable devplist; env exists devplist || setenv devplist 1; for distro_bootpart in ${devplist}; do if fstype ${devtype} ${devnum}:${distro_bootpart} bootfstype; then run scan_dev_for_boot; fi; done
+scan_dev_for_extlinux=if test -e ${devtype} ${devnum}:${distro_bootpart} ${prefix}extlinux/extlinux.conf; then echo Found ${prefix}extlinux/extlinux.conf; run boot_extlinux; echo SCRIPT FAILED: continuing...; fi
+scan_dev_for_scripts=for script in ${boot_scripts}; do if test -e ${devtype} ${devnum}:${distro_bootpart} ${prefix}${script}; then echo Found U-Boot script ${prefix}${script}; run boot_a_script; echo SCRIPT FAILED: continuing...; fi; done
+scriptaddr=0x00000000
+sdcard_upgrade=if mmc dev 1 && fatls mmc 1 sdcard_upgrade;then mtd list;if fatload mmc 1 ${sys_memory} sdcard_upgrade/gpt.img;then mtd erase ${mtd_name} 0x00 0x20000mtd write ${mtd_name} ${sys_memory} 0x00 0x20000;else echo "not found gpt.img file!"; fi;mtd_blk part 1;if fatload mmc 1 ${sys_memory} sdcard_upgrade/uboot.img;then mtd erase ${mtd_name} ${uboot_a_start} ${uboot_a_offset};mtd erase ${mtd_name} ${uboot_b_start} ${uboot_b_offset};mtd write ${mtd_name} ${sys_memory} ${uboot_a_start} ${uboot_a_offset};mtd write ${mtd_name} ${sys_memory} ${uboot_b_start} ${uboot_b_offset};else echo "not found uboot.img file!"; fi;if fatload mmc 1 ${sys_memory} sdcard_upgrade/zboot.img;then mtd erase ${mtd_name} ${boot_a_start} ${boot_a_offset};mtd erase ${mtd_name} ${boot_a_start} ${boot_a_offset};mtd write ${mtd_name} ${sys_memory} ${boot_a_start} ${boot_a_offset};mtd write ${mtd_name} ${sys_memory} ${boot_b_start} ${boot_b_offset};else echo "not found zboot.img file!"; fi;if fatload mmc 1 ${sys_memory} sdcard_upgrade/system.ubi ;then mtd erase ${mtd_name} ${system_a_start} ${system_a_offset};mtd erase ${mtd_name} ${system_b_start} ${system_b_offset};mtd write ${mtd_name} ${sys_memory} ${system_a_start} ${system_a_offset};mtd write ${mtd_name} ${sys_memory} ${system_b_start} ${system_b_offset};else echo "not found system.ubi file!"; fi;if fatload mmc 1 ${sys_memory} sdcard_upgrade/model.ubi ;then mtd erase ${mtd_name} ${model_start} ${model_offset};mtd write ${mtd_name} ${sys_memory} ${model_start} ${model_offset};else echo "not found model.ubi file!"; fi;echo "sdcard upgrade finished!!!"; gpio set 89;gpio set 90;while true ;do gpio clear 90;sleep 1;gpio set 90;sleep 1;done;fi;
+serial#=3d99410429e09d59
+soc=rockchip
+stderr=serial
+stdin=serial
+stdout=serial
+sys_memory=0x1b3f6380
+vendor=rockchip
+
+Environment size: 4768/32764 bytes
+=> bdinfo
+arch_number = 0x00000000
+boot_params = 0x00000000
+DRAM bank   = 0x00000000
+-> start    = 0x00000000
+-> size     = 0x08400000
+DRAM bank   = 0x00000001
+-> start    = 0x08648000
+-> size     = 0x179B8000
+current eth = unknown
+ip_addr     = <NULL>
+baudrate    = 1500000 bps
+TLB addr    = 0x1FFF0000
+relocaddr   = 0x1FF39000
+reloc off   = 0x00000000
+irq_sp      = 0x1DDF9390
+sp start    = 0x1DDF7390
+Early malloc usage: 1ac4 / 80000
+fdt_blob = 08300000
+=> help
+?       - alias for 'help'
+base    - print or set address offset
+bdinfo  - print Board Info structure
+bidram_dump- Dump bidram layout
+boot    - boot default, i.e., run 'bootcmd'
+boot_fit- Boot FIT Image from memory or boot/recovery partition
+bootd   - boot default, i.e., run 'bootcmd'
+bootm   - boot application image from memory
+bootp   - boot image via network using BOOTP/TFTP protocol
+bootrkp - Boot Linux Image from rockchip image type
+bootz   - boot Linux zImage image from memory
+cmp     - memory compare
+coninfo - print console devices and information
+cp      - memory copy
+crc32   - checksum calculation
+crypto_sum- crypto checksum engine
+dhcp    - boot image via network using DHCP/TFTP protocol
+dm      - Driver model low level access
+download- enter rockusb/bootrom download mode
+dump_atags- Dump the content of the atags
+dump_irqs- Dump IRQs
+echo    - echo args to console
+editenv - edit environment variable
+env     - environment handling commands
+exit    - exit script
+ext2load- load binary file from a Ext2 filesystem
+ext2ls  - list files in a directory (default /)
+ext4load- load binary file from a Ext4 filesystem
+ext4ls  - list files in a directory (default /)
+ext4size- determine a file's size
+false   - do nothing, unsuccessfully
+fatinfo - print information about filesystem
+fatload - load binary file from a dos filesystem
+fatls   - list files in a directory (default /)
+fatsize - determine a file's size
+fatwrite- write file into a dos filesystem
+fdt     - flattened device tree utility commands
+fstype  - Look up a filesystem type
+go      - start application at address 'addr'
+gpio    - query and control gpio pins
+gpt     - GUID Partition Table
+help    - print command description/usage
+iomem   - Show iomem data by device compatible(high priority) or node name
+load    - load binary file from a filesystem
+loop    - infinite loop on address range
+ls      - list files in a directory (default /)
+md      - memory display
+mii     - MII utility commands
+mm      - memory modify (auto-incrementing address)
+mmc     - MMC sub system
+mmcinfo - display MMC info
+mtd     - MTD utils
+mtd_blk - MTD Block device sub-system
+mw      - memory write (fill)
+nand    - NAND sub-system
+nboot   - boot from NAND device
+nm      - memory modify (constant address)
+part    - disk partition related commands
+ping    - send ICMP ECHO_REQUEST to network host
+printenv- print environment variables
+pxe     - commands to get and boot from pxe files
+rbrom   - Perform RESET of the CPU
+reboot  - Perform RESET of the CPU, alias of 'reset'
+reset   - Perform RESET of the CPU
+rkimgtest- Test if storage media have rockchip image
+rockusb - Use the rockusb Protocol
+run     - run commands in an environment variable
+save    - save file to a filesystem
+setenv  - set environment variables
+sf      - SPI flash sub-system
+showvar - print local hushshell variables
+size    - determine a file's size
+sleep   - delay execution for some time
+source  - run script from memory
+sspi    - SPI utility command
+sysboot - command to get and boot from syslinux files
+sysmem_dump- Dump sysmem layout
+sysmem_search- Search a available sysmem region
+test    - minimal test like /bin/sh
+tftp    - download image via network using TFTP protocol
+true    - do nothing, successfully
+version - print monitor, compiler and linker version
+=> 

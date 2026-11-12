@@ -1,6 +1,9 @@
 # ---- 不入库：原厂全片/分区备份（252MB，含业务数据、loader 区） ----
 移动千里眼S4602原厂固件备份/
 
+# ---- 不入库：实机全片 dump（8×32MiB 分块 + 拼接镜像，约 513MB） ----
+backup/
+
 # ---- 不入库：大型二进制/镜像/解包产物 ----
 *.ubi
 *.tgz
@@ -18,6 +21,7 @@ docs/evidence/*.json
 firmware/zboot.img
 firmware/rootfs.ubi.rv1109
 firmware/boot_a.img
+firmware/zboot.img.s4602
 
 # ---- Python ----
 __pycache__/
