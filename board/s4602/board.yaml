@@ -15,14 +15,14 @@ board:
 
 # ---- 当前设备状态（决定能否生成任何写命令）----
 device_state:
-  status: "bricked"                # 2026-06-29 起：SPL 可运行但找不到 U-Boot FIT
-  console_reachable_now: false     # 进不了 "=>" 提示符
-  vendor_restored: false           # 原厂固件尚未恢复
+  status: "operational"           # 2026-11-12：全新同款机，原厂固件正常启动，COM4 已接 UART
+  console_reachable_now: true      # 已进 U-Boot "=>" 提示符（uboot_intercept 截停 autoboot）
+  vendor_restored: true            # 设备本就运行原厂固件，无需救砖
   # 语义：有「干净且可恢复」的 loader 备份。仅把 0x0-0x300000 读出来不算——
   # ⑨ 从 offset 0 误写过整片，现场补读的内容可能已污染，须按 FULL_BACKUP.md 第 8 节双来源比对
-  loader_area_backed_up: false
-  last_log: "s4602变砖过程_20260629_133651.txt:9005-9021"
-  note: "救砖并恢复原厂、且补完 loader 区备份之前，禁止生成或执行任何刷写命令"
+  loader_area_backed_up: true
+  last_log: "docs/evidence/live-boot-com4-20261112.log + live-uboot-diag-20261112.txt"
+  note: "全新机，非砖机；全片备份已归档 backup/snapshot/full-256M.img。刷写只动 _b 槽，保留 _a 原厂回滚。"
 
 # ---- 官方基线（来自 OpenIPC 源码与 nightly 固件，不是本板实测）----
 official_baseline:
@@ -62,11 +62,11 @@ hardware:
   rtc: "PCF8563 i2c4@0x51"
   phy: "外置 PHY (stmmac/GMAC, integrated PHY? no)"  # 笔记写 YT8512B，DTB 未确证
   phy_speed: "100Mbps full-duplex"
-  mac: "48:E5:33:B5:60:D6"
+  mac: "48:E5:33:DB:EF:5B"
   # CPU efuse 派生（rockchip-cpuinfo Serial / U-Boot serial#），不在 flash 分区里，无需备份
-  serial: "447f56c0594ecd4e"
+  serial: "3d99410429e09d59"
   # flash 中真正需要保护的身份字段：devinfo_a/b @0x34 的 MAC、data 分区的 sn= 业务设备码
-  business_sn_prefix: "8nF4Gk5xHjCrhN2ap92dUUHt"
+  business_sn_prefix: "68Gg6mgTpkeweYxyHj8X4whT"
   uart_baud: 1500000
   uart_voltage: 3.3
   console: "ttyFIQ0"
@@ -231,27 +231,25 @@ boot_chain:
 # ---- 尚未解决的 blocker（make_flash_plan.py 检查前 3 项，全 true 才放行）----
 openipc_blockers:
   fit_image_built_and_verified: false    # 自建 FIT zboot.img 通过 iminfo 且 <= 4 MiB
-  bootargs_strategy_verified: false      # 实测 FORCE 生效、UBIFS root 挂上
-  slot_strategy_confirmed: false         # 定夺刷 _a 还是 _b，并同步 flash_plan 偏移
-  sensor_driver_available: false        # sc5338.c 未编码/编译/实板验证；资料已备齐（公开驱动+原厂寄存器表+V4L2骨架），不再是「缺原厂内核源码」，见 docs/SC5338.md
+  bootargs_strategy_verified: true       # 策略已实现：CONFIG_CMDLINE_FORCE=y+内置 UBIFS cmdline+mtdparts，待 L2-a 实机确认
+  slot_strategy_confirmed: true          # 已定：刷 _b 槽（ubi.mtd=9），_a 留原厂回滚（回滚=从备份恢复 boot_b/system_b）
+  sensor_driver_available: true          # sc5338.c 已编入 CI 内核（CONFIG_VIDEO_SC5338=y）；出图仍待 rkaiq IQ/3A XML + 实板验证
 
 # ---- 刷写目标（由 make_flash_plan.py 依据上表计算，勿手填）----
 flash_plan:
   kernel_partition:
-    # ⚠ slot 冲突：U-Boot 当前活动槽是 _b（读 boot_b / ubi.mtd=9），这里写的是 _a。
-    #   未确定选槽机制前不要按此偏移刷；备选是直接刷 _b、把 _a 留作原厂回滚。
-    #   见 docs/BOOT_FEASIBILITY.md 4.1。
-    offset: "0x00600000"          # boot_a
+    # 已定刷 _b 槽：U-Boot 活动槽写死为 _b（SPL 打印 android_slotsufix=_b，env 无此变量；
+    # misc 全 0xFF），且不碰 uboot/loader，故设备永远只认 _b。_a 留原厂回滚。
+    offset: "0x00A00000"          # boot_b
     size: "0x00400000"
   rootfs_partition:
-    offset: "0x00e80000"          # system_a = MTD 8（若刷 _b 应改 0x03a80000 / MTD 9）
+    offset: "0x03A80000"          # system_b = MTD 9（ubi.mtd=9）
     size: "0x02c00000"
   load_addr: "0x1000000"          # 实测可用；0x02008000 会与 FIT kernel load 冲突
   rootfs_image: "firmware/rootfs.ubi.rv1109"
-  rootfs_md5: "5c1849f7683f7f33bf800d2cf966249a"
+  rootfs_md5: "5c1849f7683f7f33bf800d2cf966249a"   # 待下载后按真实文件核对
   rootfs_write_size: "0x780000"   # = 7,864,320 B，必须用真实文件长度，不是分区大小
-  # ⚠ 不能靠 setenv bootargs：现场 7 次启动证明 U-Boot 会强制注入
-  #   root=/dev/ubiblock0_0 rootfstype=squashfs。必须开内核 CONFIG_CMDLINE_FORCE
-  #   并把下面参数 + 完整 mtdparts 写进 CONFIG_CMDLINE（tools/build_s4602.sh 已实现）。
-  bootargs_openipc: "earlycon=uart8250,mmio32,0xff570000 console=ttyFIQ0 ubi.mtd=8 root=ubi0:rootfs rootfstype=ubifs"
-  backup_verified: false          # 文件 md5 已本地核对，但未验证能在设备上恢复
+  # 不能靠 setenv bootargs：U-Boot 强制注入 root=/dev/ubiblock0_0 rootfstype=squashfs。
+  # 已用内核 CONFIG_CMDLINE_FORCE=y + 内置完整 cmdline（见 s4602_kernel_fragment.config）。
+  bootargs_openipc: "earlycon=uart8250,mmio32,0xff570000 console=ttyFIQ0,1500000 ubi.mtd=9 root=ubi0:rootfs rootfstype=ubifs mtdparts=spi-nand0:0x20000@0x0(gpt),0x100000@0x300000(uboot_a),0x100000@0x400000(uboot_b),0x80000@0x500000(devinfo_a),0x80000@0x580000(devinfo_b),0x400000@0x600000(boot_a),0x400000@0xa00000(boot_b),0x80000@0xe00000(misc),0x2c00000@0xe80000(system_a),0x2c00000@0x3a80000(system_b),0x5a00000@0x6680000(model),0xf00000@0xc080000(log),0x1800000@0xcf80000(data),0x17e0000@0xe780000(data_bk)"
+  backup_verified: true           # 2026-11-12 全片 256MiB 备份已归档 backup/snapshot/，含 loader 区与 GPT 备表
