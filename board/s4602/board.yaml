@@ -22,7 +22,7 @@ device_state:
   # ⑨ 从 offset 0 误写过整片，现场补读的内容可能已污染，须按 FULL_BACKUP.md 第 8 节双来源比对
   loader_area_backed_up: true
   last_log: "docs/evidence/live-boot-com4-20261112.log + live-uboot-diag-20261112.txt"
-  note: "全新机，非砖机；全片备份已归档 backup/snapshot/full-256M.img。刷写只动 _b 槽，保留 _a 原厂回滚。"
+  note: "全新机，非砖机；全片备份已归档 backup/snapshot/full-256M.img。2026-11-12 已用 SD 通道刷 OpenIPC 到 _b 槽并启动成功（UBIFS 挂载 + sc5338 Detected SCce50）；_a 原厂保留回滚。"
 
 # ---- 官方基线（来自 OpenIPC 源码与 nightly 固件，不是本板实测）----
 official_baseline:

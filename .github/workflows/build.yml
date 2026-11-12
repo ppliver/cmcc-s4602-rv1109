@@ -72,6 +72,8 @@ jobs:
             echo "ERROR: ES7202 audio ADC must stay disabled (NULL deref in es7202_probe on this board)."
             exit 1
           fi
+          echo ">>> external RMII PHY driver resolution (fixes eth0 NO-CARRIER on S4602):"
+          for s in MOTORCOMM_PHY REALTEK_PHY MICREL_PHY STMMAC_ETH DWMAC_ROCKCHIP; do grep -E "^CONFIG_$s=y$" .config || { echo "ERROR: required PHY/GMAC symbol CONFIG_$s is not built-in (y). Aborting."; exit 1; }; done
           make ARCH=arm -j"$(nproc)" zImage
 
       - name: Package FIT (zboot.img)
