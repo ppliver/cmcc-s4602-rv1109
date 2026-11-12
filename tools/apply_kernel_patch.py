@@ -1,20 +1,27 @@
 #!/usr/bin/env python3
 """
-Inject the SC5338 sensor driver into an OpenIPC/linux tree (rockchip-rv11xx).
+Inject the S4602 board support into an OpenIPC/linux tree (rockchip-rv11xx).
 
-OpenIPC/linux does not ship a SC5338 driver, so before building we copy
-sc5338.c + sc5338-tables.h into drivers/media/i2c/ and wire them into the
-Makefile + Kconfig.  This makes CONFIG_VIDEO_SC5338 a real tristate symbol so
-the fragment (board/s4602/s4602_kernel_fragment.config) survives olddefconfig.
+Two independent fixes are applied before `make`:
+
+1. SC5338 sensor driver -- OpenIPC/linux does not ship it, so we copy
+   sc5338.c + sc5338-tables.h into drivers/media/i2c/ and wire them into the
+   Makefile + Kconfig. This makes CONFIG_VIDEO_SC5338 a real tristate symbol
+   so the fragment survives olddefconfig.
+
+2. S4602 SPI-NAND id -- the Rockchip rkflash driver's spi_nand_tbl[] has no
+   entry for the board's flash id `e5 f2 e5`, so sfc_nand_init() returns
+   FTL_UNSUPPORTED_FLASH, no MTD device is created, and UBI fails with
+   "cannot open mtd 9, error -19". We inject the exact table entry recovered
+   byte-for-byte from the vendor 4.19.111 vmlinux (spi_nand_tbl @0xb3f674).
 
 Usage:
   python3 tools/apply_kernel_patch.py --linux /opt/linux [--patch-dir src/kernel-patches]
 
-Idempotent: re-running does not duplicate Makefile/Kconfig entries.
+Idempotent: re-running does not duplicate Makefile/Kconfig/table entries.
 """
 import argparse
 import os
-import sys
 
 DRIVER_C = "sc5338.c"
 DRIVER_H = "sc5338-tables.h"
@@ -30,6 +37,26 @@ KCONFIG_BLOCK = """config VIDEO_SC5338
 \t  2880x1620@15fps on the China Mobile S4602 (RV1109) camera. To compile
 \t  this driver as a module, choose M here. If unsure, say N.
 """
+
+# Recovered from vendor 4.19.111 vmlinux (docs/evidence/vendor-vmlinux.bin),
+# spi_nand_tbl entry @0xb3f674:
+#   e5 f2 00 00 | 04 00 40 00 02 00 00 04 | 0c 13 08 01 | 04 14 ff ff | ptr
+# id=e5 f2 00, sec_per_page=4, page_per_blk=64, plane_per_die=2,
+# blk_per_plane=1024, feature=0x0C, density=19 (=256 MiB), max_ecc_bits=8,
+# has_qe_bits=1, meta={04,14,FF,FF}.
+# The function pointer 0xb05f15b0 is shared with id 0x2C,0x24, which maps to
+# &sfc_nand_get_ecc_status6 in the OpenIPC tree.
+NAND_TABLE_ENTRY = (
+    "\t/* CMCC S4602 SPI-NAND: id e5 f2 e5, 256 MiB, 2 KiB page, 128 KiB block,\n"
+    "\t * 2 planes. Recovered byte-exact from vendor 4.19.111 vmlinux\n"
+    "\t * spi_nand_tbl @0xb3f674; upstream rockchip-rv11xx lacks this id and\n"
+    "\t * sfc_nand_init() otherwise returns FTL_UNSUPPORTED_FLASH.\n"
+    "\t */\n"
+    "\t{ 0xE5, 0xF2, 0x00, 4, 0x40, 2, 1024, 0x0C, 19, 0x8, 1,\n"
+    "\t  { 0x04, 0x14, 0xFF, 0xFF }, &sfc_nand_get_ecc_status6 },\n"
+)
+
+NAND_TABLE_MARKER = "static struct nand_info spi_nand_tbl[] = {"
 
 
 def copy_driver(patch_dir, i2c_dir):
@@ -85,7 +112,6 @@ def patch_kconfig(i2c_dir):
     # Preferred anchor: right after the SC500AI block (both SmartSens sensors).
     for i, ln in enumerate(lines):
         if ln.strip() == "config VIDEO_SC500AI":
-            # Find the next top-level 'config ' or 'endmenu' after this block.
             for j in range(i + 1, len(lines)):
                 s = lines[j].strip()
                 if s.startswith("config ") or s == "endmenu":
@@ -116,8 +142,31 @@ def patch_kconfig(i2c_dir):
     print("  Kconfig: added 'config VIDEO_SC5338'")
 
 
+def patch_spi_nand_tbl(linux):
+    """Add the S4602 SPI-NAND id to drivers/rkflash/sfc_nand.c."""
+    path = os.path.join(linux, "drivers", "rkflash", "sfc_nand.c")
+    if not os.path.isfile(path):
+        raise SystemExit("ERROR: %s not found (is --linux the linux tree?)" % path)
+    with open(path, "r", encoding="utf-8") as f:
+        content = f.read()
+    if "0xE5, 0xF2" in content or "0xe5, 0xf2" in content:
+        print("  sfc_nand.c already has 0xE5,0xF2 entry (skip)")
+        return
+    start = content.find(NAND_TABLE_MARKER)
+    if start < 0:
+        raise SystemExit("ERROR: cannot find spi_nand_tbl in %s" % path)
+    end = content.find("\n};", start)
+    if end < 0:
+        raise SystemExit("ERROR: cannot find end of spi_nand_tbl in %s" % path)
+    # `end+1` points at the '};' line; insert our entry just before it.
+    patched = content[:end + 1] + NAND_TABLE_ENTRY + content[end + 1:]
+    with open(path, "w", encoding="utf-8") as f:
+        f.write(patched)
+    print("  sfc_nand.c: injected 0xE5,0xF2 (S4602 SPI-NAND) table entry")
+
+
 def main():
-    ap = argparse.ArgumentParser(description="Inject SC5338 driver into OpenIPC/linux")
+    ap = argparse.ArgumentParser(description="Inject S4602 board support into OpenIPC/linux")
     ap.add_argument("--linux", required=True, help="path to OpenIPC/linux tree")
     ap.add_argument("--patch-dir", default=None, help="dir containing sc5338.c / sc5338-tables.h")
     args = ap.parse_args()
@@ -136,6 +185,7 @@ def main():
     copy_driver(patch_dir, i2c_dir)
     patch_makefile(i2c_dir)
     patch_kconfig(i2c_dir)
+    patch_spi_nand_tbl(linux)
     print("Done.")
 
 

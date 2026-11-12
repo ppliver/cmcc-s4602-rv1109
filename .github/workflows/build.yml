@@ -32,8 +32,11 @@ jobs:
       - name: Clone OpenIPC linux (rockchip-rv11xx)
         run: git clone --depth 1 --branch rockchip-rv11xx https://github.com/OpenIPC/linux.git /opt/linux
 
-      - name: Inject SC5338 sensor driver into linux tree
-        run: python3 "$GITHUB_WORKSPACE/tools/apply_kernel_patch.py" --linux /opt/linux
+      - name: Inject S4602 board support into linux tree (SC5338 + SPI-NAND id)
+        run: |
+          python3 "$GITHUB_WORKSPACE/tools/apply_kernel_patch.py" --linux /opt/linux
+          grep -q '0xE5, 0xF2' /opt/linux/drivers/rkflash/sfc_nand.c || { echo "ERROR: S4602 SPI-NAND id (e5 f2 e5) not injected"; exit 1; }
+          grep -q 'config VIDEO_SC5338' /opt/linux/drivers/media/i2c/Kconfig || { echo "ERROR: SC5338 Kconfig not injected"; exit 1; }
 
       - name: Download OpenIPC rv11xx generic kernel config (baseline)
         run: |
@@ -63,6 +66,12 @@ jobs:
           echo ">>> SC5338 / dependency config resolution:"
           for s in MEDIA_SUPPORT MEDIA_CONTROLLER VIDEO_V4L2 I2C VIDEO_SC5338; do grep -E "^CONFIG_$s=" .config || echo "CONFIG_$s NOT SET"; done
           grep -q '^CONFIG_VIDEO_SC5338=y$' .config || { echo "ERROR: SC5338 driver is not built-in (CONFIG_VIDEO_SC5338 != y). Aborting."; exit 1; }
+          echo ">>> storage / audio config resolution:"
+          for s in RK_FLASH RK_SFC_NAND RK_SFC_NAND_MTD MTD_CMDLINE_PARTS MTD_UBI UBIFS_FS SND_SOC_ES7202 MTD_SPI_NAND; do grep -E "^CONFIG_$s=" .config || echo "CONFIG_$s NOT SET"; done
+          if grep -q '^CONFIG_SND_SOC_ES7202=y$' .config; then
+            echo "ERROR: ES7202 audio ADC must stay disabled (NULL deref in es7202_probe on this board)."
+            exit 1
+          fi
           make ARCH=arm -j"$(nproc)" zImage
 
       - name: Package FIT (zboot.img)
