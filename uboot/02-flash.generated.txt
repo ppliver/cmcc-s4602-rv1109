@@ -1,0 +1,55 @@
+# 由 tools/make_flash_plan.py 生成 —— 2026-11-12T16:18:16
+# 逐条执行，任何一条报错立即停手。禁止整段粘贴（曾导致命令被截断而变砖）。
+# 前置：docs/RECOVERY.md 阶段 2 已完成，原厂可启动，loader 区已补备份。
+# 本设备 U-Boot 实测：无 nand 设备 / 无 ubi / 无 saveenv，只能用 mtd 命令。
+# 红线：mtd write 四参数齐全，size 必须等于文件实际字节数，绝不写整个分区。
+
+# 镜像: rootfs.ubi.rv1109 (7864320 bytes = 0x780000, md5 a9052a434652eb7f7d4895c61479c95e)
+# --- 0. 槽策略（2026-11-12 现场定夺）---
+# SPL 横幅打印 _b / env 无 android_slotsufix / misc 全 0xFF → 活动槽写死在厂商 SPL，
+# 而红线是不碰 uboot/loader，所以设备永远只认 _b。故刷 _b，_a 原厂完整留作回滚。
+#   boot_b   = 0x00A00000 (size 0x00400000)
+#   system_b = 0x03A80000 (size 0x02c00000) / ubi.mtd=9
+
+# --- 1. 【非破坏】RAM 里验证 FIT，确认无误前不碰 flash ---
+# 本版 U-Boot 无 iminfo；改用 fdt + crc32（比 iminfo 更强，与本机逐位比对）。
+fatload mmc 1 0x1000000 zboot.img.s4602
+crc32 0x1000000 0x339B14          # 必须 = 996edec7
+fdt addr 0x1000000 ; fdt header ; fdt print /
+#  header: magic 0xd00dfeed, version 17；print: images/kernel@1 + fdt@1 + conf@1
+# 可选（会离开 U-Boot，需重新断电复位）：boot_fit 0x1000000
+#   → 验证 boot_fit 是否接受无签名 FIT、内核能否起来、Kernel command line 是否为 UBIFS
+
+# --- 2. 写 rootfs 到 system_b，回读 CRC 比对 ---
+fatload mmc 1 0x1000000 rootfs.ubi.rv1109
+crc32 0x1000000 0x780000       # 必须 = 24efa8cf
+mtd erase spi-nand0 0x03A80000 0x02c00000
+mtd write spi-nand0 0x1000000 0x03A80000 0x780000
+mtd read  spi-nand0 0x2000000 0x03A80000 0x780000
+crc32 0x2000000 0x780000   # 必须 = 24efa8cf（本版 cmp.b 报 Usage，用 crc32）
+
+# --- 3. 写内核 FIT 到 boot_b（size 必须 page 0x800 对齐）---
+# FIT 实际 3382036 B = 0x339B14；向上对齐到 0x33A000（补 1260 B 0xFF）
+mw.b 0x1000000 0xFF 0x33A000   # 先把目标缓冲区整体填 0xFF（尾部即对齐填充）
+fatload mmc 1 0x1000000 zboot.img.s4602  # 再加载，只覆盖有效数据，尾部保持 0xFF
+crc32 0x1000000 0x339B14          # 必须 = 996edec7
+mtd erase spi-nand0 0x00A00000 0x00400000
+mtd write spi-nand0 0x1000000 0x00A00000 0x33A000
+mtd read  spi-nand0 0x2000000 0x00A00000 0x33A000
+crc32 0x2000000 0x339B14      # 必须 = 996edec7
+
+# --- 4. bootargs：不要 setenv，也不要写 DTB chosen ---
+# 现场 7 次启动实证：U-Boot 会强制注入 root=/dev/ubiblock0_0 rootfstype=squashfs。
+# 唯一可靠做法：内核 CONFIG_CMDLINE_FORCE=y + 内置完整 cmdline（含 mtdparts）。
+# 启动后核对 'Kernel command line' 是 ubi.mtd=9 + root=ubi0:rootfs + ubifs。
+
+# --- 5. 分级验收 ---
+#  L1 boot_fit 认 FIT / Starting kernel / OpenIPC 内核版本
+#  L2 Kernel command line 正确 / ubi0 attached / UBIFS mounted / 可登录
+#  L3 majestic 出流 —— SC5338 驱动已编入 CI 内核，但 rkaiq IQ/3A XML 未取，
+#     实板出流未验证；达不到别误判为刷写失败
+
+# --- 6. 回滚 ---
+# SD 卡上保留 full-00..07.bin（本次全片备份，逐块 CRC 已验）。
+# 进 U-Boot 后 fatload + mtd write 反向写回 boot_b/system_b 即恢复原厂。
+# 失败则断电重启回未刷的 _a 槽，不要反复试刷

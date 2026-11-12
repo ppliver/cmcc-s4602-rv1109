@@ -21,6 +21,7 @@ import argparse
 import hashlib
 import re
 import sys
+import zlib
 from datetime import datetime
 from pathlib import Path
 
@@ -200,6 +201,23 @@ def main() -> int:
     load = plan["load_addr"]
     size_hex = f"0x{size:X}"
     readback = "0x2000000"
+
+    # --- 2026-11-12 实机校准（COM4 / U-Boot 2017.09）---
+    # 1) 这张 TF 卡是「整卡 FAT 卷、无分区表」：fatload/fatwrite 必须用 `mmc 1`，
+    #    `mmc 1:1` 实测报 Unrecognized filesystem。
+    # 2) 本版 U-Boot 裁掉了 iminfo；用 fdt addr/header/print + crc32 与本机逐位比对替代。
+    # 3) `? mtd` 实证：<size> 必须是 page(0x800) 倍数（erase 必须 block 0x20000 倍数）。
+    #    FIT 文件尾不足一页的部分须在 RAM 里补 0xFF 后按对齐长度写入。
+    # 4) `cmp.b` 实测报 Usage；改用 crc32 源/回读双向比对（备份阶段已验证可靠）。
+    zboot = ROOT / "firmware" / "zboot.img.s4602"
+    zboot_size = zboot.stat().st_size if zboot.is_file() else 0
+    zboot_crc = (f"{zlib.crc32(zboot.read_bytes()) & 0xffffffff:08x}"
+                 if zboot_size else "<CRC>")
+    page = 0x800
+    zboot_write = ((zboot_size + page - 1) // page) * page if zboot_size else 0
+    zboot_write_hex = f"0x{zboot_write:X}" if zboot_write else "<ALIGNED_SIZE>"
+    zboot_pad = zboot_write - zboot_size
+    rootfs_crc = f"{zlib.crc32(args.image.read_bytes()) & 0xffffffff:08x}"
     lines = [
         "# 由 tools/make_flash_plan.py 生成 —— " + datetime.now().isoformat(timespec="seconds"),
         "# 逐条执行，任何一条报错立即停手。禁止整段粘贴（曾导致命令被截断而变砖）。",
@@ -208,49 +226,58 @@ def main() -> int:
         "# 红线：mtd write 四参数齐全，size 必须等于文件实际字节数，绝不写整个分区。",
         "",
         f"# 镜像: {args.image.name} ({size} bytes = {size_hex}, md5 {md5})",
-        "# --- 0. 只刷一个槽，另一个槽原厂完整保留作回滚 ---",
-        "# ⚠ 活动槽实测是 _b（android_slotsufix=_b / ubi.mtd=9 / boot_fit 读 boot_b）；",
-        "#   本清单按 board.yaml 的 _a 偏移生成，执行前必须先按 docs/BOOT_FEASIBILITY.md 4.1",
-        "#   定夺槽方向并同步 flash_plan（或改刷 _b、让 _a 成为回滚槽）。",
+        "# --- 0. 槽策略（2026-11-12 现场定夺）---",
+        "# SPL 横幅打印 _b / env 无 android_slotsufix / misc 全 0xFF → 活动槽写死在厂商 SPL，",
+        "# 而红线是不碰 uboot/loader，所以设备永远只认 _b。故刷 _b，_a 原厂完整留作回滚。",
+        f"#   boot_b   = {kernel['offset']} (size {kernel['size']})",
+        f"#   system_b = {rootfs['offset']} (size {rootfs['size']}) / ubi.mtd=9",
         "",
-        "# --- 1. 加载 rootfs UBI 镜像到 RAM，核对字节数 ---",
-        f"fatload mmc 1:1 {load} rootfs.ubi.rv1109",
-        f"# 或用: tftpboot {load} rootfs.ubi.rv1109",
-        f"# 必须看到: {size} bytes read / Bytes transferred = {size} ({size_hex} hex)",
+        "# --- 1. 【非破坏】RAM 里验证 FIT，确认无误前不碰 flash ---",
+        "# 本版 U-Boot 无 iminfo；改用 fdt + crc32（比 iminfo 更强，与本机逐位比对）。",
+        f"fatload mmc 1 {load} zboot.img.s4602",
+        f"crc32 {load} 0x{zboot_size:X}          # 必须 = {zboot_crc}",
+        f"fdt addr {load} ; fdt header ; fdt print /",
+        "#  header: magic 0xd00dfeed, version 17；print: images/kernel@1 + fdt@1 + conf@1",
+        "# 可选（会离开 U-Boot，需重新断电复位）：boot_fit " + load,
+        "#   → 验证 boot_fit 是否接受无签名 FIT、内核能否起来、Kernel command line 是否为 UBIFS",
         "",
-        "# --- 2. 写 system_a 分区并回读比对 ---",
+        "# --- 2. 写 rootfs 到 system_b，回读 CRC 比对 ---",
+        f"fatload mmc 1 {load} rootfs.ubi.rv1109",
+        f"crc32 {load} {size_hex}       # 必须 = {rootfs_crc}",
         f"mtd erase spi-nand0 {rootfs['offset']} {rootfs['size']}",
         f"mtd write spi-nand0 {load} {rootfs['offset']} {size_hex}",
         f"mtd read  spi-nand0 {readback} {rootfs['offset']} {size_hex}",
-        f"cmp.b {load} {readback} {size_hex}",
-        "# cmp.b 必须报告 0 处差异，否则停手",
+        f"crc32 {readback} {size_hex}   # 必须 = {rootfs_crc}（本版 cmp.b 报 Usage，用 crc32）",
         "",
-        "# --- 3. 写内核 FIT zboot.img（官方 nightly 不含；官方 zboot.img 默认不是 FIT）---",
-        "# 必须由 tools/build_s4602.sh 用原厂 boot_a.img 作 ITB 模板产出，",
-        "# magic = d00dfeed、大小 <= 0x400000，否则 boot_fit 会报 Not fit magic。",
-        "# 先不写 flash：fatload + iminfo + bootm 在 RAM 里验证格式与 DTB，",
-        "# 确认能启动后再执行下面三步。ZBOOT_SIZE_HEX 用实际文件字节数，不是分区大小。",
-        f"fatload mmc 1:1 {load} zboot.img.s4602",
-        "iminfo " + load + "     # 必须列出 kernel / fdt 且 hash OK",
-        f"# mtd erase spi-nand0 {kernel['offset']} {kernel['size']}",
-        f"# mtd write spi-nand0 {load} {kernel['offset']} <ZBOOT_SIZE_HEX>",
-        f"# mtd read  spi-nand0 {readback} {kernel['offset']} <ZBOOT_SIZE_HEX> && cmp.b {load} {readback} <ZBOOT_SIZE_HEX>",
+        "# --- 3. 写内核 FIT 到 boot_b（size 必须 page 0x800 对齐）---",
+        f"# FIT 实际 {zboot_size} B = 0x{zboot_size:X}；向上对齐到 {zboot_write_hex}（补 {zboot_pad} B 0xFF）",
+        f"mw.b {load} 0xFF {zboot_write_hex}   # 先把目标缓冲区整体填 0xFF（尾部即对齐填充）",
+        f"fatload mmc 1 {load} zboot.img.s4602  # 再加载，只覆盖有效数据，尾部保持 0xFF",
+        f"crc32 {load} 0x{zboot_size:X}          # 必须 = {zboot_crc}",
+        f"mtd erase spi-nand0 {kernel['offset']} {kernel['size']}",
+        f"mtd write spi-nand0 {load} {kernel['offset']} {zboot_write_hex}",
+        f"mtd read  spi-nand0 {readback} {kernel['offset']} {zboot_write_hex}",
+        f"crc32 {readback} 0x{zboot_size:X}      # 必须 = {zboot_crc}",
         "",
         "# --- 4. bootargs：不要 setenv，也不要写 DTB chosen ---",
-        "# 现场 7 次启动实证：U-Boot 会强制注入 root=/dev/ubiblock0_0",
-        "# rootfstype=squashfs ubi.mtd=9，setenv 与 DTB chosen 都会被覆盖。",
+        "# 现场 7 次启动实证：U-Boot 会强制注入 root=/dev/ubiblock0_0 rootfstype=squashfs。",
         "# 唯一可靠做法：内核 CONFIG_CMDLINE_FORCE=y + 内置完整 cmdline（含 mtdparts）。",
-        "# 启动后在串口核对 'Kernel command line' 是 UBIFS 参数、ubi attach 成功。",
+        "# 启动后核对 'Kernel command line' 是 ubi.mtd=9 + root=ubi0:rootfs + ubifs。",
         "",
-        "# --- 5. 分级验收（见 docs/BOOT_FEASIBILITY.md 第 5 节）---",
-        "#  L1 iminfo 认 FIT / Starting kernel / OpenIPC 内核版本",
-        "#  L2 Kernel command line 正确 / ubi0 attached / UBIFS mounted / SSH 可登录",
-        "#  L3 majestic 出流 —— 目前 OpenIPC 内核无 SC5338 驱动，达不到，别误判为刷写失败",
-        "# 失败则断电重启回未刷的那个原厂槽，不要反复试刷",
+        "# --- 5. 分级验收 ---",
+        "#  L1 boot_fit 认 FIT / Starting kernel / OpenIPC 内核版本",
+        "#  L2 Kernel command line 正确 / ubi0 attached / UBIFS mounted / 可登录",
+        "#  L3 majestic 出流 —— SC5338 驱动已编入 CI 内核，但 rkaiq IQ/3A XML 未取，",
+        "#     实板出流未验证；达不到别误判为刷写失败",
+        "",
+        "# --- 6. 回滚 ---",
+        "# SD 卡上保留 full-00..07.bin（本次全片备份，逐块 CRC 已验）。",
+        "# 进 U-Boot 后 fatload + mtd write 反向写回 boot_b/system_b 即恢复原厂。",
+        "# 失败则断电重启回未刷的 _a 槽，不要反复试刷",
     ]
     args.out.parent.mkdir(parents=True, exist_ok=True)
     args.out.write_text("\n".join(lines) + "\n", encoding="utf-8")
-    print(f"已生成 {args.out}（仍含 <> 占位符，需按现场值替换后逐条执行）")
+    print(f"已生成 {args.out}（长度/CRC 均已按 firmware/ 实际镜像计算，逐条执行）")
     return 0
 
 
