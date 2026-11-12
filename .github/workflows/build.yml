@@ -41,6 +41,8 @@ jobs:
           grep -q '^config MOTORCOMM_PHY' /opt/linux/drivers/net/phy/Kconfig || { echo "ERROR: MOTORCOMM_PHY Kconfig not injected"; exit 1; }
           grep -q 'CONFIG_MOTORCOMM_PHY) += motorcomm.o' /opt/linux/drivers/net/phy/Makefile || { echo "ERROR: motorcomm.o Makefile entry not injected"; exit 1; }
           grep -q 'PHY_ID_YT8512B.*0x00000128' /opt/linux/drivers/net/phy/motorcomm.c || { echo "ERROR: YT8512B PHY id missing"; exit 1; }
+          grep -q 's4602-phy-diag' /opt/linux/drivers/net/phy/motorcomm.c || { echo "ERROR: S4602 PHY bench diagnostics block missing"; exit 1; }
+          grep -q 'BMCR_LOOPBACK' /opt/linux/drivers/net/phy/motorcomm.c || { echo "ERROR: PHY loopback self-test missing"; exit 1; }
 
       - name: Download OpenIPC rv11xx generic kernel config (baseline)
         run: |

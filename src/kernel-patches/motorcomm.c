@@ -10,6 +10,9 @@
 #include <linux/netdevice.h>
 #include <linux/of_device.h>
 #include <linux/phy.h>
+#include <linux/delay.h>
+#include <linux/jiffies.h>
+#include <linux/workqueue.h>
 
 /*
  * OpenIPC/linux rockchip-rv11xx is 4.19.111, which predates
@@ -273,6 +276,235 @@ err_handle:
 	return ret;
 }
 
+/* ======================= S4602 bench diagnostics (2026-11-12) =======================
+ * 背景：bench 环境没有网线、也没有对端交换机口，eth0 永远是 carrier=0。
+ * 只看 sysfs 读数无法区分两种完全不同的故障：
+ *   (a) PHY 没有有效参考时钟 / 我们的驱动把它配坏了  -> 软件问题，可修
+ *   (b) 物理层根本没接                                -> 现场问题，只能等 PoE 口
+ * 因此在 PHY 起来 8 秒后自动跑一组自检，只用 CL22 标准寄存器 + YT8512
+ * 厂商扩展寄存器，不依赖任何外部工具：
+ *
+ *   T1 内部自环 (BMCR_LOOPBACK)  —— 不需要网线，判定 PHY 核心 + 参考时钟
+ *   T2 强制 100M 全双工         —— 判定物理 MDI 链路是否存在
+ *   T3 强制 10M 半双工
+ *   T4 回滚我们对 AFE_PLL/EXTEND_COMBO 的改写（恢复出厂扩展寄存器）后再测
+ *
+ * 判据（现场看这一段就够）：
+ *   T1 link=1 且 T2/T3 link=0 -> PHY 正常，现场没插线/对端未启用
+ *   T1 link=1 且 T2 link=1    -> 链路已通
+ *   T1 link=0                 -> PHY 无参考时钟或配置错，继续查时钟链
+ *   T2 link=0 但 T4 link=1    -> 是我们的 PHY 时钟初始化把 PHY 配坏了
+ *
+ * 注：CL22 的 BMSR bit2(Link Status) 是 latch-low 语义，读一次会被清掉，
+ *     第二次读才是实时值 —— 所以判定链路必须连续读两次。
+ * ========================================================================== */
+#define S4602_DIAG_TAG "s4602-phy-diag: "
+
+/* mii.h 没有 ANADV(0x07) 的宏，这里自己定义 */
+#define S4602_MII_ANADV		0x07
+
+struct s4602_phy_diag {
+	struct delayed_work work;
+	struct phy_device *phydev;
+	/* yt8512_clk_init() 改写之前的厂商扩展寄存器原值，用于 T4 回滚 */
+	int orig_pll;
+	int orig_combo;
+	int have_orig;
+};
+
+static struct s4602_phy_diag s4602_diag;
+
+static int s4602_mdio_read(struct phy_device *phydev, u32 regnum)
+{
+	int ret;
+
+	mutex_lock(&phydev->mdio.bus->mdio_lock);
+	ret = __phy_read(phydev, regnum);
+	mutex_unlock(&phydev->mdio.bus->mdio_lock);
+
+	return ret;
+}
+
+static int s4602_mdio_write(struct phy_device *phydev, u32 regnum, u16 val)
+{
+	int ret;
+
+	mutex_lock(&phydev->mdio.bus->mdio_lock);
+	ret = __phy_write(phydev, regnum, val);
+	mutex_unlock(&phydev->mdio.bus->mdio_lock);
+
+	return ret;
+}
+
+/* 连续读两次 BMSR，第二次才是实时链路状态 */
+static int s4602_bmsr_live(struct phy_device *phydev)
+{
+	int first, second;
+
+	first = s4602_mdio_read(phydev, MII_BMSR);
+	second = s4602_mdio_read(phydev, MII_BMSR);
+	if (first < 0 || second < 0)
+		return -EIO;
+
+	return second;
+}
+
+static void s4602_dump(struct phy_device *phydev, const char *tag)
+{
+	int bmcr, bmsr, anar, anlp, aner, anadv, spec;
+	int pll, combo, led0, led1, slp;
+
+	bmcr  = s4602_mdio_read(phydev, MII_BMCR);
+	bmsr  = s4602_bmsr_live(phydev);
+	anar  = s4602_mdio_read(phydev, MII_ADVERTISE);
+	anlp  = s4602_mdio_read(phydev, MII_LPA);
+	aner  = s4602_mdio_read(phydev, MII_EXPANSION);
+	anadv = s4602_mdio_read(phydev, S4602_MII_ANADV);
+	spec  = s4602_mdio_read(phydev, REG_PHY_SPEC_STATUS);
+
+	if (bmsr < 0)
+		bmsr = 0;
+	if (bmcr < 0)
+		bmcr = 0;
+	if (anar < 0)
+		anar = 0;
+	if (anlp < 0)
+		anlp = 0;
+	if (aner < 0)
+		aner = 0;
+	if (anadv < 0)
+		anadv = 0;
+	if (spec < 0)
+		spec = 0;
+
+	pr_info(S4602_DIAG_TAG "%-9s BMCR=0x%04x BMSR=0x%04x(link=%d aneg_done=%d)\n",
+		tag, (u16)bmcr, (u16)bmsr,
+		!!(bmsr & BMSR_LSTATUS), !!(bmsr & BMSR_ANEGCOMPLETE));
+	pr_info(S4602_DIAG_TAG "%-9s ANAR=0x%04x ANLP=0x%04x ANER=0x%04x ANADV=0x%04x SPEC=0x%04x\n",
+		tag, (u16)anar, (u16)anlp, (u16)aner, (u16)anadv, (u16)spec);
+
+	pll   = (int)ytphy_read_ext(phydev, YT8512_EXTREG_AFE_PLL) & 0xffff;
+	combo = (int)ytphy_read_ext(phydev, YT8512_EXTREG_EXTEND_COMBO) & 0xffff;
+	led0  = (int)ytphy_read_ext(phydev, YT8512_EXTREG_LED0) & 0xffff;
+	led1  = (int)ytphy_read_ext(phydev, YT8512_EXTREG_LED1) & 0xffff;
+	slp   = (int)ytphy_read_ext(phydev, YT8512_EXTREG_SLEEP_CONTROL1) & 0xffff;
+
+	pr_info(S4602_DIAG_TAG "%-9s ext AFE_PLL(0x50)=0x%04x EXTEND_COMBO(0x4000)=0x%04x\n",
+		tag, pll, combo);
+	pr_info(S4602_DIAG_TAG "%-9s ext LED0(0x40c0)=0x%04x LED1(0x40c3)=0x%04x SLEEP(0x2027)=0x%04x\n",
+		tag, led0, led1, slp);
+}
+
+/*
+ * 强制速率下测链路：关自协商、锁速率/双工，再连续读 BMSR。
+ * 返回 1=有链路 0=无链路 -1=读写失败。
+ * 把读回的 BMCR 一起打出来：若与我们要写的不一致，说明 phylib 轮询线程
+ * 在测试窗口里把 BMCR 改回去了，此时 link 结论不可信（会标 POLLER-CLOBBERED）。
+ */
+static int s4602_force_link(struct phy_device *phydev, u16 bmcr, const char *name)
+{
+	int link = 0, bmsr = 0, i, bmcr_back, spec;
+
+	s4602_mdio_write(phydev, MII_BMCR, bmcr);
+	msleep(200);
+
+	for (i = 0; i < 5; i++) {
+		bmsr = s4602_bmsr_live(phydev);
+		if (bmsr < 0)
+			return -1;
+		if (bmsr & BMSR_LSTATUS) {
+			link = 1;
+			break;
+		}
+		msleep(50);
+	}
+
+	bmcr_back = s4602_mdio_read(phydev, MII_BMCR);
+	spec = s4602_mdio_read(phydev, REG_PHY_SPEC_STATUS);
+
+	if (bmcr_back < 0)
+		bmcr_back = 0;
+	if (spec < 0)
+		spec = 0;
+
+	pr_info(S4602_DIAG_TAG "T %-15s want=0x%04x got=0x%04x BMSR=0x%04x link=%d SPEC=0x%04x%s\n",
+		name, bmcr, (u16)bmcr_back, (u16)bmsr, link, (u16)spec,
+		((u16)bmcr_back != bmcr) ? " [POLLER-CLOBBERED]" : "");
+
+	return link;
+}
+
+static void s4602_phy_diag_work(struct work_struct *work)
+{
+	struct s4602_phy_diag *diag =
+		container_of(to_delayed_work(work), struct s4602_phy_diag, work);
+	struct phy_device *phydev = diag->phydev;
+	int link_loop, link_100, link_10, link_rb;
+
+	if (!phydev)
+		return;
+
+	pr_info(S4602_DIAG_TAG "===================== BEGIN =====================\n");
+
+	s4602_dump(phydev, "idle");
+
+	/* T1 内部自环：不需要网线，判定 PHY 核心与参考时钟是否正常 */
+	link_loop = s4602_force_link(phydev,
+			BMCR_LOOPBACK | BMCR_SPEED100 | BMCR_FULLDPLX,
+			"loopback-100fd");
+	pr_info(S4602_DIAG_TAG "T1 loopback link=%d => %s\n", link_loop,
+		link_loop ? "PHY 核心/参考时钟 OK" : "PHY 无参考时钟或配置错误");
+
+	/* T2/T3 强制速率：判定物理 MDI 链路是否存在 */
+	link_100 = s4602_force_link(phydev, BMCR_SPEED100 | BMCR_FULLDPLX,
+			"force-100fd");
+	pr_info(S4602_DIAG_TAG "T2 force-100fd link=%d\n", link_100);
+
+	link_10 = s4602_force_link(phydev, BMCR_SPEED10, "force-10hd");
+	pr_info(S4602_DIAG_TAG "T3 force-10hd link=%d\n", link_10);
+
+	/*
+	 * T4 回滚厂商扩展寄存器：去掉 PLL_REFCLK_SEL_EN / RMII_EN，
+	 * 恢复成 attach 时读到的原值，再测一次 —— A/B 我们的时钟初始化。
+	 */
+	link_rb = -1;
+	if (diag->have_orig) {
+		ytphy_write_ext(phydev, YT8512_EXTREG_AFE_PLL,
+				(u16)diag->orig_pll);
+		ytphy_write_ext(phydev, YT8512_EXTREG_EXTEND_COMBO,
+				(u16)diag->orig_combo);
+		msleep(500);
+		s4602_dump(phydev, "rollback");
+		link_rb = s4602_force_link(phydev, BMCR_SPEED100 | BMCR_FULLDPLX,
+				"rollback-100fd");
+		pr_info(S4602_DIAG_TAG "T4 rollback link=%d (T2 was %d)\n",
+			link_rb, link_100);
+
+		if (link_rb == 1 && link_100 == 0) {
+			/* 回滚反而通了：保留出厂扩展寄存器配置 */
+			pr_info(S4602_DIAG_TAG "AUTO-FIX: 保留回滚后的扩展寄存器配置\n");
+		} else {
+			/* 恢复我们自己的配置（在原值基础上重新置位） */
+			ytphy_write_ext(phydev, YT8512_EXTREG_AFE_PLL,
+					(u16)(diag->orig_pll |
+					      YT8512_CONFIG_PLL_REFCLK_SEL_EN));
+			ytphy_write_ext(phydev, YT8512_EXTREG_EXTEND_COMBO,
+					(u16)(diag->orig_combo |
+					      YT8512_CONTROL1_RMII_EN));
+			msleep(200);
+		}
+	}
+
+	/* 恢复自协商 */
+	s4602_mdio_write(phydev, MII_BMCR, BMCR_ANENABLE | BMCR_ANRESTART);
+	msleep(300);
+	s4602_dump(phydev, "restore");
+
+	pr_info(S4602_DIAG_TAG "====================== END ======================\n");
+	pr_info(S4602_DIAG_TAG "SUMMARY: T1loop=%d T2force100=%d T3force10=%d T4rollback=%d\n",
+		link_loop, link_100, link_10, link_rb);
+}
+
 static int __maybe_unused ytphy_write_mmd(struct phy_device *phydev, u16 device, u16 reg, u16 value)
 {
 	int ret = 0;
@@ -493,6 +725,10 @@ static int yt8512_clk_init(struct phy_device *phydev)
 	if (val < 0)
 		return val;
 
+	/* 保存原值：S4602 诊断的 T4 要用它做 A/B 回滚 */
+	s4602_diag.orig_pll = val & 0xffff;
+	s4602_diag.have_orig = 1;
+
 	val |= YT8512_CONFIG_PLL_REFCLK_SEL_EN;
 
 	ret = ytphy_write_ext(phydev, YT8512_EXTREG_AFE_PLL, val);
@@ -502,6 +738,8 @@ static int yt8512_clk_init(struct phy_device *phydev)
 	val = ytphy_read_ext(phydev, YT8512_EXTREG_EXTEND_COMBO);
 	if (val < 0)
 		return val;
+
+	s4602_diag.orig_combo = val & 0xffff;
 
 	val |= YT8512_CONTROL1_RMII_EN;
 
@@ -641,6 +879,15 @@ static int yt8512_config_init(struct phy_device *phydev)
 	ret = ytphy_write_ext(phydev, YT8512_EXTREG_SLEEP_CONTROL1, val);
 	if (ret < 0)
 		return ret;
+
+	/*
+	 * S4602 bench 诊断：8 秒后自动跑一遍 PHY 自检
+	 * （内部自环 / 强制速率 / 扩展寄存器回滚 A-B）。
+	 * 现场只要看这一段日志就能判定"是没插线"还是"PHY 坏了"。
+	 */
+	s4602_diag.phydev = phydev;
+	INIT_DELAYED_WORK(&s4602_diag.work, s4602_phy_diag_work);
+	schedule_delayed_work(&s4602_diag.work, msecs_to_jiffies(8000));
 
 	return ret;
 }
