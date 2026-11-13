@@ -52,8 +52,8 @@ jobs:
           echo "=== majestic.mk (key rule) ==="; cat /tmp/majestic.mk
           # Extract MAJESTIC_SITE from the real .mk so we don't hardcode it.
           SITE=$(grep -E '^MAJESTIC_SITE' /tmp/majestic.mk | awk '{print $3}')
-          echo "MAJESTIC_SITE=${SITE}" > /tmp/site.env
-          echo "derived MAJESTIC_SITE=${SITE}"
+          echo "SITE=${SITE}" > /tmp/site.env
+          echo "derived MAJESTIC_SITE=${SITE} (written to /tmp/site.env as SITE=...)"
 
       - name: Probe each SoC family's majestic S3 key + reproduce buildroot extract
         run: |
@@ -93,7 +93,7 @@ jobs:
         run: |
           set -uo pipefail
           # Re-derive the two key facts the user is asking about, assert them, emit summary.
-          SITE=$(grep -oE '^MAJESTIC_SITE=.*' /tmp/site.env | sed 's/^MAJESTIC_SITE=//')
+          SITE=$(grep -oE '^SITE=.*' /tmp/site.env | sed 's/^SITE=//')
           grab() { curl -s -o /tmp/v.bin -w "%{http_code}" --max-time 40 "$1" 2>/dev/null; }
           c1106=$(grab "${SITE}/majestic.rv1106.lite.master.tar.bz2")
           c11xx=$(grab "${SITE}/majestic.rv11xx.lite.master.tar.bz2")
