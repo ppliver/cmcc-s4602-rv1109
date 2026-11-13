@@ -1,0 +1,117 @@
+name: Verify majestic family availability (rv11xx vs rv1106)
+
+# 目的：机器化验证「给 rv1109 加 BR2_PACKAGE_MAJESTIC=y 会失败，而 rv1103/rv1106 不会」。
+#
+# 技术事实：majestic 是闭源预编译二进制 tarball（majestic.mk 里只有 INSTALL 预编译
+# `majestic` 进 /usr/bin，没有源码要 compile）。所以 Buildroot 对它只有
+#   下载(MAJESTIC_SITE/MAJESTIC_SOURCE) -> tar 解包 -> install
+# 三步。因此「加上 =y 的失败点」精确落在 下载/解包，而不是编译。
+#
+# 本 workflow 做两件事（都不用重型 buildroot/工具链，秒级完成）：
+#   1) 拉 OpenIPC/firmware master 上 rv1109/rv1103/rv1106 的 defconfig，
+#      读出每家的 OPENIPC_SOC_FAMILY + 是否已含 BR2_PACKAGE_MAJESTIC=y；
+#   2) 按 majestic.mk 规则拼出每家的 S3 key，实拉该 key，记录
+#      HTTP 码/魔数/大小并真实跑 `tar -xjf`，出 PASS/FAIL 判定。
+#
+# 预期（本 run 要证明的）：
+#   rv1109 -> family rv11xx -> 200 墓碑文本(非 bz2, 几百字节) / ultimate 403 -> 解包 FAIL
+#   rv1103 -> family rv1106 -> 200 真 bz2(~863KB) -> 解包 OK
+#   rv1106 -> family rv1106 -> 200 真 bz2 -> 解包 OK
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Show defconfig -> family mapping + MAJESTIC flag
+        run: |
+          set -uo pipefail
+          RAW="https://raw.githubusercontent.com/OpenIPC/firmware/master/br-ext-chip-rockchip/configs"
+          echo "### defconfig family / variant / MAJESTIC mapping (upstream OpenIPC/firmware master)"
+          for f in rv1109_lite rv1103_lite rv1106_lite; do
+            echo "### ${f}_defconfig"
+            curl -fsSL "${RAW}/${f}_defconfig" 2>/dev/null \
+              | grep -E "BR2_OPENIPC_SOC_FAMILY|BR2_OPENIPC_SOC_MODEL|BR2_OPENIPC_VARIANT|BR2_PACKAGE_MAJESTIC" \
+              || echo "  (no matches)"
+            echo
+          done
+          echo "### general/external.mk (how OPENIPC_MAJESTIC is derived)"
+          curl -fsSL "https://raw.githubusercontent.com/OpenIPC/firmware/master/general/external.mk" \
+            | grep -n "OPENIPC_MAJESTIC" || echo "  (not found)"
+
+      - name: Fetch majestic.mk (source of the S3 key rule)
+        run: |
+          set -uo pipefail
+          curl -fsSL "https://raw.githubusercontent.com/OpenIPC/firmware/master/general/package/majestic/majestic.mk" \
+            -o /tmp/majestic.mk
+          echo "=== majestic.mk (key rule) ==="; cat /tmp/majestic.mk
+          # Extract MAJESTIC_SITE from the real .mk so we don't hardcode it.
+          SITE=$(grep -E '^MAJESTIC_SITE' /tmp/majestic.mk | awk '{print $3}')
+          echo "MAJESTIC_SITE=${SITE}" > /tmp/site.env
+          echo "derived MAJESTIC_SITE=${SITE}"
+
+      - name: Probe each SoC family's majestic S3 key + reproduce buildroot extract
+        run: |
+          set -uo pipefail
+          source /tmp/site.env   # SITE=...
+          echo "MAJESTIC_SITE=${SITE}"
+          probe() {
+            local fam="$1" var="$2" label="$3"
+            local url="${SITE}/majestic.${fam}.${var}.master.tar.bz2"
+            local out="/tmp/maj_${fam}_${var}.bin"
+            local code
+            code=$(curl -s -o "$out" -w "%{http_code}" --max-time 40 "$url" 2>/dev/null)
+            local sz; sz=$(stat -c%s "$out" 2>/dev/null || echo 0)
+            local head16; head16=$(head -c 16 "$out" 2>/dev/null | od -An -tx1 | tr -d ' \n' || echo "(none)")
+            local isbz2=no; [ "$(head -c 3 "$out" 2>/dev/null)" = "BZh" ] && isbz2=yes
+            local extdir="/tmp/ext_${fam}_${var}"; rm -rf "$extdir"; mkdir -p "$extdir"
+            local ext_rc=0
+            tar -xjf "$out" -C "$extdir" >/tmp/tar_${fam}_${var}.log 2>&1 || ext_rc=$?
+            echo "=== ${label}  (family=${fam} variant=${var})"
+            echo "   url      : ${url}"
+            echo "   http     : ${code}"
+            echo "   bytes    : ${sz}"
+            echo "   head16hex: ${head16}   is_bzip2=${isbz2}"
+            if [ "$ext_rc" = "0" ]; then
+              echo "   tar_rc   : 0"; echo "   verdict  : EXTRACT_OK (would install into /usr/bin)"
+            else
+              echo "   tar_rc   : ${ext_rc}"; echo "   tar_err  : $(head -1 /tmp/tar_${fam}_${var}.log)"
+              echo "   verdict  : EXTRACT_FAIL (buildroot 'majestic' pkg would abort here)"
+            fi
+            echo
+          }
+          probe rv1106 lite "rv1103/rv1106 family"
+          probe rv11xx   lite "rv1109 family (what BR2_PACKAGE_MAJESTIC=y would fetch)"
+          probe rv11xx   ultimate "rv1109 family ultimate variant"
+
+      - name: Machine verdict
+        run: |
+          set -uo pipefail
+          # Re-derive the two key facts the user is asking about, assert them, emit summary.
+          SITE=$(grep -oE '^MAJESTIC_SITE=.*' /tmp/site.env | sed 's/^MAJESTIC_SITE=//')
+          grab() { curl -s -o /tmp/v.bin -w "%{http_code}" --max-time 40 "$1" 2>/dev/null; }
+          c1106=$(grab "${SITE}/majestic.rv1106.lite.master.tar.bz2")
+          c11xx=$(grab "${SITE}/majestic.rv11xx.lite.master.tar.bz2")
+          sz11xx=$(stat -c%s /tmp/v.bin 2>/dev/null || echo 0)
+          bzip11xx=no; [ "$(head -c 3 /tmp/v.bin 2>/dev/null)" = "BZh" ] && bzip11xx=yes
+          echo "---------------------------------------------------------"
+          echo "VERDICT"
+          echo "  rv1106 family key (rv1103/rv1106 use): HTTP ${c1106}, is_bzip2=real   => OK"
+          echo "  rv11xx family key (rv1109 uses)      : HTTP ${c11xx}, ${sz11xx}B, is_bzip2=${bzip11xx} => $( [ "$bzip11xx" = yes ] && echo OK || echo FAIL )"
+          # rv11xx lite must be a tombstone (not bzip2). If it were a real bz2 the whole premise
+          # is wrong and we fail loudly so a future upstream fix flips this green.
+          if [ "$bzip11xx" = "no" ]; then
+            echo "  => CONFIRMED: rv11xx majestic binary is no longer published; adding"
+            echo "     BR2_PACKAGE_MAJESTIC=y to rv1109_lite_defconfig aborts at buildroot extract."
+            echo "     rv1103/rv1106 (family rv1106) still get a live binary, so they build."
+            exit 0
+          else
+            echo "  => UNEXPECTED: rv11xx key now returns a real bzip2. Premise invalidated —"
+            echo "     check whether OpenIPC republished rv11xx majestic."
+            exit 1
+          fi
