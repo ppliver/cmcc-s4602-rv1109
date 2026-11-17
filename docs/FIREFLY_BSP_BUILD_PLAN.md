@@ -81,6 +81,27 @@ rootfs 暂沿用已有 `firmware/rootfs.ubi.rv1109`（OpenIPC）或 vendor rootf
 1. 参考板 DTS `rv1109-38-v10-spi-nand` 编出的内核能否被**原厂 U-Boot** `boot_fit` 起（DTS 与 S4602 硬件匹配度）—— 需上机。
 2. 出图（Stage 2：buildroot + rkmedia RTSP demo + vendor DTS + 14 分区 parameter）在 RV1109 的实际效果 —— 全路线收益点也是最大不确定项。
 
+**★★2026-11-17 容量缺口已解除（Stage 1 收尾达成）：**
+- 目标：把 rv1126 defconfig 编出的 zboot.img 从 5.90 MiB 压回 boot_b 4 MiB 以内（对照 OpenIPC 3.38 MiB 基线）。
+- **达成：zboot.img 最终 2,755,396 B = 2.63 MiB，富余 1,438,908 B（1.37 MiB）可写 boot_b，魔数 `d00dfeed` 有效。**
+  进度曲线（4 轮 fragment 裁剪 + 压缩切换，每轮 177 kconfig 校验 + GA 权威字节数）：
+  `5.90(r0 原 defconfig) → 5.10(r1 裁 DRM/SND/USB) → 4.33(r2 裁无线/SCSI/MMC/input, 关 select 源 WLAN/WL_ROCKCHIP)
+   → 4.24(r3 裁 MPP 解码侧+crypto 孤儿) → 2.63 MiB ✅(r4 内核压缩 LZ4→XZ, XZ_DEC_ARM/BCJ)`。
+- **r4 是关键一刀**：前三轮"裁功能模块"收益递减（顶层 CRYPTO 被 44 处 select 关不掉，per-algo 裁了几乎不省）；
+  改走"不裁功能、换压缩"——`KERNEL_XZ`（树内 `XZ_DEC_ARM`/`XZ_DEC_ARMTHUMB`/`XZ_DEC_BCJ` 已齐，
+  BCJ 对 ARM 代码再压几个百分点），比 LZ4 小 20–30%，一次 4.24→2.63 MiB，且**保留 MPP 解码 + 全部 crypto 给 Stage 2**，
+  代价仅启动解压 +1~2s（摄像头冷启动可接受）。
+- **裁剪边界（`board/s4602/firefly/s4602_fragment.firefly.config`，kconfig 校验 `tools/fl_fix_kconfig.py` 全绿）**：
+  关 = DRM/SND/USB(含 DWC3/GADGET/CONFIGFS)/无线(WLAN select WIRELESS、WL_ROCKCHIP+AP6XXX select MAC80211/CFG80211)/
+  SCSI/MMC/键盘触摸HID/背光/PSTORE/IIO/DEVFREQ/thermal；保留 = 出图链路 `MEDIA_SUPPORT`/`VIDEO_ROCKCHIP_{CIF,ISP,ISPP}`/
+  `VIDEO_SC5338`/`STMMAC`/`MOTORCOMM_PHY`/`UBI`/`UBIFS`/`SQUASHFS`/`I2C`/`SPI`/`CMDLINE_FORCE` +
+  MPP 编码侧 `RKVENC/VEPU2/MPP_SERVICE` + crypto 核心 `AES/SHA1/SHA256/LZO/CRC32C/HASH/ALGAPI`。
+  **关键经验：`select` 优先级高于 `# ... is not set`，关叶子会被 select 源拉回，必须关 select 源头（WLAN/WL_ROCKCHIP）。**
+- 权威产物已归位 `firmware/firefly-s4602-rv1109-slim-r4-run44003549545.zip`（GA run `44003549545`，
+  commit `d08a2ee`：zboot 2,755,396 B + `rv1109-38-v10-spi-nand.dtb` 87,116 B + `vendor-kernel.dtb` 85,937 B）。
+- **下一步 = 上机**：台架 SD 三参 `bootm` 或刷 `boot_b`，确认原厂 U-Boot 能起这个内核 + `dmesg` 看 sc5338/sfc_nand 命中。
+
+
 **★★2026-11-17 GA 首跑成功 + 容量缺口（决定性发现）：**
 - ✅ GA run `43998544748` **success**（commit `d7ba710`），artifact `firefly-s4602-rv1109` 已产出并本地核对：
   `zboot.img` 6,191,772 B（**5.90 MiB**，魔数前 4 字节 `d00dfeed` 有效 FIT）+
@@ -99,7 +120,7 @@ rootfs 暂沿用已有 `firmware/rootfs.ubi.rv1109`（OpenIPC）或 vendor rootf
 ## 6. 行动项（优先级）
 
 1. ~~触发 GA 收 Stage 1 kernel FIT artifact~~ ✅ run `43998544748` 已 success，artifact 已核对（魔数有效）。
-2. **【当前阻塞项】压小内核**：`rv1126_defconfig` 5.90 MiB zboot > 4 MiB boot_b → 裁 defconfig 使 zboot.img < 4 MiB（对照 OpenIPC 3.38 MiB 基线）。**在缩容达标前不上机。**
-3. 缩容达标后台架引导（SD 三参 `bootm` 或刷 `boot_b`）→ 确认进系统 + `dmesg` 预期（sc5338 Detected、sfc_nand id e5f2e5 命中）。
+2. ~~压小内核使 zboot < 4 MiB~~ ✅ **已达成**：4 轮裁剪 + 压缩切换后 zboot = 2.63 MiB（富余 1.37 MiB），见 §5「容量缺口已解除」。
+3. **【当前主行动项】台架引导**：SD 三参 `bootm` 或 `mtd write boot_b` 刷 round4 产物（`firefly-s4602-rv1109-slim-r4-run44003549545.zip`）→ 确认原厂 U-Boot 起内核 + `dmesg`（sc5338 Detected、sfc_nand id e5f2e5 命中）。
 4. 通过后开 Stage 2（buildroot + rkmedia RTSP demo + vendor DTS + 14 分区 parameter）。
 5. 全路线验收 = `vlc rtsp://<ip>/live/main_stream` 出**硬件 ISP 画质**（对比现有 8.8fps 软件 demosaic）。
