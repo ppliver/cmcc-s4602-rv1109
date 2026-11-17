@@ -125,11 +125,25 @@ jobs:
           cp docs/evidence/vendor-kernel.dtb firmware/vendor-kernel.dtb   # 上机替换候选
           ls -l firmware/zboot.img firmware/rv1109-38-v10-spi-nand.dtb firmware/vendor-kernel.dtb
           python3 - <<'PY'
-          import struct
-          d=open('firmware/zboot.img','rb').read(8)
-          print('FIT magic: %s (expect d00dfeed)' % d.hex())
-          assert d.hex().endswith('d00dfeed'), 'not a valid FIT'
-          print('zboot.img size:', len(open('firmware/zboot.img','rb').read()), '(must be < 4 MiB boot_b)')
+          import os
+          p='firmware/zboot.img'
+          magic=open(p,'rb').read(4)
+          print('FIT magic: %s (expect d00dfeed)' % magic.hex())
+          # FIT 魔数在头部前 4 字节（u32 大端 0xd00dfeed）。
+          # 旧写法 d.hex().endswith('d00dfeed') 是对整个 8 字节 hex 串判断，
+          # 第 4-8 字节是 totalSize（本例 00 00 02 d8=6191772）→ 误报 invalid。
+          assert magic.hex() == 'd00dfeed', 'not a valid FIT'
+          size=os.path.getsize(p)
+          BOOT_B=0x400000
+          print('zboot.img size: %d B (%.2f MiB) vs boot_b = %d B (%.1f MiB)'
+                % (size, size/1048576.0, BOOT_B, BOOT_B/1048576.0))
+          if size > BOOT_B:
+            # 容量缺口是真实约束，但不是「产物无效」——降级为告警，让 artifact 照常产出，
+            # 由计划文档跟踪「换精简 defconfig / 缩小 zImage」作为 Stage 1 收尾前置项。
+            print('WARNING: zboot.img > boot_b(4MiB)；无法直接写 boot_b，'
+                  '上机前需精简内核 defconfig（当前 rv1126_defconfig 偏大）。')
+          else:
+            print('OK: zboot.img fits in boot_b(4MiB).')
           PY
 
       - name: Upload build artifacts
