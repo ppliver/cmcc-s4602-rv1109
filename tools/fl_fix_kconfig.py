@@ -54,7 +54,11 @@ ON = [
     "CONFIG_CRYPTO", "CONFIG_CRYPTO_AES", "CONFIG_CRYPTO_SHA1",
     "CONFIG_CRYPTO_SHA256", "CONFIG_CRYPTO_LZO", "CONFIG_CRYPTO_CRC32C",
     "CONFIG_CRYPTO_HASH", "CONFIG_CRYPTO_ALGAPI",
+    # round4: XZ compression must be active (XZ_DEC present, LZ4 off)
+    "CONFIG_KERNEL_XZ", "CONFIG_XZ_DEC", "CONFIG_XZ_DEC_ARM", "CONFIG_XZ_DEC_BCJ",
 ]
+# round4: LZ4 must be OFF (replaced by XZ)
+OFF_COMP = ["CONFIG_KERNEL_LZ4"]
 
 
 def run(c, cmd, timeout=600, stdin=None):
@@ -130,6 +134,16 @@ def main():
             allon = False
         print("  %-28s %-6s %s" % (sym, "OK" if ok else "MISS!!", v))
     print("CAPTURE_ALL_ON =", allon)
+    print("=== round4 compression (LZ4 off, XZ on) ===")
+    for sym in OFF_COMP:
+        r2, o2, _ = run(c, "grep -E '^%s=' ~/fl-kernel/.config" % sym)
+        v = o2.strip() if o2.strip() else "absent"
+        ok = not v.endswith("=y")
+        print("  %-28s %-6s %s" % (sym, "OK(off)" if ok else "STILL_ON!!", v))
+    for sym in ("CONFIG_KERNEL_XZ", "CONFIG_XZ_DEC", "CONFIG_XZ_DEC_ARM", "CONFIG_XZ_DEC_BCJ"):
+        r2, o2, _ = run(c, "grep -E '^%s=' ~/fl-kernel/.config" % sym)
+        v = o2.strip() if o2.strip() else "absent"
+        print("  %-28s %-6s %s" % (sym, "OK" if v.endswith("=y") else "MISS!!", v))
     c.close()
 
 
