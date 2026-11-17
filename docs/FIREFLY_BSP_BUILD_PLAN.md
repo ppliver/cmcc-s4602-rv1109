@@ -78,14 +78,28 @@ rootfs 暂沿用已有 `firmware/rootfs.ubi.rv1109`（OpenIPC）或 vendor rootf
    make 全程带 `HOSTLDFLAGS="-Wl,--allow-multiple-definition"`。
 
 **仍未验证（下一步）：**
-1. 全量 `zImage` + 参考板 DTS + 打 FIT（177 资源 2核/3GB/11G 不够，留给 GA 跑）。
-2. 参考板 DTS `rv1109-38-v10-spi-nand` 编出的内核能否被**原厂 U-Boot** `boot_fit` 起（DTS 与 S4602 硬件匹配度）—— 需上机。
-3. 出图（Stage 2：buildroot + rkmedia RTSP demo + vendor DTS + 14 分区 parameter）在 RV1109 的实际效果 —— 全路线收益点也是最大不确定项。
+1. 参考板 DTS `rv1109-38-v10-spi-nand` 编出的内核能否被**原厂 U-Boot** `boot_fit` 起（DTS 与 S4602 硬件匹配度）—— 需上机。
+2. 出图（Stage 2：buildroot + rkmedia RTSP demo + vendor DTS + 14 分区 parameter）在 RV1109 的实际效果 —— 全路线收益点也是最大不确定项。
+
+**★★2026-11-17 GA 首跑成功 + 容量缺口（决定性发现）：**
+- ✅ GA run `43998544748` **success**（commit `d7ba710`），artifact `firefly-s4602-rv1109` 已产出并本地核对：
+  `zboot.img` 6,191,772 B（**5.90 MiB**，魔数前 4 字节 `d00dfeed` 有效 FIT）+
+  `rv1109-38-v10-spi-nand.dtb` 87,116 B + `vendor-kernel.dtb` 85,937 B。
+  全量 4.19 zImage + 参考 DTS + 打 FIT 这条 177 装不下的链路，**GA 一次跑通**。
+- ⚠️ **容量缺口 = Stage 1 上机前的硬阻塞**：`zboot.img` 5.90 MiB **> boot_b 分区 4 MiB（0x400000=4,194,304 B）**，
+  超 **1,997,468 B（≈1.9 MiB）**，直接 `mtd write boot_b` 写不下。
+  根因：`rv1126_defconfig` 比 OpenIPC 精简配置肥（OpenIPC 同代 4.19 的 zboot.img 仅 **3.38 MiB**，见 `board.yaml` CI run 43177394588）。
+  本 kernel 本体 zImage=6,102,608 B（5.82 MiB）→ 单 kernel 就顶格，FIT 头 + dtb 再叠加。**解法 = 换精简 defconfig**
+  （裁掉 camera 链路用不到的 fb/graphics/多余 mpp/视频 codec），目标把 zboot.img 压回 <4 MiB；
+  这是「刷 boot_b」这一步的前置，**未做前不得动设备**。
+- 校验 bug 已修（commit `d7ba710`）：step9 旧写法 `assert d.hex().endswith('d00dfeed')` 对整个 8 字节 hex 串判断，
+  而 FIT header 第 4–8 字节是 `image_header.timestamp`（本例 728），并非 magic，导致有效 FIT 误报 `not a valid FIT`
+  （run `43997690368` 因此挂）；改为只判前 4 字节 `magic.hex()=='d00dfeed'`，容量缺口降为 **WARNING**（artifact 照常产出，不卡 CI）。
 
 ## 6. 行动项（优先级）
 
-1. **【已落盘】触发**：`gh workflow` 手动 dispatch / push → 收 Stage 1 kernel FIT artifact（先不刷设备）。
-2. 核对 artifact：FIT 魔数 `d00dfeed`、zImage 大小、`dmesg` 预期（sc5338 Detected、sfc_nand id e5f2e5 命中）。
-3. 台架引导（SD 三参 `bootm` 或刷 `boot_b`）→ 确认能进系统 + `media-ctl` 看到 sensor 出帧。
+1. ~~触发 GA 收 Stage 1 kernel FIT artifact~~ ✅ run `43998544748` 已 success，artifact 已核对（魔数有效）。
+2. **【当前阻塞项】压小内核**：`rv1126_defconfig` 5.90 MiB zboot > 4 MiB boot_b → 裁 defconfig 使 zboot.img < 4 MiB（对照 OpenIPC 3.38 MiB 基线）。**在缩容达标前不上机。**
+3. 缩容达标后台架引导（SD 三参 `bootm` 或刷 `boot_b`）→ 确认进系统 + `dmesg` 预期（sc5338 Detected、sfc_nand id e5f2e5 命中）。
 4. 通过后开 Stage 2（buildroot + rkmedia RTSP demo + vendor DTS + 14 分区 parameter）。
 5. 全路线验收 = `vlc rtsp://<ip>/live/main_stream` 出**硬件 ISP 画质**（对比现有 8.8fps 软件 demosaic）。

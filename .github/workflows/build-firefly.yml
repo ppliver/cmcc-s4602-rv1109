@@ -131,7 +131,9 @@ jobs:
           print('FIT magic: %s (expect d00dfeed)' % magic.hex())
           # FIT 魔数在头部前 4 字节（u32 大端 0xd00dfeed）。
           # 旧写法 d.hex().endswith('d00dfeed') 是对整个 8 字节 hex 串判断，
-          # 第 4-8 字节是 totalSize（本例 00 00 02 d8=6191772）→ 误报 invalid。
+          # 而第 4-8 字节是 image_header.timestamp（本例 00 00 02 d8=728，
+          # image_size 在 offset 8）→ 整个串不以 d00dfeed 结尾，误报 invalid。
+          # 只判前 4 字节 magic 即可。
           assert magic.hex() == 'd00dfeed', 'not a valid FIT'
           size=os.path.getsize(p)
           BOOT_B=0x400000
