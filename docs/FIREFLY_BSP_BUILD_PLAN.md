@@ -83,22 +83,25 @@ rootfs 暂沿用已有 `firmware/rootfs.ubi.rv1109`（OpenIPC）或 vendor rootf
 
 **★★2026-11-17 容量缺口已解除（Stage 1 收尾达成）：**
 - 目标：把 rv1126 defconfig 编出的 zboot.img 从 5.90 MiB 压回 boot_b 4 MiB 以内（对照 OpenIPC 3.38 MiB 基线）。
-- **达成：zboot.img 最终 2,755,396 B = 2.63 MiB，富余 1,438,908 B（1.37 MiB）可写 boot_b，魔数 `d00dfeed` 有效。**
-  进度曲线（4 轮 fragment 裁剪 + 压缩切换，每轮 177 kconfig 校验 + GA 权威字节数）：
+- **达成：zboot.img 最终 2,954,252 B = 2.82 MiB，富余 1,240,052 B（1.18 MiB）可写 boot_b，魔数 `d00dfeed` 有效。**
+  进度曲线（每轮 177 kconfig 校验 + GA 权威字节数）：
   `5.90(r0 原 defconfig) → 5.10(r1 裁 DRM/SND/USB) → 4.33(r2 裁无线/SCSI/MMC/input, 关 select 源 WLAN/WL_ROCKCHIP)
-   → 4.24(r3 裁 MPP 解码侧+crypto 孤儿) → 2.63 MiB ✅(r4 内核压缩 LZ4→XZ, XZ_DEC_ARM/BCJ)`。
-- **r4 是关键一刀**：前三轮"裁功能模块"收益递减（顶层 CRYPTO 被 44 处 select 关不掉，per-algo 裁了几乎不省）；
-  改走"不裁功能、换压缩"——`KERNEL_XZ`（树内 `XZ_DEC_ARM`/`XZ_DEC_ARMTHUMB`/`XZ_DEC_BCJ` 已齐，
-  BCJ 对 ARM 代码再压几个百分点），比 LZ4 小 20–30%，一次 4.24→2.63 MiB，且**保留 MPP 解码 + 全部 crypto 给 Stage 2**，
-  代价仅启动解压 +1~2s（摄像头冷启动可接受）。
+   → 4.24(r3 裁 MPP 解码侧+crypto 孤儿) → 2.63(r4 内核压缩 LZ4→XZ) → 2.82 MiB ✅(r5 恢复 USB host + 加 4G RNDIS 网卡驱动, 回涨 198 KB)`。
+- **r5 是需求变更（2026-11-17 用户）**：板上有 USB 口、后续插 4G 无线网卡 RNDIS 模式，**USB host 子系统不能裁**
+  （r1 误裁，已撤）。恢复 defconfig 的 USB host（XHCI/EHCI/OHCI/STORAGE），并补上 4G 卡数据驱动
+  （defconfig 默认全关，光有 host 也识别不了）：`USB_USBNET` + `USB_NET_RNDIS_HOST`（auto-select CDCETHER）
+  + `CDC_NCM`/`CDCETHER` + `USB_SERIAL_WWAN/OPTION/QUALCOMM`，全 `=y` 内建。仍关 USB 设备角色（GADGET/CONFIGFS）。
+  代价 198 KB，仍富余 1.18 MiB，未破红线。
+- **r4 是关键一刀**：前三轮"裁功能模块"收益递减（顶层 CRYPTO 被 44 处 select 关不掉）；
+  改走"不裁功能、换压缩"——`KERNEL_XZ`（树内 `XZ_DEC_ARM`/`BCJ` 已齐，BCJ 对 ARM 代码再压几 %），
+  4.24→2.63 MiB，保留 MPP 解码 + 全部 crypto 给 Stage 2，代价仅启动解压 +1~2s。
 - **裁剪边界（`board/s4602/firefly/s4602_fragment.firefly.config`，kconfig 校验 `tools/fl_fix_kconfig.py` 全绿）**：
-  关 = DRM/SND/USB(含 DWC3/GADGET/CONFIGFS)/无线(WLAN select WIRELESS、WL_ROCKCHIP+AP6XXX select MAC80211/CFG80211)/
-  SCSI/MMC/键盘触摸HID/背光/PSTORE/IIO/DEVFREQ/thermal；保留 = 出图链路 `MEDIA_SUPPORT`/`VIDEO_ROCKCHIP_{CIF,ISP,ISPP}`/
-  `VIDEO_SC5338`/`STMMAC`/`MOTORCOMM_PHY`/`UBI`/`UBIFS`/`SQUASHFS`/`I2C`/`SPI`/`CMDLINE_FORCE` +
-  MPP 编码侧 `RKVENC/VEPU2/MPP_SERVICE` + crypto 核心 `AES/SHA1/SHA256/LZO/CRC32C/HASH/ALGAPI`。
+  关 = DRM/SND/无线(WLAN select WIRELESS、WL_ROCKCHIP+AP6XXX select MAC80211/CFG80211)/SCSI/MMC/键盘触摸HID/背光/PSTORE/IIO/DEVFREQ/thermal/USB-gadget；
+  **保留 = 出图链路 `MEDIA_SUPPORT`/`VIDEO_ROCKCHIP_{CIF,ISP,ISPP}`/`VIDEO_SC5338`/`STMMAC`/`MOTORCOMM_PHY`/`UBI`/`UBIFS`/`SQUASHFS`/`I2C`/`SPI`/`CMDLINE_FORCE`
+  + MPP 编码侧 `RKVENC/VEPU2/MPP_SERVICE` + crypto 核心 + USB host 子系统 + 4G 网卡数据驱动（USB 见 §"硬件约束"）**。
   **关键经验：`select` 优先级高于 `# ... is not set`，关叶子会被 select 源拉回，必须关 select 源头（WLAN/WL_ROCKCHIP）。**
-- 权威产物已归位 `firmware/firefly-s4602-rv1109-slim-r4-run44003549545.zip`（GA run `44003549545`，
-  commit `d08a2ee`：zboot 2,755,396 B + `rv1109-38-v10-spi-nand.dtb` 87,116 B + `vendor-kernel.dtb` 85,937 B）。
+- 权威产物已归位 `firmware/firefly-s4602-rv1109-usb4g-r5-run44020818093.zip`（GA run `44020818093`，
+  commit `c6cad32`：zboot 2,954,252 B + `rv1109-38-v10-spi-nand.dtb` 87,116 B + `vendor-kernel.dtb` 85,937 B）。
 - **下一步 = 上机**：台架 SD 三参 `bootm` 或刷 `boot_b`，确认原厂 U-Boot 能起这个内核 + `dmesg` 看 sc5338/sfc_nand 命中。
 
 
@@ -120,7 +123,11 @@ rootfs 暂沿用已有 `firmware/rootfs.ubi.rv1109`（OpenIPC）或 vendor rootf
 ## 6. 行动项（优先级）
 
 1. ~~触发 GA 收 Stage 1 kernel FIT artifact~~ ✅ run `43998544748` 已 success，artifact 已核对（魔数有效）。
-2. ~~压小内核使 zboot < 4 MiB~~ ✅ **已达成**：4 轮裁剪 + 压缩切换后 zboot = 2.63 MiB（富余 1.37 MiB），见 §5「容量缺口已解除」。
-3. **【当前主行动项】台架引导**：SD 三参 `bootm` 或 `mtd write boot_b` 刷 round4 产物（`firefly-s4602-rv1109-slim-r4-run44003549545.zip`）→ 确认原厂 U-Boot 起内核 + `dmesg`（sc5338 Detected、sfc_nand id e5f2e5 命中）。
+2. ~~压小内核使 zboot < 4 MiB~~ ✅ **已达成**：裁剪 + 压缩切换 + 恢复 USB host 后 zboot = 2.82 MiB（富余 1.18 MiB），见 §5「容量缺口已解除」。
+3. **【当前主行动项】台架引导**：SD 三参 `bootm` 或 `mtd write boot_b` 刷 **round5 产物**（`firefly-s4602-rv1109-usb4g-r5-run44020818093.zip`，含 USB host + 4G RNDIS 驱动）→ 确认原厂 U-Boot 起内核 + `dmesg`（sc5338 Detected、sfc_nand id e5f2e5 命中、插 4G 卡后出现 `usb0`/`wlan` 网卡）。
 4. 通过后开 Stage 2（buildroot + rkmedia RTSP demo + vendor DTS + 14 分区 parameter）。
 5. 全路线验收 = `vlc rtsp://<ip>/live/main_stream` 出**硬件 ISP 画质**（对比现有 8.8fps 软件 demosaic）。
+
+> **硬件约束（2026-11-17 用户）**：板上有 USB 口、要插 4G 无线网卡 RNDIS 模式 → **USB host 子系统绝不能裁**，
+> 内核须含 USB host(XHCI/EHCI/OHCI) + `USB_USBNET`/`USB_NET_RNDIS_HOST`/`CDC_NCM`/`CDCETHER`/`USB_SERIAL_WWAN/OPTION/QUALCOMM`。
+> 仍关 USB 设备角色（GADGET/CONFIGFS）。
