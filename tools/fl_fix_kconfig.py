@@ -16,9 +16,11 @@ FRAG_PATH = os.path.join(ROOT, "board", "s4602", "firefly", "s4602_fragment.fire
 OFF = [
     "CONFIG_DRM", "CONFIG_DRM_ROCKCHIP", "CONFIG_DRM_KMS_HELPER",
     "CONFIG_SND", "CONFIG_SND_SOC", "CONFIG_SND_SOC_ROCKCHIP",
-    "CONFIG_SOUND", "CONFIG_USB", "CONFIG_USB_XHCI_HCD",
-    "CONFIG_USB_EHCI_HCD", "CONFIG_USB_OHCI_HCD", "CONFIG_USB_DWC3",
-    "CONFIG_USB_GADGET", "CONFIG_USB_CONFIGFS", "CONFIG_FB",
+    "CONFIG_SOUND",
+    # USB: host subsystem KEPT (board has USB port, 4G RNDIS card). Only the
+    # device-role options stay off (gadget/configfs don't affect host 4G cards).
+    "CONFIG_USB_GADGET", "CONFIG_USB_CONFIGFS",
+    "CONFIG_FB",
     # round 2: wireless / local block / input (incl. select-sources WLAN/WL_ROCKCHIP)
     "CONFIG_WLAN", "CONFIG_WL_ROCKCHIP", "CONFIG_AP6XXX", "CONFIG_WIRELESS",
     "CONFIG_MAC80211", "CONFIG_CFG80211", "CONFIG_BT",
@@ -56,6 +58,15 @@ ON = [
     "CONFIG_CRYPTO_HASH", "CONFIG_CRYPTO_ALGAPI",
     # round4: XZ compression must be active (XZ_DEC present, LZ4 off)
     "CONFIG_KERNEL_XZ", "CONFIG_XZ_DEC", "CONFIG_XZ_DEC_ARM", "CONFIG_XZ_DEC_BCJ",
+    # round5 (2026-11-17): USB host kept + 4G RNDIS card drivers (user requirement)
+    # (USB_STORAGE excluded: it depends on SCSI which we trimmed in round2, and
+    #  a 4G RNDIS card is a USB *network* device, not USB mass storage -> not needed)
+    "CONFIG_USB", "CONFIG_USB_XHCI_HCD", "CONFIG_USB_EHCI_HCD",
+    "CONFIG_USB_OHCI_HCD",
+    "CONFIG_USB_USBNET", "CONFIG_USB_NET_RNDIS_HOST",
+    "CONFIG_USB_NET_CDC_NCM", "CONFIG_USB_NET_CDCETHER",
+    "CONFIG_USB_SERIAL", "CONFIG_USB_SERIAL_WWAN",
+    "CONFIG_USB_SERIAL_OPTION", "CONFIG_USB_SERIAL_QUALCOMM",
 ]
 # round4: LZ4 must be OFF (replaced by XZ)
 OFF_COMP = ["CONFIG_KERNEL_LZ4"]
