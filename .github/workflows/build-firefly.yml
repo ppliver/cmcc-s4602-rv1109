@@ -1,0 +1,141 @@
+name: Build S4602 kernel FIT from Firefly RV1109 BSP (Stage 1)
+
+# 路线 P2 / docs/FIREFLY_BSP_BUILD_PLAN.md —— Stage 1：
+#   拉 Firefly 公开 manifest 的 rv1126_rv1109 BSP（tag linux_release_v2.2.5g），
+#   复用 tools/apply_kernel_patch.py 注入 S4602 板级支持（SC5338 + SPI-NAND id + YT8512B PHY），
+#   叠加 board/s4602/firefly fragment，编 4.19.111 内核 zImage + DTS，打 FIT(zboot.img)。
+#   全程直拉 GitLab 公开仓（无需 NDA / 无需 RK 技术窗口 / 不用 repo）。
+#
+# 只编内核 + 打 FIT，不刷设备。产物 artifact: firefly-s4602-rv1109
+# 上机引导验证、Buildroot rootfs + rkmedia RTSP demo（Stage 2）另行。
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main, master ]
+
+permissions:
+  contents: read
+
+env:
+  # Firefly 公开 manifest pin 的 BSP 版本
+  FL_TAG: "rv1126_rv1109/linux_release_v2.2.5g"
+  FL_GROUP: "https://gitlab.com/firefly-linux"
+  # 工具链仓没有该 tag，走 branch（manifest 的 dest-branch）
+  FL_TC_BRANCH: "rv1126_rv1109/firefly"
+  # Firefly 自带交叉工具链（gcc-linaro 6.3.1 = 原厂内核同系），绕开 build.sh 探测 gcc-10.3 的坑
+  FL_TC_REPO: "prebuilts/gcc/linux-x86/arm/gcc-linaro-6.3.1-2017.05-x86_64_arm-linux-gnueabihf"
+
+jobs:
+  build-kernel-fit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Checkout project (scripts + board assets)
+        uses: actions/checkout@v4
+
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            make gcc g++ libssl-dev bison flex bc \
+            u-boot-tools device-tree-compiler kconfig-mconf xz-utils libelf-dev
+          # 4.19 内核 kconfig 目标链走 `#!/usr/bin/env python`（Python2 时代写的）。
+          # ubuntu-latest 只有 python3，无 `python` 命令 → defconfig 会报
+          # /usr/bin/env: "python": No such file or directory。补一个软链兜底。
+          # 注意：不要 sudo 装 python2（GA 上无 python2 包），软链 python3 即可（4.19 kconfig 兼容 py3）。
+          sudo ln -sf "$(which python3)" /usr/local/bin/python
+          python --version 2>&1 | head -1
+
+      - name: Clone Firefly kernel (pinned BSP tag)
+        run: |
+          git clone --depth 1 -b "$FL_TAG" "$FL_GROUP/kernel.git" /opt/fl-kernel
+          cd /opt/fl-kernel
+          git log -1 --format='kernel HEAD %H | %ci'
+
+      - name: Clone Firefly cross toolchain (gcc-linaro 6.3.1, dest-branch)
+        run: |
+          git clone --depth 1 -b "$FL_TC_BRANCH" "$FL_GROUP/$FL_TC_REPO.git" /opt/fl-tc
+          ls -l /opt/fl-tc/bin/arm-linux-gnueabihf-gcc
+          /opt/fl-tc/bin/arm-linux-gnueabihf-gcc --version | head -1
+          echo "CROSS_PREFIX=/opt/fl-tc/bin/arm-linux-gnueabihf-" >> "$GITHUB_ENV"
+
+      - name: Inject S4602 board support into Firefly kernel (SC5338 + SPI-NAND id + YT8512B PHY)
+        run: |
+          python3 "$GITHUB_WORKSPACE/tools/apply_kernel_patch.py" --linux /opt/fl-kernel
+          # 逐项硬校验注入落位（锚点与 4.19 树一致，已在计划文档第 2 节核对）
+          grep -q '0xE5, 0xF2' /opt/fl-kernel/drivers/rkflash/sfc_nand.c \
+            || { echo "ERROR: S4602 SPI-NAND id (e5 f2 e5) not injected"; exit 1; }
+          grep -q 'config VIDEO_SC5338' /opt/fl-kernel/drivers/media/i2c/Kconfig \
+            || { echo "ERROR: SC5338 Kconfig not injected"; exit 1; }
+          test -f /opt/fl-kernel/drivers/net/phy/motorcomm.c \
+            || { echo "ERROR: motorcomm.c not copied"; exit 1; }
+          grep -q 'PHY_ID_YT8512B' /opt/fl-kernel/drivers/net/phy/motorcomm.c \
+            || { echo "ERROR: YT8512B PHY id missing in motorcomm.c"; exit 1; }
+
+      - name: Place S4602 fragment into kernel configs
+        run: |
+          cp "$GITHUB_WORKSPACE/board/s4602/firefly/s4602_fragment.firefly.config" \
+             /opt/fl-kernel/arch/arm/configs/s4602_fragment.firefly.config
+          echo "fragment placed:"; grep -E '^CONFIG_' /opt/fl-kernel/arch/arm/configs/s4602_fragment.firefly.config
+
+      - name: Build 4.19 kernel (zImage + DTS)
+        working-directory: /opt/fl-kernel
+        env:
+          ARCH: arm
+          CROSS_COMPILE: ${{ env.CROSS_PREFIX }}
+        run: |
+          set -e
+          # HOSTLDFLAGS：4.19 自带 host 工具 scripts/dtc/dtc 用老式 bison 产物，
+          # 在较新 binutils（默认 --no-common，如 ubuntu-latest）下链接报
+          #   scripts/dtc/dtc-parser.tab.o:(.bss): multiple definition of `yylloc'
+          # 加 -Wl,--allow-multiple-definition 修掉。实测（2026-11-17 构建机 192.168.219.177）
+          # 单文件编译 sc5338.o / motorcomm.o / sfc_nand.o 全通过。
+          export HOSTLDFLAGS="-Wl,--allow-multiple-definition"
+          echo ">>> base defconfig + S4602 fragment merge"
+          make ARCH=arm rv1126_defconfig
+          MC=scripts/kconfig/merge_config.sh
+          [ -f "$MC" ] || MC=scripts/merge_config.sh
+          bash "$MC" -m .config arch/arm/configs/s4602_fragment.firefly.config
+          make ARCH=arm olddefconfig
+          echo ">>> symbol resolution:"
+          for s in VIDEO_SC5338 MOTORCOMM_PHY REALTEK_PHY MICREL_PHY STMMAC_ETH \
+                   CMDLINE_FORCE MTD_CMDLINE_PARTS RK_FLASH RK_SFC_NAND MTD_UBI UBIFS_FS SQUASHFS; do
+            grep -E "^CONFIG_$s=" .config || echo "CONFIG_$s NOT SET"
+          done
+          # SC5338 是注入符号，必须 builtin，否则内核起来 sensor 探测不了
+          grep -q '^CONFIG_VIDEO_SC5338=y$' .config \
+            || { echo "ERROR: CONFIG_VIDEO_SC5338 != y"; exit 1; }
+          # SPI-NAND：Firefly 树已内置 DS35Q2GB(0xE5 0xF2) 表项（sfc_nand.c 实测），无需再注
+          echo ">>> building zImage"
+          make ARCH=arm -j"$(nproc)" zImage
+          echo ">>> building DTS (stock RV1109 SPI-NAND reference, for kernel+dtb ABI self-consistency)"
+          make ARCH=arm rv1109-38-v10-spi-nand.dtb
+          ls -l arch/arm/boot/zImage arch/arm/boot/dts/rv1109-38-v10-spi-nand.dtb
+
+      - name: Package FIT (zboot.img) with the built reference DTS
+        run: |
+          mkdir -p firmware
+          bash tools/make_fit.sh /opt/fl-kernel/arch/arm/boot/zImage \
+               /opt/fl-kernel/arch/arm/boot/dts/rv1109-38-v10-spi-nand.dtb \
+               firmware/zboot.img
+          cp /opt/fl-kernel/arch/arm/boot/dts/rv1109-38-v10-spi-nand.dtb firmware/rv1109-38-v10-spi-nand.dtb
+          cp docs/evidence/vendor-kernel.dtb firmware/vendor-kernel.dtb   # 上机替换候选
+          ls -l firmware/zboot.img firmware/rv1109-38-v10-spi-nand.dtb firmware/vendor-kernel.dtb
+          python3 - <<'PY'
+          import struct
+          d=open('firmware/zboot.img','rb').read(8)
+          print('FIT magic: %s (expect d00dfeed)' % d.hex())
+          assert d.hex().endswith('d00dfeed'), 'not a valid FIT'
+          print('zboot.img size:', len(open('firmware/zboot.img','rb').read()), '(must be < 4 MiB boot_b)')
+          PY
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: firefly-s4602-rv1109
+          path: |
+            firmware/zboot.img
+            firmware/rv1109-38-v10-spi-nand.dtb
+            firmware/vendor-kernel.dtb
+          if-no-files-found: error
