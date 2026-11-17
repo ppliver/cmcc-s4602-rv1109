@@ -39,7 +39,9 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y \
             make gcc g++ libssl-dev bison flex bc \
-            u-boot-tools device-tree-compiler kconfig-mconf xz-utils libelf-dev
+            u-boot-tools device-tree-compiler xz-utils libelf-dev
+          # 注意：不装 kconfig-mconf（Ubuntu 26.04 resolute 无此包，apt 整条 install 会 exit 100）。
+          # 本流程走 defconfig + merge_config + olddefconfig，不需要 menuconfig，故无需 kconfig-mconf。
           # 4.19 内核 kconfig 目标链走 `#!/usr/bin/env python`（Python2 时代写的）。
           # ubuntu-latest 只有 python3，无 `python` 命令 → defconfig 会报
           # /usr/bin/env: "python": No such file or directory。补一个软链兜底。
