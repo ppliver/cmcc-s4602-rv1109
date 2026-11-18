@@ -11,8 +11,6 @@ name: Build S4602 kernel FIT from Firefly RV1109 BSP (Stage 1)
 
 on:
   workflow_dispatch:
-  push:
-    branches: [ main, master ]
 
 permissions:
   contents: read
