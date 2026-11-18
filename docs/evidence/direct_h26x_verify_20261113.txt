@@ -1,0 +1,77 @@
+=== 2026-11-13 设备端直发 H.264/H.265 端到端验收 ===
+
+构建：
+python tools/armbuild.py h264out.c h264out --dynamic \
+    --inc out/reference/mpp/inc-1.0.9 --libs="-ldl -lm"
+[2/4] compile rc=0   -> firmware/h264out (32868 bytes)
+
+--- MPP 配置（raw 路径，已知成功配置）---
+[mpp] init coding=0x7 ret=0                     (H.264)
+[raw] MppBufferType=0x3                         (DRM, 必须)
+[raw] 1 x 353280-byte NV12 @ 0xa6249000 (hs=640 vs=368) pkt=... md=... ret=0
+[mpp] GET_HDR_SYNC ret=0 len=36
+[hdr] 2 parameter-set NALs (VPS/SPS/PPS), 36 B total
+[v4l2] /dev/video0 G_FMT 2880x1616 BG10
+[v4l2] RAW source 2880x1616 bpl=3840 sizeimage=6205440 (keep G_FMT, no S_FMT)
+[v4l2] REQBUFS got 3
+[v4l2] STREAMON OK
+[run] capture loop started (rkcif RAW10; IQ daemon must NOT be running)
+
+--- 帧率实测（--box 2, --chroma 35, --nfrmbuf 1 --vbufs 3, --dry）---
+320x180 : captured=25 encoded=25 elapsed=1.05s -> 23.8 fps
+480x270 : captured=25 encoded=25 elapsed=1.95s -> 12.8 fps
+640x360 : captured=25 encoded=25 elapsed=2.90s ->  8.6 fps
+640x360 H.265 : init coding=0x1000004 / h265e_api / elapsed=2.89s -> 8.7 fps
+含色度降噪后 640x360 约 6.6 fps。
+
+--- 端到端 RTP（tools/verify_direct_stream.py，主机 192.168.6.109 收包）---
+H.264 / 320x180 / 60 frames:
+  [done] captured=60 encoded=60 rtp=240 bytes=243954 elapsed=4.39s
+  [rtp] {"packets": 240, "seq_gaps": 0, "marker_bits": 60,
+         "nal_types": {"6": 6, "7": 3, "8": 3, "28": 60},
+         "annexb_bytes": 240966}
+  [OK] decoded frame -> out/captures/direct_h264_320.jpg (27015 bytes)
+
+H.264 / 640x360 / 40 frames:
+  [done] captured=40 encoded=40 rtp=274 bytes=300046 elapsed=6.08s
+  [rtp] {"packets": 274, "seq_gaps": 0, "marker_bits": 40,
+         "nal_types": {"6": 4, "7": 2, "8": 2, "28": 40},
+         "annexb_bytes": 296458}
+  [OK] decoded frame -> out/captures/direct_h264_clean.jpg (88294 bytes)
+
+H.265 / 640x360 / 30 frames:
+  [done] captured=30 encoded=30 rtp=235 bytes=254487 elapsed=4.58s
+  [rtp] {"packets": 235, "seq_gaps": 0, "marker_bits": 30,
+         "nal_types": {"1": 28, "19": 2, "32": 2, "33": 2, "34": 2, "39": 4},
+         "annexb_bytes": 251212}
+  [OK] decoded frame -> out/captures/direct_h265_640.jpg (84127 bytes)
+  (NAL 1=TRAIL_R 19=IDR_W_RADL 32=VPS 33=SPS 34=PPS 39=SEI)
+
+--- 首帧 NV12 Y 平面（--dump /tmp/raw_nv12.pgm）---
+Y min/max/mean 31 255 148.06  nonzero>16 230400  (640x360 全画面有效)
+out/captures/raw_nv12_luma.png 为干净可辨认场景（百叶窗 / 网状椅背 / 桌面）
+
+--- 失败路径对照（重要）---
+[1] MPP_BUFFER_TYPE_NORMAL(0x1) 帧缓冲：
+    解码帧 Y min/max/mean 0 0 0.0（后续帧 0 242 0.4），UV 全 0 -> 纯绿画面
+    原因：普通堆内存无 cache 同步，CPU 写的 NV12 硬件 DMA 读不到。
+[2] raw 路径沿用 MPP_SET_INPUT_TIMEOUT=100 / OUTPUT_TIMEOUT=1 + 独立 header group：
+    mpp_service_cmd_send ioctl MPP_IOC_CFG_V1 failed ret -1 errno 12 Cannot allocate memory
+    hal_h264e_vepu541_start send cmd failed 12（每帧仅 ~100 B 空洞包）
+[3] --nfrmbuf 2：同样 ENOMEM。此版 VEPU541 HAL 只允许 1 个帧缓冲。
+[4] 未加色度降噪：严重 Bayer 假色/彩噪（HDR_X2 行交错）。
+
+--- 正式启停脚本（sh /tmp/start_h264out.sh）---
+=== restart ===
+[h264out] stopping sender ... STOPPED
+[h264out] h264 (raw) -> 192.168.6.88:5600
+STARTED
+=== status ===
+--- IQ engine (must be OFF when SRC=raw) --- NOT RUNNING
+--- sender ---
+  978 root /tmp/h264out --src raw --dev /dev/video0 --ip 192.168.6.88 --port 5600 \
+      --codec h264 --w 640 --h 360 --box 2 --chroma 35 --fps 25 --kbps 1500 \
+      --frames 0 --vbufs 3 --nfrmbuf 1
+[stat] captured=34 encoded=34 rtp=247 bytes=272127 cap_fps=6.62 out_fps=6.62 send_err=0
+=== 临时 MIRROR=192.168.6.109:5611 校验 ===
+481 个 PT=96 的 RTP 包收到（脚本启动的进程确实在推流）

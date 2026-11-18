@@ -1,0 +1,125 @@
+================================================================================
+S4602 (RV1109/RV1126) GMAC 时钟链与 PHY 参考时钟 —— 实机寄存器取证
+日期: 2026-11-12 21:0x (UTC+8)
+设备: CMCC S4602, MAC 48:E5:33:DB:EF:5B, OpenIPC 4.19.111+
+获取方式: 设备 BusyBox `devmem` applet 直读物理寄存器（/dev/mem 存在且 root 可用，
+          但 `dd if=/dev/mem` 被 devmem 限制拒绝 EIO；devmem applet 可用）
+================================================================================
+
+--------------------------------------------------------------------------------
+[1] CRU / GRF 地址推导（源码核对）
+--------------------------------------------------------------------------------
+RV1126 时钟树: drivers/clk/rockchip/clk-rv1126.c（OpenIPC/linux @ rockchip-rv11xx）
+  #define RV1126_CLKSEL_CON(x)   ((x) * 0x4 + 0x100)     -> clk-rv1126.c:111
+  #define RV1126_CLKGATE_CON(x)  ((x) * 0x4 + 0x280)     -> clk-rv1126.c:112
+  #define RV1126_GMAC_CON        0x460                   -> clk-rv1126.c:14
+  #define RV1126_GRF_IOFUNC_CON1 0x10264                 -> clk-rv1126.c:15
+
+CRU base  = 0xff490000   (DT: clock-controller@ff490000, compatible "rockchip,rv1126-cru")
+GRF base  = 0xfe000000   (DT: syscon@fe000000,  compatible "rockchip,rv1126-grf")
+
+  CLKGATE_CON(20) -> 0xff490000 + 20*4 + 0x280 = 0xff4902d0
+  CLKSEL_CON(61)  -> 0xff490000 + 61*4 + 0x100 = 0xff4901f4
+  CLKSEL_CON(63)  -> 0xff490000 + 63*4 + 0x100 = 0xff4901fc
+  GMAC_CON        -> 0xff490460
+  GRF_IOFUNC_CON1 -> 0xfe010264
+
+--------------------------------------------------------------------------------
+[2] 实测寄存器值
+--------------------------------------------------------------------------------
+0xff4902d0 (CLKGATE_CON(20)) = 0x00003A00
+    置位: bit9, bit11, bit12, bit13
+0xff4901f4 (CLKSEL_CON(61))  = 0x00000709
+0xff4901fc (CLKSEL_CON(63))  = 0x00000109
+0xff490460 (GMAC_CON)        = 0x00000010
+0xfe010264 (GRF_IOFUNC_CON1) = 0x00000000
+邻域: 0xff4902c0=0x00007DF3  0xff4902c4=0x00000140  0xff4902c8=0x00006BF0
+      0xff4902cc=0x00002030  0xff4902d4=0x00000000  0xff4902d8=0x0000278F
+      0xff4902dc=0x000000FC  0xff4902e0..0xff4902ec=0x00000000
+
+--------------------------------------------------------------------------------
+[3] 门控位极性判定（重要）
+--------------------------------------------------------------------------------
+CLKGATE_CON(20) 各 bit 与 Linux clk_summary 的 enable_count 对照：
+
+  bit  时钟                        HW位  Linux enable_count  一致于
+  ---  --------------------------  ----  ------------------  ------------------------
+   6   clk_gmac_div                0     1                   "1=关断"
+   7   clk_gmac_ref                0     (未在摘要中列出)    -
+   8   clk_gmac_rx_src             0     1                   "1=关断"
+   9   clk_gmac_tx_src             1     0                   "1=关断"
+  10   clk_gmac_ptpref             0     1                   "1=关断"
+  11   clk_gmac_ethernet_out2io    1     0                   "1=关断"
+  12   clk_gmac_rgmii_m0           1     0                   "1=关断"
+  13   clk_gmac_rgmii_m1           1     0                   "1=关断"
+
+  8 个数据点全部一致，且与"1 = 时钟被关断（写 0 才使能）"相符；
+  若极性相反则 clk_gmac_div（Linux 明确 enable_count=1）应当是关断的，矛盾。
+  => 结论：CLKGATE_CON 的位是低有效使能（1=off）。
+
+  注意：Linux 的 enable_count 只是软件计数器，**不能**用来判断硬件门控位
+  （U-Boot 若曾置位，Linux 仍会显示 0）。本节结论来自直接读硬件寄存器。
+
+--------------------------------------------------------------------------------
+[4] RMII 50MHz 参考时钟链 —— 逐级核对
+--------------------------------------------------------------------------------
+clk_gmac_div  = COMPOSITE(CLK_GMAC_DIV, "clk_gmac_div", mux_cpll_gpll_p, 0,
+        RV1126_CLKSEL_CON(63), 7, 1, MFLAGS, 0, 5, DFLAGS,
+        RV1126_CLKGATE_CON(20), 6, GFLAGS)
+
+  CLKSEL_CON(63) = 0x109
+     bit7 (mux cpll/gpll) = 0        -> 父时钟 = cpll
+     bits0-5 (divider)   = 9        -> div = 9+1 = 10
+     cpll = 500 MHz -> 500/10 = 50 MHz      ✓ 与 clk_summary 的 50,000,000 一致
+  CLKGATE_CON(20) bit6 = 0                -> 门控开（使能）           ✓
+
+GRF_IOFUNC_CON1 = 0x0
+  MUXGRF(CLK_GMAC_SRC, "clk_gmac_src", mux_clk_gmac_src_m0_p, ...,
+         RV1126_GRF_IOFUNC_CON1, 12, 1, MFLAGS)
+     bit12 = 0 -> clk_gmac_src = clk_gmac_src_m0 = clk_gmac_div   ✓
+
+GMAC_CON = 0x10 = 0b010000
+     bit0 (CLK_GMAC_SRC_M0 mux) = 0 -> 选 clk_gmac_div          ✓
+     bit1 (RMII_MODE_CLK mux)   = 0 -> rmii_mode_clk = clk_gmac_rx_div20 ✓
+     bit4 (CLK_GMAC_TX_RX mux)   = 1 -> rmii_mode_clk           ✓
+     bit2-3 (RGMII_MODE_CLK)     = 0
+     bit5 (CLK_GMAC_SRC_M1 mux)  = 0
+
+CLKGATE_CON(20): bit8(rx_src)=0, bit6(div)=0 -> RMII 接收链全程使能
+clk_summary 佐证: clk_gmac_rx_div20 = 2,500,000 (=50MHz/20) enable_count=1
+
+  => 结论：SoC 侧 RMII 50MHz 时钟链**完全正确配置且已使能**。
+
+clk_gmac_ethernet_out2io (CLKGATE_CON(20) bit11 = 1 -> 关断)
+  CLKSEL_CON(61) = 0x709
+     bit15 (mux cpll/gpll) = 0 -> cpll
+     bits8-12 (divider) = 7 -> div = 8 -> 500/8 = 62.5 MHz
+  该时钟的量级（62.5MHz）既不是 RMII 的 50MHz 也不是 RGMII 的 125MHz，
+  且当前处于关断状态 -> 它是 RGMII 场景的引脚源（gpll 1GHz/8=125MHz），
+  与本板 RMII 配置无关。
+
+--------------------------------------------------------------------------------
+[5] 由此得到的工作假设
+--------------------------------------------------------------------------------
+1. SoC 侧给 PHY 提供 50MHz 参考时钟的链路是通的（clk_gmac_div 50MHz 使能 ->
+   clk_gmac_src_m0 -> clk_gmac_rx_src -> rx_div20 -> rmii_mode_clk -> tx_rx）。
+2. 仍然无法解释 PHY 为何 BMSR.LSTATUS=0 / ANLP=0x0000。
+   剩下的候选：
+     a) PHY 实际没收到 50MHz（引脚走线/mux/板级连线问题）—— 由新内核的
+        BMCR_LOOPBACK 自环测试判定（T1）。
+     b) PHY 收到了 50MHz 但被我们的扩展寄存器配置搞坏 —— 由 T4 回滚 A/B 判定。
+     c) PHY 完全正常，只是 bench 没插线/对端未启用 —— 由 T2/T3 判定。
+3. 原厂固件在 bench 上同样 udhcpc:no lease，说明 (c) 可能性最高；
+   但 (a)/(b) 必须在**现场有 PoE 口**的条件下才能最终排除。
+
+--------------------------------------------------------------------------------
+[6] 其它现场读数
+--------------------------------------------------------------------------------
+- 设备 /dev/mem 存在 (crw-rw---- root root 1,1)，但 dd 读取 0xff490000 返回
+  "Bad address"（devmem_is_allowed 限制）；`devmem` applet 位于 /sbin/devmem 可用。
+- 读取 0xff380030..0xff380050 触发 "Unhandled fault: external abort on non-linefetch"
+  —— 该地址不是本 SoC 的 pinctrl 基址（RV1126 pinctrl 走 0xff3e/0xff38 之外的
+  另一区间，DT 里 pinctrl 节点无 reg，靠 ranges 继承）。串口 shell 未受影响。
+  引脚复用改用 debugfs 的 pinmux-pins 核对（下一轮）。
+- 设备端 SD 卡 /mnt/mmcblk1 (vfat, 7.4G, rw) 一直可用，是本轮传镜像的通道。
+================================================================================

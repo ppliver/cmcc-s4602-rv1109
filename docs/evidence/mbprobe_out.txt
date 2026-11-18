@@ -1,0 +1,66 @@
+===== (4096,0,0,0) =====
+[mbprobe] size=4096 args=(0,0,0)
+  CreateBuffer -> 0x4a6160
+  GetSize=4096 (want 4096) MATCH
+  GetPtr=0x4a6978  GetHandle=(nil)
+  GetFD=-1  GetDevFD=-1
+  ReleaseBuffer -> 0
+  RESULT: PARTIAL
+RC=0
+
+===== (4096,1,0,0) =====
+[mbprobe] size=4096 args=(1,0,0)
+  CreateBuffer -> 0x43a160
+  GetSize=4096 (want 4096) MATCH
+  GetPtr=0xa6dcb000  GetHandle=0x1
+  GetFD=6  GetDevFD=4
+  fcntl(F_GETFD)=1 (VALID FD)
+  mmap(dma-buf)=0xffffffff FAIL
+  ReleaseBuffer -> 0
+  RESULT: ABI_CONFIRMED
+RC=0
+
+===== (4096,0,1,0) =====
+[mbprobe] size=4096 args=(0,1,0)
+  CreateBuffer -> 0x47c160
+  GetSize=4096 (want 4096) MATCH
+  GetPtr=0x47c978  GetHandle=(nil)
+  GetFD=-1  GetDevFD=-1
+  ReleaseBuffer -> 0
+  RESULT: PARTIAL
+RC=0
+
+===== (4096,1,1,0) =====
+[mbprobe] size=4096 args=(1,1,0)
+  CreateBuffer -> 0x455160
+  GetSize=4096 (want 4096) MATCH
+  GetPtr=0xa542f000  GetHandle=0x1
+  GetFD=6  GetDevFD=4
+  fcntl(F_GETFD)=1 (VALID FD)
+  mmap(dma-buf)=0xffffffff FAIL
+  ReleaseBuffer -> 0
+  RESULT: ABI_CONFIRMED
+RC=0
+
+===== (4096,0,0,1) =====
+[mbprobe] size=4096 args=(0,0,1)
+  CreateBuffer -> 0x511160
+  GetSize=4096 (want 4096) MATCH
+  GetPtr=0x511978  GetHandle=(nil)
+  GetFD=-1  GetDevFD=-1
+  ReleaseBuffer -> 0
+  RESULT: PARTIAL
+RC=0
+
+===== (3110400,1,0,0) =====
+[mbprobe] size=3110400 args=(1,0,0)
+  CreateBuffer -> 0x44e160
+  GetSize=3110400 (want 3110400) MATCH
+  GetPtr=0xa40a7000  GetHandle=0x1
+  GetFD=6  GetDevFD=4
+  fcntl(F_GETFD)=1 (VALID FD)
+  mmap(dma-buf)=0xffffffff FAIL
+  ReleaseBuffer -> 0
+  RESULT: ABI_CONFIRMED
+RC=0
+

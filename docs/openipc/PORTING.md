@@ -5,7 +5,7 @@
 
 > 本版推翻了 2026-11-11 上午那版的多处「未验证」结论。
 > 用户补充了原厂启动日志、变砖过程记录、S4602 笔记与 14 个分区备份。
-> 复盘见 [`INCIDENT.md`](INCIDENT.md)，救砖与实施路径见 [`RECOVERY.md`](RECOVERY.md)。
+> 复盘见 [`INCIDENT.md`](../shared/INCIDENT.md)，救砖与实施路径见 [`RECOVERY.md`](../shared/RECOVERY.md)。
 
 ---
 
@@ -17,7 +17,7 @@
 | S4602 的硬件参数还未知吗 | **已知大半** | 串口日志 + 原厂 DTB + 备份解析：RV1109 / LPDDR4 512MB / SPI-NAND 256MB / SC5338 / 14 分区 |
 | U-Boot 控制台可进吗 | **变砖前可以**（Ctrl+C → `=>`） | 原厂日志 97–103 行完整 `help` / `printenv` |
 | 原厂校验内核签名吗 | **不校验** | SPL 日志 `## Verified-boot: 0`、`FIT: no signed, no conf required` |
-| 要不要编译 U-Boot | **不要** | 官方策略 + SPL/ddr bin 至今仍在运行；详见 [`UBOOT.md`](UBOOT.md) |
+| 要不要编译 U-Boot | **不要** | 官方策略 + SPL/ddr bin 至今仍在运行；详见 [`UBOOT.md`](../shared/UBOOT.md) |
 | **U-Boot 能引导 OpenIPC 内核吗** | **能**（不用改 U-Boot） | `boot_fit` + 无签名校验 + 原厂 FIT 可作模板；详见 [`BOOT_FEASIBILITY.md`](BOOT_FEASIBILITY.md) |
 | 官方 nightly 能直接刷吗 | **不能** | 不含 `zboot.img`，DTB 是 Longse 评估板 + IMX307；且官方 `zboot.img` 默认不是 FIT |
 | **刷进去能直接挂载 rootfs 吗** | **不能** | U-Boot 强制注入 `rootfstype=squashfs`，OpenIPC rootfs 是 UBIFS → 需 `CONFIG_CMDLINE_FORCE` |
@@ -70,7 +70,8 @@
 
 **仍未确认**：NAND 芯片丝印型号、PHY 确切型号（笔记写 YT8512B，DTB 未见）、
 A/B 选槽机制（活动槽 `_b` 与 `flash_plan` 的 `_a` 假设冲突）、USB OTG 能否进 MASKROM、
-**rkaiq 的 IQ/3A tuning XML**（原厂 `system_a.img` 是 squashfs-in-UBI，尚未解包）、
+~~rkaiq 的 IQ/3A tuning XML（原厂 `system_a.img` 尚未解包）~~
+**已解决 2026-11-13**：`COMMON_sc5338.xml` 等已从原厂 rootfs 解出，见 [`FIRST_LIGHT.md`](FIRST_LIGHT.md)；
 `CONFIG_CMDLINE_FORCE` 在本 BSP 上的实际行为、
 `mkimg` 生成的 ITS 里残留 signature 节点是否会让 `mkimage` 报错，
 以及 SC5338 的 xvclk/link freq、原厂 3 张寄存器表各自对应的 mode（见 `SC5338.md` 第 7 节）。
@@ -190,9 +191,11 @@ MASKROM + `rkdeveloptool` / `upgrade_tool` 按扇区写入，或用 `sdcard_upgr
 
 1. **P0** 接 UART 抓当前上电输出；确认 USB OTG 是否枚举 `2207`。
 2. **P0** 取得原厂 `MiniLoaderAll.bin` / `parameter.txt`（固件包或同型机 dump）。
-3. **P1** 按 [`SC5338.md`](SC5338.md) 完成 `sc5338.c` 编码（资料已备齐，**不需原厂内核源码**）；另需从原厂 rootfs 解出 rkaiq IQ/3A tuning XML。
+3. **P1 已完成（2026-11-13）**：`sc5338.c` 已编入内核并实板验证（`Detected SCce50 sensor`）；
+   rkaiq IQ/3A tuning XML 已从原厂 rootfs 解出；设备已出图。见 [`FIRST_LIGHT.md`](FIRST_LIGHT.md)。
+   后续改为 P1：把 IQ 参数注入 rkisp，取得硬件 NV12 流。
 4. **P1** `RECOVERY.md` 2A 第 1 批只恢复 gpt + uboot_a/b + boot_a/b，验证能进 `=>`。
-5. **P1** 按 [`FULL_BACKUP.md`](FULL_BACKUP.md) 补完整全片备份，恢复其余分区，确认原厂可启动。
+5. **P1** 按 [`FULL_BACKUP.md`](../shared/FULL_BACKUP.md) 补完整全片备份，恢复其余分区，确认原厂可启动。
 6. **P2** 用 `vendor-kernel.dtb` 校订 DTS，跑改好的 `build_s4602.sh`
    （FIT 模板 + `CMDLINE_FORCE`），核对 magic/尺寸；实测 `Kernel command line`。
 7. **P2** 定夺 A/B 槽方向 → `make_flash_plan.py --check` 三项 blocker 全绿 → 只刷一个槽并验收。

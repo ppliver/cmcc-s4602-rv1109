@@ -76,7 +76,7 @@ gamma 后 R=0 → 整幅画面青绿，U/V 实测 `154/29`（正常应 ≈128）
 
 效果：画面从"彩虹带不能用"变成"近似灰度、能看清桌面/物体轮廓"。
 若要最干净的监控画面，可设 `CHROMA=0`（纯灰度）。真正要"硬件 ISP 画质"
-只能走 vendor BSP 路线（[`VENDOR_BSP_ROUTE.md`](VENDOR_BSP_ROUTE.md)），
+只能走 vendor BSP 路线（[`VENDOR_BSP_ROUTE.md`](../vendor/VENDOR_BSP_ROUTE.md)），
 当前 OpenIPC 栈上做不出。
 
 ---

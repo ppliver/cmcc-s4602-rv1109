@@ -1,0 +1,51 @@
+=== mpcap present? ===
+-rwxr-xr-x    1 root     root         12644 Nov 13 04:06 /tmp/aiqprobe
+-rwx------    1 root     root        357564 Nov 13 02:58 /tmp/mpcap
+===== video6 rkisp selfpath (default fmt) =====
+[i] /dev/video6 drv=rkisp_v4 card=rkisp_selfpath
+[i] G_FMT 720x202 fourcc=FBCG planes=2 sizeimage=218192 bpl=720
+[x] REQBUFS: Device or resource busy
+RC6=5
+===== video5 rkisp mainpath (default fmt) =====
+[i] /dev/video5 drv=rkisp_v4 card=rkisp_mainpath
+[i] G_FMT 2880x1616 fourcc=NV12 planes=1 sizeimage=6981120 bpl=2880
+[i] REQBUFS got 4 buffers
+[i] buf0 len=6981120 offset=0
+[i] buf1 len=6981120 offset=6983680
+[i] buf2 len=6981120 offset=13967360
+[i] buf3 len=6981120 offset=20951040
+[x] STREAMON: Operation not permitted
+RC5=7
+===== dmesg tail =====
+[ 9038.745624] rkcif_mipi_lvds: not active buffer, skip current frame, mipi/lvds stream[0]
+[ 9038.783121] rkcif_mipi_lvds: not active buffer, skip current frame, mipi/lvds stream[0]
+[ 9038.820629] rkcif_mipi_lvds: not active buffer, skip current frame, mipi/lvds stream[0]
+[ 9038.858142] rkcif_mipi_lvds: not active buffer, skip current frame, mipi/lvds stream[0]
+[ 9038.895621] rkcif_mipi_lvds: not active buffer, skip current frame, mipi/lvds stream[0]
+[ 9038.933129] rkcif_mipi_lvds: not active buffer, skip current frame, mipi/lvds stream[0]
+[ 9038.970632] rkcif_mipi_lvds: not active buffer, skip current frame, mipi/lvds stream[0]
+[ 9039.008130] rkcif_mipi_lvds: not active buffer, skip current frame, mipi/lvds stream[0]
+[ 9039.045628] rkcif_mipi_lvds: not active buffer, skip current frame, mipi/lvds stream[0]
+[ 9039.083130] rkcif_mipi_lvds: not active buffer, skip current frame, mipi/lvds stream[0]
+[ 9039.120634] rkcif_mipi_lvds: not active buffer, skip current frame, mipi/lvds stream[0]
+[ 9039.158138] rkcif_mipi_lvds: not active buffer, skip current frame, mipi/lvds stream[0]
+[ 9039.195630] rkcif_mipi_lvds: not active buffer, skip current frame, mipi/lvds stream[0]
+[ 9039.233129] rkcif_mipi_lvds: not active buffer, skip current frame, mipi/lvds stream[0]
+[ 9039.270629] rkcif_mipi_lvds: not active buffer, skip current frame, mipi/lvds stream[0]
+[ 9039.308130] rkcif_mipi_lvds: not active buffer, skip current frame, mipi/lvds stream[0]
+[ 9039.345642] rkcif_mipi_lvds: not active buffer, skip current frame, mipi/lvds stream[0]
+[ 9039.383141] rkcif_mipi_lvds: not active buffer, skip current frame, mipi/lvds stream[0]
+[ 9039.420635] rkcif_mipi_lvds: not active buffer, skip current frame, mipi/lvds stream[0]
+[ 9039.458141] rkcif_mipi_lvds: not active buffer, skip current frame, mipi/lvds stream[0]
+[ 9039.495630] rkcif_mipi_lvds: not active buffer, skip current frame, mipi/lvds stream[0]
+[ 9039.533130] rkcif_mipi_lvds: not active buffer, skip current frame, mipi/lvds stream[0]
+[ 9039.570629] rkcif_mipi_lvds: not active buffer, skip current frame, mipi/lvds stream[0]
+[ 9039.608129] rkcif_mipi_lvds: not active buffer, skip current frame, mipi/lvds stream[0]
+[ 9039.635276] rkcif_mipi_lvds: stream[0] start stopping
+[ 9039.645822] rockchip-mipi-csi2 ffb10000.mipi-csi2: stream off, src_sd: e59d054e, sd_name:rockchip-mipi-dphy-rx
+[ 9039.645835] rockchip-mipi-csi2 ffb10000.mipi-csi2: stream OFF
+[ 9039.645847] rockchip-mipi-dphy-rx ff4b0000.csi-dphy: stream on:0
+[ 9039.646935] rockchip-mipi-dphy-rx ff4b0000.csi-dphy: stream on:0
+[ 9039.649533] rkcif_mipi_lvds: stream[0] stopping finished
+
+[stderr]

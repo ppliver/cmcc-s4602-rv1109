@@ -1,0 +1,21 @@
+[vencprobe] official SDK struct sizes (armhf)
+  sizeof(VENC_CHN_ATTR_S)   = 100
+  sizeof(VENC_ATTR_S)       = 52
+  sizeof(VENC_RC_ATTR_S)    = 28
+  sizeof(VENC_GOP_ATTR_S)   = 20
+  offset VENC_ATTR.enType   = 0
+  offset VENC_ATTR.picW     = 24
+  offset CHN.stRcAttr       = 52
+  offset CHN.stGopAttr      = 80
+  enum RK_CODEC_TYPE_H264   = 6
+  enum IMAGE_TYPE_NV12      = 4
+  enum RK_ID_VENC           = 4
+[03:57:12.370455][CAMHW]:XCAM ERROR CamHwIsp20.cpp:1022: No free isp&ispp needed by fake camera!
+  SYS_Init -> 0
+  CreateChn(chn=0, codec=6, 1920x1080, rc=1) -> [RKMEDIA][SYS][Info]:RK_MPI_VENC_CreateChn: Enable VENC[0], Type:6 Start...
+  CreateChn(chn=1, codec=6, 1280x720, rc=1) -> [RKMEDIA][SYS][Info]:RK_MPI_VENC_CreateChn: Enable VENC[1], Type:6 Start...
+  CreateChn(chn=2, codec=9, 1280x720, rc=4) -> [RKMEDIA][SYS][Info]:RK_MPI_VENC_CreateChn: Enable VENC[2], Type:9 Start...
+  CreateJpegLightChn(chn=3, codec=9, 1280x720, rc=4) -> -21 [ILLEGAL_PARAM]
+  created 0/4 channels
+  RESULT: VENC_STRUCT_OK_BUT_CHANNEL_BLOCKED
+RC=0

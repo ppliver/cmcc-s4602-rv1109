@@ -1,0 +1,2563 @@
+g_calib_tag_infos
+calib_system_EXP_DELAY_Normal_sub_tags
+calib_system_EXP_DELAY_Hdr_sub_tags
+calib_system_EXP_DELAY_sub_tags
+calib_system_env_ctrl_sub_tags
+calib_system_gain_ctrl_sub_tags
+calib_system_DCG_SETTING_Hdr_sub_tags
+calib_system_DCG_SETTING_Normal_sub_tags
+calib_system_DCG_SETTING_sub_tags
+calib_system_hdr_sub_tags
+calib_system_sub_tags
+calib_sensor_ie_sub_tags
+calib_sensor_cproc_sub_tags
+calib_sensor_color_as_grey_sub_tags
+calib_sensor_orb_sub_tags
+calib_sensor_lumadetect_sub_tags
+calib_sensor_fec_sub_tags
+calib_sensor_ldch_sub_tags
+calib_sensor_lut3d_sub_tags
+calib_sensor_cpsl_sub_tags
+calib_sensor_moduleinfo_sub_tags
+calib_sensor_sensorinfo_gainrange_sub_tags
+calib_sensor_sensorinfo_sub_tags
+calib_sensor_Hist_Setting_sub_tags
+calib_sensor_Enhance_Setting_sub_tags
+calib_sensor_Dehaze_Setting_sub_tags
+calib_sensor_dehaze_sub_tags
+calib_sensor_EDGEFILTER_ISO_sub_tags
+calib_sensor_EDGEFILTER_Setting_sub_tags
+calib_sensor_edgefilter_mode_cell_sub_tags
+calib_sensor_edgefilter_sub_tags
+calib_sensor_SHARP_ISO_sub_tags
+calib_sensor_SHARP_Setting_sub_tags
+calib_sensor_sharp_mode_cell_sub_tags
+calib_sensor_sharp_sub_tags
+calib_sensor_MFNR_motion_detection_sub_tags
+calib_sensor_MFNR_ISO_sub_tags
+calib_sensor_MFNR_Setting_sub_tags
+calib_sensor_MFNR_DynamicEN_sub_tags
+calib_sensor_mfnr_mode_cell_sub_tags
+calib_sensor_awb_uv_ratio_sub_tags
+calib_sensor_mfnr_sub_tags
+calib_sensor_GIC_ISO_sub_tags
+calib_sensor_gic_sub_tags
+calib_sensor_YNR_ISO_sub_tags
+calib_sensor_YNR_Setting_sub_tags
+calib_sensor_ynr_mode_cell_sub_tags
+calib_sensor_ynr_sub_tags
+calib_sensor_degamma_cell_sub_tags
+calib_sensor_degamma_sub_tags
+calib_sensor_gamma_sub_tags
+calib_sensor_uvnr_setting_sub_tags
+calib_sensor_uvnr_mode_cell_sub_tags
+calib_sensor_uvnr_sub_tags
+calib_sensor_ccm_matrixAll_sub_tags
+calib_sensor_ccm_aCcmCof_sub_tags
+calib_sensor_ccm_illAll_sub_tags
+calib_sensor_gain_alphaScale_curve_sub_tags
+calib_sensor_lumaCCM_sub_tags
+calib_sensor_ccm_mode_cell_sub_tags
+calib_sensor_ccm_sub_tags
+calib_sensor_rkdm_sub_tags
+calib_sensor_tableAll_sub_tags
+calib_sensor_illAll_sub_tags
+calib_sensor_resolutionAlll_sub_tags
+calib_sensor_alscCoef_sub_tags
+calib_sensor_lsc_sub_tags
+calib_sensor_Bayernr_Setting_sub_tags
+calib_sensor_bayernr_mode_cell_sub_tags
+calib_sensor_bayernr_sub_tags
+calib_sensor_dpcc_sensor_dpcc_sub_tags
+calib_sensor_dpcc_pdaf_sub_tags
+calib_sensor_set_cell_RO_sub_tags
+calib_sensor_set_cell_RG_sub_tags
+calib_sensor_set_cell_RND_sub_tags
+calib_sensor_set_cell_PG_sub_tags
+calib_sensor_set_cell_LC_sub_tags
+calib_sensor_set_cell_RK_sub_tags
+calib_sensor_set_cell_sub_tags
+calib_sensor_dpcc_expert_mode_sub_tags
+calib_sensor_dpcc_fast_mode_sub_tags
+calib_sensor_dpcc_sub_tags
+calib_sensor_blc_mode_cell_sub_tags
+calib_sensor_blc_sub_tags
+calib_sensor_awdr_mode_config_sub_tags
+calib_sensor_awdr_mode_strength_sub_tags
+calib_sensor_awdr_mode_sub_tags
+calib_sensor_awdr_sub_tags
+calib_sensor_ahdr_GlobalTMO_sub_tags
+calib_sensor_ahdr_LocalTMO_sub_tags
+calib_sensor_ahdr_DetailsLowLight_sub_tags
+calib_sensor_ahdr_DetailsHighLight_sub_tags
+calib_sensor_ahdr_GlobalLuma_sub_tags
+calib_sensor_ahdr_Tmo_En_sub_tags
+calib_sensor_ahdr_Tmo_sub_tags
+calib_sensor_ahdr_Merge_sub_tags
+calib_sensor_af_highlightparam_sub_tags
+calib_sensor_af_ldgparam_sub_tags
+calib_sensor_af_vcmcfg_sub_tags
+calib_sensor_af_zoomfocus_focuspos_sub_tags
+calib_sensor_af_zoomfocus_tbl_sub_tags
+calib_sensor_af_meas_iso_sub_tags
+calib_sensor_af_pdaf_sub_tags
+calib_sensor_af_laser_af_sub_tags
+calib_sensor_af_contrast_af_sub_tags
+calib_sensor_af_infinity_mode_sub_tags
+calib_sensor_af_macro_mode_sub_tags
+calib_sensor_af_fixed_mode_sub_tags
+calib_sensor_af_Window_sub_tags
+calib_sensor_af_sub_tags
+calib_sensor_aec_SframeCtrl_sub_tags
+calib_sensor_aec_MframeCtrl_sub_tags
+calib_sensor_aec_LframeCtrl_sub_tags
+calib_sensor_aec_ExpRatioCtrl_sub_tags
+calib_sensor_aec_LongFrmMode_sub_tags
+calib_sensor_aec_HdrAECtrl_sub_tags
+calib_sensor_aec_OverExp_sub_tags
+calib_sensor_aec_BackLight_sub_tags
+calib_sensor_aec_DySetPointEn_sub_tags
+calib_sensor_aec_LinearAECtrl_sub_tags
+calib_sensor_aec_AecEnvLvCalib_sub_tags
+calib_sensor_aec_AecManualCtrl_HdrAE_sub_tags
+calib_sensor_aec_AecManualCtrl_LinearAE_sub_tags
+calib_sensor_aec_AecManualCtrl_sub_tags
+calib_sensor_aec_AecIrisCtrl_DCAttr_sub_tags
+calib_sensor_aec_AecIrisCtrl_PAttr_sub_tags
+calib_sensor_aec_AecIrisCtrl_sub_tags
+calib_sensor_aec_IRNightMode_sub_tags
+calib_sensor_aec_VBNightMode_sub_tags
+calib_sensor_aec_AecDNSwitch_sub_tags
+calib_sensor_aec_AecRoute_HdrAE_sub_tags
+calib_sensor_aec_AecRoute_LinearAE_sub_tags
+calib_sensor_aec_AecRoute_sub_tags
+calib_sensor_aec_AecGridWeight_sub_tags
+calib_sensor_aec_AecInitValue_HdrAE_sub_tags
+calib_sensor_aec_AecInitValue_LinearAE_sub_tags
+calib_sensor_aec_AecInitValue_sub_tags
+calib_sensor_aec_AecAntiFlicker_sub_tags
+calib_sensor_aec_AecFrameRateMode_sub_tags
+calib_sensor_aec_AecDelayFrmNum_sub_tags
+calib_sensor_aec_AecSpeed_sub_tags
+calib_sensor_aec_AecSyncTest_HdrAlterExp_sub_tags
+calib_sensor_aec_AecSyncTest_LinAlterExp_sub_tags
+calib_sensor_aec_AecSyncTest_AlterExp_sub_tags
+calib_sensor_aec_AecSyncTest_sub_tags
+calib_sensor_aec_sub_tags
+calib_sensor_awb_RemosaicPara_sub_tags
+calib_sensor_awb_wbGainClip_sub_tags
+calib_sensor_awb_wbGainDaylightClip_sub_tags
+calib_sensor_awb_lutAll_sub_tags
+calib_sensor_awb_wbGainOffset_sub_tags
+calib_sensor_awb_wbGainAdjust_sub_tags
+calib_sensor_awb_xyRegionStableSelection_sub_tags
+calib_sensor_awb_strategypara_lightSources_sub_tags
+calib_sensor_awb_strategypara_global_sub_tags
+calib_sensor_awb_strategypara_sub_tags
+calib_sensor_awb_wpDiffLumaWeight_sub_tags
+calib_sensor_awb_lsUsedForEstimation_sub_tags
+calib_sensor_awb_colorBlock_sub_tags
+calib_sensor_awb_singleColorProcess_sub_tags
+calib_sensor_awb_dampFactor_sub_tags
+calib_sensor_awb_runInterval_sub_tags
+calib_sensor_awb_tolerance_sub_tags
+calib_sensor_awb_wpDiffwei_w_LowLV_sub_tags
+calib_sensor_awb_wpDiffwei_w_HighLV_sub_tags
+calib_sensor_awb_wpDiffWeiEnableTh_sub_tags
+calib_sensor_awb_excludeRange_sub_tags
+calib_sensor_awb_limitRange_sub_tags
+calib_sensor_awb_resall_sub_tags
+calib_sensor_awb_measurewindow_sub_tags
+calib_sensor_awb_lsusedforyuvdet_sub_tags
+calib_sensor_awb_hfc_sub_tags
+calib_sensor_awb_v201_lightSources_sub_tags
+calib_sensor_awb_v201_global_sub_tags
+calib_sensor_awb_v201_sub_tags
+calib_sensor_awb_rtYuvRegion_sub_tags
+calib_sensor_awb_yuvRegion_sub_tags
+calib_sensor_awb_lightXYRegion_sub_tags
+calib_sensor_awb_v200_lightSources_sub_tags
+calib_sensor_awb_v200_global_sub_tags
+calib_sensor_awb_v200_sub_tags
+calib_sensor_awb_sub_tags
+calib_sensor_sub_tags
+calib_header_sub_tags
+calib_filestart_sub_tags
+rk_aiq_user_api_af_StartZoomCalib
+rk_aiq_uapi_startZoomCalib
+rk_aiq_uapi_sysctl_getSensorDiscrib
+rk_aiq_uapi_sysctl_getCurCalib
+rk_aiq_uapi_sysctl_upateCalib
+AecCalibConfig
+CamCalibDbGetCcmProfileByName
+AfSetZoomCalibMode
+AfGetZoomCalibMode
+CalibrateOECurve
+CalibrateMDCurve
+librkaiq.so
+/dev/%s
+Opening media device %s
+%s: Can't open media device %s
+media get entity by name: %s is null
+%s: Link not found
+%s: Unable to setup link (%s)
+%s: Unable to retrieve media device information for device %s (%s)
+%s: Unable to enumerate entities for device %s (%s)
+%s: Unable to enumerate pads and links (%s).
+%s: Unable to enumerate pads and linksfor device %s
+No pad '%d' on entity "%s". Maximum pad number is %d
+No link between "%s":%d and "%s":%d
+%s: Unable to parse link
+/home/liyunjian/ipc_rv1109_rv1126/buildroot/output/rockchip_rv1126_rv1109/build/camera_engine_rkaiq-1.0/xcore/smartptr.h
+N5RkCam12BaseSensorHwE
+N5RkCam15SharedItemProxyINS_24RKAiqAecExpInfoWrapper_sEEE
+N5RkCam14SharedItemPoolINS_24RKAiqAecExpInfoWrapper_sEEE
+N5RkCam21rk_sensor_full_info_tE
+N5RkCam24RKAiqAecExpInfoWrapper_sE
+void XCam::SmartPtr<Obj>::init_ref(ObjD*) [with ObjD = RkCam::BaseSensorHw; Obj = RkCam::BaseSensorHw]
+XCam::SmartPtr<Obj>::SmartPtr(const XCam::SmartPtr<Obj>&) [with Obj = RkCam::rk_sensor_full_info_t]
+void XCam::SmartPtr<Obj>::release() [with Obj = RkCam::BaseSensorHw]
+void XCam::SmartPtr<Obj>::release() [with Obj = RkCam::rk_sensor_full_info_t]
+void XCam::SmartPtr<Obj>::init_ref(ObjD*) [with ObjD = RkCam::rk_sensor_full_info_t; Obj = RkCam::rk_sensor_full_info_t]
+void XCam::SmartPtr<Obj>::release() [with Obj = RkCam::SensorHw]
+virtual XCamReturn RkCam::CamHwIsp20::getEffectiveExpParams(uint32_t, XCam::SmartPtr<RkCam::SharedItemProxy<RkCam::RKAiqAecExpInfoWrapper_s> >&)
+XCam::SmartPtr<Obj>::SmartPtr(const XCam::SmartPtr<ObjDerive>&) [with ObjDerive = RkCam::SensorHw; Obj = RkCam::BaseSensorHw]
+void XCam::SmartPtr<Obj>::release() [with Obj = RkCam::RKAiqAecExpInfoWrapper_s]
+void XCam::SmartPtr<Obj>::init_ref(ObjD*) [with ObjD = RkCam::SensorHw; Obj = RkCam::BaseSensorHw]
+void XCam::SmartPtr<Obj>::init_ref(ObjD*) [with ObjD = RkCam::BaseSensorHw; Obj = XCam::V4l2SubDevice]
+void XCam::SmartPtr<Obj>::release() [with Obj = RkCam::SharedItemPool<RkCam::RKAiqAecExpInfoWrapper_s>]
+XCam::SmartPtr<Obj>::SmartPtr(const XCam::SmartPtr<Obj>&) [with Obj = RkCam::RKAiqAecExpInfoWrapper_s]
+void XCam::SmartPtr<Obj>::release() [with Obj = RkCam::SharedItemProxy<RkCam::RKAiqAecExpInfoWrapper_s>]
+get_sensor_caps
+XCAM WARNING %s:%d: Mutex lock failed %d: %s
+XCAM WARNING %s:%d: Mutex unlock failed %d: %s
+XCAM WARNING %s:%d: Mutex init failed %d: %s
+XCAM WARNING %s:%d: Mutex destroy failed %d: %s
+/home/liyunjian/ipc_rv1109_rv1126/buildroot/output/rockchip_rv1126_rv1109/build/camera_engine_rkaiq-1.0/xcore/xcam_mutex.h
+XCAM ERROR %s:%d: motion detect is running, operate not permit!
+/home/liyunjian/ipc_rv1109_rv1126/buildroot/output/rockchip_rv1126_rv1109/build/camera_engine_rkaiq-1.0/hwi/isp20/CamHwIsp20.cpp
+XCAM ERROR %s:%d: munmap ldch buf info!!
+XCAM ERROR %s:%d: munmap fec buf info!!
+XCAM ERROR %s:%d: alloc ldch buf failed!
+XCAM ERROR %s:%d: failed to get ldch buf info!!
+XCAM ERROR %s:%d: failed to map ldch buf!!
+XCAM ERROR %s:%d: alloc fec buf failed!
+XCAM ERROR %s:%d: failed to get fec buf info!!
+XCAM ERROR %s:%d: failed to map fec buf!!
+XCAM ERROR %s:%d: set mIspCoreDev fmt failed !
+XCAM ERROR %s:%d: set mIspCoreDev crop failed !
+XCAM ERROR %s:%d: set mIspCoreDev source crop failed !
+XCAM ERROR %s:%d: get mIspCoreDev src fmt failed !
+XCAM ERROR %s:%d: set mIspCoreDev src fmt failed !
+XCAM ERROR %s:%d: get HDR sink pad failed!
+XCAM ERROR %s:%d: get HDR source pad s failed!
+XCAM ERROR %s:%d: get HDR source pad m failed!
+XCAM ERROR %s:%d: get HDR source pad l failed!
+XCAM ERROR %s:%d: mipi tx:%d prepare err: %d
+XCAM ERROR %s:%d: mipi rx:%d prepare err: %d
+XCAM ERROR %s:%d: hdr mipi start err: %d
+XCAM ERROR %s:%d: mipi tx:%d start err: %d
+XCAM ERROR %s:%d: mipi rx:%d start err: %d
+XCAM ERROR %s:%d: mipi rx:%d stop err: %d
+XCAM ERROR %s:%d: mipi tx:%d stop err: %d
+XCAM ERROR %s:%d: wrong rotation %d
+XCAM ERROR %s:%d: can't set sharp config, check fec & sharp config
+%s:(%d)  enter 
+%s:(%d)  exit 
+%s:(%d) enter 
+%s:(%d) exit 
+%s:(%d) entor 
+XCAM ERROR %s:%d: set ircut value failed to device!
+XCAM ERROR %s:%d: set flashlight params err: %d
+XCAM ERROR %s:%d: set ir params err: %d
+XCAM ERROR %s:%d: set flashlight ir params err: %d
+XCAM ERROR %s:%d: getSensorModeData failed 
+XCAM ERROR %s:%d: get sensor fmt failed !
+XCAM WARNING %s:%d: get_selection failed !
+XCAM ERROR %s:%d: set ispcore fmt failed !
+XCAM ERROR %s:%d: set _ispp_sd sink fmt failed !
+XCAM ERROR %s:%d: set _ispp_sd crop failed !
+XCAM WARNING %s:%d: get mIspSpDev fmt failed !
+XCAM ERROR %s:%d: set mIspSpDev fmt failed !
+XCAM WARNING %s:%d: get selecttion error 
+XCAM ERROR %s:%d: |||set P-Iris step: %d
+XCAM ERROR %s:%d: set P-Iris step failed to device
+XCAM ERROR %s:%d: |||set DC-Iris PwmDuty: %d
+XCAM ERROR %s:%d: set DC-Iris PwmDuty failed to device
+XCAM ERROR %s:%d: set focus result failed to device
+XCAM ERROR %s:%d: set setZoomFocusParams failed to device
+XCAM ERROR %s:%d: get zoom result failed to device
+XCAM ERROR %s:%d: |||get zoom result: %d
+XCAM ERROR %s:%d: set vcm config failed
+XCAM ERROR %s:%d: focus correction failed
+XCAM ERROR %s:%d: zoom correction failed
+XCAM ERROR %s:%d: get vcm config failed
+XCAM ERROR %s:%d: wrong hdr mode: %d
+XCAM ERROR %s:%d: sensor linked to isp, not supported now!
+XCAM WARNING %s:%d: set sensor mode error !
+XCAM ERROR %s:%d: start isp stats dev err: %d
+XCAM ERROR %s:%d: start ispp stats dev err: %d
+XCAM ERROR %s:%d: camhw state err: %d
+XCAM ERROR %s:%d: start isp selfpath dev err: %d
+XCAM ERROR %s:%d: start isp luma dev err: %d
+XCAM ERROR %s:%d: start isp core dev err: %d
+XCAM ERROR %s:%d: start flashlight err: %d
+XCAM ERROR %s:%d: start flashlight ir err: %d
+mSensorDev.ptr ()
+XCAM ERROR %s:%d: camerainfo of %s not fount!
+XCAM ERROR %s:%d: can't find sensor %s
+XCAM ERROR %s:%d: no camera module info, check the drv !
+%s_%s_%s.xml
+XCAM WARNING %s:%d: _cif_csi2_sd is null! 
+XCAM ERROR %s:%d: setupPipelineFmt err: %d
+XCAM ERROR %s:%d: exp-sync: module_id: 0x%x, rx id: %d, ispparams id: %d
+XCAM WARNING %s:%d: module_id: 0x%x, rx id: %d, lumaParams id: %d
+XCAM WARNING %s:%d: unkown module id: 0x%x!
+XCAM ERROR %s:%d: prepare isp params dev err: %d
+XCAM ERROR %s:%d: mIspSpDev prepare failed !
+XCAM ERROR %s:%d: can't search id %d,  _effecting_exp_mapsize is %d
+XCAM ERROR %s:%d: can't find the latest effecting exposure for id %d, impossible case !
+XCAM ERROR %s:%d: prepare ispp params dev err: %d
+XCAM ERROR %s:%d: stop isp selfpath dev err: %d
+XCAM ERROR %s:%d: stop isp luma dev err: %d
+XCAM ERROR %s:%d: stop isp core dev err: %d
+XCAM ERROR %s:%d: stop isp stats dev err: %d
+XCAM ERROR %s:%d: stop isp params dev err: %d
+XCAM ERROR %s:%d: hdr mipi stop err: %d
+XCAM ERROR %s:%d: stop ispp stats dev err: %d
+XCAM ERROR %s:%d: stop ispp params dev err: %d
+XCAM ERROR %s:%d: stop flashlight err: %d
+XCAM ERROR %s:%d: stop flashlight ir err: %d
+XCAM WARNING %s:%d: no new ispp %s params for frame %d !
+XCAM WARNING %s:%d: frame(%d) aiq ispp meas result params is null
+XCAM WARNING %s:%d: frame(%d) aiq ispp other result params is null
+XCAM ERROR %s:%d: ispp working mode changed from 0x%x to 0x%x
+XCAM ERROR %s:%d: RKISP1: failed to ioctl VIDIOC_QBUF for index %d, %d %s.
+XCAM WARNING %s:%d: no new isp %s params for frame %d !
+XCAM WARNING %s:%d: don't update ldch params if restoring params from pause state
+XCAM ERROR %s:%d: rkisp1_convert_results error
+XCAM WARNING %s:%d: frame(%d) aiq isp other result params is null
+XCAM ERROR %s:%d: convertExpRatioToAiqResults error!
+XCAM WARNING %s:%d: frame(%d) aiq isp meas result params is null
+XCAM WARNING %s:%d: isp stream sequence(%d) != aiq result params id(%d)
+XCAM ERROR %s:%d: frame_id(%d), get exposure failed!!!
+XCAM ERROR %s:%d: Can not get isp params buffer for frame %d 
+XCAM ERROR %s:%d: %d:parse sensor entity name %s error at %d, please check sensor driver !
+XCAM ERROR %s:%d: failed to open dev (%s)
+XCAM ERROR %s:%d: @%s %s: Get sensor module info failed
+XCAM ERROR %s:%d: @%s %s: Enum sensor frame interval failed
+XCAM ERROR %s:%d: sensor device mount error!
+XCAM ERROR %s:%d: get isp or ispp info fail, something gos wrong!
+XCAM ERROR %s:%d: No free isp&ispp needed by fake camera!
+XCAM ERROR %s:%d: get isp version failed !
+XCAM ERROR %s:%d: input param: module ID is wrong!
+/home/liyunjian/ipc_rv1109_rv1126/buildroot/output/rockchip_rv1126_rv1109/build/camera_engine_rkaiq-1.0/hwi/isp20/Isp20Params.cpp
+XCAM ERROR %s:%d: algo isn't enabled, so enable module failed!
+XCAM ERROR %s:%d: dpcc algo isn't enabled, so enable module failed!
+XCAM ERROR %s:%d: bls algo isn't enabled, so enable module failed!
+XCAM ERROR %s:%d: lsc algo isn't enabled, so enable module failed!
+XCAM ERROR %s:%d: ccm algo isn't enabled, so enable module failed!
+XCAM ERROR %s:%d: awb algo isn't enabled, so enable module failed!
+XCAM ERROR %s:%d: goc algo isn't enabled, so enable module failed!
+XCAM ERROR %s:%d: rawnr algo isn't enabled, so enable module failed!
+XCAM ERROR %s:%d: 3dlut algo isn't enabled, so enable module failed!
+XCAM ERROR %s:%d: ldch algo isn't enabled, so enable module failed!
+XCAM ERROR %s:%d: gic algo isn't enabled, so enable module failed!
+XCAM ERROR %s:%d: gain algo isn't enabled, so enable module failed!
+XCAM ERROR %s:%d: dehaze algo isn't enabled, so enable module failed!
+XCAM ERROR %s:%d: Wrong Long frame expo!!!
+XCAM ERROR %s:%d: Wrong Short frame expo!!!
+XCAM ERROR %s:%d: Wrong luma change!!!
+N5RkCam15SharedItemProxyINS_22RkAiqIrisInfoWrapper_sEEE
+N5RkCam14SharedItemPoolINS_22RkAiqIrisInfoWrapper_sEEE
+N5RkCam15SharedItemProxyINS_20RKAiqAfInfoWrapper_sEEE
+N5RkCam22RkAiqIrisInfoWrapper_sE
+N5RkCam14SharedItemPoolINS_20RKAiqAfInfoWrapper_sEEE
+N5RkCam20RKAiqAfInfoWrapper_sE
+bool RkCam::Isp20PollThread::set_event_handle_dev(XCam::SmartPtr<RkCam::BaseSensorHw>&)
+void XCam::SmartPtr<Obj>::release() [with Obj = RkCam::RkAiqIrisInfoWrapper_s]
+void XCam::SmartPtr<Obj>::release() [with Obj = RkCam::SharedItemPool<RkCam::RkAiqIrisInfoWrapper_s>]
+XCam::SmartPtr<Obj>::SmartPtr(const XCam::SmartPtr<Obj>&) [with Obj = RkCam::RkAiqIrisInfoWrapper_s]
+void XCam::SmartPtr<Obj>::release() [with Obj = RkCam::SharedItemProxy<RkCam::RkAiqIrisInfoWrapper_s>]
+void XCam::SmartPtr<Obj>::release() [with Obj = RkCam::RKAiqAfInfoWrapper_s]
+void XCam::SmartPtr<Obj>::release() [with Obj = RkCam::SharedItemPool<RkCam::RKAiqAfInfoWrapper_s>]
+XCam::SmartPtr<Obj>::SmartPtr(const XCam::SmartPtr<Obj>&) [with Obj = RkCam::RKAiqAfInfoWrapper_s]
+void XCam::SmartPtr<Obj>::release() [with Obj = RkCam::SharedItemProxy<RkCam::RKAiqAfInfoWrapper_s>]
+XCam::SmartPtr<Obj>::SmartPtr(const XCam::SmartPtr<Obj>&) [with Obj = RkCam::BaseSensorHw]
+XCam::SmartPtr<Obj>::SmartPtr(const XCam::SmartPtr<Obj>&) [with Obj = RkCam::SharedItemProxy<RkCam::RKAiqAfInfoWrapper_s>]
+XCam::SmartPtr<Obj>::SmartPtr(const XCam::SmartPtr<Obj>&) [with Obj = RkCam::SharedItemProxy<RkCam::RkAiqIrisInfoWrapper_s>]
+/home/liyunjian/ipc_rv1109_rv1126/buildroot/output/rockchip_rv1126_rv1109/build/camera_engine_rkaiq-1.0/xcore/v4l2_buffer_proxy.h
+XCAM ERROR %s:%d: safe list pop failed, code:%d
+/home/liyunjian/ipc_rv1109_rv1126/buildroot/output/rockchip_rv1126_rv1109/build/camera_engine_rkaiq-1.0/xcore/safe_list.h
+XCAM WARNING %s:%d: %s write %s failed!
+/home/liyunjian/ipc_rv1109_rv1126/buildroot/output/rockchip_rv1126_rv1109/build/camera_engine_rkaiq-1.0/hwi/isp20/Isp20PollThread.cpp
+XCAM ERROR %s:%d: Failed to create mipi tx:%d poll stop pipe: %s
+XCAM ERROR %s:%d: Fail to set event mipi tx:%d stop pipe flag: %s
+XCAM ERROR %s:%d: Failed to create mipi rx:%d poll stop pipe: %s
+XCAM ERROR %s:%d: Fail to set event mipi rx:%d stop pipe flag: %s
+%s/meta_data
+XCAM ERROR %s:%d: mkdir %s error(%s)!
+%s/raw_%04d-%02d-%02d_%02d-%02d-%02d
+XCAM ERROR %s:%d: mkdir %s error(%s)!!!
+%s/capture_image
+echo %d > %s
+XCAM ERROR %s:%d: skip num  %d, skip seq %d, dest seq %d
+%s/frame%d_%dx%d_%s.raw
+XCAM WARNING %s:%d: can't find frameid(%d), get sof timestamp failed!
+XCAM WARNING %s:%d: %s missing tmo state for buf_seq %d, min rdtimes_seq %d !
+XCAM WARNING %s:%d: %s missing rdtimes for buf_seq %d, min rdtimes_seq %d !
+XCAM WARNING %s:%d: find luma id(%d)-seq id(%d)
+XCAM WARNING %s:%d: luma map is empty
+XCAM WARNING %s:%d: %s buf not ready(%d) !
+XCAM ERROR %s:%d: %s frame[%d] set isp params failed, don't read back!
+XCAM ERROR %s:%d: Rx[%d] can not get buffer
+XCAM ERROR %s:%d: Rx[%d] queue buffer failed
+XCAM ERROR %s:%d: %s frame[%d] queue  failed, don't read back!
+XCAM WARNING %s:%d: _isp_hdr_fid2times_map size is %d
+XCAM WARNING %s:%d: exp-sync: can't find id %d, get latest id %d in _isp_hdr_fid2times_map
+XCAM WARNING %s:%d: can't find the latest effecting exposure for id %d, impossible case !
+XCAM WARNING %s:%d: skip frame %d
+XCAM ERROR %s:%d: skip frame %d
+XCAM WARNING %s:%d: do nothing, sequence not match l: %d, s: %d, m: %d !!!
+XCAM WARNING %s:%d: poll %s buffer stop success !
+XCAM WARNING %s:%d: mipi_dev_index %d poll %s buffer event got error(0x%x) but continue
+XCAM WARNING %s:%d: dequeue %s buffer failed
+XCAM ERROR %s:%d: create mipi stop fds failed !
+XCAM WARNING %s:%d: Flush write not completed
+void XCam::SmartPtr<Obj>::init_ref(ObjD*) [with ObjD = RkCam::SharedItemProxy<RkCam::RKAiqAfInfoWrapper_s>; Obj = RkCam::SharedItemProxy<RkCam::RKAiqAfInfoWrapper_s>]
+void XCam::SmartPtr<Obj>::init_ref(ObjD*) [with ObjD = RkCam::SharedItemProxy<RkCam::RkAiqIrisInfoWrapper_s>; Obj = RkCam::SharedItemProxy<RkCam::RkAiqIrisInfoWrapper_s>]
+rkaiq_runtime_dbg_en
+%s WRITE_FLG 21
+%s access ! framenum %d
+%s read %s fail! empty
+%s read framenum %d failed! framenum %d 
+%s read  success value %d !framenum %d
+%s remove /tmp/motion_detection_wr_flg name %s frame_write_st %d write_frame_num %d framenum %d
+XCAM ERROR %s:%d: can't subscribe TNR complete event!
+/home/liyunjian/ipc_rv1109_rv1126/buildroot/output/rockchip_rv1126_rv1109/build/camera_engine_rkaiq-1.0/hwi/isp20/Isp20SpThread.cpp
+XCAM ERROR %s:%d: fbcbuf_fd[%u]:%d is illegal!
+XCAM ERROR %s:%d: 
+*** ASSERT: In File %s,line %d ***
+XCAM ERROR %s:%d: tnrbuf_fd[%u]:%d is illegal!
+XCAM ERROR %s:%d: Failed to create ispsp poll stop pipe: %s
+XCAM ERROR %s:%d: Fail to set event ispsp stop pipe flag: %s
+XCAM ERROR %s:%d: Failed to create ispp poll stop pipe: %s
+XCAM ERROR %s:%d: Fail to set event ispp stop pipe flag: %s
+XCAM ERROR %s:%d: Failed to create ispp poll sync pipe: %s
+XCAM ERROR %s:%d: Fail to set event ispp sync pipe flag: %s
+XCAM ERROR %s:%d: create ispsp stop fds failed !
+XCAM ERROR %s:%d: mmap gainwr_fd failed!!!(errno=%d),fd: %d, size: %d
+XCAM ERROR %s:%d: ratio_idx=%d
+XCAM WARNING %s:%d: poll ispp stop sucess !
+XCAM WARNING %s:%d: ispp poll buffer event got error(%d) but continue
+XCAM ERROR %s:%d: frame_num_isp(%d) should be greater than frame_num_pp(%d)!
+XCAM ERROR %s:%d: mmap gainkg_fd failed!!!(errno=%d),fd: %d, idx:%u, size: %d
+XCAM ERROR %s:%d: stmtParamsSelected->mfnr_sigma_scale %d is out of range
+XCAM ERROR %s:%d: pthread_setaffinity_np
+XCAM ERROR %s:%d: pthread_getaffinity_np
+XCAM WARNING %s:%d: poll isp sp stop sucess !
+XCAM WARNING %s:%d: isp sp poll buffer event got error(%d) but continue
+XCAM ERROR %s:%d: dequeue isp_sp_dev buffer failed
+XCAM ERROR %s:%d: mmap gain_dmafd failed!!!(errno:%d),fd: %d, idx: %u, size: %d
+void XCam::SmartPtr<Obj>::init_ref(ObjD*) [with ObjD = RkCam::SharedItemProxy<RkCam::RKAiqAecExpInfoWrapper_s>; Obj = RkCam::SharedItemProxy<RkCam::RKAiqAecExpInfoWrapper_s>]
+void XCam::SmartPtr<Obj>::init_ref(ObjD*) [with ObjD = RkCam::RKAiqAecExpInfoWrapper_s; Obj = RkCam::RKAiqAecExpInfoWrapper_s]
+XCam::RefObj* XCam::generate_ref_count(Obj*, std::true_type) [with Obj = RkCam::SharedItemPool<RkCam::RKAiqAecExpInfoWrapper_s>; std::true_type = std::integral_constant<bool, true>]
+XCam::SmartPtr<Obj>::SmartPtr(const XCam::SmartPtr<Obj>&) [with Obj = RkCam::SharedItemProxy<RkCam::RKAiqAecExpInfoWrapper_s>]
+RkCam::SharedItemPool<T>::SharedItemPool(const char*, uint32_t) [with T = RkCam::RKAiqAecExpInfoWrapper_s; uint32_t = unsigned int]
+N5RkCam8SensorHwE
+/home/liyunjian/ipc_rv1109_rv1126/buildroot/output/rockchip_rv1126_rv1109/build/camera_engine_rkaiq-1.0/common/shared_item_pool.cpp
+XCAM WARNING %s:%d: SharedItemPool<%s> expect to reserve %d data but only reserved %d
+XCAM WARNING %s:%d: failed to set hflip (val: %d)
+/home/liyunjian/ipc_rv1109_rv1126/buildroot/output/rockchip_rv1126_rv1109/build/camera_engine_rkaiq-1.0/hwi/SensorHw.cpp
+XCAM WARNING %s:%d: failed to set vflip (val: %d)
+XCAM ERROR %s:%d: Not support gain's delay greater than time's delay!
+XCAM ERROR %s:%d: Not support dcg gain's delay %d, greater than time_delay %d!
+XCAM ERROR %s:%d: failed to set hdr mode to %d
+XCAM ERROR %s:%d: failed to set hdr mode %d
+XCAM ERROR %s:%d: failed to set vblank result(val: %d)
+XCAM ERROR %s:%d: failed to set hflip (val: %d)
+XCAM ERROR %s:%d: failed to set vflip (val: %d)
+XCAM ERROR %s:%d: %s: expParams is invalid!
+SensorLocalExpParams
+XCAM ERROR %s:%d: %s: no free params buffer!
+XCAM ERROR %s:%d: !!!!frame losed,last frameid:%d,current farmeid:%d!!!!
+XCAM ERROR %s:%d: %s: sof_id[%d]: set exposure failed!!!
+void XCam::SmartPtr<Obj>::init_ref(ObjD*) [with ObjD = RkCam::RkAiqIrisInfoWrapper_s; Obj = RkCam::RkAiqIrisInfoWrapper_s]
+void XCam::SmartPtr<Obj>::init_ref(ObjD*) [with ObjD = RkCam::RKAiqAfInfoWrapper_s; Obj = RkCam::RKAiqAfInfoWrapper_s]
+XCam::RefObj* XCam::generate_ref_count(Obj*, std::true_type) [with Obj = RkCam::SharedItemPool<RkCam::RKAiqAfInfoWrapper_s>; std::true_type = std::integral_constant<bool, true>]
+XCam::RefObj* XCam::generate_ref_count(Obj*, std::true_type) [with Obj = RkCam::SharedItemPool<RkCam::RkAiqIrisInfoWrapper_s>; std::true_type = std::integral_constant<bool, true>]
+RkCam::SharedItemPool<T>::SharedItemPool(const char*, uint32_t) [with T = RkCam::RKAiqAfInfoWrapper_s; uint32_t = unsigned int]
+RkCam::SharedItemPool<T>::SharedItemPool(const char*, uint32_t) [with T = RkCam::RkAiqIrisInfoWrapper_s; uint32_t = unsigned int]
+XCAM ERROR %s:%d: set zoom position failed
+/home/liyunjian/ipc_rv1109_rv1126/buildroot/output/rockchip_rv1126_rv1109/build/camera_engine_rkaiq-1.0/hwi/LensHw.cpp
+XCAM ERROR %s:%d: get zoom timeinfo failed
+XCAM ERROR %s:%d: get focus timeinfo failed
+XCAM ERROR %s:%d: get vcm cfg failed
+XCAM ERROR %s:%d: set vcm cfg failed
+XCAM ERROR %s:%d: focus is not supported
+XCAM ERROR %s:%d: iris is not supported
+XCAM ERROR %s:%d: get iris result failed
+XCAM ERROR %s:%d: zoom or focus is not supported
+XCAM ERROR %s:%d: get focus result failed
+XCAM ERROR %s:%d: zoom is not supported
+XCAM ERROR %s:%d: zoom focus modify position failed
+XCAM ERROR %s:%d: set iris result failed to device
+XCAM ERROR %s:%d: get iris timeinfo failed
+XCAM ERROR %s:%d: set dc-iris result failed to device
+XCAM ERROR %s:%d: LensHwHelperThd got empty attrib, stop thread
+XCAM ERROR %s:%d: LensHwHelperThd failed to run command!
+XCAM ERROR %s:%d: %s: frame_id %d, can not find sof time!
+XCAM ERROR %s:%d:  get RK_VIDIOC_FLASH_TIMEINFO failed. cmd = 0x%x
+/home/liyunjian/ipc_rv1109_rv1126/buildroot/output/rockchip_rv1126_rv1109/build/camera_engine_rkaiq-1.0/hwi/FlashLight.cpp
+XCAM ERROR %s:%d: not support flash num %d
+XCAM ERROR %s:%d:  set fl to mode  %d failed
+XCAM ERROR %s:%d:  set fl %s to %d failed
+XCAM ERROR %s:%d: query V4L2_CID_FLASH_INTENSITY failed. cmd = 0x%x
+XCAM ERROR %s:%d: query V4L2_CID_FLASH_TORCH_INTENSITY failed. cmd = 0x%x
+virtual XCamReturn RkCam::FakeSensorHw::get_selection(int, uint32_t, v4l2_subdev_selection&)
+N5RkCam12FakeSensorHwE
+/home/liyunjian/ipc_rv1109_rv1126/buildroot/output/rockchip_rv1126_rv1109/build/camera_engine_rkaiq-1.0/hwi/fakecamera/FakeSensorHw.cpp
+XCAM ERROR %s:%d: %s no support format: %d
+XCAM ERROR %s:%d: raw buf type is wrong:0x%x
+FakeSensorExpParams
+XCAM WARNING %s:%d: Can't find exp params of frameid(%d), use the last one
+XCAM ERROR %s:%d: wait raw buffer process done timeout
+void XCam::SmartPtr<Obj>::init_ref(ObjD*) [with ObjD = RkCam::FakeSensorHw; Obj = RkCam::BaseSensorHw]
+void XCam::SmartPtr<Obj>::release() [with Obj = RkCam::FakeSensorHw]
+XCam::SmartPtr<Obj>::SmartPtr(const XCam::SmartPtr<ObjDerive>&) [with ObjDerive = RkCam::FakeSensorHw; Obj = RkCam::BaseSensorHw]
+XCAM ERROR %s:%d: Not support TAG(0x%04x)
+/home/liyunjian/ipc_rv1109_rv1126/buildroot/output/rockchip_rv1126_rv1109/build/camera_engine_rkaiq-1.0/hwi/fakecamera/FakeCamHwIsp20.cpp
+XCAM ERROR %s:%d: file: %s is not exist!
+XCAM ERROR %s:%d: open file: %s failed
+XCAM ERROR %s:%d: Not support raw data type:%d
+bool RkCam::RkAiqCalibParser::parseEntrySensorAwbLsForYuvDet(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorAwbLsForYuvDetV201(const tinyxml2::XMLElement*, void*)
+%s%.0f 
+bool RkCam::RkAiqCalibParser::parseEntrySensorAwbCctLutAll(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorAwbLsForEstimation(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorAecLinearAeDynamicPoint(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorAhdrTmoEn(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorAhdrTmoGlobalLuma(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorAhdrTmoDetailsHighLight(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorAhdrTmoDetailsLowLight(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorAhdrLocalTMO(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorAhdrGlobalTMO(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorBlcModeCell(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorCcmAccmCofIllAll(const tinyxml2::XMLElement*, void*, int)
+bool RkCam::RkAiqCalibParser::parseEntrySensorCcmMatrixAll(const tinyxml2::XMLElement*, void*, int)
+bool RkCam::RkAiqCalibParser::parseEntrySensorUVNRSetting(const tinyxml2::XMLElement*, void*, int)
+bool RkCam::RkAiqCalibParser::parseEntrySensorGicISO(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorMFNRAwbUvRatio(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorSharpISO(const tinyxml2::XMLElement*, void*, int)
+bool RkCam::RkAiqCalibParser::parseEntrySensorDehazeSetting(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorEnhanceSetting(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorMFNRISO(const tinyxml2::XMLElement*, void*, int)
+bool RkCam::RkAiqCalibParser::parseEntrySensorAecLinAlterExp(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorAecHdrAlterExp(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorAecLinearAeRoute(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorAecHdrAeRoute(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorLscAlscCofIllAll(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorAwbGlobalsExclude(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorAwbStategyLightSources(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorAwbGlobalsExcludeV201(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorBayerNrSetting(const tinyxml2::XMLElement*, void*, int)
+bool RkCam::RkAiqCalibParser::parseEntrySensorDegammaModeCell(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorEdgeFilterISO(const tinyxml2::XMLElement*, void*, int)
+bool RkCam::RkAiqCalibParser::parseEntrySensorHistSetting(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorAwbWindow(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorAwbColBlk(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorAwbWindowV201(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorLscTableAll(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorAfMeasISO(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorAfZoomFocusDist(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorYnrISO(const tinyxml2::XMLElement*, void*, int)
+bool RkCam::RkAiqCalibParser::parseEntrySensorAwbDampFactor(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorAwbXyRegionStableSelection(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorAwbFrameChoose(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorAwbFrameChooseV201(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorAwbLimitRange(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorAwbwbGainOffset(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorAwbwbGainDaylightClip(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorAwbwbGainClip(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorAwbLightXYRegion(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorAwbLightYUVRegion(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorAwbMeasureLightSourcesV200(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorAwbLightXYRegionV201(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorAwbLightRTYUVRegionV201(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorAwbMeasureLightSourcesV201(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorAwbLimitRangeV201(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorAwbWpDiffWeiEnableTh(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorAwbWpDiffwei_w_HighLV(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorAwbWpDiffwei_w_LowLV(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorAwbWpDiffLumaWeight(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorAwbRemosaicPara(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorAecSpeed(const tinyxml2::XMLElement*, void*)
+parseEntrySensorAecSpeed
+bool RkCam::RkAiqCalibParser::parseEntrySensorAecDelayFrmNum(const tinyxml2::XMLElement*, void*)
+parseEntrySensorAecDelayFrmNum
+bool RkCam::RkAiqCalibParser::parseEntrySensorAecVBNightMode(const tinyxml2::XMLElement*, void*)
+parseEntrySensorAecVBNightMode
+bool RkCam::RkAiqCalibParser::parseEntrySensorAecIRNightMode(const tinyxml2::XMLElement*, void*)
+parseEntrySensorAecIRNightMode
+bool RkCam::RkAiqCalibParser::parseEntrySensorAecFrameRateMode(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorAecInitValueLinearAE(const tinyxml2::XMLElement*, void*)
+parseEntrySensorAecInitValueLinearAE
+bool RkCam::RkAiqCalibParser::parseEntrySensorAecInitValueHdrAE(const tinyxml2::XMLElement*, void*)
+parseEntrySensorAecInitValueHdrAE
+parseEntrySensorAecInitValue
+bool RkCam::RkAiqCalibParser::parseEntrySensorAecGridWeight(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorAecIrisCtrlPAttr(const tinyxml2::XMLElement*, void*)
+parseEntrySensorAecIrisCtrlPAttr
+bool RkCam::RkAiqCalibParser::parseEntrySensorAecIrisCtrlDCAttr(const tinyxml2::XMLElement*, void*)
+parseEntrySensorAecIrisCtrlDCAttr
+bool RkCam::RkAiqCalibParser::parseEntrySensorAecManualCtrlLinearAE(const tinyxml2::XMLElement*, void*)
+parseEntrySensorAecManualCtrlLinearAE
+bool RkCam::RkAiqCalibParser::parseEntrySensorAecManualCtrlHdrAE(const tinyxml2::XMLElement*, void*)
+parseEntrySensorAecManualCtrlHdrAE
+parseEntrySensorAecManualCtrl
+bool RkCam::RkAiqCalibParser::parseEntrySensorLinearAECtrlOverExp(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorHdrAECtrlLframeCtrl(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorHdrAECtrlMframeCtrl(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorHdrAECtrlSframeCtrl(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorAecEnvLvCalib(const tinyxml2::XMLElement*, void*)
+parseEntrySensorAecEnvLvCalib
+bool RkCam::RkAiqCalibParser::parseEntrySensorModuleInfo(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorAhdrMerge(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorAWDRModeStrength(const tinyxml2::XMLElement*, int)
+bool RkCam::RkAiqCalibParser::parseEntrySensorAWDRModeConfig(const tinyxml2::XMLElement*, int)
+bool RkCam::RkAiqCalibParser::parseEntrySensorAWDRMode(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorLut3d(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorDpccFastMode(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorDpccSetCellRK(const tinyxml2::XMLElement*, int)
+bool RkCam::RkAiqCalibParser::parseEntrySensorDpccSetCellLC(const tinyxml2::XMLElement*, int)
+bool RkCam::RkAiqCalibParser::parseEntrySensorDpccSetCellPG(const tinyxml2::XMLElement*, int)
+bool RkCam::RkAiqCalibParser::parseEntrySensorDpccSetCellRND(const tinyxml2::XMLElement*, int)
+bool RkCam::RkAiqCalibParser::parseEntrySensorDpccSetCellRG(const tinyxml2::XMLElement*, int)
+bool RkCam::RkAiqCalibParser::parseEntrySensorDpccSetCellRO(const tinyxml2::XMLElement*, int)
+bool RkCam::RkAiqCalibParser::parseEntrySensorDpccPdaf(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorDpccSensor(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorRKDM(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorlumaCCMGAC(const tinyxml2::XMLElement*, void*, int)
+bool RkCam::RkAiqCalibParser::parseEntrySensorlumaCCM(const tinyxml2::XMLElement*, void*, int)
+bool RkCam::RkAiqCalibParser::parseEntrySensorGamma(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorMFNRDynamic(const tinyxml2::XMLElement*, void*, int)
+parseEntrySensorMFNRDynamic
+bool RkCam::RkAiqCalibParser::parseEntrySensorMFNRMotionDetection(const tinyxml2::XMLElement*, void*, int)
+parseEntrySensorMFNRMotionDetection
+bool RkCam::RkAiqCalibParser::parseEntrySensorAfWindow(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorAfFixedMode(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorAfMacroMode(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorAfInfinityMode(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorAfLaserAf(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorAfPdaf(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorAfVcmCfg(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorAfLdgParam(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorAfHighlight(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorLdch(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorLumaDetect(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorFec(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorOrb(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorCpsl(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorColorAsGrey(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorIE(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorCproc(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySystemHDR(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySystemDcgNormalGainCtrl(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySystemDcgHdrGainCtrl(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySystemDcgHdrEnvCtrl(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySystemDcgNormalEnvCtrl(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySystemExpDelayHdr(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySystemExpDelayNormal(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorAwbMeasureWindow(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorAwbwbGainAdjust(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorAwbSingleColor(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorAwbStategyGlobals(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorAwbMeasureWindowV201(const tinyxml2::XMLElement*, void*)
+parseEntrySensorAecAlterExp
+bool RkCam::RkAiqCalibParser::parseEntrySensorAecSyncTest(const tinyxml2::XMLElement*, void*)
+parseEntrySensorAecSyncTest
+parseEntrySensorAecRoute
+bool RkCam::RkAiqCalibParser::parseEntrySensorAhdrTmo(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorAWDR(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorBlc(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorDpccExpertMode(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorDpcc(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorCCM(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorDegamma(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorGic(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorDehaze(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorAfZoomFocusTbl(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorSharpModeCell(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorEdgeFilterModeCell(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorAwbMeasureGlobalsV200(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorAwbMeasureGlobalsV201(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorAwb(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorBayerNr(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorLsc(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorUVNR(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorYnr(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorMFNR(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorSharp(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorEdgeFilter(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorCCMModeCell(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorAecDNSwitch(const tinyxml2::XMLElement*, void*)
+parseEntrySensorAecDNSwitch
+bool RkCam::RkAiqCalibParser::parseEntrySensorAecAntiFlicker(const tinyxml2::XMLElement*, void*)
+parseEntrySensorAecAntiFlicker
+bool RkCam::RkAiqCalibParser::parseEntrySensorAecIrisCtrl(const tinyxml2::XMLElement*, void*)
+parseEntrySensorAecIrisCtrl
+bool RkCam::RkAiqCalibParser::parseEntrySensorLinearAECtrlBackLight(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorLinearAECtrl(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorHdrAECtrlExpRatioCtrl(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorHdrAECtrlLframeMode(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorHdrAECtrl(const tinyxml2::XMLElement*, void*)
+parseEntrySensorAec
+bool RkCam::RkAiqCalibParser::parseEntrySensorInfoGainRange(const tinyxml2::XMLElement*, void*)
+parseEntrySensorInfoGainRange
+bool RkCam::RkAiqCalibParser::parseEntrySensorInfo(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorAfContrastAf(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySensorAf(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySystemDcgHdrSetting(const tinyxml2::XMLElement*, void*)
+bool RkCam::RkAiqCalibParser::parseEntrySystemDcgNormalSetting(const tinyxml2::XMLElement*, void*)
+N5RkCam16RkAiqCalibParserE
+XCAM ERROR %s:%d: %s(%d): parse error: invalid register value:
+/home/liyunjian/ipc_rv1109_rv1126/buildroot/output/rockchip_rv1126_rv1109/build/camera_engine_rkaiq-1.0/iq_parser/RkAiqCalibParser.cpp
+%s%s
+XCAM WARNING %s:%d: UNKNOWN tag: %s
+XCAM ERROR %s:%d: %s(%d): parse error!
+XCAM ERROR %s:%d: %s(%d): %f err
+XCAM ERROR %s:%d: array size: %d out of Maximum range(%d)
+XCAM ERROR %s:%d: %s(%d): f:%f error
+XCAM ERROR %s:%d: %s(%d): error
+XCAM WARNING %s:%d: parse error in header section (unknow tag: %s)
+XCAM WARNING %s:%d: unknown tag %s
+XCAM ERROR %s:%d: para error in AWB section tag:%s  number of cct should be equal to cri_bound_up and cri_bound_low
+XCAM ERROR %s:%d: parse error in AWB LightSources (%s)
+XCAM ERROR %s:%d: parse error in AWB globals (%s)
+XCAM WARNING %s:%d: unknown subTag %s
+XCAM ERROR %s:%d: parse error in AWB  (%s)
+XCAM WARNING %s:%d: parse error in AWB section (unknow tag:%s)
+XCAM WARNING %s:%d: %s(%d): parse error in  AeSpeed (unknow tag: %s )
+XCAM WARNING %s:%d: %s(%d): parse error in  AeDelayFrame (unknow tag: %s )
+XCAM WARNING %s:%d: %s(%d): parse error in DNSwitch - VBNightMode(unknow tag: %s )
+XCAM WARNING %s:%d: %s(%d): parse error in DNSwitch - IRNightMode(unknow tag: %s )
+XCAM WARNING %s:%d: %s(%d): parse error in  stLinExpInitExp (unknow tag: %s )
+XCAM WARNING %s:%d: %s(%d): parse error in  stHdrExpInitExp (unknow tag: %s )
+XCAM ERROR %s:%d: parse error in Aec (%s)
+XCAM WARNING %s:%d: %s(%d): parse error in  stInitExp (unknow tag: %s )
+XCAM WARNING %s:%d: %s(%d): parse error in AecIrisCtrl PAttr (unknow tag: %s )
+XCAM WARNING %s:%d: %s(%d): parse error in AecIrisCtrl DCAttr (unknow tag: %s )
+XCAM WARNING %s:%d: %s(%d): parse error in  stManual.stLinMe (unknow tag: %s )
+XCAM WARNING %s:%d: %s(%d): parse error in  stManual.stHdrMe (unknow tag: %s )
+XCAM ERROR %s:%d: parse error in Aec ManualCtrl (%s)
+XCAM WARNING %s:%d: %s(%d): parse error in  stManual (unknow tag: %s )
+XCAM WARNING %s:%d: %s(%d): parse error in  AecEnvLv (unknow tag: %s )
+XCAM ERROR %s:%d: parse error in wdr Strength(%s)
+XCAM ERROR %s:%d: parse error in wdr Config(%s)
+XCAM ERROR %s:%d: parse error in dpcc set cell RK (%s)
+XCAM ERROR %s:%d: parse error in dpcc set cell LC (%s)
+XCAM ERROR %s:%d: parse error in dpcc set cell PG (%s)
+XCAM ERROR %s:%d: parse error in dpcc set cell RND (%s)
+XCAM ERROR %s:%d: parse error in dpcc set cell RG (%s)
+XCAM ERROR %s:%d: parse error in dpcc set cell RO (%s)
+XCAM ERROR %s:%d: parse error in CCM lumaCCM (%s)
+XCAM WARNING %s:%d: %s(%d): parse error in  mfnr dynamic (unknow tag: %s )
+XCAM ERROR %s:%d: %s(%d): parse error in  mfnr dynamic (unknow tag: %s )
+XCAM ERROR %s:%d: parse error in ExpDelay Normal setting (%s)
+XCAM ERROR %s:%d: parse error in ExpDelay Hdr setting (%s)
+XCAM WARNING %s:%d: unknown cell tag: %s
+XCAM ERROR %s:%d: parse error in AWB light sources (%s)
+(mCalibDb->awb.stategy_cfg.cct_lut_cfg_num <= CALD_AWB_CT_LV_NUM_MAX)
+XCAM ERROR %s:%d: parse error in AWB wbGainAdjust (%s)
+(no == mCalibDb->awb.stategy_cfg.temporalCalGainSetSize)
+XCAM ERROR %s:%d: parse error in AWB (%s)
+XCAM ERROR %s:%d: parse error in AEC-SyncTest LinAlterExp(%s)
+XCAM ERROR %s:%d: parse error in AEC-SyncTest HdrAlterExp(%s)
+XCAM WARNING %s:%d: %s(%d): parse error in AEC-SyncTest AlterExp (unknow tag: %s )
+XCAM ERROR %s:%d: parse error in Aec-SyncTest AlterExp(%s)
+XCAM WARNING %s:%d: %s(%d): parse error in Aec-SyncTest (unknow tag: %s )
+XCAM ERROR %s:%d: parse error in AEC LinAeRoute(%s)
+XCAM ERROR %s:%d: parse error in AEC HdrAeRoute (%s)
+XCAM WARNING %s:%d: %s(%d): parse error in  AecRoute (unknow tag: %s )
+XCAM ERROR %s:%d: parse error in TMO GlobalLuma Setting (%s)
+XCAM ERROR %s:%d: parse error in TMO DetailsHighLight Setting (%s)
+XCAM ERROR %s:%d: parse error in TMO DetailsLowLight Setting (%s)
+XCAM ERROR %s:%d: parse error in TMO GlobalTMO Setting (%s)
+XCAM ERROR %s:%d: parse error in TMO LocalTMO Setting (%s)
+XCAM ERROR %s:%d: parse error in blc mode cell (%s)
+XCAM ERROR %s:%d: parse error in dpcc set cell (%s)
+XCAM ERROR %s:%d: parse error in dpcc pdaf (%s)
+XCAM ERROR %s:%d: parse error in DPCC Sensor (%s)
+XCAM ERROR %s:%d: parse error in dpcc Fast Mode (%s)
+XCAM ERROR %s:%d: parse error in dpcc Expert Mode (%s)
+XCAM ERROR %s:%d: parse error in ccm mode cell (%s)
+XCAM ERROR %s:%d: parse error in degamma mode cell (%s)
+XCAM ERROR %s:%d: parse error in GIC ISO (%s)
+XCAM ERROR %s:%d: parse error in Dehaze Setting (%s)
+XCAM ERROR %s:%d: parse error in Enhance Setting (%s)
+XCAM ERROR %s:%d: parse error in Hist setting (%s)
+XCAM ERROR %s:%d: parse error in Af focuspos (%s)
+XCAM ERROR %s:%d: parse error in BayerNR setting (%s)
+XCAM ERROR %s:%d: parse error in YNR setting (%s)
+XCAM ERROR %s:%d: parse error in YNR iso (%s)
+XCAM ERROR %s:%d: parse error in MFNR dynamic(%s)
+XCAM ERROR %s:%d: parse error in MFNR MFNR_ISO (%s)
+XCAM ERROR %s:%d: parse error in MFNR motion detection(%s)
+XCAM ERROR %s:%d: parse error in SHARP SHARP_Setting (%s)
+XCAM ERROR %s:%d: parse error in SHARP SHARP_ISO (%s)
+XCAM ERROR %s:%d: parse error in EDGEFILTER setting (%s)
+XCAM ERROR %s:%d: parse error in EDGEFILTER EDGEFILTER_ISO (%s)
+XCAM ERROR %s:%d: parse error in AWB globals excluderange (%s)
+XCAM ERROR %s:%d: parse error in AWB section (unknow tag:%s)
+(mCalibDb->awb.stategy_cfg.lightNum == mCalibDb->awb.measure_para_v200.lightNum)
+XCAM ERROR %s:%d: parse error in BayerNR Mode cell (%s)
+XCAM ERROR %s:%d: parse error in LSC aLscCof illAll (%s)
+XCAM ERROR %s:%d: parse error in LSC aLscCof resolutionAll(%s)
+XCAM ERROR %s:%d: parse error in LSC tableAll (%s)
+XCAM ERROR %s:%d: parse error in YNR mode cell (%s)
+XCAM ERROR %s:%d: parse error in MFNR awb_uv_ratio (%s)
+XCAM ERROR %s:%d: parse error in SHARP mode cell (%s)
+XCAM ERROR %s:%d: parse error in EDGEFILTER mode cell (%s)
+XCAM ERROR %s:%d: parse error in LSC aCcmCof illAll (%s)
+XCAM ERROR %s:%d: mode: %s in CCM ModeCell is invalid. instead normal or hdr
+XCAM ERROR %s:%d: parse error in CCM aCCmCof (%s)
+XCAM ERROR %s:%d: parse error in CCM matrixall (%s)
+XCAM ERROR %s:%d: %s(%d): invalid AEC DNSwitch-DNMode = %s
+XCAM ERROR %s:%d: %s(%d): (XML Write)invalid AEC DNSwitch-DNMode = %d
+XCAM WARNING %s:%d: %s(%d): parse error in DNSwitch (unknow tag: %s )
+XCAM ERROR %s:%d: %s(%d): invalid stAntiFlicker.Frequency = %s
+XCAM ERROR %s:%d: %s(%d): (XML Write)invalid AEC stAntiFlicker.Frequency = %d
+XCAM ERROR %s:%d: %s(%d): invalid stAntiFlicker.Mode = %s
+XCAM ERROR %s:%d: %s(%d): (XML Write)invalid AEC stAntiFlicker.Mode = %d
+XCAM ERROR %s:%d: %s(%d): invalid stIris.IrisType = %s
+XCAM ERROR %s:%d: parse error in Aec IrisCtrl (%s)
+XCAM WARNING %s:%d: %s(%d): parse error in Aec IrisCtrl (unknow tag: %s )
+XCAM ERROR %s:%d: parse error in AEC linear dynamic setpoint (%s)
+XCAM ERROR %s:%d: %s(%d): invalid AEC HistStatsMode = %s end
+XCAM ERROR %s:%d: %s(%d): (XML Write)invalid AEC HistStatsMode = %d end
+XCAM ERROR %s:%d: %s(%d): invalid AEC RawStatsMode = %s
+XCAM ERROR %s:%d: %s(%d): (XML Write)invalid AEC RawStatsMode = %d end
+XCAM ERROR %s:%d: %s(%d): invalid AEC YRangeMode = %s
+XCAM ERROR %s:%d: %s(%d): (XML Write)invalid AEC YRangeMode = %d
+XCAM ERROR %s:%d: %s(%d): invalid AEC AecOpType = %s
+XCAM ERROR %s:%d: %s(%d): (XML Write)invalid AEC AecOpType = %d
+XCAM WARNING %s:%d: parse error in AEC section (unknow tag:%s)
+XCAM ERROR %s:%d: %s(%d): invalid GainRange Mode = %s
+XCAM ERROR %s:%d: %s(%d): (XML Write)invalid GainRange Mode = %d
+XCAM ERROR %s:%d: parse error in SensorInfo GainRange (%s)
+parse error in SensorInfo section (unknow tag: 
+XCAM ERROR %s:%d: parse error in Af (%s)
+XCAM ERROR %s:%d: parse error in Af meas_iso (%s)
+XCAM ERROR %s:%d: %s(%d): invalid dcg Hdr.OpType = %s
+XCAM ERROR %s:%d: %s(%d): (XML Write)invalid dcg Hdr.OpType = %d
+XCAM ERROR %s:%d: parse error in System DCG HdrGainCtrl (%s)
+XCAM ERROR %s:%d: parse error in System DCG HdrEnvCtrl (%s)
+XCAM ERROR %s:%d: %s(%d): invalid dcg OpType = %s
+XCAM ERROR %s:%d: %s(%d): (XML Write)invalid dcg OpType = %d
+XCAM ERROR %s:%d: parse error in System DCG NormalGainCtrl(%s)
+XCAM ERROR %s:%d: parse error in System DCG NormalEnvCtrl(%s)
+XCAM ERROR %s:%d: parse error in Dcg NormalSetting (%s)
+XCAM ERROR %s:%d: parse error in Dcg HdrSetting (%s)
+XCAM ERROR %s:%d: parse error in System (%s)
+XCAM ERROR %s:%d: %s(%d): Error: Parse error errorID %d
+XCAM ERROR %s:%d: Error: Not a calibration data file
+XCAM ERROR %s:%d: %s(%d): Error: Generate error ID %d
+XCAM ERROR %s:%d: reconstruct cell failed %s!
+/home/liyunjian/ipc_rv1109_rv1126/buildroot/output/rockchip_rv1126_rv1109/build/camera_engine_rkaiq-1.0/iq_parser/RkAiqCalibDb.cpp
+XCAM ERROR %s:%d: persist cell failed
+rkaiq_calibdb_path
+%s/%s.bin
+XCAM ERROR %s:%d: calibDb not found!
+XCAM WARNING %s:%d: magic code is not matched! calculated:%u, readed:%u
+XCAM ERROR %s:%d: parse %s failed.
+XCAM ERROR %s:%d: calibdb %s and bin are all not exist!
+XCAM ERROR %s:%d: read %s failed!
+XCAM ERROR %s:%d: magic code is not matched! calculated:%u, readed:%u
+XCAM ERROR %s:%d: get calibdb from bin failed.
+XCAM ERROR %s:%d: generate %s to %s failed.
+XCAM ERROR %s:%d: alloc generate memory failed.
+XCAM ERROR %s:%d: open %s failed!
+XCAM ERROR %s:%d: write %s failed!
+XCAM ERROR %s:%d: save to bin failed.
+XCAM ERROR %s:%d: %s is not found!
+calib_check_calc_checksum
+calib_check_getID_by_name
+calib_check_cell_set_size
+calib_check_tag_attrs
+calib_check_tag_mark
+calib_check_nonleaf_tag_start
+calib_check_nonleaf_tag_end
+XCAM ERROR %s:%d: %s(%d): pls init the taginfo in g_calib_tag_infos first, id:%d, Assert!
+/home/liyunjian/ipc_rv1109_rv1126/buildroot/output/rockchip_rv1126_rv1109/build/camera_engine_rkaiq-1.0/iq_parser/RkAiqCalibTag.cpp
+XCAM ERROR %s:%d: %s(%d): parent_tag_id:%d tag_name:%s --- tag id is is wrong: min:0 max:%d 
+XCAM ERROR %s:%d: %s(%d): subtag: %s from parent tag: %s is unknown, assert!!!
+XCAM ERROR %s:%d: %s(%d): parent_tag_id:%d tag_id:%d tag_name:%s --- tag id is is wrong: min:0 max:%d 
+XCAM ERROR %s:%d: %s(%d): parent_tag_id:%d tag_id:%d --- tag id is is wrong: min:0 max:%d 
+XCAM ERROR %s:%d: %s(%d): parent_tag_id:%d parent_tag_name:%s  tag_id:%d tag_name:%s  --- tag size:%d is wrong 
+XCAM ERROR %s:%d: %s(%d): parent_tag_id:%d parent_tag_name:%s  tag_id:%d tag_name:%s --- tag_info type not match (%d) != (%d) 
+XCAM ERROR %s:%d: %s(%d): parent_tag_id:%d parent_tag_name:%s  tag_id:%d tag_name:%s --- tag_info size not match (%d) != (%d) 
+XCAM ERROR %s:%d: %s(%d): parent_tag_id:%d parent_tag_name:%s  tag_id:%d tag_name:%s --- ASSERT!!!
+XCAM ERROR %s:%d: %s(%d): parent_tag_id:%d tag_id:%d --- tag_id is wrong:  min:0 max:%d
+XCAM ERROR %s:%d: %s(%d): parent_tag_id:%d parent_tag_name:%s tag_id:%d tag_name:%s --- tag_counts_remain <= 0  assert!!!
+XCAM ERROR %s:%d: %s(%d): parent_tag_id:%d parent_tag_name:%s tag_id:%d tag_name:%s can't find this tag, assert!!!
+XCAM ERROR %s:%d: %s(%d): tag_id:%d tag_name:%s  --- check_info malloc fail 
+XCAM ERROR %s:%d: %s(%d): tag_id:%d parent_tag_id:%d  --- tag_id is wrong:  min:0 max:%d
+XCAM ERROR %s:%d: %s(%d): tag_id:%d tag_name:%s parent_id:%d parent_name:%s: mark parent error assert !!!
+XCAM ERROR %s:%d: %s(%d): tag_id:%d tag_name:%s  ---  has check info already 
+XCAM ERROR %s:%d: %s(%d): tag_id:%d tag_name:%s --- checking_tags malloc fail 
+XCAM ERROR %s:%d: %s(%d): tag_id:%d tag_name:%s --- new tag_counts_remain malloc fail 
+XCAM ERROR %s:%d: %s(%d): tag_id:%d tag_name:%s --- return failure 
+XCAM ERROR %s:%d: %s(%d): tag_id:%d --- tag_id is wrong:  min:0 max:%d
+XCAM WARNING %s:%d: %s(%d): parent_id:%d parent_name:%s tag_id:%d tag_name:%s --- tag_counts_remain[%d]:%d != 0  assert!!!
+sensor_name
+sensor
+sensorWbGain
+AecEnvLvCalib
+CalibFNumber
+sensor_dpcc
+sensor_dpcc_auto_en
+Sensor_Mode
+SENSORINFO
+SensorFlip
+XMLDocument error id=%d str1=%s str2=%s
+&%s;
+ %s="
+</%s>
+<!--%s-->
+<?%s?>
+<!%s>
+T* algoHandle(const rk_aiq_sys_ctx_t*, int) [with T = RkCam::RkAiqAieHandleInt; rk_aiq_sys_ctx_t = rk_aiq_sys_ctx_s]
+T* algoHandle(const rk_aiq_sys_ctx_t*, int) [with T = RkCam::RkAiqAsdHandleInt; rk_aiq_sys_ctx_t = rk_aiq_sys_ctx_s]
+T* algoHandle(const rk_aiq_sys_ctx_t*, int) [with T = RkCam::RkAiqAldchHandleInt; rk_aiq_sys_ctx_t = rk_aiq_sys_ctx_s]
+T* algoHandle(const rk_aiq_sys_ctx_t*, int) [with T = RkCam::RkAiqAfecHandleInt; rk_aiq_sys_ctx_t = rk_aiq_sys_ctx_s]
+T* algoHandle(const rk_aiq_sys_ctx_t*, int) [with T = RkCam::RkAiqAcpHandleInt; rk_aiq_sys_ctx_t = rk_aiq_sys_ctx_s]
+T* algoHandle(const rk_aiq_sys_ctx_t*, int) [with T = RkCam::RkAiqAfHandleInt; rk_aiq_sys_ctx_t = rk_aiq_sys_ctx_s]
+T* algoHandle(const rk_aiq_sys_ctx_t*, int) [with T = RkCam::RkAiqAsharpHandleInt; rk_aiq_sys_ctx_t = rk_aiq_sys_ctx_s]
+T* algoHandle(const rk_aiq_sys_ctx_t*, int) [with T = RkCam::RkAiqAnrHandleInt; rk_aiq_sys_ctx_t = rk_aiq_sys_ctx_s]
+T* algoHandle(const rk_aiq_sys_ctx_t*, int) [with T = RkCam::RkAiqAeHandleInt; rk_aiq_sys_ctx_t = rk_aiq_sys_ctx_s]
+T* algoHandle(const rk_aiq_sys_ctx_t*, int) [with T = RkCam::RkAiqAdpccHandleInt; rk_aiq_sys_ctx_t = rk_aiq_sys_ctx_s]
+T* algoHandle(const rk_aiq_sys_ctx_t*, int) [with T = RkCam::RkAiqAdegammaHandleInt; rk_aiq_sys_ctx_t = rk_aiq_sys_ctx_s]
+T* algoHandle(const rk_aiq_sys_ctx_t*, int) [with T = RkCam::RkAiqAgammaHandleInt; rk_aiq_sys_ctx_t = rk_aiq_sys_ctx_s]
+T* algoHandle(const rk_aiq_sys_ctx_t*, int) [with T = RkCam::RkAiqAdhazHandleInt; rk_aiq_sys_ctx_t = rk_aiq_sys_ctx_s]
+T* algoHandle(const rk_aiq_sys_ctx_t*, int) [with T = RkCam::RkAiqA3dlutHandleInt; rk_aiq_sys_ctx_t = rk_aiq_sys_ctx_s]
+T* algoHandle(const rk_aiq_sys_ctx_t*, int) [with T = RkCam::RkAiqAccmHandleInt; rk_aiq_sys_ctx_t = rk_aiq_sys_ctx_s]
+T* algoHandle(const rk_aiq_sys_ctx_t*, int) [with T = RkCam::RkAiqAlscHandleInt; rk_aiq_sys_ctx_t = rk_aiq_sys_ctx_s]
+T* algoHandle(const rk_aiq_sys_ctx_t*, int) [with T = RkCam::RkAiqAhdrHandleInt; rk_aiq_sys_ctx_t = rk_aiq_sys_ctx_s]
+T* algoHandle(const rk_aiq_sys_ctx_t*, int) [with T = RkCam::RkAiqAdebayerHandleInt; rk_aiq_sys_ctx_t = rk_aiq_sys_ctx_s]
+T* algoHandle(const rk_aiq_sys_ctx_t*, int) [with T = RkCam::RkAiqAwbHandleInt; rk_aiq_sys_ctx_t = rk_aiq_sys_ctx_s]
+T* algoHandle(const rk_aiq_sys_ctx_t*, int) [with T = RkCam::RkAiqAblcHandleInt; rk_aiq_sys_ctx_t = rk_aiq_sys_ctx_s]
+void XCam::SmartPtr<Obj>::release() [with Obj = RkCam::RkAiqCore]
+void XCam::SmartPtr<Obj>::release() [with Obj = RkCam::RkAiqManager]
+void XCam::SmartPtr<Obj>::init_ref(ObjD*) [with ObjD = RkCam::RkAiqManager; Obj = RkCam::RkAiqManager]
+void XCam::SmartPtr<Obj>::init_ref(ObjD*) [with ObjD = RkCam::RkAiqCore; Obj = RkCam::RkAiqCore]
+XCam::SmartPtr<Obj>::SmartPtr(const XCam::SmartPtr<Obj>&) [with Obj = RkCam::RkAiqCore]
+XCAM ERROR %s:%d: GAIN OUT OF RANGE: lasttime-gain: %f-%f
+/home/liyunjian/ipc_rv1109_rv1126/buildroot/output/rockchip_rv1126_rv1109/build/camera_engine_rkaiq-1.0/uAPI/rk_aiq_user_api_custom_ae.cpp
+XCAM ERROR %s:%d: algo module index %d user api disabled !
+/home/liyunjian/ipc_rv1109_rv1126/buildroot/output/rockchip_rv1126_rv1109/build/camera_engine_rkaiq-1.0/uAPI/rk_aiq_user_api_awb.cpp
+/home/liyunjian/ipc_rv1109_rv1126/buildroot/output/rockchip_rv1126_rv1109/build/camera_engine_rkaiq-1.0/uAPI/rk_aiq_user_api_ahdr.cpp
+/home/liyunjian/ipc_rv1109_rv1126/buildroot/output/rockchip_rv1126_rv1109/build/camera_engine_rkaiq-1.0/uAPI/rk_aiq_user_api_accm.cpp
+/home/liyunjian/ipc_rv1109_rv1126/buildroot/output/rockchip_rv1126_rv1109/build/camera_engine_rkaiq-1.0/uAPI/rk_aiq_user_api_adehaze.cpp
+/home/liyunjian/ipc_rv1109_rv1126/buildroot/output/rockchip_rv1126_rv1109/build/camera_engine_rkaiq-1.0/uAPI/rk_aiq_user_api_agamma.cpp
+/home/liyunjian/ipc_rv1109_rv1126/buildroot/output/rockchip_rv1126_rv1109/build/camera_engine_rkaiq-1.0/uAPI/rk_aiq_user_api_ae.cpp
+/home/liyunjian/ipc_rv1109_rv1126/buildroot/output/rockchip_rv1126_rv1109/build/camera_engine_rkaiq-1.0/uAPI/rk_aiq_user_api_sysctl.cpp
+XCAM ERROR %s:%d: %s: malloc fail
+XCAM ERROR %s:%d: GAIN OUT OF RANGE: lasttime-gain: %d-%d
+XCAM ERROR %s:%d: %s: pConfig NULL pointer! 
+XCAM ERROR %s:%d: prepare failed !
+/home/liyunjian/ipc_rv1109_rv1126/buildroot/output/rockchip_rv1126_rv1109/build/camera_engine_rkaiq-1.0/uAPI/rk_aiq_user_api_adebayer.cpp
+/home/liyunjian/ipc_rv1109_rv1126/buildroot/output/rockchip_rv1126_rv1109/build/camera_engine_rkaiq-1.0/uAPI/rk_aiq_user_api_alsc.cpp
+/home/liyunjian/ipc_rv1109_rv1126/buildroot/output/rockchip_rv1126_rv1109/build/camera_engine_rkaiq-1.0/uAPI/rk_aiq_user_api_a3dlut.cpp
+/home/liyunjian/ipc_rv1109_rv1126/buildroot/output/rockchip_rv1126_rv1109/build/camera_engine_rkaiq-1.0/uAPI/rk_aiq_user_api_adegamma.cpp
+/home/liyunjian/ipc_rv1109_rv1126/buildroot/output/rockchip_rv1126_rv1109/build/camera_engine_rkaiq-1.0/uAPI/rk_aiq_user_api_ablc.cpp
+/home/liyunjian/ipc_rv1109_rv1126/buildroot/output/rockchip_rv1126_rv1109/build/camera_engine_rkaiq-1.0/uAPI/rk_aiq_user_api_adpcc.cpp
+/home/liyunjian/ipc_rv1109_rv1126/buildroot/output/rockchip_rv1126_rv1109/build/camera_engine_rkaiq-1.0/uAPI/rk_aiq_user_api_anr.cpp
+/home/liyunjian/ipc_rv1109_rv1126/buildroot/output/rockchip_rv1126_rv1109/build/camera_engine_rkaiq-1.0/uAPI/rk_aiq_user_api_asharp.cpp
+XCAM ERROR %s:%d: param invalid!
+/home/liyunjian/ipc_rv1109_rv1126/buildroot/output/rockchip_rv1126_rv1109/build/camera_engine_rkaiq-1.0/uAPI/rk_aiq_user_api_imgproc.cpp
+XCAM ERROR %s:%d: setExpMode failed in getExpSwAttr!
+XCAM ERROR %s:%d: mode is not supported!
+XCAM ERROR %s:%d: setExpMode failed in setExpSwAttr!
+XCAM ERROR %s:%d: setManualExp failed in getExpSwAttr!
+XCAM ERROR %s:%d: setManualExp failed in setExpSwAttr!
+XCAM ERROR %s:%d: getExpMode failed in getExpSwAttr!
+XCAM ERROR %s:%d: gain range is wrong!
+XCAM ERROR %s:%d: get exp attr failed!
+XCAM ERROR %s:%d: set exp attr failed!
+XCAM ERROR %s:%d: param error!
+XCAM ERROR %s:%d: time range is wrong!
+XCAM ERROR %s:%d: Not support in HDR mode!
+XCAM ERROR %s:%d: getLinExpAttr error!
+XCAM ERROR %s:%d: setBLCMode error!
+XCAM ERROR %s:%d: setBLCStrength error!
+XCAM ERROR %s:%d: setHLCStrength error!
+XCAM ERROR %s:%d: setLExpMode failed!
+XCAM ERROR %s:%d: mode is invalid!
+XCAM ERROR %s:%d: getLExpMode failed!
+XCAM ERROR %s:%d: freq is invalid!
+XCAM ERROR %s:%d: mode error, auto mode now!
+XCAM ERROR %s:%d: setWBMode failed in getting awb attrib!
+XCAM ERROR %s:%d: setWBMode failed in query info!
+XCAM ERROR %s:%d: Not supported mode!
+XCAM ERROR %s:%d: setWbMode failed!
+XCAM ERROR %s:%d: getWBMode failed!
+XCAM ERROR %s:%d: param error, setMWBScene failed!
+XCAM ERROR %s:%d: invalid scene mode, setMWBScene failed!
+XCAM ERROR %s:%d: setMWBScene failed!
+XCAM ERROR %s:%d: param error, getMWBScene failed!
+XCAM ERROR %s:%d: getMWBScene failed!
+XCAM ERROR %s:%d: param error, setMWBGain failed!
+XCAM ERROR %s:%d: getMWBGain failed!
+XCAM ERROR %s:%d: setMWBGain failed!
+XCAM ERROR %s:%d: param error, getMWBGain failed!
+XCAM ERROR %s:%d: param error, setMWBCT failed!
+XCAM ERROR %s:%d: getMWBCT failed!
+XCAM ERROR %s:%d: setMWBCT failed!
+XCAM ERROR %s:%d: param error, getMWBCT failed!
+XCAM ERROR %s:%d: setCrSuppsn failed!
+XCAM ERROR %s:%d: getCrSuppsn failed!
+XCAM ERROR %s:%d: param error, setHDRMode failed!
+XCAM ERROR %s:%d: not in HDR mode!
+XCAM ERROR %s:%d: get hdr attr failed!
+XCAM ERROR %s:%d: param error, getHDRMode failed!
+XCAM ERROR %s:%d: getHDRMOde failed in get attrib!
+XCAM ERROR %s:%d: ctx is null, setMHDRStrth failed!
+XCAM ERROR %s:%d: level(%d) is out of range, setMHDRStrth failed!
+XCAM ERROR %s:%d: setMHDRStrth failed!
+XCAM ERROR %s:%d: ctx is null, getMHDRStrth failed!
+XCAM ERROR %s:%d: getMHDRStrth failed in get attrib!
+XCAM ERROR %s:%d: ctx is null, getDarkAreaBoostStrth failed!
+XCAM ERROR %s:%d: Not valid in HDR mode!
+XCAM ERROR %s:%d: getDarkAreaBoostStrth failed!
+XCAM ERROR %s:%d: level(%d) is out of range, setDarkAreaBoostStrth failed!
+XCAM ERROR %s:%d: setDarkAreaBoostStrth failed!
+XCAM ERROR %s:%d: get anr attrib failed!,ret=%d
+XCAM ERROR %s:%d: setNRMode failed!
+XCAM ERROR %s:%d: ctx is null, setANRStrth failed!
+XCAM ERROR %s:%d: setANRStrth failed!
+XCAM ERROR %s:%d: ctx is null, getANRStrth failed!
+XCAM ERROR %s:%d: getANRStrth failed!
+XCAM ERROR %s:%d: ctx is null, setMSpaNRStrth failed!
+XCAM ERROR %s:%d: setMSpaNRStrth failed!
+XCAM ERROR %s:%d: ctx is null, getMSpaNRStrth failed!
+XCAM ERROR %s:%d: getMSpaNRStrth failed!
+XCAM ERROR %s:%d: ctx is null, setMTNRStrth failed!
+XCAM ERROR %s:%d: setMTNRStrth failed!
+XCAM ERROR %s:%d: ctx is null, getMTNRStrth failed!
+XCAM ERROR %s:%d: getMTNRStrth failed!
+XCAM ERROR %s:%d: param error, ctx is NULL!
+XCAM ERROR %s:%d: setDhzMode auto failed!
+XCAM ERROR %s:%d: param error, getDhzMode failed!
+XCAM ERROR %s:%d: getMDhzStrth failed in get attrib!
+XCAM ERROR %s:%d: Error use, param 'on' should be 'true'!
+XCAM ERROR %s:%d: param error, strength range is [1,10]!
+XCAM ERROR %s:%d: setMDhzStrth failed!
+XCAM ERROR %s:%d: Not in manual mode!
+XCAM ERROR %s:%d: enable dehaze failed!
+XCAM ERROR %s:%d: disable dehaze failed!
+XCAM ERROR %s:%d: ctx is null, set sharpeness failed!
+XCAM ERROR %s:%d: level out of range, set sharpeness failed!
+XCAM ERROR %s:%d: set sharpeness failed!
+XCAM ERROR %s:%d: param error, get sharpeness failed!
+XCAM ERROR %s:%d: get sharpeness failed!
+XCAM ERROR %s:%d: ctx is null, setGammaCoef failed!
+XCAM ERROR %s:%d: get gamma attrib failed!
+/home/liyunjian/ipc_rv1109_rv1126/buildroot/output/rockchip_rv1126_rv1109/build/camera_engine_rkaiq-1.0/uAPI/rk_aiq_user_api_afec.cpp
+XCAM ERROR %s:%d: get fec attrib failed!
+/home/liyunjian/ipc_rv1109_rv1126/buildroot/output/rockchip_rv1126_rv1109/build/camera_engine_rkaiq-1.0/uAPI/rk_aiq_user_api_af.cpp
+XCAM ERROR %s:%d: setFocusMode failed!
+XCAM ERROR %s:%d: getFocusMode failed!
+XCAM ERROR %s:%d: setFixedModeCode failed!
+XCAM ERROR %s:%d: getFixedModeCode failed!
+XCAM ERROR %s:%d: setFocusWin failed!
+XCAM ERROR %s:%d: getFocusWin failed!
+XCAM ERROR %s:%d: setFocusMeasCfg failed!
+XCAM ERROR %s:%d: getFocusMeasCfg failed!
+/home/liyunjian/ipc_rv1109_rv1126/buildroot/output/rockchip_rv1126_rv1109/build/camera_engine_rkaiq-1.0/uAPI/rk_aiq_user_api_asd.cpp
+/home/liyunjian/ipc_rv1109_rv1126/buildroot/output/rockchip_rv1126_rv1109/build/camera_engine_rkaiq-1.0/uAPI/rk_aiq_user_api_aldch.cpp
+XCAM ERROR %s:%d: get ldch attrib failed!
+/home/liyunjian/ipc_rv1109_rv1126/buildroot/output/rockchip_rv1126_rv1109/build/camera_engine_rkaiq-1.0/uAPI/rk_aiq_user_api_acp.cpp
+XCAM ERROR %s:%d: level out of range, setContrast failed!
+XCAM ERROR %s:%d: getAttrib error,set contrast failed!
+XCAM ERROR %s:%d: set contrast failed!
+XCAM ERROR %s:%d: param error, getContrast failed!
+XCAM ERROR %s:%d: get contrast failed!
+XCAM ERROR %s:%d: ctx is null, set brightness failed!
+XCAM ERROR %s:%d: level out of range, set brightness failed!
+XCAM ERROR %s:%d: getAttrib error,set brightness failed!
+XCAM ERROR %s:%d: set brightness failed!
+XCAM ERROR %s:%d: param error, get brightness failed!
+XCAM ERROR %s:%d: get brightness failed!
+XCAM ERROR %s:%d: ctx is null, set saturation failed!
+XCAM ERROR %s:%d: level out of range, set saturation failed!
+XCAM ERROR %s:%d: getAttrib error,set saturation failed!
+XCAM ERROR %s:%d: set saturation failed!
+XCAM ERROR %s:%d: param error, get saturation failed!
+XCAM ERROR %s:%d: get saturation failed!
+XCAM ERROR %s:%d: ctx is null, set hue failed!
+XCAM ERROR %s:%d: level out of range, set hue failed!
+XCAM ERROR %s:%d: getAttrib error,set hue failed!
+XCAM ERROR %s:%d: set hue failed!
+XCAM ERROR %s:%d: param error, get hue failed!
+XCAM ERROR %s:%d: get hue failed!
+/home/liyunjian/ipc_rv1109_rv1126/buildroot/output/rockchip_rv1126_rv1109/build/camera_engine_rkaiq-1.0/uAPI/rk_aiq_user_api_aie.cpp
+XCAM ERROR %s:%d: enable fec failed! maybe fec not enable in xml.
+Calib v1.4.8,magicCode:1170944
+XCAM ERROR %s:%d: failed to create new CalibDb for:%s
+XCAM ERROR %s:%d: failed to update iqfile
+XCAM WARNING %s:%d: new calibdb is not equal with the current one
+XCAM ERROR %s:%d: can't find custom ae algo for sys_ctx %p !
+XCAM ERROR %s:%d: enable custom ae lib id %d failed !
+%s/%s.xml
+/etc/iqfiles/
+XCAM ERROR %s:%d: dup sensor name error !
+%s/%s
+HDR_MODE
+-hdr3.xml
+_normal.xml
+XCAM WARNING %s:%d: %s not exist, will use the default !
+XCAM ERROR %s:%d: _rkAiqManager init error!
+XCAM ERROR %s:%d: register %d failed !
+XCAM ERROR %s:%d: can't get custom ae algo %d ctx!
+/tmp/.rkaiq_log
+[%s][%s]:%s
+xc:%s
+XCAM WARNING %s:%d: Thread(%s) set name to thread_id failed.(%d, %s)
+/home/liyunjian/ipc_rv1109_rv1126/buildroot/output/rockchip_rv1126_rv1109/build/camera_engine_rkaiq-1.0/xcore/xcam_thread.cpp
+/home/liyunjian/ipc_rv1109_rv1126/buildroot/output/rockchip_rv1126_rv1109/build/camera_engine_rkaiq-1.0/xcore/xcam_buffer.cpp
+XCAM WARNING %s:%d: XCamVideoBufferInfo reset failed, unsupported format:%s
+XCAM WARNING %s:%d: VideoBufferInfo get_planar_info failed, unsupported format:%s
+XCAM WARNING %s:%d: unknown v4l2 format(%s) to video info
+/home/liyunjian/ipc_rv1109_rv1126/buildroot/output/rockchip_rv1126_rv1109/build/camera_engine_rkaiq-1.0/xcore/v4l2_buffer_proxy.cpp
+/home/liyunjian/ipc_rv1109_rv1126/buildroot/output/rockchip_rv1126_rv1109/build/camera_engine_rkaiq-1.0/xcore/v4l2_device.cpp
+XCAM ERROR %s:%d: subdev(%s) VIDIOC_SUBDEV_S_SELECTION failed
+XCAM ERROR %s:%d: subdev(%s) VIDIOC_SUBDEV_G_FMT failed: %s
+XCAM ERROR %s:%d: subdev(%s) VIDIOC_SUBDEV_S_FMT failed: %s
+XCAM ERROR %s:%d: Fail to get format via ioctl VIDVIO_G_FMT.
+XCAM ERROR %s:%d: release buffer: munmap failed
+XCAM ERROR %s:%d: %s fail to enqueue buffer index:%d.
+XCAM WARNING %s:%d: can't set device name since device opened
+XCAM WARNING %s:%d: can't set sensor id since device opened
+XCAM WARNING %s:%d: device(%s) set mplanes count failed
+XCAM WARNING %s:%d: device(%s) set framerate failed since formatted was already set.
+XCAM WARNING %s:%d: device(%s) set mem type failed
+XCAM WARNING %s:%d: device(%s) set buf type failed
+XCAM WARNING %s:%d: device(%s) set buf sync failed
+XCAM WARNING %s:%d: device(%s) set buffer count failed
+XCAM ERROR %s:%d: Cannot query cap from v4l2 device while it is closed.
+XCAM ERROR %s:%d: VIDIOC_QUERYCAP returned: %d (%s)
+XCAM ERROR %s:%d: @%s: unsupported buffer type.
+XCAM ERROR %s:%d: open device(%s) failed
+XCAM ERROR %s:%d: Cannot set format to v4l2 device while it is active.
+XCAM ERROR %s:%d: Cannot set format to v4l2 device while it is closed.
+XCAM WARNING %s:%d: device(%s) pre_set_format failed
+XCAM ERROR %s:%d: Video device is busy, fail to set format.
+XCAM ERROR %s:%d: Fail to set format: %s
+XCAM ERROR %s:%d: device(%s) set v4l2 format failed, supported format: width:%d, height:%d
+XCAM WARNING %s:%d: device(%s) set framerate failed on VIDIOC_G_PARM but continue
+XCAM WARNING %s:%d: device(%s) set framerate failed on VIDIOC_S_PARM but continue
+XCAM WARNING %s:%d: device(%s) post_set_format failed
+XCAM ERROR %s:%d: subdev(%s) VIDIOC_G_CROP failed
+XCAM ERROR %s:%d: subdev(%s) VIDIOC_S_CROP failed
+XCAM ERROR %s:%d: device(%s) query MMAP buf(%d) failed
+XCAM ERROR %s:%d: device(%s) mmap planar(%d) of buf(%d) failed
+XCAM ERROR %s:%d: device(%s) mmap buf(%d) failed
+XCAM ERROR %s:%d: device(%s) get dma buf(%d) failed
+XCAM ERROR %s:%d: device(%s) fail to dequeue buffer.
+XCAM ERROR %s:%d: device(%s) dequeue wrong buffer index:%d
+XCAM ERROR %s:%d: device(%s) starts failed on VIDIOC_REQBUFS
+XCAM WARNING %s:%d: device(%s) steamoff failed
+XCAM ERROR %s:%d: No bufer allocated in device(%s)
+XCAM ERROR %s:%d: device(%s) start failed
+XCAM ERROR %s:%d: device(%s) start failed on queue index:%d
+XCAM ERROR %s:%d: device(%s) start failed on VIDIOC_STREAMON
+/home/liyunjian/ipc_rv1109_rv1126/buildroot/output/rockchip_rv1126_rv1109/build/camera_engine_rkaiq-1.0/xcore/fake_v4l2_device.cpp
+XCAM ERROR %s:%d: Failed to create virtual tx notify poll pipe: %s
+XCAM ERROR %s:%d: Fail to set event virtual tx notify pipe flag: %s
+XCAM ERROR %s:%d: create virtual tx pipe failed
+XCAM ERROR %s:%d: Flush write not completed
+XCAM ERROR %s:%d: device(%s) dequeue buffer failed since not activated
+/home/liyunjian/ipc_rv1109_rv1126/buildroot/output/rockchip_rv1126_rv1109/build/camera_engine_rkaiq-1.0/xcore/buffer_pool.cpp
+XCAM ERROR %s:%d: BufferPool fixate video info failed
+XCAM WARNING %s:%d: BufferPool expect to reserve %d data but only reserved %d
+XCAM ERROR %s:%d: BufferPool reserve failed with none buffer data allocated
+/home/liyunjian/ipc_rv1109_rv1126/buildroot/output/rockchip_rv1126_rv1109/build/camera_engine_rkaiq-1.0/xcore/poll_thread.cpp
+XCAM ERROR %s:%d: Failed to create luma poll stop pipe: %s
+XCAM ERROR %s:%d: Fail to set event luma stop pipe flag: %s
+XCAM ERROR %s:%d: Failed to create stats poll stop pipe: %s
+XCAM ERROR %s:%d: Fail to set stats poll stop pipe flag: %s
+XCAM ERROR %s:%d: Failed to create event poll stop pipe: %s
+XCAM ERROR %s:%d: Failed to create params poll stop pipe: %s
+XCAM ERROR %s:%d: Fail to set params poll stop pipe flag: %s
+XCAM ERROR %s:%d: Failed to create pparams poll stop pipe: %s
+XCAM ERROR %s:%d: Fail to set pparams poll stop pipe flag: %s
+XCAM ERROR %s:%d: create stop fds failed !
+XCAM WARNING %s:%d: poll event failed but continue
+XCAM WARNING %s:%d: poll event timeout and continue
+XCAM WARNING %s:%d: dequeue event failed on dev:%s
+N5RkCam11RkAiqHandleE
+N5RkCam13RkAiqAeHandleE
+N5RkCam14RkAiqAfdHandleE
+N5RkCam14RkAiqAwbHandleE
+N5RkCam13RkAiqAfHandleE
+N5RkCam15RkAiqAhdrHandleE
+N5RkCam14RkAiqAnrHandleE
+N5RkCam15RkAiqAlscHandleE
+N5RkCam17RkAiqAsharpHandleE
+N5RkCam16RkAiqAdhazHandleE
+N5RkCam14RkAiqAsdHandleE
+N5RkCam14RkAiqAcpHandleE
+N5RkCam17RkAiqA3dlutHandleE
+N5RkCam15RkAiqAblcHandleE
+N5RkCam15RkAiqAccmHandleE
+N5RkCam15RkAiqAcgcHandleE
+N5RkCam19RkAiqAdebayerHandleE
+N5RkCam16RkAiqAdpccHandleE
+N5RkCam15RkAiqAfecHandleE
+N5RkCam17RkAiqAgammaHandleE
+N5RkCam19RkAiqAdegammaHandleE
+N5RkCam15RkAiqAgicHandleE
+N5RkCam14RkAiqAieHandleE
+N5RkCam16RkAiqAldchHandleE
+N5RkCam15RkAiqAr2yHandleE
+N5RkCam15RkAiqAwdrHandleE
+N5RkCam15RkAiqAorbHandleE
+XCAM ERROR %s:%d: ae handle prepare failed
+/home/liyunjian/ipc_rv1109_rv1126/buildroot/output/rockchip_rv1126_rv1109/build/camera_engine_rkaiq-1.0/aiq_core/RkAiqHandle.cpp
+XCAM WARNING %s:%d: bypass !
+XCAM ERROR %s:%d: ae algo prepare failed
+XCAM ERROR %s:%d: ae handle preProcess failed
+XCAM ERROR %s:%d: no aec stats, ignore!
+XCAM ERROR %s:%d: ae handle pre_process failed
+XCAM ERROR %s:%d: no rk ae pre res, failed !
+XCAM ERROR %s:%d: ae handle processing failed
+XCAM ERROR %s:%d: ae algo processing failed
+XCAM ERROR %s:%d: no rk ae proc res, failed !
+XCAM ERROR %s:%d: ae handle postProcess failed
+XCAM ERROR %s:%d: ae algo postProcess failed
+XCAM ERROR %s:%d: afd handle prepare failed
+XCAM ERROR %s:%d: afd algo prepare failed
+XCAM ERROR %s:%d: afd handle preProcess failed
+XCAM ERROR %s:%d: afd handle pre_process failed
+XCAM ERROR %s:%d: afd handle processing failed
+XCAM ERROR %s:%d: afd algo processing failed
+XCAM ERROR %s:%d: afd handle postProcess failed
+XCAM ERROR %s:%d: afd algo postProcess failed
+XCAM ERROR %s:%d: awb handle prepare failed
+XCAM ERROR %s:%d: awb algo prepare failed
+XCAM ERROR %s:%d: awb handle preProcess failed
+XCAM ERROR %s:%d: no awb stats, ignore!
+XCAM ERROR %s:%d: no effective awb cfg, ignore!
+XCAM ERROR %s:%d: awb handle pre_process failed
+XCAM ERROR %s:%d: awb handle processing failed
+XCAM ERROR %s:%d: awb algo processing failed
+XCAM ERROR %s:%d: awb handle postProcess failed
+XCAM ERROR %s:%d: awb algo postProcess failed
+XCAM ERROR %s:%d: af handle prepare failed
+XCAM ERROR %s:%d: af algo prepare failed
+XCAM ERROR %s:%d: af handle preProcess failed
+XCAM ERROR %s:%d: af handle pre_process failed
+XCAM ERROR %s:%d: af handle processing failed
+XCAM ERROR %s:%d: af algo processing failed
+XCAM ERROR %s:%d: af handle postProcess failed
+XCAM ERROR %s:%d: af algo postProcess failed
+XCAM ERROR %s:%d: ahdr handle prepare failed
+XCAM ERROR %s:%d: ahdr algo prepare failed
+XCAM ERROR %s:%d: ahdr handle preProcess failed
+XCAM ERROR %s:%d: ahdr handle pre_process failed
+XCAM ERROR %s:%d: ahdr handle processing failed
+XCAM ERROR %s:%d: ahdr algo processing failed
+XCAM ERROR %s:%d: ahdr handle postProcess failed
+XCAM ERROR %s:%d: ahdr algo postProcess failed
+XCAM ERROR %s:%d: anr handle prepare failed
+XCAM ERROR %s:%d: anr algo prepare failed
+XCAM ERROR %s:%d: anr handle preProcess failed
+XCAM ERROR %s:%d: anr handle pre_process failed
+XCAM ERROR %s:%d: anr handle processing failed
+XCAM ERROR %s:%d: anr algo processing failed
+XCAM ERROR %s:%d: anr handle postProcess failed
+XCAM ERROR %s:%d: anr algo postProcess failed
+XCAM ERROR %s:%d: alsc handle prepare failed
+XCAM ERROR %s:%d: alsc algo prepare failed
+XCAM ERROR %s:%d: alsc handle preProcess failed
+XCAM ERROR %s:%d: alsc handle pre_process failed
+XCAM ERROR %s:%d: alsc handle processing failed
+XCAM ERROR %s:%d: alsc algo processing failed
+XCAM ERROR %s:%d: alsc handle postProcess failed
+XCAM ERROR %s:%d: alsc algo postProcess failed
+XCAM ERROR %s:%d: asharp handle prepare failed
+XCAM ERROR %s:%d: asharp algo prepare failed
+XCAM ERROR %s:%d: asharp handle preProcess failed
+XCAM ERROR %s:%d: asharp handle pre_process failed
+XCAM ERROR %s:%d: asharp handle processing failed
+XCAM ERROR %s:%d: asharp algo processing failed
+XCAM ERROR %s:%d: asharp handle postProcess failed
+XCAM ERROR %s:%d: asharp algo postProcess failed
+XCAM ERROR %s:%d: adhaz handle prepare failed
+XCAM ERROR %s:%d: adhaz algo prepare failed
+XCAM ERROR %s:%d: adhaz handle preProcess failed
+XCAM ERROR %s:%d: adhaz handle pre_process failed
+XCAM ERROR %s:%d: adhaz handle processing failed
+XCAM ERROR %s:%d: adhaz algo processing failed
+XCAM ERROR %s:%d: adhaz handle postProcess failed
+XCAM ERROR %s:%d: adhaz algo postProcess failed
+XCAM ERROR %s:%d: asd handle prepare failed
+XCAM ERROR %s:%d: asd algo prepare failed
+XCAM ERROR %s:%d: asd handle preProcess failed
+XCAM ERROR %s:%d: asd handle pre_process failed
+XCAM ERROR %s:%d: asd handle processing failed
+XCAM ERROR %s:%d: asd algo processing failed
+XCAM ERROR %s:%d: asd handle postProcess failed
+XCAM ERROR %s:%d: asd algo postProcess failed
+XCAM ERROR %s:%d: acp handle prepare failed
+XCAM ERROR %s:%d: acp algo prepare failed
+XCAM ERROR %s:%d: acp handle preProcess failed
+XCAM ERROR %s:%d: acp handle pre_process failed
+XCAM ERROR %s:%d: acp handle processing failed
+XCAM ERROR %s:%d: acp algo processing failed
+XCAM ERROR %s:%d: acp handle postProcess failed
+XCAM ERROR %s:%d: acp algo postProcess failed
+XCAM ERROR %s:%d: a3dlut handle prepare failed
+XCAM ERROR %s:%d: a3dlut algo prepare failed
+XCAM ERROR %s:%d: a3dlut handle preProcess failed
+XCAM ERROR %s:%d: a3dlut handle pre_process failed
+XCAM ERROR %s:%d: a3dlut handle processing failed
+XCAM ERROR %s:%d: a3dlut algo processing failed
+XCAM ERROR %s:%d: a3dlut handle postProcess failed
+XCAM ERROR %s:%d: a3dlut algo postProcess failed
+XCAM ERROR %s:%d: ablc handle prepare failed
+XCAM ERROR %s:%d: ablc algo prepare failed
+XCAM ERROR %s:%d: ablc handle preProcess failed
+XCAM ERROR %s:%d: ablc handle pre_process failed
+XCAM ERROR %s:%d: ablc handle processing failed
+XCAM ERROR %s:%d: ablc algo processing failed
+XCAM ERROR %s:%d: ablc handle postProcess failed
+XCAM ERROR %s:%d: ablc algo postProcess failed
+XCAM ERROR %s:%d: accm handle prepare failed
+XCAM ERROR %s:%d: accm algo prepare failed
+XCAM ERROR %s:%d: accm handle preProcess failed
+XCAM ERROR %s:%d: accm handle pre_process failed
+XCAM ERROR %s:%d: accm handle processing failed
+XCAM ERROR %s:%d: accm algo processing failed
+XCAM ERROR %s:%d: accm handle postProcess failed
+XCAM ERROR %s:%d: accm algo postProcess failed
+XCAM ERROR %s:%d: acgc handle prepare failed
+XCAM ERROR %s:%d: acgc algo prepare failed
+XCAM ERROR %s:%d: acgc handle preProcess failed
+XCAM ERROR %s:%d: acgc handle pre_process failed
+XCAM ERROR %s:%d: acgc handle processing failed
+XCAM ERROR %s:%d: acgc algo processing failed
+XCAM ERROR %s:%d: acgc handle postProcess failed
+XCAM ERROR %s:%d: acgc algo postProcess failed
+XCAM ERROR %s:%d: adebayer handle prepare failed
+XCAM ERROR %s:%d: adebayer algo prepare failed
+XCAM ERROR %s:%d: adebayer handle preProcess failed
+XCAM ERROR %s:%d: adebayer handle pre_process failed
+XCAM ERROR %s:%d: adebayer handle processing failed
+XCAM ERROR %s:%d: adebayer algo processing failed
+XCAM ERROR %s:%d: adebayer handle postProcess failed
+XCAM ERROR %s:%d: adebayer algo postProcess failed
+XCAM ERROR %s:%d: adpcc handle prepare failed
+XCAM ERROR %s:%d: adpcc algo prepare failed
+XCAM ERROR %s:%d: adpcc handle preProcess failed
+XCAM ERROR %s:%d: adpcc handle pre_process failed
+XCAM ERROR %s:%d: adpcc handle processing failed
+XCAM ERROR %s:%d: adpcc algo processing failed
+XCAM ERROR %s:%d: adpcc handle postProcess failed
+XCAM ERROR %s:%d: adpcc algo postProcess failed
+XCAM ERROR %s:%d: afec handle prepare failed
+XCAM ERROR %s:%d: afec algo prepare failed
+XCAM ERROR %s:%d: afec handle preProcess failed
+XCAM ERROR %s:%d: afec handle pre_process failed
+XCAM ERROR %s:%d: afec handle processing failed
+XCAM ERROR %s:%d: afec algo processing failed
+XCAM ERROR %s:%d: afec handle postProcess failed
+XCAM ERROR %s:%d: afec algo postProcess failed
+XCAM ERROR %s:%d: agamma handle prepare failed
+XCAM ERROR %s:%d: agamma algo prepare failed
+XCAM ERROR %s:%d: agamma handle preProcess failed
+XCAM ERROR %s:%d: agamma handle pre_process failed
+XCAM ERROR %s:%d: agamma handle processing failed
+XCAM ERROR %s:%d: agamma algo processing failed
+XCAM ERROR %s:%d: agamma handle postProcess failed
+XCAM ERROR %s:%d: agamma algo postProcess failed
+XCAM ERROR %s:%d: adegamma handle prepare failed
+XCAM ERROR %s:%d: adegamma algo prepare failed
+XCAM ERROR %s:%d: adegamma handle preProcess failed
+XCAM ERROR %s:%d: adegamma handle pre_process failed
+XCAM ERROR %s:%d: adegamma handle processing failed
+XCAM ERROR %s:%d: adegamma algo processing failed
+XCAM ERROR %s:%d: adegamma handle postProcess failed
+XCAM ERROR %s:%d: adegamma algo postProcess failed
+XCAM ERROR %s:%d: agic handle prepare failed
+XCAM ERROR %s:%d: agic algo prepare failed
+XCAM ERROR %s:%d: agic handle preProcess failed
+XCAM ERROR %s:%d: agic handle pre_process failed
+XCAM ERROR %s:%d: agic handle processing failed
+XCAM ERROR %s:%d: agic algo processing failed
+XCAM ERROR %s:%d: agic handle postProcess failed
+XCAM ERROR %s:%d: agic algo postProcess failed
+XCAM ERROR %s:%d: aie handle prepare failed
+XCAM ERROR %s:%d: aie algo prepare failed
+XCAM ERROR %s:%d: aie handle preProcess failed
+XCAM ERROR %s:%d: aie handle pre_process failed
+XCAM ERROR %s:%d: aie handle processing failed
+XCAM ERROR %s:%d: aie algo processing failed
+XCAM ERROR %s:%d: aie handle postProcess failed
+XCAM ERROR %s:%d: aie algo postProcess failed
+XCAM ERROR %s:%d: aldch handle prepare failed
+XCAM ERROR %s:%d: aldch algo prepare failed
+XCAM ERROR %s:%d: aldch handle preProcess failed
+XCAM ERROR %s:%d: aldch handle pre_process failed
+XCAM ERROR %s:%d: aldch handle processing failed
+XCAM ERROR %s:%d: aldch algo processing failed
+XCAM ERROR %s:%d: aldch handle postProcess failed
+XCAM ERROR %s:%d: aldch algo postProcess failed
+XCAM ERROR %s:%d: ar2y handle prepare failed
+XCAM ERROR %s:%d: ar2y algo prepare failed
+XCAM ERROR %s:%d: ar2y handle preProcess failed
+XCAM ERROR %s:%d: ar2y handle pre_process failed
+XCAM ERROR %s:%d: ar2y handle processing failed
+XCAM ERROR %s:%d: ar2y algo processing failed
+XCAM ERROR %s:%d: ar2y handle postProcess failed
+XCAM ERROR %s:%d: ar2y algo postProcess failed
+XCAM ERROR %s:%d: awdr handle prepare failed
+XCAM ERROR %s:%d: awdr algo prepare failed
+XCAM ERROR %s:%d: awdr handle preProcess failed
+XCAM ERROR %s:%d: awdr handle pre_process failed
+XCAM ERROR %s:%d: awdr handle processing failed
+XCAM ERROR %s:%d: awdr algo processing failed
+XCAM ERROR %s:%d: awdr handle postProcess failed
+XCAM ERROR %s:%d: awdr algo postProcess failed
+XCAM ERROR %s:%d: aorb handle prepare failed
+XCAM ERROR %s:%d: aorb algo prepare failed
+XCAM ERROR %s:%d: aorb handle preProcess failed
+XCAM ERROR %s:%d: no orb stats, ignore!
+XCAM ERROR %s:%d: aorb handle pre_process failed
+XCAM ERROR %s:%d: aorb handle processing failed
+XCAM ERROR %s:%d: aorb algo processing failed
+XCAM ERROR %s:%d: aorb handle postProcess failed
+XCAM ERROR %s:%d: aorb algo postProcess failed
+XCAM ERROR %s:%d: wrong algo type 0x%x, des type: %d !
+N5RkCam17RkAiqHandleIntComE
+N5RkCam18RkAiqAcgcHandleIntE
+N5RkCam18RkAiqAr2yHandleIntE
+N5RkCam18RkAiqAorbHandleIntE
+N5RkCam16RkAiqAeHandleIntE
+N5RkCam17RkAiqAfdHandleIntE
+N5RkCam17RkAiqAwbHandleIntE
+N5RkCam16RkAiqAfHandleIntE
+N5RkCam22RkAiqAdebayerHandleIntE
+N5RkCam18RkAiqAhdrHandleIntE
+N5RkCam18RkAiqAwdrHandleIntE
+N5RkCam18RkAiqAgicHandleIntE
+N5RkCam19RkAiqAdhazHandleIntE
+N5RkCam20RkAiqAgammaHandleIntE
+N5RkCam22RkAiqAdegammaHandleIntE
+N5RkCam18RkAiqAlscHandleIntE
+N5RkCam18RkAiqAccmHandleIntE
+N5RkCam20RkAiqA3dlutHandleIntE
+N5RkCam18RkAiqAblcHandleIntE
+N5RkCam19RkAiqAdpccHandleIntE
+N5RkCam17RkAiqAnrHandleIntE
+N5RkCam20RkAiqAsharpHandleIntE
+N5RkCam18RkAiqAfecHandleIntE
+N5RkCam17RkAiqAsdHandleIntE
+N5RkCam19RkAiqAldchHandleIntE
+N5RkCam17RkAiqAcpHandleIntE
+N5RkCam17RkAiqAieHandleIntE
+XCAM ERROR %s:%d: wrong algo type !
+/home/liyunjian/ipc_rv1109_rv1126/buildroot/output/rockchip_rv1126_rv1109/build/camera_engine_rkaiq-1.0/aiq_core/RkAiqHandleInt.cpp
+XCAM ERROR %s:%d: ae algo pre_process failed
+XCAM ERROR %s:%d: ae algo post_process failed
+XCAM ERROR %s:%d: afd algo pre_process failed
+XCAM ERROR %s:%d: afd algo post_process failed
+XCAM ERROR %s:%d: awb algo pre_process failed
+XCAM ERROR %s:%d: awb algo post_process failed
+XCAM ERROR %s:%d: af algo pre_process failed
+XCAM ERROR %s:%d: anr algo pre_process failed
+XCAM ERROR %s:%d: anr algo post_process failed
+XCAM ERROR %s:%d: asharp algo pre_process failed
+XCAM ERROR %s:%d: asharp algo post_process failed
+XCAM ERROR %s:%d: adhaz algo pre_process failed
+XCAM ERROR %s:%d: adhaz algo post_process failed
+XCAM ERROR %s:%d: ahdr algo pre_process failed
+XCAM ERROR %s:%d: ahdr algo post_process failed
+XCAM ERROR %s:%d: asd algo pre_process failed
+XCAM ERROR %s:%d: asd algo post_process failed
+XCAM ERROR %s:%d: acp algo pre_process failed
+XCAM ERROR %s:%d: acp algo post_process failed
+XCAM ERROR %s:%d: a3dlut algo pre_process failed
+XCAM ERROR %s:%d: a3dlut algo post_process failed
+XCAM ERROR %s:%d: ablc algo pre_process failed
+XCAM ERROR %s:%d: ablc algo post_process failed
+XCAM ERROR %s:%d: accm algo pre_process failed
+XCAM ERROR %s:%d: get wrong awb gain from AWB module ,use default value 
+XCAM ERROR %s:%d: fail to get awb gain form AWB module,use default value 
+XCAM ERROR %s:%d: working_mode (%d) is invaild ,fail to get sensor gain form AE module,use default value 
+XCAM ERROR %s:%d: accm algo post_process failed
+XCAM ERROR %s:%d: acgc algo pre_process failed
+XCAM ERROR %s:%d: acgc algo post_process failed
+XCAM ERROR %s:%d: adebayer algo pre_process failed
+XCAM ERROR %s:%d: adebayer algo post_process failed
+XCAM ERROR %s:%d: adpcc algo pre_process failed
+XCAM ERROR %s:%d: afec algo pre_process failed
+XCAM ERROR %s:%d: afec algo post_process failed
+XCAM ERROR %s:%d: agamma algo pre_process failed
+XCAM ERROR %s:%d: agamma algo post_process failed
+XCAM ERROR %s:%d: adegamma algo pre_process failed
+XCAM ERROR %s:%d: agic algo pre_process failed
+XCAM ERROR %s:%d: agic algo post_process failed
+XCAM ERROR %s:%d: aie algo pre_process failed
+XCAM ERROR %s:%d: aie algo post_process failed
+XCAM ERROR %s:%d: aldch algo pre_process failed
+XCAM ERROR %s:%d: aldch algo post_process failed
+XCAM ERROR %s:%d: alsc algo pre_process failed
+XCAM ERROR %s:%d: working_mode (%d) is invaild, fail to get sensor gain form AE module, use default value 
+XCAM ERROR %s:%d: alsc algo post_process failed
+XCAM ERROR %s:%d: aorb algo pre_process failed
+XCAM ERROR %s:%d: aorb algo post_process failed
+XCAM ERROR %s:%d: ar2y algo pre_process failed
+XCAM ERROR %s:%d: ar2y algo post_process failed
+XCAM ERROR %s:%d: awdr algo pre_process failed
+XCAM ERROR %s:%d: awdr algo post_process failed
+XCAM ERROR %s:%d: af algo post_process failed
+XCAM ERROR %s:%d: %s read %s failed!
+XCAM ERROR %s:%d: motion detect is running, disable mfnr is not permit!
+N5RkCam14SharedItemPoolINS_15RkAiqFullParamsEEE
+N5RkCam14SharedItemPoolINS_22RKAiqCpslInfoWrapper_sEEE
+N5RkCam15SharedItemProxyINS_22RKAiqCpslInfoWrapper_sEEE
+N5RkCam15RkAiqFullParamsE
+N5RkCam16RkAiqTxBufInfo_sE
+N5RkCam15SharedItemProxyINS_15RkAiqFullParamsEEE
+N5RkCam22RKAiqCpslInfoWrapper_sE
+void XCam::SmartPtr<Obj>::init_ref(ObjD*) [with ObjD = RkCam::SharedItemProxy<RkCam::RKAiqCpslInfoWrapper_s>; Obj = RkCam::SharedItemProxy<RkCam::RKAiqCpslInfoWrapper_s>]
+void XCam::SmartPtr<Obj>::init_ref(ObjD*) [with ObjD = RkCam::SharedItemPool<RkCam::RkAiqFullParams>; Obj = RkCam::SharedItemPool<RkCam::RkAiqFullParams>]
+void XCam::SmartPtr<Obj>::init_ref(ObjD*) [with ObjD = RkCam::SharedItemProxy<RkCam::RkAiqFullParams>; Obj = RkCam::SharedItemProxy<RkCam::RkAiqFullParams>]
+void XCam::SmartPtr<Obj>::init_ref(ObjD*) [with ObjD = RkCam::SharedItemPool<RkCam::RKAiqAecExpInfoWrapper_s>; Obj = RkCam::SharedItemPool<RkCam::RKAiqAecExpInfoWrapper_s>]
+void XCam::SmartPtr<Obj>::init_ref(ObjD*) [with ObjD = RkCam::SharedItemPool<RkCam::RkAiqIrisInfoWrapper_s>; Obj = RkCam::SharedItemPool<RkCam::RkAiqIrisInfoWrapper_s>]
+void XCam::SmartPtr<Obj>::init_ref(ObjD*) [with ObjD = RkCam::SharedItemPool<RkCam::RKAiqCpslInfoWrapper_s>; Obj = RkCam::SharedItemPool<RkCam::RKAiqCpslInfoWrapper_s>]
+void XCam::SmartPtr<Obj>::init_ref(ObjD*) [with ObjD = RkCam::RkAiqFullParams; Obj = RkCam::RkAiqFullParams]
+void XCam::SmartPtr<Obj>::init_ref(ObjD*) [with ObjD = RkCam::RKAiqCpslInfoWrapper_s; Obj = RkCam::RKAiqCpslInfoWrapper_s]
+XCamReturn RkCam::Isp20Evt::getEffectiveExpParams(uint32_t, XCam::SmartPtr<RkCam::SharedItemProxy<RkCam::RKAiqAecExpInfoWrapper_s> >&)
+void XCam::SmartPtr<Obj>::init_ref(ObjD*) [with ObjD = RkCam::RkAiqAeHandle; Obj = RkCam::RkAiqHandle]
+void XCam::SmartPtr<Obj>::init_ref(ObjD*) [with ObjD = RkCam::RkAiqAwbHandle; Obj = RkCam::RkAiqHandle]
+void XCam::SmartPtr<Obj>::init_ref(ObjD*) [with ObjD = RkCam::RkAiqAfHandle; Obj = RkCam::RkAiqHandle]
+void XCam::SmartPtr<Obj>::init_ref(ObjD*) [with ObjD = RkCam::RkAiqAhdrHandle; Obj = RkCam::RkAiqHandle]
+void XCam::SmartPtr<Obj>::init_ref(ObjD*) [with ObjD = RkCam::RkAiqAnrHandle; Obj = RkCam::RkAiqHandle]
+void XCam::SmartPtr<Obj>::init_ref(ObjD*) [with ObjD = RkCam::RkAiqAdhazHandle; Obj = RkCam::RkAiqHandle]
+void XCam::SmartPtr<Obj>::init_ref(ObjD*) [with ObjD = RkCam::RkAiqAsdHandle; Obj = RkCam::RkAiqHandle]
+void XCam::SmartPtr<Obj>::init_ref(ObjD*) [with ObjD = RkCam::RkAiqAcpHandle; Obj = RkCam::RkAiqHandle]
+void XCam::SmartPtr<Obj>::init_ref(ObjD*) [with ObjD = RkCam::RkAiqAsharpHandle; Obj = RkCam::RkAiqHandle]
+void XCam::SmartPtr<Obj>::init_ref(ObjD*) [with ObjD = RkCam::RkAiqA3dlutHandle; Obj = RkCam::RkAiqHandle]
+void XCam::SmartPtr<Obj>::init_ref(ObjD*) [with ObjD = RkCam::RkAiqAblcHandle; Obj = RkCam::RkAiqHandle]
+void XCam::SmartPtr<Obj>::init_ref(ObjD*) [with ObjD = RkCam::RkAiqAccmHandle; Obj = RkCam::RkAiqHandle]
+void XCam::SmartPtr<Obj>::init_ref(ObjD*) [with ObjD = RkCam::RkAiqAcgcHandle; Obj = RkCam::RkAiqHandle]
+void XCam::SmartPtr<Obj>::init_ref(ObjD*) [with ObjD = RkCam::RkAiqAdebayerHandle; Obj = RkCam::RkAiqHandle]
+void XCam::SmartPtr<Obj>::init_ref(ObjD*) [with ObjD = RkCam::RkAiqAdpccHandle; Obj = RkCam::RkAiqHandle]
+void XCam::SmartPtr<Obj>::init_ref(ObjD*) [with ObjD = RkCam::RkAiqAfecHandle; Obj = RkCam::RkAiqHandle]
+void XCam::SmartPtr<Obj>::init_ref(ObjD*) [with ObjD = RkCam::RkAiqAgammaHandle; Obj = RkCam::RkAiqHandle]
+void XCam::SmartPtr<Obj>::init_ref(ObjD*) [with ObjD = RkCam::RkAiqAdegammaHandle; Obj = RkCam::RkAiqHandle]
+void XCam::SmartPtr<Obj>::init_ref(ObjD*) [with ObjD = RkCam::RkAiqAgicHandle; Obj = RkCam::RkAiqHandle]
+void XCam::SmartPtr<Obj>::init_ref(ObjD*) [with ObjD = RkCam::RkAiqAieHandle; Obj = RkCam::RkAiqHandle]
+void XCam::SmartPtr<Obj>::init_ref(ObjD*) [with ObjD = RkCam::RkAiqAldchHandle; Obj = RkCam::RkAiqHandle]
+void XCam::SmartPtr<Obj>::init_ref(ObjD*) [with ObjD = RkCam::RkAiqAlscHandle; Obj = RkCam::RkAiqHandle]
+void XCam::SmartPtr<Obj>::init_ref(ObjD*) [with ObjD = RkCam::RkAiqAorbHandle; Obj = RkCam::RkAiqHandle]
+void XCam::SmartPtr<Obj>::init_ref(ObjD*) [with ObjD = RkCam::RkAiqAr2yHandle; Obj = RkCam::RkAiqHandle]
+void XCam::SmartPtr<Obj>::init_ref(ObjD*) [with ObjD = RkCam::RkAiqAwdrHandle; Obj = RkCam::RkAiqHandle]
+XCam::SmartPtr<Obj>::SmartPtr(const XCam::SmartPtr<Obj>&) [with Obj = RkCam::RkAiqFullParams]
+XCamReturn RkCam::RkAiqCore::pushStats(XCam::SmartPtr<XCam::VideoBuffer>&)
+XCamReturn RkCam::RkAiqCore::pushEvts(XCam::SmartPtr<RkCam::ispHwEvt_s>&)
+XCam::SmartPtr<Obj>::SmartPtr(const XCam::SmartPtr<Obj>&) [with Obj = RkCam::RkAiqTxBufInfo_s]
+void XCam::SmartPtr<Obj>::init_ref(ObjD*) [with ObjD = RkCam::RkAiqCoreThread; Obj = RkCam::RkAiqCoreThread]
+XCam::SmartPtr<Obj>::SmartPtr(const XCam::SmartPtr<Obj>&) [with Obj = RkCam::SharedItemProxy<RkCam::RkAiqFullParams>]
+void XCam::SmartPtr<Obj>::release() [with Obj = RkCam::RkAiqHandle]
+void XCam::SmartPtr<Obj>::init_ref(ObjD*) [with ObjD = RkCam::RkAiqHandle; Obj = RkCam::RkAiqHandle]
+void XCam::SmartPtr<Obj>::release() [with Obj = RkCam::SharedItemPool<RkCam::RkAiqFullParams>]
+XCam::SmartPtr<Obj>::SmartPtr(const XCam::SmartPtr<Obj>&) [with Obj = RkCam::RKAiqCpslInfoWrapper_s]
+void XCam::SmartPtr<Obj>::release() [with Obj = RkCam::RkAiqCoreThread]
+void XCam::SmartPtr<Obj>::release() [with Obj = RkCam::RkAiqCoreEvtsThread]
+void XCam::SmartPtr<Obj>::release() [with Obj = RkCam::RkAiqCoreTxBufAnalyzerThread]
+void XCam::SmartPtr<Obj>::release() [with Obj = RkCam::SharedItemPool<RkCam::RKAiqCpslInfoWrapper_s>]
+void XCam::SmartPtr<Obj>::release() [with Obj = RkCam::RkAiqTxBufInfo_s]
+XCamReturn RkCam::RkAiqCore::pushTxBuf(XCam::SmartPtr<XCam::VideoBuffer>&, XCam::SmartPtr<RkCam::SharedItemProxy<RkCam::RKAiqAecExpInfoWrapper_s> >&)
+void XCam::SmartPtr<Obj>::init_ref(ObjD*) [with ObjD = RkCam::RkAiqTxBufInfo_s; Obj = RkCam::RkAiqTxBufInfo_s]
+void XCam::SmartPtr<Obj>::release() [with Obj = RkCam::RKAiqCpslInfoWrapper_s]
+void XCam::SmartPtr<Obj>::release() [with Obj = RkCam::SharedItemProxy<RkCam::RKAiqCpslInfoWrapper_s>]
+void XCam::SmartPtr<Obj>::release() [with Obj = RkCam::RkAiqFullParams]
+void XCam::SmartPtr<Obj>::release() [with Obj = RkCam::SharedItemProxy<RkCam::RkAiqFullParams>]
+XCam::SmartPtr<Obj>::SmartPtr(const XCam::SmartPtr<Obj>&) [with Obj = RkCam::SharedItemProxy<RkCam::RKAiqCpslInfoWrapper_s>]
+void XCam::SmartPtr<Obj>::init_ref(ObjD*) [with ObjD = RkCam::RkAiqCoreEvtsThread; Obj = RkCam::RkAiqCoreEvtsThread]
+void XCam::SmartPtr<Obj>::init_ref(ObjD*) [with ObjD = RkCam::RkAiqCoreTxBufAnalyzerThread; Obj = RkCam::RkAiqCoreTxBufAnalyzerThread]
+void XCam::SmartPtr<Obj>::init_ref(ObjD*) [with ObjD = RkCam::RkAiqAeHandleInt; Obj = RkCam::RkAiqHandle]
+void XCam::SmartPtr<Obj>::init_ref(ObjD*) [with ObjD = RkCam::RkAiqAwbHandleInt; Obj = RkCam::RkAiqHandle]
+void XCam::SmartPtr<Obj>::init_ref(ObjD*) [with ObjD = RkCam::RkAiqAfHandleInt; Obj = RkCam::RkAiqHandle]
+void XCam::SmartPtr<Obj>::init_ref(ObjD*) [with ObjD = RkCam::RkAiqAhdrHandleInt; Obj = RkCam::RkAiqHandle]
+void XCam::SmartPtr<Obj>::init_ref(ObjD*) [with ObjD = RkCam::RkAiqAnrHandleInt; Obj = RkCam::RkAiqHandle]
+void XCam::SmartPtr<Obj>::init_ref(ObjD*) [with ObjD = RkCam::RkAiqAdhazHandleInt; Obj = RkCam::RkAiqHandle]
+void XCam::SmartPtr<Obj>::init_ref(ObjD*) [with ObjD = RkCam::RkAiqAsdHandleInt; Obj = RkCam::RkAiqHandle]
+void XCam::SmartPtr<Obj>::init_ref(ObjD*) [with ObjD = RkCam::RkAiqAcpHandleInt; Obj = RkCam::RkAiqHandle]
+void XCam::SmartPtr<Obj>::init_ref(ObjD*) [with ObjD = RkCam::RkAiqAsharpHandleInt; Obj = RkCam::RkAiqHandle]
+void XCam::SmartPtr<Obj>::init_ref(ObjD*) [with ObjD = RkCam::RkAiqA3dlutHandleInt; Obj = RkCam::RkAiqHandle]
+void XCam::SmartPtr<Obj>::init_ref(ObjD*) [with ObjD = RkCam::RkAiqAblcHandleInt; Obj = RkCam::RkAiqHandle]
+void XCam::SmartPtr<Obj>::init_ref(ObjD*) [with ObjD = RkCam::RkAiqAccmHandleInt; Obj = RkCam::RkAiqHandle]
+void XCam::SmartPtr<Obj>::init_ref(ObjD*) [with ObjD = RkCam::RkAiqAcgcHandleInt; Obj = RkCam::RkAiqHandle]
+void XCam::SmartPtr<Obj>::init_ref(ObjD*) [with ObjD = RkCam::RkAiqAdebayerHandleInt; Obj = RkCam::RkAiqHandle]
+void XCam::SmartPtr<Obj>::init_ref(ObjD*) [with ObjD = RkCam::RkAiqAdpccHandleInt; Obj = RkCam::RkAiqHandle]
+void XCam::SmartPtr<Obj>::init_ref(ObjD*) [with ObjD = RkCam::RkAiqAfecHandleInt; Obj = RkCam::RkAiqHandle]
+void XCam::SmartPtr<Obj>::init_ref(ObjD*) [with ObjD = RkCam::RkAiqAgammaHandleInt; Obj = RkCam::RkAiqHandle]
+void XCam::SmartPtr<Obj>::init_ref(ObjD*) [with ObjD = RkCam::RkAiqAdegammaHandleInt; Obj = RkCam::RkAiqHandle]
+void XCam::SmartPtr<Obj>::init_ref(ObjD*) [with ObjD = RkCam::RkAiqAgicHandleInt; Obj = RkCam::RkAiqHandle]
+void XCam::SmartPtr<Obj>::init_ref(ObjD*) [with ObjD = RkCam::RkAiqAieHandleInt; Obj = RkCam::RkAiqHandle]
+void XCam::SmartPtr<Obj>::init_ref(ObjD*) [with ObjD = RkCam::RkAiqAldchHandleInt; Obj = RkCam::RkAiqHandle]
+void XCam::SmartPtr<Obj>::init_ref(ObjD*) [with ObjD = RkCam::RkAiqAlscHandleInt; Obj = RkCam::RkAiqHandle]
+void XCam::SmartPtr<Obj>::init_ref(ObjD*) [with ObjD = RkCam::RkAiqAorbHandleInt; Obj = RkCam::RkAiqHandle]
+void XCam::SmartPtr<Obj>::init_ref(ObjD*) [with ObjD = RkCam::RkAiqAr2yHandleInt; Obj = RkCam::RkAiqHandle]
+void XCam::SmartPtr<Obj>::init_ref(ObjD*) [with ObjD = RkCam::RkAiqAwdrHandleInt; Obj = RkCam::RkAiqHandle]
+void XCam::SmartPtr<Obj>::init_ref(ObjD*) [with ObjD = RkCam::RkAiqAfdHandleInt; Obj = RkCam::RkAiqHandle]
+XCamReturn RkCam::Isp20StatsBuffer::getEffectiveExpParams(uint32_t, XCam::SmartPtr<RkCam::SharedItemProxy<RkCam::RKAiqAecExpInfoWrapper_s> >&)
+N5RkCam15RkAiqCoreThreadE
+N5RkCam19RkAiqCoreEvtsThreadE
+N5RkCam28RkAiqCoreTxBufAnalyzerThreadE
+N5RkCam9RkAiqCoreE
+RkAiqCoreThread
+/home/liyunjian/ipc_rv1109_rv1126/buildroot/output/rockchip_rv1126_rv1109/build/camera_engine_rkaiq-1.0/hwi/isp20/Isp20Evts.h
+mSensor.ptr ()
+XCAM ERROR %s:%d: wrong state %d
+/home/liyunjian/ipc_rv1109_rv1126/buildroot/output/rockchip_rv1126_rv1109/build/camera_engine_rkaiq-1.0/aiq_core/RkAiqCore.cpp
+XCAM ERROR %s:%d: %s updateConfig failed
+XCAM ERROR %s:%d: %s preProcess failed
+XCAM ERROR %s:%d: %s processing failed
+XCAM ERROR %s:%d: %s postProcess failed
+XCAM ERROR %s:%d: should call afer init
+XCAM ERROR %s:%d: %s: not support for black&white sensor
+XCAM ERROR %s:%d: %s: not support,since color_as_grey is enabled in xml
+XCAM ERROR %s:%d: %s: gray mode %d error
+XCAM ERROR %s:%d: can't find type id <%d, %d> algo
+XCAM ERROR %s:%d: can't find current type %d algo
+XCAM ERROR %s:%d: only support ae/awb/af custom algos !
+XCAM ERROR %s:%d: no free aiq params buffer!
+XCAM ERROR %s:%d: no free ispp params buffer!
+XCAM ERROR %s:%d: preprocessPp failed
+XCAM ERROR %s:%d: processingPp failed
+XCAM ERROR %s:%d: post processPp failed
+XCAM WARNING %s:%d: no free cpsl params buffer!
+XCAM ERROR %s:%d: no free isp params buffer!
+XCAM ERROR %s:%d: no free exposure params buffer!
+XCAM ERROR %s:%d: no free iris params buffer!
+XCAM ERROR %s:%d: no free focus params buffer!
+XCAM ERROR %s:%d: no free isp other params buffer!
+XCAM ERROR %s:%d: no free ispp other params buffer!
+XCAM ERROR %s:%d: preprocess failed
+XCAM ERROR %s:%d: processing failed
+XCAM ERROR %s:%d: post process failed
+XCAM WARNING %s:%d: in state %d
+XCAM ERROR %s:%d: %s update initial user params failed
+XCAM ERROR %s:%d: %s prepare failed
+XCAM ERROR %s:%d: %s custom update initial user params failed
+XCAM ERROR %s:%d: %s custom prepare failed
+XCAM WARNING %s:%d: RkAiqCoreEvtsThread got empty stats, stop thread
+XCAM ERROR %s:%d: RkAiqCoreEvtsThread failed to analyze events
+XCAM WARNING %s:%d: no free or cached stats, user may hold all stats buf !
+RkAiqCoreEvtsThread
+RkAiqCoreTxBufAnalyzerThread
+RkAiqFullParams
+RkAiqExpParams
+RkAiqIrisParams
+RkAiqIspMeasParams
+RkAiqIspOtherParams
+RkAiqIsppMeasParams
+RkAiqIsppOtherParams
+RkAiqFocusParams
+RkAiqCpslParamsPool
+RkAiqStatsPool
+XCAM ERROR %s:%d: fail to get stats ,ignore
+/home/liyunjian/ipc_rv1109_rv1126/buildroot/output/rockchip_rv1126_rv1109/build/camera_engine_rkaiq-1.0/hwi/isp20/Isp20StatsBuffer.h
+XCAM ERROR %s:%d: fail to get expParams
+XCAM ERROR %s:%d: fail to get ispParams
+XCAM ERROR %s:%d: fail to get ispParams ,ignore
+XCAM ERROR %s:%d: wrong AeSwapMode=%d
+XCAM ERROR %s:%d: wrong AeSelMode=%d
+XCAM WARNING %s:%d: RkAiqCoreThread got empty stats, stop thread
+XCAM ERROR %s:%d: RkAiqCoreThread failed to analyze 3a stats
+/home/liyunjian/ipc_rv1109_rv1126/buildroot/output/rockchip_rv1126_rv1109/build/camera_engine_rkaiq-1.0/aiq_core/RkLumaCore.cpp
+XCAM WARNING %s:%d: RkLumaCoreThread got empty stats, stop thread
+/home/liyunjian/ipc_rv1109_rv1126/buildroot/output/rockchip_rv1126_rv1109/build/camera_engine_rkaiq-1.0/ipc_server/socket_server.cpp
+XCAM ERROR %s:%d: %02X 
+XCAM ERROR %s:%d: packetSize check failed,returnsize is %d, pack is %d
+XCAM ERROR %s:%d: data hash not match.return
+XCAM ERROR %s:%d: polled error
+XCAM WARNING %s:%d: poll socket got error(0x%x) but continue
+XCAM ERROR %s:%d: Error socket accept failed %d %d
+XCAM WARNING %s:%d: SocketServer::Process
+XCAM ERROR %s:%d: Error bind
+XCAM ERROR %s:%d: Error listen
+XCAM ERROR %s:%d: poll stop pipe error: %d
+XCAM ERROR %s:%d: Fail to set stop pipe flag: %s
+XCAM ERROR %s:%d: THE Edge sieze is%d'
+/home/liyunjian/ipc_rv1109_rv1126/buildroot/output/rockchip_rv1126_rv1109/build/camera_engine_rkaiq-1.0/ipc_server/command_process.cpp
+N5RkCam15RkAiqAnalyzerCbE
+N5RkCam17RkAiqMngCmdThread9message_sE
+void RkCam::RkAiqManager::setAiqCalibDb(const CamCalibDbContext_t*)
+XCamReturn RkCam::RkAiqManager::getSensorDiscrib(rk_aiq_exposure_sensor_descriptor*)
+XCam::SmartPtr<Obj>::SmartPtr(const XCam::SmartPtr<Obj>&) [with Obj = RkCam::RkAiqMngCmdThread::message_s]
+void XCam::SmartPtr<Obj>::release() [with Obj = RkCam::RkAiqMngCmdThread::message_s]
+void XCam::SmartPtr<Obj>::init_ref(ObjD*) [with ObjD = RkCam::RkAiqMngCmdThread::message_s; Obj = RkCam::RkAiqMngCmdThread::message_s]
+void RkCam::RkAiqManager::setCamHw(XCam::SmartPtr<RkCam::ICamHw>&)
+void RkCam::RkAiqManager::setAnalyzer(XCam::SmartPtr<RkCam::RkAiqCore>)
+void XCam::SmartPtr<Obj>::release() [with Obj = RkCam::RkAiqRstApplyThread]
+void XCam::SmartPtr<Obj>::release() [with Obj = RkCam::RkAiqMngCmdThread]
+void RkCam::RkAiqManager::setLumaAnalyzer(XCam::SmartPtr<RkCam::RkLumaCore>)
+void XCam::SmartPtr<Obj>::init_ref(ObjD*) [with ObjD = RkCam::RkAiqRstApplyThread; Obj = RkCam::RkAiqRstApplyThread]
+void XCam::SmartPtr<Obj>::init_ref(ObjD*) [with ObjD = RkCam::RkAiqMngCmdThread; Obj = RkCam::RkAiqMngCmdThread]
+virtual void RkCam::RkAiqManager::rkAiqCalcDone(XCam::SmartPtr<RkCam::SharedItemProxy<RkCam::RkAiqFullParams> >&)
+virtual bool RkCam::RkAiqRstApplyThread::loop()
+XCamReturn RkCam::RkAiqManager::prepare(uint32_t, uint32_t, rk_aiq_working_mode_t)
+virtual bool RkCam::RkAiqMngCmdThread::loop()
+XCamReturn RkCam::RkAiqManager::init()
+N5RkCam17RkAiqMngCmdThreadE
+N5RkCam19RkAiqRstApplyThreadE
+N5RkCam12RkAiqManagerE
+/home/liyunjian/ipc_rv1109_rv1126/buildroot/output/rockchip_rv1126_rv1109/build/camera_engine_rkaiq-1.0/RkAiqManager.cpp
+!mCalibDb
+XCAM ERROR %s:%d: cmd thread stop error
+XCAM ERROR %s:%d: analyzer deinit error %d
+XCAM ERROR %s:%d: luma analyzer deinit error %d
+XCAM ERROR %s:%d: camhw deinit error %d
+XCAM ERROR %s:%d: wrong aiq state !
+XCAM WARNING %s:%d: set mirror %d, flip %d error
+sensorDes
+!mRkAiqAnalyzer.ptr()
+XCAM ERROR %s:%d: get expParam failed: %d!
+RkAiqRstApplyThread
+RkAiqMngCmdThread
+XCAM ERROR %s:%d: analyzer stop error %d
+XCAM ERROR %s:%d: luma analyzer stop error %d
+XCAM ERROR %s:%d: apply result thread stop error
+XCAM ERROR %s:%d: camhw stop error %d
+XCAM WARNING %s:%d: empty aiq params results!
+XCAM ERROR %s:%d: setFlParams error %d
+XCAM ERROR %s:%d: setExposureParams error %d
+XCAM ERROR %s:%d: setIrisParams error %d
+XCAM ERROR %s:%d: setIspParams error %d
+XCAM ERROR %s:%d: setIsppParams error %d
+XCAM ERROR %s:%d: setFocusParams error %d
+XCAM WARNING %s:%d: RkAiqRstApplyThread got empty result, stop thread
+XCAM ERROR %s:%d: Not supported HDR mode !
+XCAM ERROR %s:%d: camhw prepare error %d
+XCAM ERROR %s:%d: getSensorModeData error %d
+XCAM ERROR %s:%d: analyzer prepare error %d
+XCAM ERROR %s:%d: set initial params error %d
+XCAM ERROR %s:%d: apply result thread start error
+XCAM ERROR %s:%d: analyzer start error %d
+XCAM ERROR %s:%d: luma analyzer start error %d
+XCAM ERROR %s:%d: camhw start error %d
+XCAM WARNING %s:%d: should be called at STARTED state
+XCAM ERROR %s:%d: pause hwi error %d
+XCAM ERROR %s:%d: hwi swWorkingModeDyn error ...
+XCAM WARNING %s:%d: RkAiqMngCmdThread got empty result, stop thread
+XCAM ERROR %s:%d: analyzer init error %d !
+XCAM ERROR %s:%d: luma analyzer init error %d !
+XCAM ERROR %s:%d: camHw init error %d !
+XCAM ERROR %s:%d: cmd thread start error
+XCAM LOW1 %s:%d: %s:Enter!
+XCAM ERROR %s:%d: %s AePrepare failed: %d
+XCAM ERROR %s:%d: %s AecGetPreResults failed: %d
+XCAM LOW1 %s:%d: %s:Exit!
+XCAM ERROR %s:%d: %s AecUpdateConfig failed: %d
+XCAM ERROR %s:%d: %s AecStart failed: %d
+XCAM ERROR %s:%d: %s AecInitEcm failed: %d
+XCAM ERROR %s:%d: %s AecRelease failed: %d
+XCAM ERROR %s:%d: %s AecInit failed: %d
+XCAM ERROR %s:%d: %s AIrisRun failed: %d
+XCAM ERROR %s:%d: %s AecGetProcResults failed: %d
+XCAM VERBOSE %s:%d: exp_set_cnt=%d
+XCAM DEBUG %s:%d: exp_set%d,sgain=0x%x,stime=0x%x,mgain=0x%x,mtime=0x%x,lgain=0x%x,ltime=0x%x
+XCAM DEBUG %s:%d: exp_set%d,gain=0x%x,time=0x%x
+XCAM DEBUG %s:%d: >>> Framenum=%d Cur gain=%f,time=%f,Meanluma=%f,piris=%d
+XCAM DEBUG %s:%d: >>> Framenum=%d Cur sgain=%f,stime=%f,mgain=%f,mtime=%f,lgain=%f,ltime=%f
+XCAM DEBUG %s:%d: SMeanLuma=%f, MMeanLuma=%f,LMeanLuma=%f,TmoMeanluma=%f,Isconverged=%d,P-iris=%d
+XCAM DEBUG %s:%d: Cur-Exp: FrmId=%ld,S-gain=0x%x,S-time=0x%x,M-gain=0x%x,M-time=0x%x,L-gain=0x%x,L-time=0x%x,envChange=%d,dcg=%d-%d-%d,Piris=%d
+XCAM DEBUG %s:%d: Last-Res:FrmId=%ld,S-gain=0x%x,S-time=0x%x,M-gain=0x%x,M-time=0x%x,L-gain=0x%x,L-time=0x%x
+XCAM DEBUG %s:%d: Cur-Exp: FrmId=%ld,gain=0x%x,time=0x%x,envChange=%d,dcg=%d,pirs=%d
+XCAM DEBUG %s:%d: Last-Res:FrmId=%ld,gain=0x%x,time=0x%x,pirs=%d
+XCAM DEBUG %s:%d: ===========Bypass AEC!!============
+XCAM ERROR %s:%d: %s AecRun failed: %d
+?mapSensorExpToHal
+XCAM LOW1 %s:%d: %s:(enter)
+XCAM ERROR %s:%d: %s: pAecCtx NULL pointer! 
+XCAM LOW1 %s:%d: %s: (exit)
+XCAM VERBOSE %s:%d: preEnv: Idx=%d,FrmId=%d,inputExp=%f,lumadiff=%f,newExp=%f
+XCAM VERBOSE %s:%d: curEnv: Idx=%d,FrmId=%d,inputExp=%f,lumadiff=%f,newExp=%f
+XCAM VERBOSE %s:%d: preExp=%f,output exp=%f
+XCAM LOW1 %s:%d: %s: (enter)
+XCAM VERBOSE %s:%d: Lumadiff=%f,qValue=%f,memship[0]=%f,memship[1]=%f
+XCAM VERBOSE %s:%d: dLumadiff=%f,qValue=%f,memship[0]=%f,memship[1]=%f
+XCAM VERBOSE %s:%d: %s:input lgain=%f,ltime=%f,mgain=%f,mtime=%f,sgain=%f,stime=%f
+XCAM WARNING %s:%d: %s:LoopCnt=100,CheckLoop will quit
+XCAM VERBOSE %s:%d: %s:output lgain=%f,ltime=%f,mgain=%f,mtime=%f,sgain=%f,stime=%f
+XCAM LOW1 %s:%d: %s: %d: Y measure mode luma(%d)    Modifyluma(%f) GridWeights(%d)
+XCAM DEBUG %s:%d: OverExpCtrl on! ori:luma=%f, new:luma=%f
+XCAM VERBOSE %s:%d: DampOver: %f, OldExposure: %f, NewExposure: %f
+XCAM VERBOSE %s:%d: DampUnder: %f, OldExposure: %f, NewExposure: %f
+XCAM VERBOSE %s:%d: dark2bright cnt=%d
+XCAM VERBOSE %s:%d: bright2dark cnt=%d
+XCAM DEBUG %s:%d: M-GlobalLuma=%f,M-Target=%f
+XCAM VERBOSE %s:%d: %s: old Mexp=%f,new Mexp=%f
+XCAM ERROR %s:%d: %s:pAecCtx == NULL
+XCAM ERROR %s:%d: %s:ae_stat == NULL
+XCAM VERBOSE %s:%d: %s %d:SNewExposure=%f
+XCAM DEBUG %s:%d: S-HighLightLuma=%f,S-Target=%f,S-GlobalLuma=%f,S-Target=%f
+XCAM VERBOSE %s:%d: %s: old Sexp=%f,new Sexp=%f
+XCAM LOW1 %s:%d: %s %d:NewExposure=%f
+XCAM LOW1 %s:%d: %s %d:NewExposure1=%f,NewExposure2=%f
+XCAM VERBOSE %s:%d: %s %d:LNewExposure=%f,OLD LExposure=%f
+XCAM DEBUG %s:%d: L-LowLightLuma=%f,L-Target=%f,L-GlobalLuma=%f,L-Target=%f
+XCAM DEBUG %s:%d: LowLightLuma=%f,Target=%f,GlobalLuma=%f,Target=%f
+XCAM VERBOSE %s:%d: %s %d: in range old exp=%f,new exp=%f (exit)
+XCAM VERBOSE %s:%d: %s %d: too small old exp=%f,new exp=%f (exit)
+XCAM VERBOSE %s:%d: %s %d: too big old exp=%f,new exp=%f (exit)
+XCAM DEBUG %s:%d: %s: NewExposure(%f) SplitGain(%f) SplitIntegrationTime(%f) SplitPirisGain(%d)
+XCAM DEBUG %s:%d: Hdr use fixed ExpRatio,M2SRatio=%f,L2MRatio=%f
+XCAM DEBUG %s:%d: SNewExposure=%f,MNewExposure=%f,LNewExposure=%f
+XCAM ERROR %s:%d: wrong frameNum=%d
+XCAM DEBUG %s:%d: L2MRatio > %f
+XCAM DEBUG %s:%d: M2SRatio > %f
+XCAM DEBUG %s:%d: TotalRatio > %f
+XCAM DEBUG %s:%d: AecHdrClmExecute: sgain=%f,stime=%f,mgain=%f,mtime=%f,lgain=%f,ltime=%f
+XCAM LOW1 %s:%d: gain=%f,dcg_mode=[%d]
+XCAM ERROR %s:%d: %s: pweight == NULL
+XCAM VERBOSE %s:%d: %s: MeanLuma(%f), gridweights(%u) 
+XCAM ERROR %s:%d: wrong GridNum:%d
+XCAM INFO %s:%d: %s: (enter)
+XCAM INFO %s:%d: %s: (exit)
+XCAM ERROR %s:%d: wrong working_mode for V20!!!
+XCAM VERBOSE %s:%d: ae_meas: win offset: [%d,%d]-[%d,%d]-[%d,%d]-[%d,%d]
+XCAM VERBOSE %s:%d: ae_meas: win size: [%dx%d]-[%dx%d]-[%dx%d]-[%dx%d]
+XCAM VERBOSE %s:%d: hist_meas: hist win offset: [%d,%d]-[%d,%d]-[%d,%d]-[%d,%d]
+XCAM VERBOSE %s:%d: hist_meas: hist win size: [%dx%d]-[%dx%d]-[%dx%d]-[%dx%d]
+XCAM ERROR %s:%d: %s: Can't allocate AEC context
+XCAM ERROR %s:%d: %s: Can't allocate AEC config
+XCAM ERROR %s:%d: %s: AecStop() failed!
+XCAM ERROR %s:%d:  pAecCtx NULL pointer! 
+XCAM LOW1 %s:%d: =======================%s: (enter)=====================
+XCAM ERROR %s:%d: wrong with the FrameNum=%d
+XCAM DEBUG %s:%d: IsHdr=%d,AeSwapMode=%d,AeOptype=%d,HdrFrameNum=%d,LineHdrMode=%d
+XCAM ERROR %s:%d: wrong RAWAE0~2 SwapMode!!
+XCAM ERROR %s:%d: wrong RAWAE3 SelMode!!
+XCAM VERBOSE %s:%d: AeSwapMode=%d,AeSelMode=%d,LinGridNum=%d,HdrGridNum[0-1-2]=%d-%d-%d,TMOGridNum=%d,YuvGridNum=%d
+XCAM VERBOSE %s:%d: %s:AeDNSwitch : Trigger:%d DNMode:%d FillLightMode:%d D2NFacTh:%f D2NFrmCnt:%d IRenable:%d
+XCAM VERBOSE %s:%d: %s:AeDNSwitch : MaxWbDis:%f VbPercent:%f VBenable:%d N2DFacth:%f N2DFrmCnt:%d
+XCAM VERBOSE %s:%d: EnvCalib:calibFN=%f,realFN=%f,curve_coeff=%f-%f
+XCAM DEBUG %s:%d: use default Exp2Reg GainRange!
+XCAM LOW1 %s:%d: %s idx:%d GainRange: %f-%f-%f-%f-%f-%f-%f
+XCAM DEBUG %s:%d: use default Exp2Reg TimeFactor!
+XCAM VERBOSE %s:%d: SensorInfo:CISTimeRegUnEqualEn=%d,CISTimeRegMin=%d,CISTimeRegOdevity[0]=%f,CISTimeRegOdevity[1]=%f,HdrGainIndSetEn=%d
+XCAM VERBOSE %s:%d: nr_switch:valid=%d,direct=%d,up_th=%d,low_th=%d,div_coeff=%d
+XCAM VERBOSE %s:%d: SyncTest:en=%d,interval=%d,LinAlter-num=%d,lin-time[1]=%f
+XCAM VERBOSE %s:%d: IrisCtrl:en=%d,Type=%d,TotalStep=%d,EffcStep=%d,ZeroIsMax=%d,ki=%f
+XCAM WARNING %s:%d: Cannot enbale BackLitCtrl & OverExpCtrl in the sametime,use default setting:only enable Backlit
+XCAM VERBOSE %s:%d: %s:overexp: en:%d HLth:%f LL:%f MaxWeight=%f
+XCAM VERBOSE %s:%d: %s:backlight: en:%d MeasArea:%d OELowth:%f
+XCAM VERBOSE %s:%d: HdrAeCtrl:LongfrmMode=%d,SfmMinLine=%d,LrmExpTh=%f
+XCAM VERBOSE %s:%d: HdrAeCtrl:L2MRatioMax[0~6]=%f %f %f %f %f %f
+XCAM VERBOSE %s:%d: HdrAeCtrl:M2SRatioMax[0~6]=%f %f %f %f %f %f
+XCAM WARNING %s:%d: ExpEffectNum > MAX_AEC_EFFECT_FNUM
+XCAM WARNING %s:%d: dcgCtrl:cannot enable gainCtrl & envCtrl in the sametime,use gainCtrl
+XCAM WARNING %s:%d: dcgCtrl:no enable gainCtrl or envCtrl, use initial dcgmode
+XCAM VERBOSE %s:%d: SysCtrl-dcg:support_en=%d,optype=%d,dcg_mode=[%d,%d,%d],dcg_ratio=%f,gainCtrl_en=%d,lch2hcg_gainth=%f
+XCAM VERBOSE %s:%d: SysCtrl-dcg:support_en=%d,optype=%d,dcg_mode=[%d],dcg_ratio=%f,gainCtrl_en=%d,lch2hcg_gainth=%f
+XCAM WARNING %s:%d: %s: invalid HistStatsMode(%d) change to HistStatsMode(%d)
+XCAM WARNING %s:%d: %s: invalid RawStatsMode(%d) change to RawStatsMode(%d)
+XCAM WARNING %s:%d: %s: invalid YRangeMode(%d) change to YRangeMode(%d)
+XCAM VERBOSE %s:%d: %s: aec use api(15x15) GridWeights
+XCAM ERROR %s:%d: %s: wrong day gridweight num!!
+XCAM ERROR %s:%d: %s: wrong night gridweight num!!
+XCAM VERBOSE %s:%d: %s: aec use iq xml GridWeights
+XCAM VERBOSE %s:%d: %s:after GridWeights %2d %2d %2d %2d %2d %2d %2d %2d %2d %2d %2d %2d %2d %2d %2d
+XCAM VERBOSE %s:%d: %s:after HdrGridWeights[1] %2d %2d %2d %2d %2d %2d %2d %2d %2d %2d %2d %2d %2d %2d %2d
+XCAM INFO %s:%d: %s:PixelClockFreqMHZ: %f
+XCAM INFO %s:%d: %s:PixelPeriodsPerLine: %f   vts:%f
+XCAM INFO %s:%d: %s: InitialFps = %f
+XCAM WARNING %s:%d: %s: ApiSetFps(%f) > InitialFps (%f),no support
+XCAM INFO %s:%d: %s: ApiSetFps = %f, new vts=%f 
+XCAM WARNING %s:%d: %s: Invalid flicker period; defaulting to AEC_FLICKER_FREQUENCY_50HZ
+XCAM VERBOSE %s:%d: AntiFlicker:enable=%d,Freq=%d,Mode=%d,EcmTflicker=%f
+XCAM VERBOSE %s:%d: LinAeRoute time: %f,gain: %f,piris:%d
+XCAM VERBOSE %s:%d: DySetpoint time: %f,setpoint:%f
+XCAM ERROR %s:%d: pAecCtx->pCurDySetpoint = NULL
+XCAM VERBOSE %s:%d: use default LinAe Route!
+XCAM VERBOSE %s:%d: use default HdrAe Route!
+XCAM WARNING %s:%d: Warning: LinAeRange.ExpTimeRange value is zero, cannot be effective!
+XCAM WARNING %s:%d: Warning: HdrAeRange.ExpTimeRange[%d] value is zero, cannot be effective!
+XCAM ERROR %s:%d: Error: LinAe MaxTime(%f) < MinTime(%f),limit MinTime = MaxTime
+XCAM ERROR %s:%d: Error: LinAe MaxTime(%f) < MinTime(%f),limit MaxTime = MinTime
+XCAM ERROR %s:%d: Error: HdrAe MaxTime[%d]=%f < MinTime[%d]=%f,limit MinTime = MaxTime
+XCAM ERROR %s:%d: Error: HdrAe MaxTime[%d]=%f < MinTime[%d]=%f,limit MaxTime = MinTime
+XCAM WARNING %s:%d: Warning: LinAeRange.GainRange value is zero, cannot be effective!
+XCAM WARNING %s:%d: Warning: LinAeRange.IspDGainRange value is zero, cannot be effective!
+XCAM WARNING %s:%d: Warning: HdrAeRange.GainRange[%d] value is zero, cannot be effective!
+XCAM WARNING %s:%d: Warning: HdrAeRange.IspDGainRange[%d] value is zero, cannot be effective!
+XCAM WARNING %s:%d: wrong value with CISAgainRange, Range value should not be zero!
+XCAM WARNING %s:%d: wrong value with CISIspDgainRange, Range value should not be zero!
+XCAM VERBOSE %s:%d: EcmGainDot: %f-%f-%f-%f-%f-%f
+XCAM VERBOSE %s:%d: EcmTimeDot: %f-%f-%f-%f-%f-%f
+XCAM VERBOSE %s:%d: EcmGainDot[%d]: %f-%f-%f-%f-%f-%f
+XCAM VERBOSE %s:%d: EcmTimeDot[%d]: %f-%f-%f-%f-%f-%f
+XCAM VERBOSE %s:%d: Linear AE: use IQ Initial time
+XCAM VERBOSE %s:%d: Linear AE: Initial time:%f,gain:%f,ispDgain:%f,PirisGain:%d,DcPwmDuty=%d
+XCAM VERBOSE %s:%d: Hdr AE: use IQ Initial time
+XCAM VERBOSE %s:%d: Hdr AE: Initial time[%d]:%f,gain[%d]:%f,ispDgain[%d]:%f,PirisGain:%d
+XCAM VERBOSE %s:%d: Manual LinExpValue: TimeEn=%d,GainEn=%d,IspDgainEn=%d,irisEn=%d,gain=%f,time=%f,piris=%d
+XCAM VERBOSE %s:%d: Manual HdrExpValue: TimeEn=%d,GainEn=%d,IspDgainEn=%d,irisEn=%d
+XCAM VERBOSE %s:%d: Manual HdrExpValue: Lgain=%f,Ltime=%f,Mgain=%f,Mtime=%f,Sgain=%f,Stime=%f
+XCAM ERROR %s:%d: Something wrong in ManualAE config:(%d)
+XCAM VERBOSE %s:%d: MeState=0x%04x
+XCAM ERROR %s:%d: NOTE: Hdr exptime exceeds fps limit,the value would be corrected !!
+XCAM ERROR %s:%d: MinExposure > MaxExposure,something wrong with initial config!
+XCAM VERBOSE %s:%d: MaxTime:%f,MinTime:%f,MaxGain:%f,MinGain:%f
+XCAM ERROR %s:%d: Hdr MinExposure[%d] > MaxExposure[%d],something wrong with initial config!
+XCAM ERROR %s:%d: Hdr MaxExposure[%d] < MaxExposure[%d],something wrong with initial config!
+XCAM ERROR %s:%d: Hdr MinExposure[%d] < MinExposure[%d],something wrong with initial config!
+XCAM VERBOSE %s:%d: LMaxTime:%f,LMinTime:%f,LMaxGain:%f,LMinGain:%f
+XCAM VERBOSE %s:%d: MMaxTime:%f,MMinTime:%f,MMaxGain:%f,MMinGain:%f
+XCAM VERBOSE %s:%d: SMaxTime:%f,SMinTime:%f,SMaxGain:%f,SMinGain:%f
+XCAM LOW1 %s:%d: ===========================%s: (exit)====================
+XCAM LOW1 %s:%d: ag: %2.2f, C1: %2.2f  C0: %2.2f M0: %2.2f, minReg: %2.2f maxReg: %2.2f
+XCAM LOW1 %s:%d: ---------------------time coefficient: %f-%f-%f-%f
+XCAM DEBUG %s:%d: acuuracy of gain is too low:%f to %f, adjust time:%f 
+XCAM DEBUG %s:%d: acuuracy of time is too low:%f to %f, adjust gain:%f 
+XCAM LOW1 %s:%d: %s: regtime(%d)  regGain(%d) time = %f,gain = %f exposure:%f
+XCAM LOW1 %s:%d: time coefficient: %f-%f-%f-%f
+XCAM DEBUG %s:%d: Warning,Integration-time values not satisfy with DCG Mode,corrected
+XCAM LOW1 %s:%d: Damp%d:lgain=%f,ltime=%f,mgain=%f,mtime=%f,sgain=%f,stime=%f
+XCAM VERBOSE %s:%d: MaxEnvLux=%f,num=%d,MinEnvLux=%f,num=%d
+XCAM VERBOSE %s:%d: GlobalEnvLux=%f
+XCAM VERBOSE %s:%d: %s:BlockEnvLux %2d %2d %2d %2d %2d %2d %2d %2d %2d %2d %2d %2d %2d %2d %2d
+XCAM DEBUG %s:%d: maybe switch to EcmTflicker=%f
+XCAM DEBUG %s:%d: keep EcmTflicker=%f no change
+XCAM DEBUG %s:%d: normal,freq=%f,no change
+XCAM DEBUG %s:%d: maybe another freq=%f,nochange
+XCAM DEBUG %s:%d: maybe fixed flicker,no change
+XCAM DEBUG %s:%d: may be freq is not 50 HZ nor 60HZ,no change
+XCAM DEBUG %s:%d: maybe exist fixed flicker,no change
+XCAM VERBOSE %s:%d: EnvLv=%f,SMeanLuma=%f,MMeanLuma=%f,LMeanLuma=%f,DR=%f,NormalIndex=%d
+XCAM VERBOSE %s:%d: Prepare: Framenum=%d Cur gain=%f,time=%f,Meanluma=%f,IsConverged=%d
+XCAM VERBOSE %s:%d: EnvLv:%f,MeanLuma=%f,DarkLuma=%f,DR=%f,NormalIndex=%d
+XCAM DEBUG %s:%d: ================================= Linear-AE (enter)===============================
+XCAM DEBUG %s:%d: ae_stat == NULL
+XCAM DEBUG %s:%d: exp_info == NULL
+XCAM DEBUG %s:%d: ================================= (exit)===============================
+XCAM DEBUG %s:%d: >>> Framenum=%d Cur gain=%f,time=%f,pirisGain=%d,RawMeanluma=%f,YuvMeanluma=%f,IsConverged=%d
+XCAM DEBUG %s:%d: LinearMe:gain=%f,reggain=%d,time=%f,regtime=%d
+XCAM DEBUG %s:%d: calc result:SetPoint=%f,gain=%f,time=%f,piris=%d,reggain=%d,regtime=%d
+XCAM DEBUG %s:%d: ================================= HDR-AE (enter)===============================
+XCAM DEBUG %s:%d: exp_info <0.0f
+XCAM DEBUG %s:%d: %s: SMeanLuma=%f, MMeanLuma=%f,LMeanLuma=%f,TmoMeanluma=%f,Isconverged=%d,Longfrm=%d
+XCAM DEBUG %s:%d: >>> Framenum=%d Cur Piris=%d, Sgain=%f,Stime=%f,mgain=%f,mtime=%f,lgain=%f,ltime=%f
+XCAM DEBUG %s:%d: HdrMe:sgain=%f,stime=%f,mgain=%f,mtime=%f,lgain=%f,ltime=%f
+XCAM DEBUG %s:%d: HdrMe:reg-sgain=%d,reg-stime=%d,reg-mgain=%d,reg-mtime=%d,reg-lgain=%d,reg-ltime=%d
+XCAM DEBUG %s:%d: calc result:piris=%d,sgain=%f,stime=%f,mgain=%f,mtime=%f,lgain=%f,ltime=%f
+XCAM LOW1 %s:%d: %s:(exit)
+XCAM DEBUG %s:%d: ========================AIris Run(enter)========================
+XCAM VERBOSE %s:%d: -------luma stable_cnt %d
+XCAM VERBOSE %s:%d: -------luma converged_cnt %d
+XCAM DEBUG %s:%d: AIris converged End,stay at holdvalue
+XCAM DEBUG %s:%d: AIris Iris is Max,stay at maxvalue
+XCAM DEBUG %s:%d: AIris Bright or Converged to Dark,stay at holdvalue!
+XCAM DEBUG %s:%d: AIris Dark or Converged to Bright,stay at holdvalue!
+XCAM DEBUG %s:%d: AIris SetPoint=%f,CurPoint=%f,LastPoint=%f
+XCAM DEBUG %s:%d: AIris i_data=%f,p_data=%f,d_data=%f,du=%f,u=%d,ctrl=%d
+XCAM DEBUG %s:%d: ========================AIris Run(exit)=========================
+XCAM DEBUG %s:%d: ========================AIris Set Max(enter)========================
+XCAM DEBUG %s:%d: ========================AIris Set Max(exit)========================
+XCAM VERBOSE %s:%d: %s:(check)MeanLuma=%f,LowLightLuma=%f,L2M_ExpRatio=%f,M2S_ExpRatio=%f
+XCAM VERBOSE %s:%d: %s: RegGain[%d]=%d,RegTime[%d]=%d
+XCAM VERBOSE %s:%d: %s: gain=%f,RegGain=%d,time=%f,RegTime=%d
+XCAM VERBOSE %s:%d: input wrong FrameIndex
+XCAM VERBOSE %s:%d: %s:FrameIndex:%d, In/Split-Exposure: %f/%f (Split-Gain/-IntTime/-PirisGain: %f/%f/%d)
+XCAM ERROR %s:%d: Something wrong with the ManualEn params!
+XCAM VERBOSE %s:%d: %s: (enter) OldAlpha: %f
+XCAM VERBOSE %s:%d: %s: In/Split-Exposure: %f/%f (Split-Gain/-IntTime/-PirisGain: %f/%f/%d) abs_diff(%f)
+XCAM VERBOSE %s:%d: %s: (enter) OldAlpha: %f  Alpha: %f
+XCAM LOW1 %s:%d: %s: inparams.bins[%d~%d] = %lu, %lu, %lu, %lu, %lu, %lu, %lu, %lu, %lu, %lu, %lu, %lu, %lu, %lu, %lu, %lu
+XCAM VERBOSE %s:%d: %s: dLuma = %f
+XCAM VERBOSE %s:%d: ClmHistogramSize=%ld
+XCAM WARNING %s:%d: %s: SumHistogram == 0, avoid division by zero, correcting to 1
+XCAM WARNING %s:%d: %s: MeanHistogram == 0, avoid division by zero, correcting to 1
+XCAM VERBOSE %s:%d: %s: SumHistogram=%lu, MeanHistogram=%f
+XCAM VERBOSE %s:%d: %s: TargetValue = %f, MeanLuma = %f, MeanHistogram = %f, MeanRatio: %f
+XCAM ERROR %s:%d: %s: ClmHistogramX[%d] == 0 (%f), avoid division by zero
+XCAM LOW1 %s:%d: --- MeanHistogram: %f,input exp=%f
+XCAM LOW1 %s:%d: --- NewExposure: %f
+XCAM VERBOSE %s:%d: %s: Exposure too small,Leaving iteration loop
+XCAM VERBOSE %s:%d: %s: Exposure too large,Leaving iteration loop
+XCAM VERBOSE %s:%d: %s: To much iterations (%lu). Leaving iteration loop
+XCAM VERBOSE %s:%d: %s: NewExposure: %f dL = %f
+XCAM ERROR %s:%d: %s: pointer NUll
+XCAM ERROR %s:%d: %s: pAecCtx = NUll
+XCAM ERROR %s:%d: %s %d: wrong with seed_xy=[%d,%d],gridnum=%d,colnum=%d
+XCAM VERBOSE %s:%d: %s:LumaMark %2d %2d %2d %2d %2d %2d %2d %2d %2d %2d %2d %2d %2d %2d %2d
+XCAM LOW1 %s:%d: %s:Seed HighLightLuma=%f,SeedNeibor HighLightLuma=%f
+XCAM VERBOSE %s:%d: %s:HighLightLuma=%f,HighLightROIPdf=%f
+XCAM VERBOSE %s:%d: %s:OverExpLuma=%f,OverExpROIPdf=%f
+XCAM VERBOSE %s:%d: %s: GlobalMean=%f,NonOverExpLuma=%f,FinalNonOverExpLuma=%f,NonOverExpPdf=%f
+XCAM VERBOSE %s:%d: %s:LowLightLuma=%f,FinalLowLightLuma=%f,LowLightNum=%d,Pdf_fac=%f,Contrast=%f,Lv_fac=%f
+XCAM VERBOSE %s:%d: New Kp=%f,Ki=%f,Kd=%f
+XCAM LOW1 %s:%d: ENTER %s
+XCAM ERROR %s:%d: wrong Day AecWeight num:%d
+XCAM ERROR %s:%d: wrong Night AecWeight num:%d
+XCAM LOW1 %s:%d: EXIT %s
+XCAM ERROR %s:%d: Error: LinAeRoute Nodes > AEC_ROUTE_MAX_NODES !!
+XCAM ERROR %s:%d: Error: cell name is changed!!
+XCAM ERROR %s:%d: Error: HdrAeRoute Nodes > AEC_ROUTE_MAX_NODES !!
+XCAM LOW1 %s:%d: %s enter
+XCAM INFO %s:%d: %s awb_gain_algo (%f,%f,%f,%f) 
+XCAM LOW1 %s:%d: %s exit 
+XCAM LOW1 %s:%d: %s enter 
+XCAM WARNING %s:%d: %s fail to get aec res, use default value
+XCAM LOW1 %s:%d: %s exit
+UpdateAwbCalibPara
+CalibDbGetAwbResIdxByName
+XCAM VERBOSE %s:%d: %s, cfgGroupIllIndxCurrent %d IllIndxSetCurrent:%s timeSign:%s
+XCAM INFO %s:%d: ******************************%dth frame************************* 
+XCAM DEBUG %s:%d: awbConverged(%d) frameChoose(%d) ,LVValue(%d),runInterval(%d),tolerance(%f),LVLevel(%d),LVType(%d)
+XCAM DEBUG %s:%d: WPNo(%d,%d,%d),effective xy type (%d),effective uv type(%d,%d),vaild wp number(%d),WPmode(%d),WPType(%d)
+XCAM VERBOSE %s:%d: current gain (rggb):(%f,%f,%f,%f) spaGainEqu2Tem(%d) clip(%d) df(%1.2f)
+XCAM VERBOSE %s:%d: wbGainSgc (rggb):(%f,%f,%f,%f) ,wbWeightSgc(%f),sgcGainEqu2Tem(%d)
+XCAM VERBOSE %s:%d: wbGainSpa (rggb):(%f,%f,%f,%f) ,wbWeightSpa(%f)
+XCAM VERBOSE %s:%d: wbGainTepType1 (rggb):(%f,%f,%f,%f)
+XCAM VERBOSE %s:%d: wbGainType1 (rggb):(%f,%f,%f,%f)
+XCAM DEBUG %s:%d: wbGainType3(rggb):(%f,%f,%f,%f),wbWeightType3(%f)
+XCAM VERBOSE %s:%d: chromatic adaptation gain (rggb):(%f,%f,%f,%f),strength(%f)
+XCAM VERBOSE %s:%d: the light source slecetion to 3dyuv is :[%d,%d,%d,%d]
+XCAM VERBOSE %s:%d: current light source : %d  (%d,%d,%d)
+XCAM VERBOSE %s:%d: current color : %d
+XCAM VERBOSE %s:%d:  %s:
+XCAM VERBOSE %s:%d:      type%d: gain (rg,bg):(%f,%f) WPNo(%d)
+XCAM VERBOSE %s:%d: blockresult[15][15]:
+XCAM VERBOSE %s:%d: 
+XCAM VERBOSE %s:%d: %d (%.7f,%.7f,%.7f), 
+XCAM VERBOSE %s:%d: current light source : %s  (%d,%d,%d)
+XCAM VERBOSE %s:%d: %s:
+XCAM VERBOSE %s:%d:      stategy_result.gain (rggb):(%f,%f,%f,%f) 
+XCAM VERBOSE %s:%d:      prob_total(%f),prob_dis(%f),prob_LV(%f),prob_WPNO(%f)
+XCAM VERBOSE %s:%d:      spatial gain(rggb):(%f,%f,%f,%f),statistics gain weigth(%f)
+XCAM VERBOSE %s:%d:      type%d: gain (rg,bg):(%f,%f) WPNo(%d)  Weight(%f)
+XCAM VERBOSE %s:%d: wbGainTepTp3 (rggb):(%f,%f,%f,%f)  wbGainTepTp3 (%f)
+XCAM VERBOSE %s:%d: excWpRangeResult[%d]:   gain (rg,bg):(%f,%f) WPNo(%d),mode(%d)
+XCAM LOW1 %s:%d: write blk info to ./tmp/awb_log_blk_info.txt;
+XCAM LOW1 %s:%d: fail to write blk info to ./tmp/awb_log_blk_info.txt;
+XCAM LOW1 %s:%d: write blk info to %s
+XCAM LOW1 %s:%d: fail to write blk info to %s
+ %s:
+current light source : %s  (%d,%d,%d)
+XCAM INFO %s:%d: %s: (enter)  
+XCAM INFO %s:%d: %s: config_calib %d  para->prepare_type = %x
+XCAM ERROR %s:%d: %s blkMeasureMode:%d is invaild!!!
+XCAM ERROR %s:%d: %s dsMode:%d is invaild!!!
+XCAM ERROR %s:%d: %s measeureWindow.mode:%d is invaild!!!
+XCAM INFO %s:%d: %s: (exit)  
+XCAM ERROR %s:%d: %s  Don't support multiwindowMode(%d) in %s!
+XCAM WARNING %s:%d: Discard the measure result , since time sign (%s)for %dth group is different with 0th group (%s) 
+XCAM VERBOSE %s:%d: time sign for %dth gruoup is %s
+XCAM DEBUG %s:%d: lightWpResVaLidIll: %s
+XCAM WARNING %s:%d: Discard the measure result, since the result of %d th light source is lost 
+XCAM DEBUG %s:%d: %s,lightWpResVaLid %d,EffeGroupIllIndxCurrent %d IllIndxSetCurrent:%s timeSin:%s
+XCAM INFO %s:%d: ENTER %s  
+XCAM ERROR %s:%d: can't find %s in all awb resolution
+XCAM ERROR %s:%d: measeureWindow.mode is invaild!!!
+XCAM DEBUG %s:%d: adjust windowSet 
+XCAM ERROR %s:%d: windowSet[%d,%d,%d,%d]is invaild!!!
+XCAM DEBUG %s:%d: windowSet[%d,%d,%d,%d]
+XCAM INFO %s:%d:  ENTER: %s 
+XCAM ERROR %s:%d: Fail to get awb_cfg_effect_v200!!!
+XCAM ERROR %s:%d: fail to write  ./tmp/config_rkisp_effect_s_%d.c, awb_cfg_effect_v200 is NULL
+XCAM DEBUG %s:%d: %s: byPass: %d  mode( 0-manual 1-auto):%d  
+XCAM ERROR %s:%d: Wrong WB mode : %d!!!
+XCAM INFO %s:%d: remosaic_cfg.enable %d
+XCAM DEBUG %s:%d:  %s byPass : %d, wb mode( 0-manual 1-auto): %d
+XCAM DEBUG %s:%d: wbGainAdjustEn %d, cct_lut_cfg_num %d
+XCAM DEBUG %s:%d: cct_lut_cfg[%d] cri_grid_num %d, ct_grid_num %d lv %f 
+XCAM DEBUG %s:%d: cct_lut_cfg[%d].cri_range %f %f
+XCAM DEBUG %s:%d: cct_lut_cfg[%d].ct_range %f %f
+XCAM VERBOSE %s:%d: cct[%d,%d]=%f  cri%d,%d]=%f
+XCAM DEBUG %s:%d: wbGainClipEn %d,wbGainDaylightClipEn %d, outdoor_cct_min %f
+XCAM VERBOSE %s:%d: cct_clip_cfg.cct[%d] = %f
+XCAM VERBOSE %s:%d: cct_clip_cfg.cri_bound_low[%d] = %f
+XCAM VERBOSE %s:%d: cct_clip_cfg.cri_bound_up[%d] = %f
+XCAM DEBUG %s:%d: hdrFrameChooseMode(0-fixed 1-auto) : %d  hdrFrameChoose : %d
+XCAM DEBUG %s:%d: measeureWindow mode(0-auto 1-fixed) %d 
+XCAM VERBOSE %s:%d: window[%d] %s  [%d,%d,%d,%d]
+XCAM DEBUG %s:%d: manual mode(1-cct 2-wbgain 3-scene):%d
+XCAM DEBUG %s:%d: manual CCT:%f,CRI:%f
+XCAM DEBUG %s:%d: manual gain(rggb):%f,%f,%f,%f
+XCAM DEBUG %s:%d: manual scene
+CalibDbGetAwbLsIdxByName
+XCAM WARNING %s:%d: %s It's wrong to cal xyType2Weight(%f) in %s,but it will be ignored.
+XCAM DEBUG %s:%d: varianceLuma %f big_type_count %d mid_type_count %d extra_light_count %d
+XCAM INFO %s:%d: varianceLuma %f big_type_count %d mid_type_count %d extra_light_count %d
+XCAM INFO %s:%d: xy_area_type %d WPTotalNUM %d extraLightResult.WpNo %d
+XCAM DEBUG %s:%d: %s,updateFlag : %d
+XCAM DEBUG %s:%d: %s,awb gain tolerance : %f,not upadte current wbgain %f,%f,%f,%f, use last wbgain %f,%f,%f,%f
+XCAM DEBUG %s:%d: %s,awbConverged : %d in unSmoothwbGain
+XCAM DEBUG %s:%d: %s,awbConverged : %d final
+XCAM DEBUG %s:%d: Global  
+XCAM DEBUG %s:%d: ill:%s  prob: %f
+XCAM ERROR %s:%d: can't find %s in all awb light sources
+XCAM ERROR %s:%d:  stManual scene : %d is invaild !!!
+XCAM ERROR %s:%d: Wrong stManual mode : %d!!!
+XCAM VERBOSE %s:%d: total_pixel_num %d, overExposure_pixel_num %d, ratio %f ratioTh %f IsOverExposure %d
+XCAM ERROR %s:%d: para->working_mode %d is invaild!!!
+XCAM DEBUG %s:%d: %s MeanLuma:%f, analog_gain:%f, integration_time:%f , GlobalEnvLv:%f
+XCAM DEBUG %s:%d: frameChoose %d working_mode :%d
+XCAM ERROR %s:%d: frameChoose %d is invaild!!!
+XCAM VERBOSE %s:%d: befoe scale awb_gain r gr gb b: %f,%f,%f,%f
+XCAM VERBOSE %s:%d: sensor_wb_gain : %f,%f,%f,%f
+XCAM VERBOSE %s:%d: after scale awb_gain r gr gb b: %f,%f,%f,%f
+XCAM ERROR %s:%d: can't find %s in all StategyPara light sources
+XCAM ERROR %s:%d: %s multiwindowMode:%d is invaild!!!
+XCAM INFO %s:%d: awbTimeShare enable %d,useFramesNum %d timeSigned %s xyAndUvRangeNumMax %d
+XCAM DEBUG %s:%d: awbTimeShare.groupIllIndxSet[%d]= %s
+XCAM DEBUG %s:%d: %s awbTimeShare timeSign %s, groupIllIndxSet[%d]] = %s, yuvEnable %s
+XCAM VERBOSE %s:%d: gain:%f, %f, %f, %f
+XCAM VERBOSE %s:%d:  gainVar[%d] %f convergedVarTh %f
+XCAM LOW1 %s:%d: 
+XCAM LOW1 %s:%d: %s  WPMODE is (%d)!
+XCAM ERROR %s:%d: %s ct_grid_num =0 is invalid
+XCAM ERROR %s:%d: %s cri_grid_num =0 is invalid
+XCAM WARNING %s:%d: %s CCT is out of range, abandon to adjust wb gain
+XCAM VERBOSE %s:%d: %s ori: (%f,%f) ,out: (%f,%f)
+XCAM ERROR %s:%d: offset.rgain should be smaller than %f
+XCAM ERROR %s:%d: offset.gbgain should be smaller than %f
+XCAM ERROR %s:%d: offset.grgain should be smaller than %f
+XCAM ERROR %s:%d: offset.bgain should be smaller than %f
+XCAM VERBOSE %s:%d: %s in wbgain: (%f,%f,%f,%f)
+XCAM VERBOSE %s:%d: %s out wbgain: (%f,%f,%f,%f)
+XCAM DEBUG %s:%d: CCT:%f,CCRI:%f
+XCAM DEBUG %s:%d: %s, gain:%f,%f,%f,%f
+XCAM INFO %s:%d: %s wb gain clip, because curent cct(%f)< upper bound outdoor_cct_min(%f) 
+XCAM INFO %s:%d: %s wb gain clip, because curent cct(%f)< cct_min(%f) 
+XCAM INFO %s:%d: %s wb gain clip, because curent cct(%f)> cct_max(%f) 
+XCAM INFO %s:%d: %s wb gain clip, because curent cri(%f)< upper bound cri(%f) 
+XCAM INFO %s:%d: %s wb gain clip, because curent cri(%f)> lower bound cri(%f) 
+XCAM WARNING %s:%d: Unknown illName %s,fail to GetCCTbyName
+XCAM WARNING %s:%d: %s,chromatic adatptation gain adjust bypass!!! since error in illuminant_index_estimation_ccm
+zoom_module_calib
+XCAM ERROR %s:%d: %s: malloc failed, zoompi_searchrange %d, focuspi_searchrange %d
+XCAM DEBUG %s:%d: %s: i %d, zoom %d, focus %d
+XCAM DEBUG %s:%d: %s, %d: focuspos_init_real %d, zoompos_init_real %d, focuspos_init_ideal %d, zoompos_init_ideal %d, refCurveIdx %d
+XCAM DEBUG %s:%d: %s, %d: focus_search_start %d, focus_search_end %d, zoom_search_start %d, zoom_search_end %d
+XCAM LOW1 %s:%d: %s, %d: i %d, j %d, sq %f
+XCAM DEBUG %s:%d: %s, %d: min_sq_foc %d, min_sq_zoom %d, min_sq %f, ZoomTestNum %d
+XCAM ERROR %s:%d: %s, %d: sq %f, real %d, idea %d, zoom_pos %d, zoom_idx %d, diff_val %d
+XCAM ERROR %s:%d: %s: zoom_idx %d, min_sq_zoom %d
+XCAM ERROR %s:%d: %s: eavg %f, emax %f, eavg_t %f, emax_t %f
+XCAM ERROR %s:%d: %s: copy diff value from %d to %d!
+XCAM ERROR %s:%d: %s: eavg %f, emax %f, eavg_t %f, emax_t %f, min_sq_foc %d, min_sq_zoom %d
+/data/.zoom_calib.data
+XCAM ERROR %s:%d: %s: min_sq_foc %d, min_sq_zoom %d
+XCAM ERROR %s:%d: %s: i %d, diff_val %d, zoom_calib_pos %d, focus_calib_pos %d
+XCAM ERROR %s:%d: %s: Initializaion of AF failed (%d)
+XCAM ERROR %s:%d: %s: Can't stop AF (%d)
+XCAM ERROR %s:%d: %s: Can't release AF (%d)
+XCAM ERROR %s:%d: %s: AfReConfigure failure! result %d
+XCAM DEBUG %s:%d: %s: curmode %d, newmode %d
+XCAM DEBUG %s:%d: %s: af start!
+XCAM ERROR %s:%d: af start failure!
+XCAM DEBUG %s:%d: %s: af one shot!
+XCAM ERROR %s:%d: af one shot failure!
+XCAM DEBUG %s:%d: %s: af stop!
+XCAM ERROR %s:%d: af stop failure!
+XCAM ERROR %s:%d: %s: Configuration of AF failed (%d)
+XCAM ERROR %s:%d: %s: AfReset failure! result %d
+XCAM DEBUG %s:%d: zoom_index %d, output_focuspos %d, focus_infpos %d, focus_macropos %d, last_pos %d, last_focus_infpos %d, last_focus_macropos %d
+XCAM DEBUG %s:%d: safe list pop timeout
+XCAM ERROR %s:%d: AfHelperThd got empty attrib, stop thread
+XCAM ERROR %s:%d: AfHelperThd stop
+XCAM ERROR %s:%d: %s: FocusStart %d, FocusEnd %d, zoom_idx %d, range %d, %d, FocusSearchPlusRange %d
+XCAM DEBUG %s:%d: %s: Stage %d, FocusStart %d, FocusEnd %d
+XCAM ERROR %s:%d: ZoomSearchIdx %d/%d, cur_zoom_pos %d, MaxShpPos %d
+XCAM ERROR %s:%d: %s: i %d, ZoomPosRec %d, MaxShpPos %d, MaxShp %f
+XCAM DEBUG %s:%d: %s, %d, sof_time %d, focusend_time %d, LastFocusEndTime %d
+XCAM ERROR %s:%d: %s: zoom_pos %d, focus_pos %d, sharpness %f, MaxShpPos %d, MaxShp %f, Stage %d, Stage0Step %d, dsharpness %f
+XCAM DEBUG %s:%d: %s: curFocusPos %d, LastFocusEndTime %d
+XCAM INFO %s:%d: reset zoom focus
+XCAM DEBUG %s:%d: %s: handle frame start, id %d
+XCAM DEBUG %s:%d: %s; sof_time %ld, zoomend_time %ld, zoomCode %d, last_real_zoom_pos %d
+XCAM DEBUG %s:%d: %s: focus_move_willend %d, zoom_stable %d, vcm_stable %d
+XCAM DEBUG %s:%d: %s: roia: %lld - %u roib: %u - %u vcm_stable: %u, %ld, %ld, %ld, %f, sof_tim %ld, zoom_stable %u, ae_stable %d
+XCAM ERROR %s:%d: %s AfProcessFrame: %d
+XCAM ERROR %s:%d: zoom table is not right, tbl_len %d, focuspos_len %d
+XCAM DEBUG %s:%d: zoom_cnt %d maybe too large, last_zoom_index %d, cur_zoom_index %d
+XCAM DEBUG %s:%d: last_zoom_index %d, cur_zoom_index %d, last_focus_pos %d, cur_focus_pos %d, zoom_cnt %d
+XCAM DEBUG %s:%d: %s: iso = %d
+*** ASSERT: In File %s, line %d ***
+XCAM LOW1 %s:%d: INFO (enter)
+XCAM ERROR %s:%d: %s: Can't allocate AF context
+XCAM DEBUG %s:%d: pAfCtx->AfType: caf:%d laser:%d, pdaf: %d
+XCAM DEBUG %s:%d: pAfCtx->rawaf_sel:%d gamma_flt_en:%d gaus_flt_en:%d
+XCAM DEBUG %s:%d: %s: config MinFocus: %d, MaxFocus: %d, FixedFocus: %d, pAfCtx->AfMode: %d
+XCAM DEBUG %s:%d: %s: distMap[%d]: %1.3f, %d
+XCAM DEBUG %s:%d: %s: pAfCtx->MaxFocus: %d, pAfCtx->AfMode: %d
+XCAM DEBUG %s:%d: %s: focus-range: %d..%d current: %d
+XCAM DEBUG %s:%d: %s: (enter)
+XCAM ERROR %s:%d: %s: pAfCtx is NULL!
+XCAM ERROR %s:%d: %s: pAfCtx->state(%d) is error!
+XCAM DEBUG %s:%d: %s: (exit)
+XCAM DEBUG %s:%d: %s: reconfig MinFocus: %d, MaxFocus: %d, FixedFocus: %d, pAfCtx->AfMode: %d, SemiAutoFocusEnd %d
+XCAM DEBUG %s:%d: %s: set stat AFM_SEARCH_WINCHG
+XCAM DEBUG %s:%d: %s: pAfCtx->state: %d isn't been stoped!
+XCAM ERROR %s:%d: %s: pAfCtx is null
+XCAM ERROR %s:%d: %s: pMeasResults is null
+XCAM DEBUG %s:%d: %s: pAfCtx->AfType(contrast: %d, laser: %d, pdaf: %d) isn't been support!
+XCAM DEBUG %s:%d: %s: fixed mode detected(NextLensePos: %d, NextZoomIndex: %d), skip AF process!
+XCAM ERROR %s:%d: %s: pAfCtx->pAfSearchFunc is null
+XCAM DEBUG %s:%d: %s: statsInfo.sharpness %f
+XCAM DEBUG %s:%d: %s: Receive cmd: AF_TRACKING
+XCAM DEBUG %s:%d: %s: Receive cmd: AF_STOP
+XCAM DEBUG %s:%d: %s: Receive cmd: AF_SHOTCHK
+XCAM DEBUG %s:%d: %s: pAfCtx->state: %d pAfCtx->AfSearchCtx.State: %d, shot: %d
+XCAM WARNING %s:%d: wrong state %d, set shot to true
+XCAM DEBUG %s:%d: %s: Receive cmd: AF_ONESHOT
+XCAM DEBUG %s:%d: %s: Receive cmd: AF_MANUAL_TRIGER
+XCAM DEBUG %s:%d: %s: pAfCtx->afm_cnt(%d) < pAfCtx->afm_inval(%d),Ignore!
+XCAM DEBUG %s:%d: %s: NextZoomIndex %d, NewZoomIndex %d, ZoomMove %d, EndZoomChg %d
+XCAM DEBUG %s:%d: %s: Lens is moving, Sharpness is invalidate!
+XCAM DEBUG %s:%d: %s: zoom is running, wait for end!
+XCAM DEBUG %s:%d: %s: ae is not stable, wait for stable!
+XCAM DEBUG %s:%d: %s: lowPassFv is not valid, wait for next frame!
+XCAM DEBUG %s:%d: %s: ZoomMove %d, EndZoomChg %d
+XCAM DEBUG %s:%d: %s: luma is stable, trigger again
+XCAM DEBUG %s:%d: %s: luma is not stable, pause search, reTrigNumOneSearch %d
+XCAM DEBUG %s:%d: %s: init Sharpness to %f, LensePos %d
+XCAM DEBUG %s:%d: %s: slow move to TargetPos(%d), current Pos %d
+XCAM INFO %s:%d: %s: fix Sharpness to %f, LensePos %d
+XCAM DEBUG %s:%d: %s: OneShot finished, sharpness(%f/%f, %f)
+XCAM ERROR %s:%d: WARNNING: %s result is RET_PENDING, pAfCtx->LensePos: %d, Search list is:
+XCAM ERROR %s:%d:   ->index: %d  pos: %d  sharpness: %f
+XCAM ERROR %s:%d:     index: %d  pos: %d  sharpness: %f
+XCAM ERROR %s:%d: %s: pOutputResults is null
+XCAM ERROR %s:%d: %s: AF module is invalidate, Af state: %d
+XCAM ERROR %s:%d: %s: AF module is invalidate, Af state: %d, AfSearch state: %d
+XCAM DEBUG %s:%d: %s: send_zoom_reback %d, send_focus_reback %d, end_zoom_chg %d
+XCAM ERROR %s:%d: %s: osQueueTimedRead time out!!!
+XCAM ERROR %s:%d: %s: pAfCtx is NULL
+XCAM ERROR %s:%d: %s: invalid focus search function
+XCAM ERROR %s:%d: %s: calloc AfSeachPos_t failed!
+XCAM DEBUG %s:%d: %s: nPos->index: %d  pos: %d 
+XCAM DEBUG %s:%d: %s: curpos: %d  maxpos:: %d 
+XCAM DEBUG %s:%d: Search list is:
+XCAM DEBUG %s:%d:   ->index: %d  pos: %d  stage: %d
+XCAM DEBUG %s:%d:     index: %d  pos: %d  stage: %d
+XCAM DEBUG %s:%d: %s: current iso = %d, again %f, dgain %f, integration_time: %f!
+XCAM DEBUG %s:%d: %s: ValidMaxMinRatio %f, ValidValueThers %f
+XCAM DEBUG %s:%d: %s
+XCAM DEBUG %s:%d: %2d: %s
+XCAM DEBUG %s:%d: %s: mmaxI %d, mmaxJ %d, mmaxShp: %f, mmaxShpPos: %d
+XCAM DEBUG %s:%d: %s: range %d, maxI %d, maxJ %d, maxShp: %f, maxShpPos: %d
+XCAM DEBUG %s:%d: %s: maxI %d, maxJ %d, maxShp: %f, maxShpPos: %d
+XCAM DEBUG %s:%d: fix to maxI %d, maxJ %d, maxShp %f
+XCAM INFO %s:%d: --> SearchIdx %d route(search %s) is:
+XCAM INFO %s:%d:     stage: %1d, index: %2d, pos: %3d, sharpness: %12f, dSharpness: %12f, abs_dSharpness: %12f, skip: %1d, quick_focus: %1d
+XCAM INFO %s:%d:     MaxSharpnessPos %2d, MaxSharpness: %12f, MinSharpness: %12f
+XCAM LOW1 %s:%d: %s: this is soc af
+XCAM DEBUG %s:%d: %s: zoom_idx %d, stop_step %d
+XCAM DEBUG %s:%d: 
+XCAM DEBUG %s:%d: %s: max_luma %d, time %f, gain %f
+XCAM DEBUG %s:%d: %s: max_hl_cnt %f BlockSize4_4 %d, i %d, MaxLowPassHighLhtPercent[i] %f
+XCAM DEBUG %s:%d: %s: is_highlight %d, is_usehigh %d, is_uselow4_4 %d, is_uselow8_8 %d, NewZoomIndex %d, Path.index %d
+XCAM DEBUG %s:%d: %s: j %d, reliable_sum %f, focus_pos %d, max_reliable %f, max_pos %d
+XCAM DEBUG %s:%d: %s: i %d, globalMaxShpRate %f, maxdeta %f
+XCAM DEBUG %s:%d: %s: i %d, MaxLowPassFvPos4_4 %f, maxdeta %f
+XCAM DEBUG %s:%d: %s: i %d, MaxLowPassFvRate8_8 %f, maxdeta %f
+XCAM DEBUG %s:%d: %s: choose_curve %s, choose_index %d, max_reliable %f, max_pos %d
+XCAM DEBUG %s:%d: %s: x: %f, %f, %f, y: %f, %f, %f, max %f, *maxPos %d
+XCAM DEBUG %s:%d: %s: %d, choose_curve %s, choose_index %d, curPos->pos %d, Path.index %d
+XCAM DEBUG %s:%d: %s: %d, fineSeachNum %d, fineSeachStart %d, fineSeachEnd %d
+XCAM DEBUG %s:%d: %s: step1num %d, LensPosEnd1 %d, LensPosBegin1 %d, pAfCtx->AfSearchCtx.Step %d
+XCAM DEBUG %s:%d: %s: (%d)search direction : [(%d->%d)-(%d->%d)], num=%d-[%d-%d]
+XCAM DEBUG %s:%d: %s: 1 nPos->index: %d  pos: %d  curPos: %d 
+XCAM DEBUG %s:%d: %s: 2 nPos->index: %d  pos: %d  curPos: %d
+XCAM DEBUG %s:%d: index: %d    pos: %d  sharpness: %f, MaxSharpness %f
+XCAM DEBUG %s:%d: %s: %d, choose_curve %s, choose_index %d, curPos->pos %d, MaxSharpnessPos %d, pAfCtx->AfSearchCtx.MaxSharpness %f
+XCAM DEBUG %s:%d: AF Seachth-%d(%d->%d) is not necessary, directly to (%d,%f)
+XCAM ERROR %s:%d: %s: nPos calloc failed, AF must be end advance!
+XCAM DEBUG %s:%d: %s: AF SeachPath-%d(%d->%d):
+XCAM DEBUG %s:%d:     nPos->index: %d  pos: %d  sharpness: %f
+XCAM DEBUG %s:%d: %s: (enter AFM_FSSTATE_INIT)
+XCAM DEBUG %s:%d: %s: (AFM_FSSTATE_INIT: %d, %f, %f)
+XCAM DEBUG %s:%d: %s: (exit AFM_FSSTATE_INIT)
+XCAM DEBUG %s:%d: %s: (enter AFM_FSSTATE_SEARCHFOCUS)
+XCAM DEBUG %s:%d: %s: (AFM_FSSTATE_SEARCHFOCUS: %d, %f, %f)
+XCAM DEBUG %s:%d: %s: (found: %d)
+XCAM DEBUG %s:%d: %s: (exit AFM_FSSTATE_SEARCHFOCUS)
+XCAM DEBUG %s:%d: %s: (AFM_FSSTATE_SEARCHFOCUS: %d, min:%d, max:%d, s:%d)
+XCAM ERROR %s:%d: %s: pAfCtx->AfSearchCtx.Path.curPos is NULL
+XCAM DEBUG %s:%d: %s: Pos %2d, integration_time %f, analog_gain %f, digital_gain %f
+XCAM DEBUG %s:%d: %s: (AFM_FSSTATE_SEARCHFOCUS: %d, %f) (%f, %f)
+XCAM DEBUG %s:%d: %s: Now maxsharpness: %f, pos: %d,
+XCAM DEBUG %s:%d: quick founding: %f %f, abs_dSharpness: %f, AfSearchCtx.Path.index %d, AfSearchCtx.Path.FoundMaxSharpness %d
+XCAM DEBUG %s:%d: %s: dSharpness %f, MaxSharpnessPos %d)
+XCAM DEBUG %s:%d: skip nxtPos(index: %d pos: %d sharpness: %f)
+XCAM DEBUG %s:%d: %s: copy sharpness(index: %d to %d pos: %d sharpness: %f)
+XCAM DEBUG %s:%d: %s: nxtPos(index: %d pos: %d sharpness: %f)
+XCAM DEBUG %s:%d: abs_dSharpness: %f, abs_dShp %f, %f, %f
+XCAM DEBUG %s:%d: quick founding: abs_dSharpness: %f, dSharpness: %f, %f, Path.index %d, stage %d, pos %d, quick_found_thers %f
+XCAM DEBUG %s:%d: %s: IsSearchResValid %d
+XCAM INFO %s:%d:  MaxSharpness(%f) < %d, Fix max focus!!!!!!!!
+XCAM INFO %s:%d: %s: Found focus(pos: %d  sharpness: %f, distance: %2.3f %d)!
+XCAM INFO %s:%d:  Sharpness: max:%f < %f min:%f dSharp:%f < 0.3, Fix max focus!!!!!!!!
+XCAM INFO %s:%d: %s: Found focus(pos: %d  sharpness: %f, distance: %2.3f %d), exp(%f, %f)!
+XCAM DEBUG %s:%d: %s: LumaDiffLogIdx %d, luma_diff %f, cur_luma %f, pre_luma %f
+XCAM DEBUG %s:%d: %s: LumaDiffLogIdx %d, stable %d, i %d
+XCAM DEBUG %s:%d: %s: dSharpnessRawIdx %d, curSharpness %f, preSharpness %f, dSharpness %f
+XCAM DEBUG %s:%d: %s: idx: 0x%x
+XCAM DEBUG %s:%d:     dDistRawLog[%d] = %1.3f
+XCAM DEBUG %s:%d: %s: laster distance is stable:
+XCAM DEBUG %s:%d: LensePos: %d, Sharpness: %f %f %f, TrigThers %f, luma_diff %f, LumaTrigThers %f, exp(%f, %f), expDiff %f, ExpTrigThers %f
+XCAM DEBUG %s:%d: Distance: %3.3f %3.3f dist: %3.3f
+XCAM DEBUG %s:%d: LensePos: %d, curSharpness: %f, triggered: %d, sceneChanged %d, dSharpness %f, TrigThers %f, luma_diff %f, LumaTrigThers %f, expDiff %f
+XCAM DEBUG %s:%d: AfRegisterEvtQue success!
+XCAM ERROR %s:%d: %s: (%d)search direction : %d-(%d->%d)
+XCAM DEBUG %s:%d: AF SeachPatch-%d(%d->%d):
+XCAM DEBUG %s:%d: %s: nPos->index: %d  pos: %d  curPos: %d  curSharpness: %f
+XCAM ERROR %s:%d: %s: nPos->index: %d  pos: %d  curPos: %d, isNeedToAddCurrentPos: %d
+XCAM DEBUG %s:%d: %s: (%d)search direction : %d-[(%d->%d)-(%d->%d)], steps: %d, addCurPos: %d, num=%d-[%d-%d]
+XCAM DEBUG %s:%d: %s: 0 nPos->index: %d  pos: %d  curPos: %d, 
+XCAM DEBUG %s:%d: %s: 1 nPos->index: %d  pos: %d  curPos: %d, 
+XCAM DEBUG %s:%d: %s: set refDepthInfo true, id %d, depth %d
+XCAM DEBUG %s:%d: %s: (%d)search direction : %d-[(%d->%d)-(%d->%d)], addCurPos: %d, num=%d-[%d-%d]
+XCAM DEBUG %s:%d: %s: 0 nPos->index: %d  pos: %d  pAfCtx->DepthRefInfo.depth: %d 
+XCAM DEBUG %s:%d: %s: 0 nPos->index: %d  pos: %d  curPos: %d 
+XCAM DEBUG %s:%d: %s: %d, NextZoomIndex %d, curPos %d, focus_infpos %d, focus_macropos %d
+XCAM DEBUG %s:%d: %s: %d, step %d, %d, direction %d, SearchStepNum %d
+XCAM DEBUG %s:%d: %s: %d, LensPosBegin2 %d, Step %d, tmpPos %d, i %d
+XCAM DEBUG %s:%d: %s: (%d)search direction : %d-[(%d->%d)-(%d->%d)], num=%d-[%d-%d]
+XCAM DEBUG %s:%d: %s: 1 nPos->index: %d  pos: %d  curPos: %d  max_pos %d  min_pos %d
+XCAM DEBUG %s:%d: curDist: %3.3f, distMap[%d]:%3.3f  dLensPos: %d, %1.2f (%d -> %d)
+XCAM DEBUG %s:%d: AF laser trig: dLensPos: %d (%d -> %d)
+XCAM DEBUG %s:%d:           nPos->index: %d  pos: %d  curPos: %d  curSharpness: %f
+XCAM ERROR %s:%d: %s: pAfCtx->state: %d is invalidate!
+XCAM ERROR %s:%d: [%s] AF TIME = %lf ms 
+XCAM ERROR %s:%d: %d
+XCAM DEBUG %s:%d: %s: lum: %d, %d sum: %d, sharpness: %f
+XCAM DEBUG %s:%d: %s: lum: %d, sum: %d, sharpness: %f
+XCAM DEBUG %s:%d: %s: sharpness %f, sum %f, weigthtsum %d
+XCAM VERBOSE %s:%d: %s
+XCAM DEBUG %s:%d: %s: SceneDiffEnable %d, SceneDiffThers %f, SceneDiffBlkThers %d, CenterSceneDiffThers %f
+XCAM DEBUG %s:%d: %s: blocks: %3d, blockNumChanged: %1d, centerBlockChanged: %1d, sceneChanged: %1d, centorShp: %f, %f, sceneChanged %d, shp_plus %f
+XCAM DEBUG %s:%d: %s: update focus pos(%d) success!
+XCAM DEBUG %s:%d: %s: set focus pos(%d) success, frame interval: %dms!
+XCAM ERROR %s:%d: %s: zoom is not support
+XCAM DEBUG %s:%d: %s: ZoomIndex(%d) is not changed, force %d
+XCAM DEBUG %s:%d: %s: set zoom pos(%d), NextZoomIndex %d success!
+XCAM DEBUG %s:%d: %s: set NextZoomIndex(%d) success!
+XCAM DEBUG %s:%d: %s: get zoom pos(%d) success!
+XCAM DEBUG %s:%d: %s: set zoom pos(%d) success!
+XCAM DEBUG %s:%d: %s: end zoom change success, NextZoomIndex %d!
+XCAM DEBUG %s:%d: %s: set pi, ZoomOffset %d, FocusOffset %d
+XCAM DEBUG %s:%d: %s: set zoom calib, zoom_calib %d!
+XCAM DEBUG %s:%d: %s: set reset zoom (%d)
+XCAM DEBUG %s:%d: %s: get zoom calib, zoom_calib %d!
+XCAM DEBUG %s:%d: %s: zoom_idx %d, search_step %d
+XCAM DEBUG %s:%d: %s: zoom_idx %d, quickfound %f
+XCAM LOW1 %s:%d: %s: zoom_index %d, *focus_infpos %d, *focus_macropos %d, focus_mod_deviate %d, diff_val %d, zoom_offset %d, focus_offset %d
+XCAM LOW1 %s:%d: %s: zoom_index %d, tbl range %d, %d
+%s/.af_pos.data
+XCAM ERROR %s:%d: %s: delete file_name %s
+XCAM DEBUG %s:%d: %s: file_name %s
+XCAM DEBUG %s:%d: %s: mode %d, use_manual %d, auto_focpos %d, auto_zoompos %d, manual_focpos %d, manual_zoompos %d
+XCAM DEBUG %s:%d: %s: mode %d, use_manual %d, NextZoomIndex %d, LensePos %d
+XCAM ERROR %s:%d: get value %d from file
+XCAM ERROR %s:%d: %s:%d preExp(%p) or curExp(%p) is NULL, so use default instead 
+/home/liyunjian/ipc_rv1109_rv1126/buildroot/output/rockchip_rv1126_rv1109/build/camera_engine_rkaiq-1.0/algos/anr/rk_aiq_algo_anr_itf.cpp
+XCAM ERROR %s:%d: %s: processing ANR failed (%d)
+XCAM ERROR %s:%d: %s: ANRPreProcess failed (%d)
+XCAM ERROR %s:%d: %s: config ANR failed (%d)
+XCAM ERROR %s:%d: %s: release ANR failed (%d)
+XCAM ERROR %s:%d: %s: Initializaion ANR failed (%d)
+XCAM ERROR %s:%d: %s(%d): null pointer
+/home/liyunjian/ipc_rv1109_rv1126/buildroot/output/rockchip_rv1126_rv1109/build/camera_engine_rkaiq-1.0/algos/anr/rk_aiq_anr_algo.cpp
+XCAM ERROR %s:%d: %s: ANRStop() failed!
+XCAM ERROR %s:%d: %s(%d): not support param mode!
+XCAM ERROR %s:%d: %s(%d): not support snr mode!
+XCAM ERROR %s:%d: %s(%d): malloc fail
+/home/liyunjian/ipc_rv1109_rv1126/buildroot/output/rockchip_rv1126_rv1109/build/camera_engine_rkaiq-1.0/algos/anr/rk_aiq_anr_algo_bayernr.cpp
+XCAM ERROR %s:%d: %s(%d): bayerne mode cell is zero
+XCAM WARNING %s:%d: %s(%d): error!!!  can't find mode name in iq files, use 0 instead
+XCAM WARNING %s:%d: %s(%d): error!!!  can't find setting in iq files, use 0 instead
+/home/liyunjian/ipc_rv1109_rv1126/buildroot/output/rockchip_rv1126_rv1109/build/camera_engine_rkaiq-1.0/algos/anr/rk_aiq_anr_algo_mfnr.cpp
+XCAM ERROR %s:%d: %s(%d): mfnr mode cell num is zero
+XCAM WARNING %s:%d: %s(%d): error!!!
+XCAM ERROR %s:%d: get_matrix_idx is error 
+/home/liyunjian/ipc_rv1109_rv1126/buildroot/output/rockchip_rv1126_rv1109/build/camera_engine_rkaiq-1.0/algos/anr/rk_aiq_anr_algo_uvnr.cpp
+XCAM ERROR %s:%d: %s(%d): uvnr mode cell num is zero
+XCAM WARNING %s:%d: %s(%d): error!!!  can't find mode cell in iq files, use 0 instead
+/home/liyunjian/ipc_rv1109_rv1126/buildroot/output/rockchip_rv1126_rv1109/build/camera_engine_rkaiq-1.0/algos/anr/rk_aiq_anr_algo_ynr.cpp
+/home/liyunjian/ipc_rv1109_rv1126/buildroot/output/rockchip_rv1126_rv1109/build/camera_engine_rkaiq-1.0/algos/anr/rk_aiq_anr_algo_gain.cpp
+XCAM DEBUG %s:%d: m2r %f, max_m2r_th %f, cct_diff %f, state %d
+XCAM DEBUG %s:%d: +++++cpsl ON2OFF
+XCAM DEBUG %s:%d: +++++cpsl changing2off
+XCAM DEBUG %s:%d: interval %d s, delta %d s, ae_stable %d
+XCAM DEBUG %s:%d: +++++cpsl changing2ON
+XCAM DEBUG %s:%d: +++++cpsl OFF2ON
+XCAM WARNING %s:%d: unsupported cpsl mode %d
+XCAM DEBUG %s:%d: cpsl: mode %d, on %d, state %d
+XCAM DEBUG %s:%d: scene: sals %d, spls %d, nrobj %d, sflr %d
+XCAM WARNING %s:%d: %s: Ae Proc result is null!!!
+/home/liyunjian/ipc_rv1109_rv1126/buildroot/output/rockchip_rv1126_rv1109/build/camera_engine_rkaiq-1.0/algos/ahdr/rk_aiq_algo_ahdr_itf.cpp
+XCAM WARNING %s:%d: %s: af Pre result is null!!!
+XCAM WARNING %s:%d: %s: ae/af Pre result is null!!!
+XCAM ERROR %s:%d: %s AHDRStart failed: %d
+XCAM ERROR %s:%d: %s AHDRInit failed: %d
+XCAM ERROR %s:%d: %s:  Wrong frame number in HDR mode!!!
+/home/liyunjian/ipc_rv1109_rv1126/buildroot/output/rockchip_rv1126_rv1109/build/camera_engine_rkaiq-1.0/algos/ahdr/rk_aiq_ahdr_algo.cpp
+XCAM ERROR %s:%d: %s:  Ahdr wrong mode!!!
+XCAM ERROR %s:%d: %s: Can't allocate AHDR context
+XCAM ERROR %s:%d: %s: AHDRStop() failed!
+/home/liyunjian/ipc_rv1109_rv1126/buildroot/output/rockchip_rv1126_rv1109/build/camera_engine_rkaiq-1.0/algos/ahdr/rk_aiq_uapi_ahdr_int.cpp
+/home/liyunjian/ipc_rv1109_rv1126/buildroot/output/rockchip_rv1126_rv1109/build/camera_engine_rkaiq-1.0/algos/acp/rk_aiq_uapi_acp_int.cpp
+XCAM ERROR %s:%d: %s:%d pAEPreRes is NULL, so use default instead 
+/home/liyunjian/ipc_rv1109_rv1126/buildroot/output/rockchip_rv1126_rv1109/build/camera_engine_rkaiq-1.0/algos/asharp/rk_aiq_algo_asharp_itf.cpp
+XCAM ERROR %s:%d: %s: processing Asharp failed (%d)
+XCAM ERROR %s:%d: %s: AsharpPreProcess failed (%d)
+XCAM ERROR %s:%d: %s: config Asharp failed (%d)
+XCAM ERROR %s:%d: %s: release Asharp failed (%d)
+XCAM ERROR %s:%d: %s: Initializaion Asharp failed (%d)
+/home/liyunjian/ipc_rv1109_rv1126/buildroot/output/rockchip_rv1126_rv1109/build/camera_engine_rkaiq-1.0/algos/asharp/rk_aiq_asharp_algo.cpp
+XCAM ERROR %s:%d: %s: AsharpStop() failed!
+XCAM ERROR %s:%d: %s(%d): not support mode cell name!
+/home/liyunjian/ipc_rv1109_rv1126/buildroot/output/rockchip_rv1126_rv1109/build/camera_engine_rkaiq-1.0/algos/asharp/rk_aiq_asharp_algo_edgefilter.cpp
+XCAM ERROR %s:%d: %s(%d): mode cell num is zero
+/home/liyunjian/ipc_rv1109_rv1126/buildroot/output/rockchip_rv1126_rv1109/build/camera_engine_rkaiq-1.0/algos/asharp/rk_aiq_asharp_algo_sharp.cpp
+XCAM ERROR %s:%d: %s(%d): sharp mode cell num is zero
+XCAM ERROR %s:%d: %s(%d): error!!!  can't find mode name in iq files, use 0 instead
+XCAM ERROR %s:%d: %s(%d): error!!!  can't find setting in iq files, use 0 instead
+XCAM ERROR %s:%d: %s:%d pAERes is NULL, so use default instead 
+/home/liyunjian/ipc_rv1109_rv1126/buildroot/output/rockchip_rv1126_rv1109/build/camera_engine_rkaiq-1.0/algos/adehaze/rk_aiq_algo_adhaz_itf.cpp
+XCAM ERROR %s:%d: %s: Adehaze Reload Para failed (%d)
+XCAM ERROR %s:%d: %s Wrong mode in Dehaze!!!
+/home/liyunjian/ipc_rv1109_rv1126/buildroot/output/rockchip_rv1126_rv1109/build/camera_engine_rkaiq-1.0/algos/adehaze/rk_aiq_adehaze_algo.cpp
+XCAM ERROR %s:%d: %s:Wrong Adehaze API mode!!! 
+XCAM ERROR %s:%d: invalid mode!
+/home/liyunjian/ipc_rv1109_rv1126/buildroot/output/rockchip_rv1126_rv1109/build/camera_engine_rkaiq-1.0/algos/adehaze/rk_aiq_uapi_adehaze_int.cpp
+XCAM ERROR %s:%d: %s: hAlut3d->mCurAtt.mode(%d) is invalid 
+/home/liyunjian/ipc_rv1109_rv1126/buildroot/output/rockchip_rv1126_rv1109/build/camera_engine_rkaiq-1.0/algos/a3dlut/rk_aiq_a3dlut_algo.cpp
+XCAM ERROR %s:%d: %s:%d curExp is NULL, so use default instead 
+/home/liyunjian/ipc_rv1109_rv1126/buildroot/output/rockchip_rv1126_rv1109/build/camera_engine_rkaiq-1.0/algos/ablc/rk_aiq_algo_ablc_itf.cpp
+XCAM ERROR %s:%d: %s: processing ABLC failed (%d)
+XCAM ERROR %s:%d: %s: config Ablc failed (%d)
+XCAM ERROR %s:%d: %s: release Ablc failed (%d)
+XCAM ERROR %s:%d: %s: Initializaion Ablc failed (%d)
+/home/liyunjian/ipc_rv1109_rv1126/buildroot/output/rockchip_rv1126_rv1109/build/camera_engine_rkaiq-1.0/algos/ablc/rk_aiq_ablc_algo.cpp
+XCAM ERROR %s:%d: %s(%d): NULL pointer
+XCAM ERROR %s:%d: %s(%d): null pointer 
+UpdateCcmCalibPara
+XCAM ERROR %s:%d: %s(%d): invalid input params
+/home/liyunjian/ipc_rv1109_rv1126/buildroot/output/rockchip_rv1126_rv1109/build/camera_engine_rkaiq-1.0/algos/accm/rk_aiq_accm_algo.cpp
+XCAM ERROR %s:%d: fail to estimate illuminant!!!
+XCAM WARNING %s:%d: fSclae is  %f  , so saturation adjust bypass
+XCAM ERROR %s:%d: can't find %s in matrixAll 
+XCAM ERROR %s:%d: %s: Current mode (%d) is not found in iq.  
+XCAM ERROR %s:%d: flevel2: %f is invalid ,should be in the range [0 100]
+XCAM ERROR %s:%d: flevel1: %f is invalid ,should be in the range [0 100]
+XCAM ERROR %s:%d: %s: hAccm->mCurAtt.mode(%d) is invalid 
+XCAM ERROR %s:%d: %s: Current hdr mode (%d) is invalid!Defaults to normal mode.  
+XCAM ERROR %s:%d: %s: curExp is NULL, so use default instead 
+/home/liyunjian/ipc_rv1109_rv1126/buildroot/output/rockchip_rv1126_rv1109/build/camera_engine_rkaiq-1.0/algos/adebayer/rk_aiq_algo_adebayer_itf.cpp
+/home/liyunjian/ipc_rv1109_rv1126/buildroot/output/rockchip_rv1126_rv1109/build/camera_engine_rkaiq-1.0/algos/adebayer/rk_aiq_algo_adebayer.cpp
+/home/liyunjian/ipc_rv1109_rv1126/buildroot/output/rockchip_rv1126_rv1109/build/camera_engine_rkaiq-1.0/algos/adebayer/rk_aiq_uapi_adebayer_int.cpp
+/home/liyunjian/ipc_rv1109_rv1126/buildroot/output/rockchip_rv1126_rv1109/build/camera_engine_rkaiq-1.0/algos/adpcc/rk_aiq_algo_adpcc_itf.cpp
+XCAM ERROR %s:%d: %s:%d pAEProcRes is NULL, so use default instead 
+XCAM ERROR %s:%d: %s: processing Adpcc failed (%d)
+XCAM ERROR %s:%d: %s: Adpcc Reload Para failed (%d)
+XCAM ERROR %s:%d: %s: release Adpcc failed (%d)
+XCAM ERROR %s:%d: %s: Initializaion Adpcc failed (%d)
+dpcc_sensor_params_init
+/home/liyunjian/ipc_rv1109_rv1126/buildroot/output/rockchip_rv1126_rv1109/build/camera_engine_rkaiq-1.0/algos/adpcc/rk_aiq_adpcc_algo.cpp
+XCAM ERROR %s:%d: %s(%d): invalid inputparams
+XCAM ERROR %s:%d: %s(%d): Wrong fast mode level!!!
+XCAM ERROR %s:%d: %s(%d): Wrong api mode in dpcc!!!
+void XCam::SmartPtr<Obj>::release() [with Obj = RKAiqAfecThread]
+15RKAiqAfecThread
+XCAM ERROR %s:%d: %s(%d): no free fec buf
+/home/liyunjian/ipc_rv1109_rv1126/buildroot/output/rockchip_rv1126_rv1109/build/camera_engine_rkaiq-1.0/algos/afec/rk_aiq_algo_afec_itf.cpp
+XCAM ERROR %s:%d: afec gen mesh false!
+XCAM ERROR %s:%d: %s: no available fec buf!
+XCAM WARNING %s:%d: RKAiqAfecThread got empty attrib, stop thread
+XCAM ERROR %s:%d: %s: get fec buf failed!
+XCAM ERROR %s:%d: RKAiqAfecThread failed to read mesh table!
+XCAM WARNING %s:%d: don't reinitialize FEC info when switching modes or updating calib
+XCAM ERROR %s:%d: failed, Fec en(%d-%d) don't support switch at running time!
+/home/liyunjian/ipc_rv1109_rv1126/buildroot/output/rockchip_rv1126_rv1109/build/camera_engine_rkaiq-1.0/algos/afec/rk_aiq_uapi_afec_int.cpp
+XCAM ERROR %s:%d: failed, bypass fec!
+XCAM ERROR %s:%d:  %s: Wrong gamma scene !!!
+/home/liyunjian/ipc_rv1109_rv1126/buildroot/output/rockchip_rv1126_rv1109/build/camera_engine_rkaiq-1.0/algos/agamma/rk_aiq_agamma_algo.cpp
+XCAM ERROR %s:%d:  %s: Wrong gamma api manual CurveType!!!
+XCAM ERROR %s:%d:  %s: Wrong gamma mode !!!
+XCAM ERROR %s:%d:  %s: Wrong degamma mode !!!
+/home/liyunjian/ipc_rv1109_rv1126/buildroot/output/rockchip_rv1126_rv1109/build/camera_engine_rkaiq-1.0/algos/adegamma/rk_aiq_adegamma_algo.cpp
+XCAM ERROR %s:%d: %s: pAERes is NULL, so use default instead 
+/home/liyunjian/ipc_rv1109_rv1126/buildroot/output/rockchip_rv1126_rv1109/build/camera_engine_rkaiq-1.0/algos/agic/rk_aiq_algo_agic_itf.cpp
+/home/liyunjian/ipc_rv1109_rv1126/buildroot/output/rockchip_rv1126_rv1109/build/camera_engine_rkaiq-1.0/algos/agic/rk_aiq_algo_agic.cpp
+/home/liyunjian/ipc_rv1109_rv1126/buildroot/output/rockchip_rv1126_rv1109/build/camera_engine_rkaiq-1.0/algos/agic/rk_aiq_uapi_agic_int.cpp
+/home/liyunjian/ipc_rv1109_rv1126/buildroot/output/rockchip_rv1126_rv1109/build/camera_engine_rkaiq-1.0/algos/aie/rk_aiq_algo_aie_int.cpp
+void XCam::SmartPtr<Obj>::release() [with Obj = RKAiqAldchThread]
+16RKAiqAldchThread
+XCAM ERROR %s:%d: %s(%d): no free ldch buf
+/home/liyunjian/ipc_rv1109_rv1126/buildroot/output/rockchip_rv1126_rv1109/build/camera_engine_rkaiq-1.0/algos/aldch/rk_aiq_algo_aldch_itf.cpp
+ldch_custom_mesh.bin
+XCAM WARNING %s:%d: lut info: [%d-%d-%d-%d-%d-%d]
+XCAM ERROR %s:%d: mismatched lut calib file
+XCAM WARNING %s:%d: check calib file, size: %d, num: %d
+XCAM WARNING %s:%d: read mesh from %s
+XCAM ERROR %s:%d: lut calib file %s not exist
+XCAM ERROR %s:%d: %s: no available ldch buf!
+XCAM WARNING %s:%d: genLDCHMesh has been initialized!!
+XCAM WARNING %s:%d: RKAiqAldchThread got empty attrib, stop thread
+XCAM WARNING %s:%d: lut is not exist
+XCAM ERROR %s:%d: RKAiqAldchThread failed to read mesh table!
+XCAM ERROR %s:%d: %s: Fail to init aiqGenLdchMesh!
+XCAM ERROR %s:%d: genLdchMeshInit is failed!
+XCAM ERROR %s:%d: failed, ldch is disalbed!
+/home/liyunjian/ipc_rv1109_rv1126/buildroot/output/rockchip_rv1126_rv1109/build/camera_engine_rkaiq-1.0/algos/aldch/rk_aiq_uapi_aldch_int.cpp
+XCAM ERROR %s:%d: can't find %s in lscResName
+/home/liyunjian/ipc_rv1109_rv1126/buildroot/output/rockchip_rv1126_rv1109/build/camera_engine_rkaiq-1.0/algos/alsc/rk_aiq_alsc_algo.cpp
+%s_%s
+XCAM ERROR %s:%d: %s: hAlsc->mCurAtt.mode(%d) is invalid 
+XCAM WARNING %s:%d: %s: ae Pre result is null!!!
+/home/liyunjian/ipc_rv1109_rv1126/buildroot/output/rockchip_rv1126_rv1109/build/camera_engine_rkaiq-1.0/algos/awdr/rk_aiq_algo_awdr_itf.cpp
+XCAM ERROR %s:%d: %s AWDR Start failed: %d
+XCAM ERROR %s:%d: %s AWDR Init failed: %d
+XCAM ERROR %s:%d: %s Awdr Release failed: %d
+/home/liyunjian/ipc_rv1109_rv1126/buildroot/output/rockchip_rv1126_rv1109/build/camera_engine_rkaiq-1.0/algos/awdr/rk_aiq_awdr_algo.cpp
+XCAM ERROR %s:%d: %s:  Awdr wrong mode!!!
+XCAM ERROR %s:%d: %s: Can't allocate AWDR context
+XCAM ERROR %s:%d: %s: AWDR Stop() failed!
+/home/liyunjian/ipc_rv1109_rv1126/buildroot/output/rockchip_rv1126_rv1109/build/camera_engine_rkaiq-1.0/algos/awdr/rk_aiq_uapi_awdr_int.cpp
+XCAM WARNING %s:%d: frmId=%d raw no exist,bypass afd
+XCAM WARNING %s:%d: two thumbdata not share the same exp,bypass afd
+XCAM ERROR %s:%d: %s AfdUpdateConfig failed: %d
+XCAM ERROR %s:%d: %s AfdRelease failed: %d
+XCAM ERROR %s:%d: %s AfdInit failed: %d
+XCAM ERROR %s:%d: tx_buf = NULL
+XCAM ERROR %s:%d: %s: pAfdCtx = NUll
+XCAM ERROR %s:%d: peak idx > thumbH,exit afd !!
+XCAM ERROR %s:%d: valley idx > thumbH,exit afd !!
+XCAM ERROR %s:%d: %s: Can't allocate AFD context
+XCAM ERROR %s:%d: %s: Can't allocate AFD config
+XCAM VERBOSE %s:%d: %s:PixelClockFreqMHZ: %f
+XCAM VERBOSE %s:%d: %s:PixelPeriodsPerLine: %f   vts:%f
+XCAM DEBUG %s:%d: PeakNum=%d,PeakItv=%f,ValleyNum=%d,ValleyItv=%f
+XCAM DEBUG %s:%d: mainpeak_index=%d,mainpeak_num=%d
+XCAM DEBUG %s:%d: res.PeakIdx=%d,res.ValleyIdx=%d
+XCAM DEBUG %s:%d: PeakExist=%d,ValleyExist=%d,IsFlickExist=%d
+/ldchMeshX_%dx%d_level%03d.bin
+LDCH MeshX.bin open error!!!
+FEC MeshXY.bin open error!!!
+meshxi.bin
+meshxf.bin
+meshyi.bin
+meshyf.bin
+save FEC 4 Mesh.bin error!!!

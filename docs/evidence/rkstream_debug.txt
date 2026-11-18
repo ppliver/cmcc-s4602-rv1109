@@ -1,0 +1,556 @@
+[rkstream] iq_dir=/tmp/factory/iqfiles node=rkispp_scale0 1280x720 hold=2s dst=:5600
+media get entity by name: stream_cif_dvp_id0 is null
+media get entity by name: stream_cif_dvp_id1 is null
+media get entity by name: stream_cif_dvp_id2 is null
+media get entity by name: stream_cif_dvp_id3 is null
+media get entity by name: rkcif-lvds-subdev is null
+media get entity by name: rkcif-lite-lvds-subdev is null
+media get entity by name: stream_cif is null
+media get entity by name: rkcif-dvp-sof is null
+media get entity by name: rkisp-mpfbc-subdev is null
+media get entity by name: rkisp_dmapath is null
+media get entity by name: rockchip-mipi-dphy-rx is null
+media get entity by name: rkcif_dvp is null
+media get entity by name: rkcif_dvp is null
+media get entity by name: rkcif_lite_mipi_lvds is null
+[04:16:00.725492][CAMHW]:XCAM ERROR CamHwIsp20.cpp:1022: No free isp&ispp needed by fake camera!
+register factory : rkmpp
+register factory : rkmpp
+register factory : video_enc
+register factory : audio_enc
+register factory : video_dec
+register factory : file_read_flow
+register factory : file_write_flow
+register factory : filter
+register factory : link_flow
+register factory : source_stream
+register factory : muxer_flow
+register factory : audio_dec
+register factory : output_stream
+register factory : move_detec
+register factory : occlusion_detec
+register factory : file_write_stream
+register factory : file_read_stream
+register factory : alsa_playback_stream
+register factory : alsa_capture_stream
+register factory : v4l2_capture_stream
+register factory : v4l2_output_stream
+register factory : drm_output_stream
+Rga built version:1.04 2874628+2021-04-04 23:47:11
+register factory : rkrga
+register factory : through_guard
+register factory : ANR
+register factory : AEC
+[rkstream] dlopen libeasymedia.so.1 -> OK
+[rkstream] all rkmedia symbols resolved
+##RKMEDIA Log level: 2
+[RKMEDIA][SYS][Info]:text is all=2
+[RKMEDIA][SYS][Info]:module is all, log_level is 2
+[rkstream] RK_MPI_SYS_Init -> 0
+[rkstream] aiq dlsym enum=0xa4f516fc init=0xa4f5b004 prepare=0xa4f5151c start=0xa4f515d8
+[rkstream] enumStaticMetas -> 0
+[rkstream] sensor='m01_f_sc5338 1-0030' iq_dir='/tmp/factory/iqfiles' HDR_MODE=0
+[04:16:00.876312][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:6920: calib_check_getID_by_name(6920): subtag: DyDampEn from parent tag: AecSpeed is unknown, assert!!!
+
+[04:16:00.876474][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:6998: calib_check_tag_attrs(6998): parent_tag_id:222 tag_id:1201 --- tag id is is wrong: min:0 max:1201 
+
+[04:16:00.876528][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:7044: calib_check_tag_attrs(7044): parent_tag_id:222 parent_tag_name:AecSpeed  tag_id:1201 tag_name:unknown --- ASSERT!!!
+
+[04:16:00.876577][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:7188: calib_check_tag_mark(7188): parent_tag_id:222 tag_id:1201 --- tag_id is wrong:  min:0 max:1201
+
+[04:16:00.876625][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:6920: calib_check_getID_by_name(6920): subtag: SmoothEn from parent tag: AecSpeed is unknown, assert!!!
+
+[04:16:00.876683][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:6998: calib_check_tag_attrs(6998): parent_tag_id:222 tag_id:1201 --- tag id is is wrong: min:0 max:1201 
+
+[04:16:00.876732][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:7044: calib_check_tag_attrs(7044): parent_tag_id:222 parent_tag_name:AecSpeed  tag_id:1201 tag_name:unknown --- ASSERT!!!
+
+[04:16:00.876780][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:7188: calib_check_tag_mark(7188): parent_tag_id:222 tag_id:1201 --- tag_id is wrong:  min:0 max:1201
+
+[04:16:00.883126][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:6920: calib_check_getID_by_name(6920): subtag: focusInfPosition from parent tag: zoomfocus_tbl is unknown, assert!!!
+
+[04:16:00.883253][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:6998: calib_check_tag_attrs(6998): parent_tag_id:439 tag_id:1201 --- tag id is is wrong: min:0 max:1201 
+
+[04:16:00.883290][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:7044: calib_check_tag_attrs(7044): parent_tag_id:439 parent_tag_name:zoomfocus_tbl  tag_id:1201 tag_name:unknown --- ASSERT!!!
+
+[04:16:00.883324][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:7188: calib_check_tag_mark(7188): parent_tag_id:439 tag_id:1201 --- tag_id is wrong:  min:0 max:1201
+
+[04:16:00.883384][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:6920: calib_check_getID_by_name(6920): subtag: focusMacroPosition from parent tag: zoomfocus_tbl is unknown, assert!!!
+
+[04:16:00.883427][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:6998: calib_check_tag_attrs(6998): parent_tag_id:439 tag_id:1201 --- tag id is is wrong: min:0 max:1201 
+
+[04:16:00.883462][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:7044: calib_check_tag_attrs(7044): parent_tag_id:439 parent_tag_name:zoomfocus_tbl  tag_id:1201 tag_name:unknown --- ASSERT!!!
+
+[04:16:00.883494][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:7188: calib_check_tag_mark(7188): parent_tag_id:439 tag_id:1201 --- tag_id is wrong:  min:0 max:1201
+
+[04:16:00.886824][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:6920: calib_check_getID_by_name(6920): subtag: AeConvergedPdf from parent tag: TMO is unknown, assert!!!
+
+[04:16:00.886871][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:6998: calib_check_tag_attrs(6998): parent_tag_id:484 tag_id:1201 --- tag id is is wrong: min:0 max:1201 
+
+[04:16:00.886907][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:7044: calib_check_tag_attrs(7044): parent_tag_id:484 parent_tag_name:TMO  tag_id:1201 tag_name:unknown --- ASSERT!!!
+
+[04:16:00.886940][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:7188: calib_check_tag_mark(7188): parent_tag_id:484 tag_id:1201 --- tag_id is wrong:  min:0 max:1201
+
+[04:16:01.018995][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:6920: calib_check_getID_by_name(6920): subtag: motion_detect_ds_size from parent tag: MFNR is unknown, assert!!!
+
+[04:16:01.019133][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:6998: calib_check_tag_attrs(6998): parent_tag_id:885 tag_id:1201 --- tag id is is wrong: min:0 max:1201 
+
+[04:16:01.019174][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:7044: calib_check_tag_attrs(7044): parent_tag_id:885 parent_tag_name:MFNR  tag_id:1201 tag_name:unknown --- ASSERT!!!
+
+[04:16:01.019208][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:7188: calib_check_tag_mark(7188): parent_tag_id:885 tag_id:1201 --- tag_id is wrong:  min:0 max:1201
+
+[04:16:01.053237][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:6920: calib_check_getID_by_name(6920): subtag: dynamicEnable from parent tag: motion_detection is unknown, assert!!!
+
+[04:16:01.053359][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:6998: calib_check_tag_attrs(6998): parent_tag_id:952 tag_id:1201 --- tag id is is wrong: min:0 max:1201 
+
+[04:16:01.053397][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:7044: calib_check_tag_attrs(7044): parent_tag_id:952 parent_tag_name:motion_detection  tag_id:1201 tag_name:unknown --- ASSERT!!!
+
+[04:16:01.053431][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:7188: calib_check_tag_mark(7188): parent_tag_id:952 tag_id:1201 --- tag_id is wrong:  min:0 max:1201
+
+[04:16:01.053468][XCORE]:XCAM ERROR RkAiqCalibParser.cpp:11277: parseEntrySensorMFNRMotionDetection(11277): parse error in  mfnr dynamic (unknow tag: dynamicEnable )
+
+[04:16:01.053502][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:6920: calib_check_getID_by_name(6920): subtag: dynamicSw from parent tag: motion_detection is unknown, assert!!!
+
+[04:16:01.053542][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:6998: calib_check_tag_attrs(6998): parent_tag_id:952 tag_id:1201 --- tag id is is wrong: min:0 max:1201 
+
+[04:16:01.053577][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:7044: calib_check_tag_attrs(7044): parent_tag_id:952 parent_tag_name:motion_detection  tag_id:1201 tag_name:unknown --- ASSERT!!!
+
+[04:16:01.053609][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:7188: calib_check_tag_mark(7188): parent_tag_id:952 tag_id:1201 --- tag_id is wrong:  min:0 max:1201
+
+[04:16:01.053640][XCORE]:XCAM ERROR RkAiqCalibParser.cpp:11277: parseEntrySensorMFNRMotionDetection(11277): parse error in  mfnr dynamic (unknow tag: dynamicSw )
+
+[04:16:01.053674][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:6920: calib_check_getID_by_name(6920): subtag: gain_upd_flag from parent tag: motion_detection is unknown, assert!!!
+
+[04:16:01.053714][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:6998: calib_check_tag_attrs(6998): parent_tag_id:952 tag_id:1201 --- tag id is is wrong: min:0 max:1201 
+
+[04:16:01.053747][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:7044: calib_check_tag_attrs(7044): parent_tag_id:952 parent_tag_name:motion_detection  tag_id:1201 tag_name:unknown --- ASSERT!!!
+
+[04:16:01.053801][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:7188: calib_check_tag_mark(7188): parent_tag_id:952 tag_id:1201 --- tag_id is wrong:  min:0 max:1201
+
+[04:16:01.053834][XCORE]:XCAM ERROR RkAiqCalibParser.cpp:11277: parseEntrySensorMFNRMotionDetection(11277): parse error in  mfnr dynamic (unknow tag: gain_upd_flag )
+
+[04:16:01.053869][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:6920: calib_check_getID_by_name(6920): subtag: med_en from parent tag: motion_detection is unknown, assert!!!
+
+[04:16:01.053907][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:6998: calib_check_tag_attrs(6998): parent_tag_id:952 tag_id:1201 --- tag id is is wrong: min:0 max:1201 
+
+[04:16:01.053942][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:7044: calib_check_tag_attrs(7044): parent_tag_id:952 parent_tag_name:motion_detection  tag_id:1201 tag_name:unknown --- ASSERT!!!
+
+[04:16:01.053975][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:7188: calib_check_tag_mark(7188): parent_tag_id:952 tag_id:1201 --- tag_id is wrong:  min:0 max:1201
+
+[04:16:01.054007][XCORE]:XCAM ERROR RkAiqCalibParser.cpp:11277: parseEntrySensorMFNRMotionDetection(11277): parse error in  mfnr dynamic (unknow tag: med_en )
+
+[04:16:01.054593][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:6920: calib_check_getID_by_name(6920): subtag: yuvnr_gain_scale3 from parent tag: motion_detection is unknown, assert!!!
+
+[04:16:01.054720][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:6998: calib_check_tag_attrs(6998): parent_tag_id:952 tag_id:1201 --- tag id is is wrong: min:0 max:1201 
+
+[04:16:01.054758][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:7044: calib_check_tag_attrs(7044): parent_tag_id:952 parent_tag_name:motion_detection  tag_id:1201 tag_name:unknown --- ASSERT!!!
+
+[04:16:01.054792][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:7188: calib_check_tag_mark(7188): parent_tag_id:952 tag_id:1201 --- tag_id is wrong:  min:0 max:1201
+
+[04:16:01.054912][XCORE]:XCAM ERROR RkAiqCalibParser.cpp:11277: parseEntrySensorMFNRMotionDetection(11277): parse error in  mfnr dynamic (unknow tag: yuvnr_gain_scale3 )
+
+[04:16:01.054955][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:6920: calib_check_getID_by_name(6920): subtag: yuvnr_gain_glb from parent tag: motion_detection is unknown, assert!!!
+
+[04:16:01.054996][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:6998: calib_check_tag_attrs(6998): parent_tag_id:952 tag_id:1201 --- tag id is is wrong: min:0 max:1201 
+
+[04:16:01.055030][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:7044: calib_check_tag_attrs(7044): parent_tag_id:952 parent_tag_name:motion_detection  tag_id:1201 tag_name:unknown --- ASSERT!!!
+
+[04:16:01.055069][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:7188: calib_check_tag_mark(7188): parent_tag_id:952 tag_id:1201 --- tag_id is wrong:  min:0 max:1201
+
+[04:16:01.055128][XCORE]:XCAM ERROR RkAiqCalibParser.cpp:11277: parseEntrySensorMFNRMotionDetection(11277): parse error in  mfnr dynamic (unknow tag: yuvnr_gain_glb )
+
+[04:16:01.055235][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:6920: calib_check_getID_by_name(6920): subtag: yuvnr_gain_th from parent tag: motion_detection is unknown, assert!!!
+
+[04:16:01.055330][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:6998: calib_check_tag_attrs(6998): parent_tag_id:952 tag_id:1201 --- tag id is is wrong: min:0 max:1201 
+
+[04:16:01.055374][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:7044: calib_check_tag_attrs(7044): parent_tag_id:952 parent_tag_name:motion_detection  tag_id:1201 tag_name:unknown --- ASSERT!!!
+
+[04:16:01.055409][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:7188: calib_check_tag_mark(7188): parent_tag_id:952 tag_id:1201 --- tag_id is wrong:  min:0 max:1201
+
+[04:16:01.055446][XCORE]:XCAM ERROR RkAiqCalibParser.cpp:11277: parseEntrySensorMFNRMotionDetection(11277): parse error in  mfnr dynamic (unknow tag: yuvnr_gain_th )
+
+[04:16:01.055483][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:6920: calib_check_getID_by_name(6920): subtag: mfnr_gain_scale from parent tag: motion_detection is unknown, assert!!!
+
+[04:16:01.055523][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:6998: calib_check_tag_attrs(6998): parent_tag_id:952 tag_id:1201 --- tag id is is wrong: min:0 max:1201 
+
+[04:16:01.055579][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:7044: calib_check_tag_attrs(7044): parent_tag_id:952 parent_tag_name:motion_detection  tag_id:1201 tag_name:unknown --- ASSERT!!!
+
+[04:16:01.055614][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:7188: calib_check_tag_mark(7188): parent_tag_id:952 tag_id:1201 --- tag_id is wrong:  min:0 max:1201
+
+[04:16:01.055647][XCORE]:XCAM ERROR RkAiqCalibParser.cpp:11277: parseEntrySensorMFNRMotionDetection(11277): parse error in  mfnr dynamic (unknow tag: mfnr_gain_scale )
+
+[04:16:01.055681][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:6920: calib_check_getID_by_name(6920): subtag: motion_dn_str from parent tag: motion_detection is unknown, assert!!!
+
+[04:16:01.055720][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:6998: calib_check_tag_attrs(6998): parent_tag_id:952 tag_id:1201 --- tag id is is wrong: min:0 max:1201 
+
+[04:16:01.055753][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:7044: calib_check_tag_attrs(7044): parent_tag_id:952 parent_tag_name:motion_detection  tag_id:1201 tag_name:unknown --- ASSERT!!!
+
+[04:16:01.055785][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:7188: calib_check_tag_mark(7188): parent_tag_id:952 tag_id:1201 --- tag_id is wrong:  min:0 max:1201
+
+[04:16:01.055817][XCORE]:XCAM ERROR RkAiqCalibParser.cpp:11277: parseEntrySensorMFNRMotionDetection(11277): parse error in  mfnr dynamic (unknow tag: motion_dn_str )
+
+[04:16:01.055851][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:6920: calib_check_getID_by_name(6920): subtag: md_sigma_scale from parent tag: motion_detection is unknown, assert!!!
+
+[04:16:01.055890][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:6998: calib_check_tag_attrs(6998): parent_tag_id:952 tag_id:1201 --- tag id is is wrong: min:0 max:1201 
+
+[04:16:01.055923][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:7044: calib_check_tag_attrs(7044): parent_tag_id:952 parent_tag_name:motion_detection  tag_id:1201 tag_name:unknown --- ASSERT!!!
+
+[04:16:01.055954][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:7188: calib_check_tag_mark(7188): parent_tag_id:952 tag_id:1201 --- tag_id is wrong:  min:0 max:1201
+
+[04:16:01.055986][XCORE]:XCAM ERROR RkAiqCalibParser.cpp:11277: parseEntrySensorMFNRMotionDetection(11277): parse error in  mfnr dynamic (unknow tag: md_sigma_scale )
+
+[04:16:01.056019][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:6920: calib_check_getID_by_name(6920): subtag: thresh01 from parent tag: motion_detection is unknown, assert!!!
+
+[04:16:01.056059][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:6998: calib_check_tag_attrs(6998): parent_tag_id:952 tag_id:1201 --- tag id is is wrong: min:0 max:1201 
+
+[04:16:01.056091][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:7044: calib_check_tag_attrs(7044): parent_tag_id:952 parent_tag_name:motion_detection  tag_id:1201 tag_name:unknown --- ASSERT!!!
+
+[04:16:01.056123][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:7188: calib_check_tag_mark(7188): parent_tag_id:952 tag_id:1201 --- tag_id is wrong:  min:0 max:1201
+
+[04:16:01.056154][XCORE]:XCAM ERROR RkAiqCalibParser.cpp:11277: parseEntrySensorMFNRMotionDetection(11277): parse error in  mfnr dynamic (unknow tag: thresh01 )
+
+[04:16:01.056187][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:6920: calib_check_getID_by_name(6920): subtag: thresh23 from parent tag: motion_detection is unknown, assert!!!
+
+[04:16:01.056226][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:6998: calib_check_tag_attrs(6998): parent_tag_id:952 tag_id:1201 --- tag id is is wrong: min:0 max:1201 
+
+[04:16:01.056260][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:7044: calib_check_tag_attrs(7044): parent_tag_id:952 parent_tag_name:motion_detection  tag_id:1201 tag_name:unknown --- ASSERT!!!
+
+[04:16:01.056291][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:7188: calib_check_tag_mark(7188): parent_tag_id:952 tag_id:1201 --- tag_id is wrong:  min:0 max:1201
+
+[04:16:01.056322][XCORE]:XCAM ERROR RkAiqCalibParser.cpp:11277: parseEntrySensorMFNRMotionDetection(11277): parse error in  mfnr dynamic (unknow tag: thresh23 )
+
+[04:16:01.088184][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:6920: calib_check_getID_by_name(6920): subtag: dynamicEnable from parent tag: motion_detection is unknown, assert!!!
+
+[04:16:01.088307][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:6998: calib_check_tag_attrs(6998): parent_tag_id:952 tag_id:1201 --- tag id is is wrong: min:0 max:1201 
+
+[04:16:01.088366][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:7044: calib_check_tag_attrs(7044): parent_tag_id:952 parent_tag_name:motion_detection  tag_id:1201 tag_name:unknown --- ASSERT!!!
+
+[04:16:01.088402][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:7188: calib_check_tag_mark(7188): parent_tag_id:952 tag_id:1201 --- tag_id is wrong:  min:0 max:1201
+
+[04:16:01.088438][XCORE]:XCAM ERROR RkAiqCalibParser.cpp:11277: parseEntrySensorMFNRMotionDetection(11277): parse error in  mfnr dynamic (unknow tag: dynamicEnable )
+
+[04:16:01.088473][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:6920: calib_check_getID_by_name(6920): subtag: dynamicSw from parent tag: motion_detection is unknown, assert!!!
+
+[04:16:01.088515][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:6998: calib_check_tag_attrs(6998): parent_tag_id:952 tag_id:1201 --- tag id is is wrong: min:0 max:1201 
+
+[04:16:01.088549][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:7044: calib_check_tag_attrs(7044): parent_tag_id:952 parent_tag_name:motion_detection  tag_id:1201 tag_name:unknown --- ASSERT!!!
+
+[04:16:01.088581][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:7188: calib_check_tag_mark(7188): parent_tag_id:952 tag_id:1201 --- tag_id is wrong:  min:0 max:1201
+
+[04:16:01.088614][XCORE]:XCAM ERROR RkAiqCalibParser.cpp:11277: parseEntrySensorMFNRMotionDetection(11277): parse error in  mfnr dynamic (unknow tag: dynamicSw )
+
+[04:16:01.088648][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:6920: calib_check_getID_by_name(6920): subtag: gain_upd_flag from parent tag: motion_detection is unknown, assert!!!
+
+[04:16:01.088687][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:6998: calib_check_tag_attrs(6998): parent_tag_id:952 tag_id:1201 --- tag id is is wrong: min:0 max:1201 
+
+[04:16:01.088720][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:7044: calib_check_tag_attrs(7044): parent_tag_id:952 parent_tag_name:motion_detection  tag_id:1201 tag_name:unknown --- ASSERT!!!
+
+[04:16:01.088751][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:7188: calib_check_tag_mark(7188): parent_tag_id:952 tag_id:1201 --- tag_id is wrong:  min:0 max:1201
+
+[04:16:01.088784][XCORE]:XCAM ERROR RkAiqCalibParser.cpp:11277: parseEntrySensorMFNRMotionDetection(11277): parse error in  mfnr dynamic (unknow tag: gain_upd_flag )
+
+[04:16:01.088818][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:6920: calib_check_getID_by_name(6920): subtag: med_en from parent tag: motion_detection is unknown, assert!!!
+
+[04:16:01.088858][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:6998: calib_check_tag_attrs(6998): parent_tag_id:952 tag_id:1201 --- tag id is is wrong: min:0 max:1201 
+
+[04:16:01.088892][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:7044: calib_check_tag_attrs(7044): parent_tag_id:952 parent_tag_name:motion_detection  tag_id:1201 tag_name:unknown --- ASSERT!!!
+
+[04:16:01.088924][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:7188: calib_check_tag_mark(7188): parent_tag_id:952 tag_id:1201 --- tag_id is wrong:  min:0 max:1201
+
+[04:16:01.088955][XCORE]:XCAM ERROR RkAiqCalibParser.cpp:11277: parseEntrySensorMFNRMotionDetection(11277): parse error in  mfnr dynamic (unknow tag: med_en )
+
+[04:16:01.089444][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:6920: calib_check_getID_by_name(6920): subtag: yuvnr_gain_scale3 from parent tag: motion_detection is unknown, assert!!!
+
+[04:16:01.089489][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:6998: calib_check_tag_attrs(6998): parent_tag_id:952 tag_id:1201 --- tag id is is wrong: min:0 max:1201 
+
+[04:16:01.089524][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:7044: calib_check_tag_attrs(7044): parent_tag_id:952 parent_tag_name:motion_detection  tag_id:1201 tag_name:unknown --- ASSERT!!!
+
+[04:16:01.089556][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:7188: calib_check_tag_mark(7188): parent_tag_id:952 tag_id:1201 --- tag_id is wrong:  min:0 max:1201
+
+[04:16:01.089587][XCORE]:XCAM ERROR RkAiqCalibParser.cpp:11277: parseEntrySensorMFNRMotionDetection(11277): parse error in  mfnr dynamic (unknow tag: yuvnr_gain_scale3 )
+
+[04:16:01.089622][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:6920: calib_check_getID_by_name(6920): subtag: yuvnr_gain_glb from parent tag: motion_detection is unknown, assert!!!
+
+[04:16:01.089679][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:6998: calib_check_tag_attrs(6998): parent_tag_id:952 tag_id:1201 --- tag id is is wrong: min:0 max:1201 
+
+[04:16:01.089717][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:7044: calib_check_tag_attrs(7044): parent_tag_id:952 parent_tag_name:motion_detection  tag_id:1201 tag_name:unknown --- ASSERT!!!
+
+[04:16:01.089750][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:7188: calib_check_tag_mark(7188): parent_tag_id:952 tag_id:1201 --- tag_id is wrong:  min:0 max:1201
+
+[04:16:01.089782][XCORE]:XCAM ERROR RkAiqCalibParser.cpp:11277: parseEntrySensorMFNRMotionDetection(11277): parse error in  mfnr dynamic (unknow tag: yuvnr_gain_glb )
+
+[04:16:01.089816][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:6920: calib_check_getID_by_name(6920): subtag: yuvnr_gain_th from parent tag: motion_detection is unknown, assert!!!
+
+[04:16:01.089856][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:6998: calib_check_tag_attrs(6998): parent_tag_id:952 tag_id:1201 --- tag id is is wrong: min:0 max:1201 
+
+[04:16:01.089891][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:7044: calib_check_tag_attrs(7044): parent_tag_id:952 parent_tag_name:motion_detection  tag_id:1201 tag_name:unknown --- ASSERT!!!
+
+[04:16:01.089923][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:7188: calib_check_tag_mark(7188): parent_tag_id:952 tag_id:1201 --- tag_id is wrong:  min:0 max:1201
+
+[04:16:01.089954][XCORE]:XCAM ERROR RkAiqCalibParser.cpp:11277: parseEntrySensorMFNRMotionDetection(11277): parse error in  mfnr dynamic (unknow tag: yuvnr_gain_th )
+
+[04:16:01.089990][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:6920: calib_check_getID_by_name(6920): subtag: mfnr_gain_scale from parent tag: motion_detection is unknown, assert!!!
+
+[04:16:01.090030][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:6998: calib_check_tag_attrs(6998): parent_tag_id:952 tag_id:1201 --- tag id is is wrong: min:0 max:1201 
+
+[04:16:01.090063][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:7044: calib_check_tag_attrs(7044): parent_tag_id:952 parent_tag_name:motion_detection  tag_id:1201 tag_name:unknown --- ASSERT!!!
+
+[04:16:01.090095][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:7188: calib_check_tag_mark(7188): parent_tag_id:952 tag_id:1201 --- tag_id is wrong:  min:0 max:1201
+
+[04:16:01.090126][XCORE]:XCAM ERROR RkAiqCalibParser.cpp:11277: parseEntrySensorMFNRMotionDetection(11277): parse error in  mfnr dynamic (unknow tag: mfnr_gain_scale )
+
+[04:16:01.090160][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:6920: calib_check_getID_by_name(6920): subtag: motion_dn_str from parent tag: motion_detection is unknown, assert!!!
+
+[04:16:01.090199][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:6998: calib_check_tag_attrs(6998): parent_tag_id:952 tag_id:1201 --- tag id is is wrong: min:0 max:1201 
+
+[04:16:01.090232][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:7044: calib_check_tag_attrs(7044): parent_tag_id:952 parent_tag_name:motion_detection  tag_id:1201 tag_name:unknown --- ASSERT!!!
+
+[04:16:01.090264][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:7188: calib_check_tag_mark(7188): parent_tag_id:952 tag_id:1201 --- tag_id is wrong:  min:0 max:1201
+
+[04:16:01.090296][XCORE]:XCAM ERROR RkAiqCalibParser.cpp:11277: parseEntrySensorMFNRMotionDetection(11277): parse error in  mfnr dynamic (unknow tag: motion_dn_str )
+
+[04:16:01.090329][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:6920: calib_check_getID_by_name(6920): subtag: md_sigma_scale from parent tag: motion_detection is unknown, assert!!!
+
+[04:16:01.090368][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:6998: calib_check_tag_attrs(6998): parent_tag_id:952 tag_id:1201 --- tag id is is wrong: min:0 max:1201 
+
+[04:16:01.090401][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:7044: calib_check_tag_attrs(7044): parent_tag_id:952 parent_tag_name:motion_detection  tag_id:1201 tag_name:unknown --- ASSERT!!!
+
+[04:16:01.090433][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:7188: calib_check_tag_mark(7188): parent_tag_id:952 tag_id:1201 --- tag_id is wrong:  min:0 max:1201
+
+[04:16:01.090463][XCORE]:XCAM ERROR RkAiqCalibParser.cpp:11277: parseEntrySensorMFNRMotionDetection(11277): parse error in  mfnr dynamic (unknow tag: md_sigma_scale )
+
+[04:16:01.090505][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:6920: calib_check_getID_by_name(6920): subtag: thresh01 from parent tag: motion_detection is unknown, assert!!!
+
+[04:16:01.090546][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:6998: calib_check_tag_attrs(6998): parent_tag_id:952 tag_id:1201 --- tag id is is wrong: min:0 max:1201 
+
+[04:16:01.090580][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:7044: calib_check_tag_attrs(7044): parent_tag_id:952 parent_tag_name:motion_detection  tag_id:1201 tag_name:unknown --- ASSERT!!!
+
+[04:16:01.090612][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:7188: calib_check_tag_mark(7188): parent_tag_id:952 tag_id:1201 --- tag_id is wrong:  min:0 max:1201
+
+[04:16:01.090642][XCORE]:XCAM ERROR RkAiqCalibParser.cpp:11277: parseEntrySensorMFNRMotionDetection(11277): parse error in  mfnr dynamic (unknow tag: thresh01 )
+
+[04:16:01.090676][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:6920: calib_check_getID_by_name(6920): subtag: thresh23 from parent tag: motion_detection is unknown, assert!!!
+
+[04:16:01.090717][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:6998: calib_check_tag_attrs(6998): parent_tag_id:952 tag_id:1201 --- tag id is is wrong: min:0 max:1201 
+
+[04:16:01.090750][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:7044: calib_check_tag_attrs(7044): parent_tag_id:952 parent_tag_name:motion_detection  tag_id:1201 tag_name:unknown --- ASSERT!!!
+
+[04:16:01.090782][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:7188: calib_check_tag_mark(7188): parent_tag_id:952 tag_id:1201 --- tag_id is wrong:  min:0 max:1201
+
+[04:16:01.090813][XCORE]:XCAM ERROR RkAiqCalibParser.cpp:11277: parseEntrySensorMFNRMotionDetection(11277): parse error in  mfnr dynamic (unknow tag: thresh23 )
+
+[04:16:01.122160][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:6920: calib_check_getID_by_name(6920): subtag: dynamicEnable from parent tag: motion_detection is unknown, assert!!!
+
+[04:16:01.122280][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:6998: calib_check_tag_attrs(6998): parent_tag_id:952 tag_id:1201 --- tag id is is wrong: min:0 max:1201 
+
+[04:16:01.122318][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:7044: calib_check_tag_attrs(7044): parent_tag_id:952 parent_tag_name:motion_detection  tag_id:1201 tag_name:unknown --- ASSERT!!!
+
+[04:16:01.122353][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:7188: calib_check_tag_mark(7188): parent_tag_id:952 tag_id:1201 --- tag_id is wrong:  min:0 max:1201
+
+[04:16:01.122391][XCORE]:XCAM ERROR RkAiqCalibParser.cpp:11277: parseEntrySensorMFNRMotionDetection(11277): parse error in  mfnr dynamic (unknow tag: dynamicEnable )
+
+[04:16:01.122425][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:6920: calib_check_getID_by_name(6920): subtag: dynamicSw from parent tag: motion_detection is unknown, assert!!!
+
+[04:16:01.122465][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:6998: calib_check_tag_attrs(6998): parent_tag_id:952 tag_id:1201 --- tag id is is wrong: min:0 max:1201 
+
+[04:16:01.122498][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:7044: calib_check_tag_attrs(7044): parent_tag_id:952 parent_tag_name:motion_detection  tag_id:1201 tag_name:unknown --- ASSERT!!!
+
+[04:16:01.122531][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:7188: calib_check_tag_mark(7188): parent_tag_id:952 tag_id:1201 --- tag_id is wrong:  min:0 max:1201
+
+[04:16:01.122562][XCORE]:XCAM ERROR RkAiqCalibParser.cpp:11277: parseEntrySensorMFNRMotionDetection(11277): parse error in  mfnr dynamic (unknow tag: dynamicSw )
+
+[04:16:01.122595][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:6920: calib_check_getID_by_name(6920): subtag: gain_upd_flag from parent tag: motion_detection is unknown, assert!!!
+
+[04:16:01.122635][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:6998: calib_check_tag_attrs(6998): parent_tag_id:952 tag_id:1201 --- tag id is is wrong: min:0 max:1201 
+
+[04:16:01.122671][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:7044: calib_check_tag_attrs(7044): parent_tag_id:952 parent_tag_name:motion_detection  tag_id:1201 tag_name:unknown --- ASSERT!!!
+
+[04:16:01.122703][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:7188: calib_check_tag_mark(7188): parent_tag_id:952 tag_id:1201 --- tag_id is wrong:  min:0 max:1201
+
+[04:16:01.122734][XCORE]:XCAM ERROR RkAiqCalibParser.cpp:11277: parseEntrySensorMFNRMotionDetection(11277): parse error in  mfnr dynamic (unknow tag: gain_upd_flag )
+
+[04:16:01.122787][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:6920: calib_check_getID_by_name(6920): subtag: med_en from parent tag: motion_detection is unknown, assert!!!
+
+[04:16:01.122831][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:6998: calib_check_tag_attrs(6998): parent_tag_id:952 tag_id:1201 --- tag id is is wrong: min:0 max:1201 
+
+[04:16:01.122864][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:7044: calib_check_tag_attrs(7044): parent_tag_id:952 parent_tag_name:motion_detection  tag_id:1201 tag_name:unknown --- ASSERT!!!
+
+[04:16:01.122896][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:7188: calib_check_tag_mark(7188): parent_tag_id:952 tag_id:1201 --- tag_id is wrong:  min:0 max:1201
+
+[04:16:01.122929][XCORE]:XCAM ERROR RkAiqCalibParser.cpp:11277: parseEntrySensorMFNRMotionDetection(11277): parse error in  mfnr dynamic (unknow tag: med_en )
+
+[04:16:01.123422][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:6920: calib_check_getID_by_name(6920): subtag: yuvnr_gain_scale3 from parent tag: motion_detection is unknown, assert!!!
+
+[04:16:01.123466][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:6998: calib_check_tag_attrs(6998): parent_tag_id:952 tag_id:1201 --- tag id is is wrong: min:0 max:1201 
+
+[04:16:01.123501][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:7044: calib_check_tag_attrs(7044): parent_tag_id:952 parent_tag_name:motion_detection  tag_id:1201 tag_name:unknown --- ASSERT!!!
+
+[04:16:01.123533][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:7188: calib_check_tag_mark(7188): parent_tag_id:952 tag_id:1201 --- tag_id is wrong:  min:0 max:1201
+
+[04:16:01.123566][XCORE]:XCAM ERROR RkAiqCalibParser.cpp:11277: parseEntrySensorMFNRMotionDetection(11277): parse error in  mfnr dynamic (unknow tag: yuvnr_gain_scale3 )
+
+[04:16:01.123601][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:6920: calib_check_getID_by_name(6920): subtag: yuvnr_gain_glb from parent tag: motion_detection is unknown, assert!!!
+
+[04:16:01.123640][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:6998: calib_check_tag_attrs(6998): parent_tag_id:952 tag_id:1201 --- tag id is is wrong: min:0 max:1201 
+
+[04:16:01.123674][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:7044: calib_check_tag_attrs(7044): parent_tag_id:952 parent_tag_name:motion_detection  tag_id:1201 tag_name:unknown --- ASSERT!!!
+
+[04:16:01.123705][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:7188: calib_check_tag_mark(7188): parent_tag_id:952 tag_id:1201 --- tag_id is wrong:  min:0 max:1201
+
+[04:16:01.123736][XCORE]:XCAM ERROR RkAiqCalibParser.cpp:11277: parseEntrySensorMFNRMotionDetection(11277): parse error in  mfnr dynamic (unknow tag: yuvnr_gain_glb )
+
+[04:16:01.123770][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:6920: calib_check_getID_by_name(6920): subtag: yuvnr_gain_th from parent tag: motion_detection is unknown, assert!!!
+
+[04:16:01.123810][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:6998: calib_check_tag_attrs(6998): parent_tag_id:952 tag_id:1201 --- tag id is is wrong: min:0 max:1201 
+
+[04:16:01.123843][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:7044: calib_check_tag_attrs(7044): parent_tag_id:952 parent_tag_name:motion_detection  tag_id:1201 tag_name:unknown --- ASSERT!!!
+
+[04:16:01.123876][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:7188: calib_check_tag_mark(7188): parent_tag_id:952 tag_id:1201 --- tag_id is wrong:  min:0 max:1201
+
+[04:16:01.123906][XCORE]:XCAM ERROR RkAiqCalibParser.cpp:11277: parseEntrySensorMFNRMotionDetection(11277): parse error in  mfnr dynamic (unknow tag: yuvnr_gain_th )
+
+[04:16:01.123939][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:6920: calib_check_getID_by_name(6920): subtag: mfnr_gain_scale from parent tag: motion_detection is unknown, assert!!!
+
+[04:16:01.123978][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:6998: calib_check_tag_attrs(6998): parent_tag_id:952 tag_id:1201 --- tag id is is wrong: min:0 max:1201 
+
+[04:16:01.124012][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:7044: calib_check_tag_attrs(7044): parent_tag_id:952 parent_tag_name:motion_detection  tag_id:1201 tag_name:unknown --- ASSERT!!!
+
+[04:16:01.124043][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:7188: calib_check_tag_mark(7188): parent_tag_id:952 tag_id:1201 --- tag_id is wrong:  min:0 max:1201
+
+[04:16:01.124093][XCORE]:XCAM ERROR RkAiqCalibParser.cpp:11277: parseEntrySensorMFNRMotionDetection(11277): parse error in  mfnr dynamic (unknow tag: mfnr_gain_scale )
+
+[04:16:01.124131][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:6920: calib_check_getID_by_name(6920): subtag: motion_dn_str from parent tag: motion_detection is unknown, assert!!!
+
+[04:16:01.124171][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:6998: calib_check_tag_attrs(6998): parent_tag_id:952 tag_id:1201 --- tag id is is wrong: min:0 max:1201 
+
+[04:16:01.124205][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:7044: calib_check_tag_attrs(7044): parent_tag_id:952 parent_tag_name:motion_detection  tag_id:1201 tag_name:unknown --- ASSERT!!!
+
+[04:16:01.124238][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:7188: calib_check_tag_mark(7188): parent_tag_id:952 tag_id:1201 --- tag_id is wrong:  min:0 max:1201
+
+[04:16:01.124269][XCORE]:XCAM ERROR RkAiqCalibParser.cpp:11277: parseEntrySensorMFNRMotionDetection(11277): parse error in  mfnr dynamic (unknow tag: motion_dn_str )
+
+[04:16:01.124302][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:6920: calib_check_getID_by_name(6920): subtag: md_sigma_scale from parent tag: motion_detection is unknown, assert!!!
+
+[04:16:01.124342][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:6998: calib_check_tag_attrs(6998): parent_tag_id:952 tag_id:1201 --- tag id is is wrong: min:0 max:1201 
+
+[04:16:01.124376][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:7044: calib_check_tag_attrs(7044): parent_tag_id:952 parent_tag_name:motion_detection  tag_id:1201 tag_name:unknown --- ASSERT!!!
+
+[04:16:01.124408][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:7188: calib_check_tag_mark(7188): parent_tag_id:952 tag_id:1201 --- tag_id is wrong:  min:0 max:1201
+
+[04:16:01.124439][XCORE]:XCAM ERROR RkAiqCalibParser.cpp:11277: parseEntrySensorMFNRMotionDetection(11277): parse error in  mfnr dynamic (unknow tag: md_sigma_scale )
+
+[04:16:01.124473][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:6920: calib_check_getID_by_name(6920): subtag: thresh01 from parent tag: motion_detection is unknown, assert!!!
+
+[04:16:01.124512][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:6998: calib_check_tag_attrs(6998): parent_tag_id:952 tag_id:1201 --- tag id is is wrong: min:0 max:1201 
+
+[04:16:01.124546][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:7044: calib_check_tag_attrs(7044): parent_tag_id:952 parent_tag_name:motion_detection  tag_id:1201 tag_name:unknown --- ASSERT!!!
+
+[04:16:01.124578][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:7188: calib_check_tag_mark(7188): parent_tag_id:952 tag_id:1201 --- tag_id is wrong:  min:0 max:1201
+
+[04:16:01.124612][XCORE]:XCAM ERROR RkAiqCalibParser.cpp:11277: parseEntrySensorMFNRMotionDetection(11277): parse error in  mfnr dynamic (unknow tag: thresh01 )
+
+[04:16:01.124646][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:6920: calib_check_getID_by_name(6920): subtag: thresh23 from parent tag: motion_detection is unknown, assert!!!
+
+[04:16:01.124685][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:6998: calib_check_tag_attrs(6998): parent_tag_id:952 tag_id:1201 --- tag id is is wrong: min:0 max:1201 
+
+[04:16:01.124718][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:7044: calib_check_tag_attrs(7044): parent_tag_id:952 parent_tag_name:motion_detection  tag_id:1201 tag_name:unknown --- ASSERT!!!
+
+[04:16:01.124751][XCORE]:XCAM ERROR RkAiqCalibTag.cpp:7188: calib_check_tag_mark(7188): parent_tag_id:952 tag_id:1201 --- tag_id is wrong:  min:0 max:1201
+
+[04:16:01.124783][XCORE]:XCAM ERROR RkAiqCalibParser.cpp:11277: parseEntrySensorMFNRMotionDetection(11277): parse error in  mfnr dynamic (unknow tag: thresh23 )
+
+[04:16:01.232501][XCORE]:XCAM ERROR v4l2_device.cpp:196: open device() failed
+[rkstream] sysctl_init -> 0x48f3f8
+[rkstream] setFecEn -> 0
+[04:16:01.242420][CAMHW]:XCAM ERROR LensHw.cpp:199: get vcm cfg failed
+[04:16:01.242700][XCORE]:XCAM ERROR v4l2_device.cpp:366: device(/dev/video6) set v4l2 format failed, supported format: width:1920, height:1080
+[04:16:01.293958][ALSC]:XCAM ERROR rk_aiq_alsc_algo.cpp:313: can't find 2880x1616 in lscResName
+
+[04:16:01.296115][ALSC]:XCAM ERROR rk_aiq_alsc_algo.cpp:313: can't find 2880x1616 in lscResName
+
+[04:16:01.298100][XCORE]:XCAM ERROR CamHwIsp20.cpp:3751: |||set DC-Iris PwmDuty: 100
+[04:16:01.298908][CAMHW]:XCAM ERROR LensHw.cpp:411: iris is not supported
+[04:16:01.337551][CAMHW]:XCAM ERROR LensHw.cpp:296: focus is not supported
+[rkstream] sysctl_prepare -> 0
+[rkstream] sysctl_start -> 0  (AIQ ENGINE RUNNING)
+[rkstream] VI_SetChnAttr(0,1,rkispp_scale0) -> 0
+[RKMEDIA][SYS][Info]:RK_MPI_VI_EnableChn: Enable VI[0:1]:rkispp_scale0, 1280x720 Start...
+[RKMEDIA][SYS][Info]:RKAIQ: parsing /dev/media0
+media get entity by name: rkcif-lvds-subdev is null
+media get entity by name: rkcif-lite-lvds-subdev is null
+[RKMEDIA][SYS][Info]:RKAIQ: parsing /dev/media1
+media get entity by name: rkisp-mpfbc-subdev is null
+media get entity by name: rkisp_dmapath is null
+media get entity by name: rockchip-mipi-dphy-rx is null
+[RKMEDIA][SYS][Info]:RKAIQ: model(rkisp0): isp_info(0): isp-subdev entity name: /dev/v4l-subdev4
+[RKMEDIA][SYS][Info]:RKAIQ: parsing /dev/media2
+[RKMEDIA][SYS][Info]:RKAIQ: model(rkispp0): ispp_info(0): ispp-subdev entity name: /dev/v4l-subdev0
+[RKMEDIA][SYS][Info]:#V4l2Stream: camraID:0, Device:rkispp_scale0
+[RKMEDIA][SYS][Warn]:camera_id: 0, chn: rkispp_scale0
+[RKMEDIA][SYS][Warn]:camera_id: 0, chn: rkispp_scale0, idx: 0
+[RKMEDIA][SYS][Info]:#V4l2Stream: camera id:0, VideoNode:/dev/video19
+[RKMEDIA][SYS][Info]:#V4L2Ctx: open /dev/video19, fd 105
+[RKMEDIA][SYS][Error]:V4L2: MPLANE not support DMA Buffer yet.
+[RKMEDIA][SYS][Info]:#V4L2Ctx: close , fd 105
+[RKMEDIA][SYS][Info]:#V4L2Stream: v4l2 ctx reset to nullptr!
+[RKMEDIA][VI][Info]:Create stream v4l2_capture_stream failed
+[RKMEDIA][VI][Info]:#SourceStreamFlow[]: stream off....
+[RKMEDIA][VI][Info]:#SourceStreamFlow[]: read thread exit sucessfully!
+[RKMEDIA][VI][Info]:#SourceStreamFlow[]: stream reset sucessfully!
+[RKMEDIA][SYS][Warn]:VI[1]:"rkispp_scale0" buffer may be occupied by other modules or apps, try again...
+[RKMEDIA][SYS][Info]:RKAIQ: parsing /dev/media0
+media get entity by name: rkcif-lvds-subdev is null
+media get entity by name: rkcif-lite-lvds-subdev is null
+[RKMEDIA][SYS][Info]:RKAIQ: parsing /dev/media1
+media get entity by name: rkisp-mpfbc-subdev is null
+media get entity by name: rkisp_dmapath is null
+media get entity by name: rockchip-mipi-dphy-rx is null
+[RKMEDIA][SYS][Info]:RKAIQ: model(rkisp0): isp_info(0): isp-subdev entity name: /dev/v4l-subdev4
+[RKMEDIA][SYS][Info]:RKAIQ: parsing /dev/media2
+[RKMEDIA][SYS][Info]:RKAIQ: model(rkispp0): ispp_info(0): ispp-subdev entity name: /dev/v4l-subdev0
+[RKMEDIA][SYS][Info]:#V4l2Stream: camraID:0, Device:rkispp_scale0
+[RKMEDIA][SYS][Warn]:camera_id: 0, chn: rkispp_scale0
+[RKMEDIA][SYS][Warn]:camera_id: 0, chn: rkispp_scale0, idx: 0
+[RKMEDIA][SYS][Info]:#V4l2Stream: camera id:0, VideoNode:/dev/video19
+[RKMEDIA][SYS][Info]:#V4L2Ctx: open /dev/video19, fd 105
+[RKMEDIA][SYS][Error]:V4L2: MPLANE not support DMA Buffer yet.
+[RKMEDIA][SYS][Info]:#V4L2Ctx: close , fd 105
+[RKMEDIA][SYS][Info]:#V4L2Stream: v4l2 ctx reset to nullptr!
+[RKMEDIA][VI][Info]:Create stream v4l2_capture_stream failed
+[RKMEDIA][VI][Info]:#SourceStreamFlow[]: stream off....
+[RKMEDIA][VI][Info]:#SourceStreamFlow[]: read thread exit sucessfully!
+[RKMEDIA][VI][Info]:#SourceStreamFlow[]: stream reset sucessfully!
+[RKMEDIA][SYS][Warn]:VI[1]:"rkispp_scale0" buffer may be occupied by other modules or apps, try again...
+[RKMEDIA][SYS][Info]:RKAIQ: parsing /dev/media0
+media get entity by name: rkcif-lvds-subdev is null
+media get entity by name: rkcif-lite-lvds-subdev is null
+[RKMEDIA][SYS][Info]:RKAIQ: parsing /dev/media1
+media get entity by name: rkisp-mpfbc-subdev is null
+media get entity by name: rkisp_dmapath is null
+media get entity by name: rockchip-mipi-dphy-rx is null
+[RKMEDIA][SYS][Info]:RKAIQ: model(rkisp0): isp_info(0): isp-subdev entity name: /dev/v4l-subdev4
+[RKMEDIA][SYS][Info]:RKAIQ: parsing /dev/media2
+[RKMEDIA][SYS][Info]:RKAIQ: model(rkispp0): ispp_info(0): ispp-subdev entity name: /dev/v4l-subdev0
+[RKMEDIA][SYS][Info]:#V4l2Stream: camraID:0, Device:rkispp_scale0
+[RKMEDIA][SYS][Warn]:camera_id: 0, chn: rkispp_scale0
+[RKMEDIA][SYS][Warn]:camera_id: 0, chn: rkispp_scale0, idx: 0
+[RKMEDIA][SYS][Info]:#V4l2Stream: camera id:0, VideoNode:/dev/video19
+[RKMEDIA][SYS][Info]:#V4L2Ctx: open /dev/video19, fd 105
+[RKMEDIA][SYS][Error]:V4L2: MPLANE not support DMA Buffer yet.
+[RKMEDIA][SYS][Info]:#V4L2Ctx: close , fd 105
+[RKMEDIA][SYS][Info]:#V4L2Stream: v4l2 ctx reset to nullptr!
+[RKMEDIA][VI][Info]:Create stream v4l2_capture_stream failed
+[RKMEDIA][VI][Info]:#SourceStreamFlow[]: stream off....
+[RKMEDIA][VI][Info]:#SourceStreamFlow[]: read thread exit sucessfully!
+[RKMEDIA][VI][Info]:#SourceStreamFlow[]: stream reset sucessfully!
+[RKMEDIA][SYS][Warn]:VI[1]:"rkispp_scale0" buffer may be occupied by other modules or apps, try again...
+[rkstream] VI_EnableChn(0,1) -> -11
+[rkstream] VI_StartStream(0,1) -> -11
+[RKMEDIA][SYS][Info]:RK_MPI_VENC_CreateChn: Enable VENC[0], Type:6 Start...
+[RKMEDIA][SYS][Info]:ParseMediaConfigFromMap: rect_x = 0, rect_y = 0, rect.w = 1280, rect.h = 720 
+[RKMEDIA][SYS][Error]:MediaCfg: fps: KEY_FPS is null!
+[rkstream] VENC_CreateChn(0,H264 1280x720) -> -33
+[rkstream] VENC unavailable -> fallback: RegisterOutCb(VI) for raw NV12
+[rkstream] RegisterOutCb(VI) -> -2
+[rkstream] heartbeat 1/2  venc_pkts=0 nals=0 rtp_pkts=0
+[rkstream] heartbeat 2/2  venc_pkts=0 nals=0 rtp_pkts=0
+[rkstream] RESULT: venc_pkts=0 nals=0 rtp_pkts=0 h264_file=/tmp/out.h264

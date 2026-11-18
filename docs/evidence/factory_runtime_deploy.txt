@@ -1,0 +1,65 @@
+REMOTE=/tmp/factory
+files=15
+aliases=9
+
+  libRKAP_3A.so
+  libRKAP_ANR.so
+  libRKAP_Common.so
+  libasound.so.2.0.0
+  libdrm.so.2.4.0
+  libeasymedia.so.1.0.1
+  libjpeg.so.62.3.0
+  libmd_share.so
+  libod_share.so
+  librga.so.2.0.0
+  librkaiq.so
+  librockchip_mpp.so.0
+  libthird_media.so
+  libv4l2.so.0.0.0
+  libv4lconvert.so.0.0.0
+
+--- aliases ---
+  libasound.so.2 -> libasound.so.2.0.0
+  libdrm.so.2 -> libdrm.so.2.4.0
+  libeasymedia.so -> libeasymedia.so.1.0.1
+  libeasymedia.so.1 -> libeasymedia.so.1.0.1
+  libjpeg.so.62 -> libjpeg.so.62.3.0
+  librga.so.2 -> librga.so.2.0.0
+  librockchip_mpp.so.1 -> librockchip_mpp.so.0
+  libv4l2.so.0 -> libv4l2.so.0.0.0
+  libv4lconvert.so.0 -> libv4lconvert.so.0.0.0
+
+--- ldd ---
+=== ldd libeasymedia ===
+ldd: warning: you do not have execution permission for `/tmp/factory/lib/libeasymedia.so.1.0.1'
+	linux-vdso.so.1 (0xaec5d000)
+	libdrm.so.2 => /tmp/factory/lib/libdrm.so.2 (0xa54c0000)
+	librockchip_mpp.so.1 => /tmp/factory/lib/librockchip_mpp.so.1 (0xa5380000)
+	libpthread.so.0 => /lib/libpthread.so.0 (0xa6f3e000)
+	libasound.so.2 => /tmp/factory/lib/libasound.so.2 (0xa52c0000)
+	libRKAP_3A.so => /tmp/factory/lib/libRKAP_3A.so (0xa5290000)
+	libRKAP_ANR.so => /tmp/factory/lib/libRKAP_ANR.so (0xa5270000)
+	libRKAP_Common.so => /tmp/factory/lib/libRKAP_Common.so (0xa5220000)
+	libv4l2.so.0 => /tmp/factory/lib/libv4l2.so.0 (0xa5200000)
+	librga.so.2 => /tmp/factory/lib/librga.so.2 (0xa51d0000)
+	libmd_share.so => /tmp/factory/lib/libmd_share.so (0xa51b0000)
+	libod_share.so => /tmp/factory/lib/libod_share.so (0xa5190000)
+	librkaiq.so => /tmp/factory/lib/librkaiq.so (0xa4f50000)
+	libstdc++.so.6 => /usr/lib/libstdc++.so.6 (0xa4dc1000)
+	libm.so.6 => /lib/libm.so.6 (0xa4d80000)
+	libgcc_s.so.1 => /lib/libgcc_s.so.1 (0xa4d60000)
+	libc.so.6 => /lib/libc.so.6 (0xa4c21000)
+	libdl.so.2 => /lib/libdl.so.2 (0xa54dd000)
+	librt.so.1 => /lib/librt.so.1 (0xa54bd000)
+	/lib/ld-linux-armhf.so.3 (0xa6f43000)
+	libv4lconvert.so.0 => /tmp/factory/lib/libv4lconvert.so.0 (0xa4ba0000)
+	libjpeg.so.62 => /tmp/factory/lib/libjpeg.so.62 (0xa4b40000)
+=== ldd librkaiq ===
+ldd: warning: you do not have execution permission for `/tmp/factory/lib/librkaiq.so'
+	linux-vdso.so.1 (0xaef4b000)
+	libpthread.so.0 => /lib/libpthread.so.0 (0xa6f70000)
+	libstdc++.so.6 => /usr/lib/libstdc++.so.6 (0xa6ba1000)
+	libm.so.6 => /lib/libm.so.6 (0xa6b60000)
+	libgcc_s.so.1 => /lib/libgcc_s.so.1 (0xa6b40000)
+	libc.so.6 => /lib/libc.so.6 (0xa6a01000)
+	/lib/ld-linux-armhf.so.3 (0xa6f75000)

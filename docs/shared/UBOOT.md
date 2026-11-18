@@ -15,7 +15,7 @@ BootROM → DDR bin → SPL 链路**至今仍能运行**（只是找不到 U-Boo
 
 | 现场观测 | U-Boot 怎么处理 | 走哪条路 |
 |---|---|---|
-| 能进 `=>`，`help` 有 `mtd`/`tftp`/`fatload`，无签名校验 | **不编译、不改动**；RAM 里 `iminfo`/`bootm` 验证自建 FIT（本机**无 `saveenv`**，且 `setenv bootargs` 实测会被覆盖 → 用内核 `CONFIG_CMDLINE_FORCE`，见 [`BOOT_FEASIBILITY.md`](BOOT_FEASIBILITY.md) 2.3） | 方案 A |
+| 能进 `=>`，`help` 有 `mtd`/`tftp`/`fatload`，无签名校验 | **不编译、不改动**；RAM 里 `iminfo`/`bootm` 验证自建 FIT（本机**无 `saveenv`**，且 `setenv bootargs` 实测会被覆盖 → 用内核 `CONFIG_CMDLINE_FORCE`，见 [`BOOT_FEASIBILITY.md`](../openipc/BOOT_FEASIBILITY.md) 2.3） | 方案 A |
 | 能进 `=>`，但缺 `ubi` 命令或内核从 boot 分区 FIT 加载 | **仍不编译**；`mtd write` 直接写 UBI 镜像，内核侧 `ubi.mtd=8` 挂载即可，不需要 U-Boot 支持 UBI | 方案 A |
 | 进不了 `=>`，或没有 NAND 写命令 | **也不编译**；走 MASKROM + `rockusb`/`rkdeveloptool` 按扇区恢复分区，loader 区原样保留 | 方案 B |
 | 原厂校验内核签名 | ~~编译 U-Boot 也救不了（校验在 BootROM/SPL 层，早于 U-Boot proper）~~ **本机已排除：`## Verified-boot: 0`、`FIT: no signed`** | 不适用 |
@@ -26,12 +26,12 @@ BootROM → DDR bin → SPL 链路**至今仍能运行**（只是找不到 U-Boo
 「U-Boot 控制台」都标「缺」，而 S4602 实测**可以** Ctrl+C 进 `=>`（变砖前），
 但 2026-06-29 之后因引导链分区被冲掉而进不去了（见 `INCIDENT.md`）。
 
-**「U-Boot 能不能引导 OpenIPC 固件」的专门判定见 [`BOOT_FEASIBILITY.md`](BOOT_FEASIBILITY.md)**：
+**「U-Boot 能不能引导 OpenIPC 固件」的专门判定见 [`BOOT_FEASIBILITY.md`](../openipc/BOOT_FEASIBILITY.md)**：
 结论是**能，且不用改 U-Boot** —— `bootcmd=boot_fit` 无签名校验，
 把原厂 `boot_a.img` 当 FIT 模板重打包 OpenIPC 内核即可。
 障碍不在 U-Boot 本身，而在「官方 `zboot.img` 默认不是 FIT」「U-Boot 强制注入
 `rootfstype=squashfs`」「SC5338 驱动尚未编码」这三处。前两处已有解法（FIT 模板 /
-`CONFIG_CMDLINE_FORCE`），第三处资料已备齐，见 [`SC5338.md`](SC5338.md)。
+`CONFIG_CMDLINE_FORCE`），第三处资料已备齐，见 [`SC5338.md`](../openipc/SC5338.md)。
 
 ---
 

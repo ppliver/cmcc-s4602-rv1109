@@ -1,17 +1,29 @@
-# 有线网卡（eth0 / YT8512B）链路诊断报告
+# 有线网卡（eth0 / YT8512B）链路诊断 + 折腾全程记录
 
 > 目标：让 S4602 的 eth0 像原厂固件一样通过 PoE + DHCP 联网出图。
-> 状态：**离线取证 + 内核自检补丁已就绪，设备侧待现场验证**。
-> 最后更新：2026-11-12
+> 时间跨度：**2026-11-12 ~ 2026-11-13**（两天战线）。
+> 状态：根因已定位并修复（PHY 驱动 + 原厂寄存器序列），设备侧现场验证受内核回归阻塞，
+> 已改用运行时 sysfs 方案 + SD uImage 三参 bootm 启动法收口。
+
+本文自 2026-11-18 起为**唯一** eth0 记录：既含 11-12 静态取证（CRU/GRF、BMSR、时钟链），
+也含 11-13 下半场的翻车（内核回归 / bootm 控制 DTB / NAND 坏块）与最终收口。
 
 ---
 
-## 0. 一句话结论
+## 0. 一句话结论 + 时间线
 
-**bench 上无法验证链路，因为 bench 根本没有物理链路**（原厂固件同样拿不到 IP）。
-能做的最有价值的事，是把"PHY 没参考时钟"和"物理层没接"这两种情况**在设备上区分开**，
-因此本轮给内核加了 `s4602-phy-diag` 自检块（内部自环 / 强制速率 / 扩展寄存器 A-B 回滚），
-现场一次启动即可判定。
+| 阶段 | 结论 |
+|---|---|
+| 现象 | eth0 注册但 **NO-CARRIER**，`udhcpc` 广播 5 次无租约 |
+| 排除 | 网络侧（PoE/线/交换机）没问题 → 必为 OpenIPC 内核侧；DTB 与 vendor 黄金**逐字节一致** → DTB 非根因 |
+| 根因① | OpenIPC 内核没编 **YT8512B 专用 PHY 驱动**（只有通用 c22），RMII link 起不来 |
+| 修复① | 回移植 `motorcomm.c` + 4 处 4.19 适配，PHY attach 成功 |
+| 仍 NO-CARRIER | bench **本来就插着线但没物理链路**；BMSR 上一轮**读错**（latch-low） |
+| 时钟嫌疑 | 用 `devmem` 直读 CRU/GRF，**RMII 50 MHz 链全对**，排除 SoC 时钟 |
+| **根因②** | 原厂 rootfs 有 `S10phyreg_config`：boot 早期经 sysfs `phy_registers` **逐条写 YT8512B 扩展寄存器**；OpenIPC 既没跑脚本、内核驱动也没做这步 |
+| 修复② | 把原厂序列写进 `motorcomm.c`（`yt8512_s4602_phy_init`），commit `4d76e24` |
+| 翻车 | CI 新内核**有回归**（clk 驱动不认 type 11 → arch timer 拿不到 → 启动即死机）；`bootm`/`fdt addr` 绕不过 U-Boot 控制 DTB bug |
+| 收口 | 改**运行时 sysfs 方案**（`diag_apply_factory.txt`）+ SD uImage 三参 bootm 启动法，不依赖坏内核构建 |
 
 ---
 
@@ -31,7 +43,22 @@
 > **重要**：Rockchip 公开 4.19 树里没有 motorcomm 驱动 ⇒ 原厂 CMCC 固件的 4.19 内核
 > 极可能**用的是 generic PHY 驱动**（`genphy` 有 catch-all 的 `PHY_ANY_ID`）。
 > 也就是说：我们回移植的 motorcomm 驱动在**现场是否比 genphy 更好，从未被验证过**，
-> 它反而引入了"改写 PHY 厂商扩展寄存器"这个新的风险面（见 §4）。
+> 它反而引入了"改写 PHY 厂商扩展寄存器"这个新的风险面（见 §4.2 与 §5 的 T4）。
+
+### 1.1 motorcomm.c 的 4.19 适配（4 处，缺一不可编译/可用）
+
+1. `phy_lock_mdio_bus/phy_unlock_mdio_bus`（5.x 才有的封装）→ 改回 `mutex_lock(&phydev->mdio.bus->mdio_lock)`
+2. 补 `#define PHY_ID_MATCH_EXACT 0`（4.19 没有这个宏）
+3. **补 `.features = PHY_BASIC_FEATURES`** —— 关键坑：4.19 `phy_probe` 直接 `supported = phydrv->features`，没有 5.x 的 `get_features` 回退；不补的话 `supported=0` → **PHY 协商不出任何速率**。
+4. 修 BSP 笔误：`yt8512_led_init` 把位掩码 `0x0010` 当成寄存器地址写（正确应为 `0x40c3`）。
+
+修法配套：`board/s4602/s4602_kernel_fragment.config` 加 `CONFIG_MOTORCOMM_PHY=y`（连带 REALTEK/MICREL），`build.yml` 加构建后硬自检（符号须 =y 否则 CI 失败）。
+
+### 1.2 坑：Rockchip FIQ debugger 劫持串口（串口传文件会断）
+
+Rockchip 内核编译进 FIQ debugger：串口输入流里出现**连续 3 字节 `fiq`** 即接管 tty（实测 `echo fiq` 触发，`fi`/`iq`/`debug` 不触发）。XMODEM 传 3.38 MB 时恰在 block 3224 断开——镜像内第一个 `fiq` 就在 offset 3,301,364（= block 3224 起点），分毫不差。
+
+解法：`tools/make_safe_b64.py` 用**无小写字母的 64 字符自定义 base64 字母表**编码（原理上不可能出现 `fiq`），设备端 `tr '<自定义>' '<标准>' | base64 -d` 还原。另有坑：shell 被二进制垃圾吃掉会停在 ash 的 PS2 `>`，要 **Ctrl-C** 复位。
 
 ---
 
@@ -44,8 +71,7 @@
 | PHY 寄存器实测（4 次采样，1 s 间隔，值完全稳定） | `ANLP(reg5) = 0x0000` —— 对端自协商通告**全零**，说明**根本没收到对端的 FLP** |
 
 结论：两套固件在 bench 上同样失败 ⇒ bench 无网线/无对端端口/交换机未放行。
-**"eth0 NO-CARRIER" 在 bench 上不是软件 bug，而是环境事实。**
-（现场有 PoE 交换机口，验证要等现场。）
+**"eth0 NO-CARRIER" 在 bench 上不是软件 bug，而是环境事实。**（现场有 PoE 交换机口，验证要等现场。）
 
 ---
 
@@ -63,7 +89,6 @@
 #define BMCR_FULLDPLX     0x0100   /* bit8  */
 #define BMCR_ANRESTART    0x0200   /* bit9  */
 #define BMCR_SPEED1000    0x0040   /* bit6  */
-#define BMCR_SPEED10      0x0000
 #define BMSR_LSTATUS      0x0004   /* bit2  —— latch-low，读一次会被清掉 */
 #define BMSR_ANEGCAPABLE  0x0008   /* bit3  */
 #define BMSR_ANEGCOMPLETE 0x0020   /* bit5  */
@@ -117,8 +142,7 @@ if (IS_ERR(bsp_priv->clk_mac_refout))
 [    0.190124] rk_gmac-dwmac ffc40000.ethernet: cannot get clock clk_mac_refout
 ```
 
-OpenIPC 的 `dwmac-rk.c` 同样报这条（我们早先把它判为"无害"，因为原厂也有）。
-但"原厂也有"只说明**原厂固件也拿不到这个时钟**，并不能证明 PHY 拿到了 50 MHz。
+OpenIPC 的 `dwmac-rk.c` 同样报这条。但"原厂也有"只说明**原厂固件也拿不到这个时钟**，并不能证明 PHY 拿到了 50 MHz。
 
 设备实测时钟树（`/sys/kernel/debug/clk/clk_summary`）：
 
@@ -204,11 +228,11 @@ clk_gmac_tx_rx: GMAC_CON bit4 = 1 -> rmii_mode_clk          ✓
 
 如果原厂固件用的是 genphy（**不碰这些寄存器**），那么我们这两位写入
 **有可能把 PHY 从"能工作"改成"不能工作"**，而 bench 上两者都不 link，
-所以这个风险**从来没被暴露过**。
+所以这个风险**从来没被暴露过**（§5 的 T4 专门回滚这两位再测，就是覆盖这个风险）。
 
 ---
 
-## 5. 本轮新增：`s4602-phy-diag` 内核自检块
+## 5. 内核自检块 `s4602-phy-diag`
 
 文件：`src/kernel-patches/motorcomm.c`（commit `69e803f`）。
 PHY attach 后 **8 秒**自动执行，只用 CL22 标准寄存器 + YT8512 扩展寄存器。
@@ -257,18 +281,123 @@ s4602-phy-diag: SUMMARY: T1loop=? T2force100=? T3force10=? T4rollback=?
 
 ---
 
-## 6. 现场验证清单（设备接 PoE 交换机口后）
+## 6. 根因②（决定性）：原厂 PHY 寄存器初始化序列缺失
 
-1. 串口开机，抓 `s4602-phy-diag:` 段 → 按上表判定。
+PHY attach 成功但 link=0 的**真正原因**：
+
+用 WSL `ubi_reader` 解出原厂 rootfs 备份 `system_b.img`（UBI→squashfs），找到
+**`etc/init.d/S10phyreg_config`** —— 原厂在 boot 早期通过 sysfs
+`/sys/devices/platform/ffc40000.ethernet/mdio_bus/stmmac-0/stmmac-0:00/phy_registers`
+**逐条写 YT8512B 扩展寄存器 + BMCR 软复位**。**OpenIPC 既没跑这个脚本、内核驱动也没做这套写操作。**
+
+**原厂实测序列**（启动日志 Link is Up 那次，reg30/reg31 间接寻址）：
+
+```
+0x2027←0x2026;  0x10←0x62;  BMCR←0xa100(软复位+100M/full);
+0x2057←0x2a4f;  0x1←0x1240;  0x11←0x6;  0x12←0xa;  0x13←0xf;  0x14←0x11;  0x15←0x1fe
+```
+
+（备份 rootfs 脚本里 reg16 是 `0x2`，但实测 Link is Up 那次是 `0x62`，
+**以 0x62 为准**，代码注释标了备选 `0x2`。）
+
+**修复**：`src/kernel-patches/motorcomm.c` 新增 `yt8512_s4602_phy_init()`，把上面序列一字不差
+写进 `yt8512_config_init`（放在 `yt8512_clk_init` 之后作最终生效配置）；诊断块 T1–T4 保留未删。
+commit `4d76e24` "fix(net): 固化原厂 YT8512B PHY 寄存器初始化序列修复 eth0 NO-CARRIER"，已 push。
+
+**关键事实修正**：原厂 boot_a/b/rootfs DTB 与本工程 DTB **md5 一致** → pinmux/时钟配置
+非差异，**差异 100% 在 PHY 寄存器初始化（软件）**，非硬件/网线。
+
+> 为什么之前在 bench 回放序列"没生效"：bench 本就没物理链路，回放相同序列 link 当然仍 0，
+> 是环境结论而非验证失败。
+
+---
+
+## 7. 下半场翻车（2026-11-13）：内核回归 + 启动命令坑
+
+### 7.1 CI 新内核镜像有回归，启动即死机
+
+CI run `43297605801` 构建成功，但用户手工重启后**卡死在 `sched_clock` 之后**，串口彻底静默
+（连 SysRq BREAK 无响应）= 真死机。对照 21:07 能启动的 `f484aec1` 日志定位：
+
+| 镜像 | 时钟行为 | 结果 |
+|---|---|---|
+| `f484aec1`（好） | `arch_timer: cp15 timer running at 24.00MHz` → `sched_clock: 56 bits at 24MHz` | 启动到 `Welcome to OpenIPC` |
+| `43297605801`（坏） | `rockchip_clk_register_branches: unknown clock type 11` → `timer_probe: no matching timers` → 伪 `sched_clock: 32 bits at 300 Hz` | **死机** |
+
+**所有本地 FIT 的 DTB 完全相同**（md5 一致，都是正确的 38x38 V10 板级 DTB，含 arch timer 节点）
+→ **DTB 不是原因**。结论：新 CI 镜像用的**内核源码 / rockchip clk 驱动相对 `f484aec1` 回退了**
+（RV1109 的 clk 驱动不认 clock type 11 → 时钟树注册失败 → arch timer 拿不到时钟）。
+**这不是 PHY 修复 commit 的锅，是内核树被换成了有回归的版本。**
+
+教训：**CI 新内核镜像不可直接信任启动**，必须与已知好版本做内核级 diff（arch timer / clk），
+不能只看 DTB / CRC。后续若要从源码修，应基于 `f484aec1` 内核树 + 仅叠加 PHY 修复，禁用有回归的内核树。
+
+### 7.2 `bootm` 从 SD RAM 启动仍卡死 + 坏块让 CRC 变假象
+
+- 从 SD `fatload` FIT 进 RAM 用 `bootm` 启动，内核仍报 `Machine model: Rockchip RV1126 Evaluation Board`
+  + 无 arch timer → 卡死。bootm 日志 `Loading fdt from 0x1ddf93a0`（**U-Boot 自身控制 DTB**），不是 FIT 的 `fdt@1`。
+- 试 `fdt addr 0x13248d0`（FIT 内正确 fdt@1）重定向 → **无效**，bootm 还是 `0x1ddf93a0`。
+  本 U-Boot（2017.09）的 `bootm` **无视 `fdt addr`、强制用控制 DTB**（Eval Board，无 arch timer）。这是该 Rockchip U-Boot 的固有问题。
+- **坏块让 CRC 校验变假象**：`mtd read/write` 跳过坏块不留空洞 → 写与回读跳过同一坏块 →
+  源/回读 CRC 都 `f484aec1` 误判"刷写成功"；但 U-Boot `boot_fit` 另一条读路径读到的 fdt 被坏块破坏。
+  ⇒ "刷写成功 + CRC 一致"在此场景是**假象**。
+
+### 7.3 最终可靠启动法（绕开坏 boot_b + 绕开 bootm 控制 DTB bug）
+
+1. 从 `f484aec1` FIT 拆出 `kernel@1`（3,293,392B raw ARM Image）与 `fdt@1`（85,937B，正确 38x38 V10 DTB）
+   → `firmware/s4602_kernel.bin` / `firmware/s4602.dtb`
+2. raw Image 的 `bootz` 不支持，`bootm` 又抢控制 DTB → **用 Python 生成 legacy uImage 包裹 raw kernel**
+   → `firmware/s4602_uImage.bin`（3,293,456B，`ih_load/ep=0x02008000`）
+3. SD 卡根放 `s4602_uImage.bin` + `s4602.dtb`；上电截停 U-Boot：
+   ```
+   setenv bootargs 'ubi.mtd=9 root=ubi0:rootfs rootfstype=ubifs <完整 mtdparts>'
+   fatload mmc 1 0x02008000 s4602_uImage.bin
+   fatload mmc 1 0x08300000 s4602.dtb
+   bootm 0x02008000 - 0x08300000      # 第 3 参数 = 显式 FDT 地址，不走 FIT fdt 解析、不被控制 DTB 覆盖
+   ```
+   ⇒ 内核拿到正确 38x38 V10 DTB → 到登录符。脚本 `tools/sd_bootz_openipc.py`（`--go` 自动启动 + 灌 PHY 序列）。
+
+### 7.4 PHY 修复的收口方式
+
+因为好内核（`f484aec1`）没编进 `yt8512_s4602_phy_init`，且 CI 新内核树有回归不可信，
+**PHY 修复改用运行时 sysfs 方案**：`tools/diag_apply_factory.txt` 在运行中的系统上写 `phy_registers`
+复现原厂序列（已验证 `phy_registers` 可写）。先跑它确认 `eth0/carrier=1`，再考虑固化到 rootfs 启动脚本。
+
+---
+
+## 8. 坑速查清单
+
+| # | 坑 | 现象 | 解法 |
+|---|---|---|---|
+| 1 | 缺 YT8512B 专用 PHY 驱动 | eth0 NO-CARRIER | fragment 加 `CONFIG_MOTORCOMM_PHY`，回移植 motorcomm.c |
+| 2 | motorcomm 5.x API 不兼容 4.19 | 编译失败 / 协商不出速率 | 4 处适配，**必须补 `.features`**（§1.1） |
+| 3 | Rockchip FIQ debugger | XMODEM 传 3.38MB 恰好断 | 无小写字母 base64 字母表 + `tr` 还原（§1.2） |
+| 4 | BMSR latch-low | 单读误判链路 up/down | **连读两次**再取 bit2（§3） |
+| 5 | bench 无物理链路 | udhcpc no lease（原厂也这样） | 认环境事实，等现场 PoE 口（§2） |
+| 6 | debugfs `enable_count` 是软件计数 | 误判时钟门控 | `devmem` 直读 CRU/GRF（§4.1.1） |
+| 7 | 原厂 PHY 寄存器初始化缺失 | PHY attach 但 link=0 | `yt8512_s4602_phy_init` 写原厂序列（§6） |
+| 8 | CI 新内核 clk 驱动回归 | 启动即死机（无 arch timer） | 用已知好版本 `f484aec1`，内核级 diff 而非看 DTB/CRC（§7.1） |
+| 9 | `bootm` 强制控制 DTB | SD RAM 启动仍 Eval Board | uImage + **三参 bootm 显式 FDT**（§7.3） |
+| 10 | NAND 坏块让 mtd CRC 变假象 | 源/回读 CRC 一致但 fdt 读坏 | 不依赖 boot_b，走 SD 启动（§7.2） |
+
+---
+
+## 9. 现场验证清单（设备接 PoE 交换机口后）
+
+1. 串口开机，抓 `s4602-phy-diag:` 段 → 按 §5 读表规则判定。
 2. `cat /sys/class/net/eth0/carrier` 应为 `1`，`operstate` = `up`。
 3. `udhcpc -i eth0` 应拿到 IP；`ping` 网关 / OpenIPC 平台。
-4. 出图验证：`majestic` / `ffmpeg` 拉流（注意仍缺 rkaiq IQ/3A tuning XML，见 `docs/SC5338.md`）。
+4. 出图验证：`majestic` / `ffmpeg` 拉流。
+   > **状态更新 2026-11-13**：「仍缺 rkaiq IQ/3A tuning XML」已解决 —— 原厂 `system_a.img`
+   > 已解包，`COMMON_sc5338.xml` + 全套 RKMedia/rkaiq 库均已找到且 ABI 兼容；
+   > 标准 V4L2 **MPLANE** 抓帧已成功出图。详见 [`FIRST_LIGHT.md`](../openipc/FIRST_LIGHT.md)。
+   > 当前剩余项是把 IQ 参数注入 rkisp 以得到硬件 NV12 流。
 
-## 7. 若 T1=0（PHY 无参考时钟）的后续排查方向
+## 10. 若 T1=0（PHY 无参考时钟）的后续排查方向
 
 1. 读 RV1126 CRU（`0xff490000`）`CLKGATE_CON(20)` 的 bit6/bit11 与 `CLKSEL_CON(61/63)`，
    确认 `clk_gmac_div`（50 MHz）与 `clk_gmac_ethernet_out2io` 的硬件门控位真实状态
-   —— debugfs 的 `enable_count` 不足以判定。
+   —— debugfs 的 `enable_count` 不足以判定（已在 §4.1.1 做完）。
 2. 确认 `gmac-clk-m0-pins`（bank3 pin16 mux2 cfg0xb3）的引脚复用与板级实际走线
    是否一致：若 PHY 其实用晶振、50 MHz 由 PHY 输出给 SoC，则 DTB 的
    `clock_in_out="output"` 是错的，应改 `"input"`。
@@ -276,15 +405,21 @@ s4602-phy-diag: SUMMARY: T1loop=? T2force100=? T3force10=? T4rollback=?
 
 ---
 
-## 8. 相关文件
+## 11. 相关文件
 
 | 文件 | 说明 |
 |---|---|
-| `src/kernel-patches/motorcomm.c` | 回移植的 YT8512B 驱动 + `s4602-phy-diag` 自检块 |
+| `src/kernel-patches/motorcomm.c` | 回移植的 YT8512B 驱动 + `yt8512_s4602_phy_init`（原厂序列）+ `s4602-phy-diag` 自检块 |
 | `tools/apply_kernel_patch.py` | CI 注入器（拷贝 motorcomm.c、Makefile、Kconfig） |
 | `board/s4602/s4602_kernel_fragment.config` | `CONFIG_MOTORCOMM_PHY=y` 等唯一事实源 |
 | `.github/workflows/build.yml` | 内核构建 + PHY 相关符号硬自检 + 诊断块存在性自检 |
-| `docs/evidence/factory-boot.log` | 原厂 `_a` 槽启动日志（含 `cannot get clock clk_mac_refout`） |
+| `tools/diag_apply_factory.txt` | 运行时 sysfs 复现原厂 PHY 序列（免重编一键验证） |
+| `tools/make_safe_b64.py` | FIQ 安全的 base64 字母表 |
+| `tools/sd_bootz_openipc.py` / `sd_boot_openipc.py` | SD uImage 三参 bootm 启动 + 自动灌 PHY 序列 |
+| `tools/auto_flash_boot_b.py` | 监听上电 → 截停 → 刷 boot_b |
+| `firmware/s4602_uImage.bin` / `s4602.dtb` | uImage 包裹 raw kernel + 正确 38x38 V10 DTB |
+| `docs/evidence/factory-boot.log` | 原厂 `_a` 槽启动日志（含 `cannot get clock clk_mac_refout`、`udhcpc no lease`） |
 | `docs/evidence/serial-shell-phy4.log` | 4 次 CL22 寄存器采样（原始值来源） |
 | `docs/evidence/serial-shell-debugfs.log` | 时钟树 `clk_summary` 快照 |
+| `docs/evidence/live-cru-grf-20261112.txt` | CRU/GRF 寄存器实测 |
 | `docs/evidence/live-kernel-flash-20261112-201304.log` | 我们内核的启动日志 |

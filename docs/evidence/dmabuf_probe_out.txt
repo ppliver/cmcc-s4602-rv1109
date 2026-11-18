@@ -1,0 +1,16 @@
+/dev/video0      QUERYCAP=ok driver=rkcif card=rkcif
+    G_FMT 2880x1616 fourcc=NV12 planes=1 bpl=2880 sizeimage=6981120
+    REQBUFS MMAP     OK (count=3)
+    REQBUFS DMABUF   OK (count=3)
+    REQBUFS USERPTR  Invalid argument (count=3)
+/dev/video5      QUERYCAP=ok driver=rkisp_v4 card=rkisp_mainpath
+    G_FMT 1280x720 fourcc=NV12 planes=1 bpl=1280 sizeimage=1382400
+    REQBUFS MMAP     OK (count=3)
+    REQBUFS DMABUF   OK (count=3)
+    REQBUFS USERPTR  OK (count=3)
+/dev/video6      QUERYCAP=ok driver=rkisp_v4 card=rkisp_selfpath
+    G_FMT 1280x720 fourcc=NV12 planes=1 bpl=1920 sizeimage=1843200
+    REQBUFS MMAP     OK (count=3)
+    REQBUFS DMABUF   OK (count=3)
+    REQBUFS USERPTR  OK (count=3)
+RC=0

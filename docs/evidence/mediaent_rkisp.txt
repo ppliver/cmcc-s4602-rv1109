@@ -1,0 +1,123 @@
+[dev] /dev/media1 driver=rkisp model=rkisp0
+[entities]
+  id=1   name='rkisp-isp-subdev' type=0x20000 pads=4 links=5
+  id=6   name='rkisp-csi-subdev' type=0x20000 pads=6 links=4
+  id=6   name='rkisp-csi-subdev' type=0x20000 pads=6 links=4
+  id=6   name='rkisp-csi-subdev' type=0x20000 pads=6 links=4
+  id=6   name='rkisp-csi-subdev' type=0x20000 pads=6 links=4
+  id=6   name='rkisp-csi-subdev' type=0x20000 pads=6 links=4
+  id=13  name='rkisp-bridge-ispp' type=0x20000 pads=1 links=0
+  id=13  name='rkisp-bridge-ispp' type=0x20000 pads=1 links=0
+  id=13  name='rkisp-bridge-ispp' type=0x20000 pads=1 links=0
+  id=13  name='rkisp-bridge-ispp' type=0x20000 pads=1 links=0
+  id=13  name='rkisp-bridge-ispp' type=0x20000 pads=1 links=0
+  id=13  name='rkisp-bridge-ispp' type=0x20000 pads=1 links=0
+  id=13  name='rkisp-bridge-ispp' type=0x20000 pads=1 links=0
+  id=17  name='rkisp_mainpath' type=0x10001 pads=1 links=0
+  id=17  name='rkisp_mainpath' type=0x10001 pads=1 links=0
+  id=17  name='rkisp_mainpath' type=0x10001 pads=1 links=0
+  id=17  name='rkisp_mainpath' type=0x10001 pads=1 links=0
+  id=23  name='rkisp_selfpath' type=0x10001 pads=1 links=0
+  id=23  name='rkisp_selfpath' type=0x10001 pads=1 links=0
+  id=23  name='rkisp_selfpath' type=0x10001 pads=1 links=0
+  id=23  name='rkisp_selfpath' type=0x10001 pads=1 links=0
+  id=23  name='rkisp_selfpath' type=0x10001 pads=1 links=0
+  id=23  name='rkisp_selfpath' type=0x10001 pads=1 links=0
+  id=29  name='rkisp_rawwr0' type=0x10001 pads=1 links=0
+  id=29  name='rkisp_rawwr0' type=0x10001 pads=1 links=0
+  id=29  name='rkisp_rawwr0' type=0x10001 pads=1 links=0
+  id=29  name='rkisp_rawwr0' type=0x10001 pads=1 links=0
+  id=29  name='rkisp_rawwr0' type=0x10001 pads=1 links=0
+  id=29  name='rkisp_rawwr0' type=0x10001 pads=1 links=0
+  id=35  name='rkisp_rawwr1' type=0x10001 pads=1 links=0
+  id=35  name='rkisp_rawwr1' type=0x10001 pads=1 links=0
+  id=35  name='rkisp_rawwr1' type=0x10001 pads=1 links=0
+  id=35  name='rkisp_rawwr1' type=0x10001 pads=1 links=0
+  id=35  name='rkisp_rawwr1' type=0x10001 pads=1 links=0
+  id=35  name='rkisp_rawwr1' type=0x10001 pads=1 links=0
+  id=41  name='rkisp_rawwr2' type=0x10001 pads=1 links=0
+  id=41  name='rkisp_rawwr2' type=0x10001 pads=1 links=0
+  id=41  name='rkisp_rawwr2' type=0x10001 pads=1 links=0
+  id=41  name='rkisp_rawwr2' type=0x10001 pads=1 links=0
+  id=41  name='rkisp_rawwr2' type=0x10001 pads=1 links=0
+  id=41  name='rkisp_rawwr2' type=0x10001 pads=1 links=0
+  id=47  name='rkisp_rawwr3' type=0x10001 pads=1 links=0
+  id=47  name='rkisp_rawwr3' type=0x10001 pads=1 links=0
+  id=47  name='rkisp_rawwr3' type=0x10001 pads=1 links=0
+  id=47  name='rkisp_rawwr3' type=0x10001 pads=1 links=0
+  id=47  name='rkisp_rawwr3' type=0x10001 pads=1 links=0
+  id=47  name='rkisp_rawwr3' type=0x10001 pads=1 links=0
+  id=53  name='rkisp_rawrd0_m' type=0x10001 pads=1 links=1
+  id=53  name='rkisp_rawrd0_m' type=0x10001 pads=1 links=1
+  id=53  name='rkisp_rawrd0_m' type=0x10001 pads=1 links=1
+  id=53  name='rkisp_rawrd0_m' type=0x10001 pads=1 links=1
+  id=53  name='rkisp_rawrd0_m' type=0x10001 pads=1 links=1
+  id=53  name='rkisp_rawrd0_m' type=0x10001 pads=1 links=1
+  id=59  name='rkisp_rawrd2_s' type=0x10001 pads=1 links=1
+  id=59  name='rkisp_rawrd2_s' type=0x10001 pads=1 links=1
+  id=59  name='rkisp_rawrd2_s' type=0x10001 pads=1 links=1
+  id=59  name='rkisp_rawrd2_s' type=0x10001 pads=1 links=1
+  id=59  name='rkisp_rawrd2_s' type=0x10001 pads=1 links=1
+  id=59  name='rkisp_rawrd2_s' type=0x10001 pads=1 links=1
+  id=65  name='rkisp_rawrd1_l' type=0x10001 pads=1 links=1
+  id=65  name='rkisp_rawrd1_l' type=0x10001 pads=1 links=1
+  id=65  name='rkisp_rawrd1_l' type=0x10001 pads=1 links=1
+  id=65  name='rkisp_rawrd1_l' type=0x10001 pads=1 links=1
+  id=65  name='rkisp_rawrd1_l' type=0x10001 pads=1 links=1
+  id=65  name='rkisp_rawrd1_l' type=0x10001 pads=1 links=1
+  id=71  name='rkisp-statistics' type=0x10001 pads=1 links=0
+  id=71  name='rkisp-statistics' type=0x10001 pads=1 links=0
+  id=71  name='rkisp-statistics' type=0x10001 pads=1 links=0
+  id=71  name='rkisp-statistics' type=0x10001 pads=1 links=0
+  id=71  name='rkisp-statistics' type=0x10001 pads=1 links=0
+  id=71  name='rkisp-statistics' type=0x10001 pads=1 links=0
+  id=77  name='rkisp-input-params' type=0x10001 pads=1 links=1
+  id=77  name='rkisp-input-params' type=0x10001 pads=1 links=1
+  id=77  name='rkisp-input-params' type=0x10001 pads=1 links=1
+  id=77  name='rkisp-input-params' type=0x10001 pads=1 links=1
+  id=77  name='rkisp-input-params' type=0x10001 pads=1 links=1
+  id=77  name='rkisp-input-params' type=0x10001 pads=1 links=1
+  id=83  name='rkisp-mipi-luma' type=0x10001 pads=1 links=0
+  id=83  name='rkisp-mipi-luma' type=0x10001 pads=1 links=0
+  id=83  name='rkisp-mipi-luma' type=0x10001 pads=1 links=0
+  id=83  name='rkisp-mipi-luma' type=0x10001 pads=1 links=0
+  id=83  name='rkisp-mipi-luma' type=0x10001 pads=1 links=0
+  id=83  name='rkisp-mipi-luma' type=0x10001 pads=1 links=0
+  id=89  name='rkcif_mipi_lvds' type=0x20000 pads=1 links=1
+  id=89  name='rkcif_mipi_lvds' type=0x20000 pads=1 links=1
+  id=89  name='rkcif_mipi_lvds' type=0x20000 pads=1 links=1
+  id=89  name='rkcif_mipi_lvds' type=0x20000 pads=1 links=1
+  id=89  name='rkcif_mipi_lvds' type=0x20000 pads=1 links=1
+  id=89  name='rkcif_mipi_lvds' type=0x20000 pads=1 links=1
+[entities exact-id scan]
+  id=1   rkisp-isp-subdev             pads=4 links=5
+      LINK src=1:p2 -> sink=13:p0 flags=0x1 ENABLED
+      LINK src=1:p2 -> sink=17:p0 flags=0x0 off
+      LINK src=1:p2 -> sink=23:p0 flags=0x1 ENABLED
+      LINK src=1:p3 -> sink=71:p0 flags=0x1 ENABLED
+      LINK src=1:p3 -> sink=83:p0 flags=0x1 ENABLED
+  id=6   rkisp-csi-subdev             pads=6 links=4
+      LINK src=6:p2 -> sink=29:p0 flags=0x1 ENABLED
+      LINK src=6:p3 -> sink=35:p0 flags=0x1 ENABLED
+      LINK src=6:p4 -> sink=41:p0 flags=0x1 ENABLED
+      LINK src=6:p5 -> sink=47:p0 flags=0x1 ENABLED
+  id=13  rkisp-bridge-ispp            pads=1 links=0
+  id=17  rkisp_mainpath               pads=1 links=0
+  id=23  rkisp_selfpath               pads=1 links=0
+  id=29  rkisp_rawwr0                 pads=1 links=0
+  id=35  rkisp_rawwr1                 pads=1 links=0
+  id=41  rkisp_rawwr2                 pads=1 links=0
+  id=47  rkisp_rawwr3                 pads=1 links=0
+  id=53  rkisp_rawrd0_m               pads=1 links=1
+      LINK src=53:p0 -> sink=1:p0 flags=0x0 off
+  id=59  rkisp_rawrd2_s               pads=1 links=1
+      LINK src=59:p0 -> sink=1:p0 flags=0x0 off
+  id=65  rkisp_rawrd1_l               pads=1 links=1
+      LINK src=65:p0 -> sink=1:p0 flags=0x0 off
+  id=71  rkisp-statistics             pads=1 links=0
+  id=77  rkisp-input-params           pads=1 links=1
+      LINK src=77:p0 -> sink=1:p1 flags=0x1 ENABLED
+  id=83  rkisp-mipi-luma              pads=1 links=0
+  id=89  rkcif_mipi_lvds              pads=1 links=1
+      LINK src=89:p0 -> sink=1:p0 flags=0x1 ENABLED
+EXIT=0

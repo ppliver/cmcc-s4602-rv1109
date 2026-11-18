@@ -1,0 +1,156 @@
+==== type 0x1 (NORMAL) ====
+[mppprobe] MPP raw-MPI hardware encoder probe
+[mppprobe] sizeof(MppApi)=128  MPP_ENC_SET_CFG=0x320001 GET_CFG=0x320002 GET_HDR_SYNC=0x32000d AVC=7 YUV420SP=0
+[ok] dlopen /tmp/factory/lib/librockchip_mpp.so.1
+[sym] mpp_create                         OK
+[sym] mpp_init                           OK
+[sym] mpp_destroy                        OK
+[sym] mpp_enc_cfg_init                   OK
+[sym] mpp_enc_cfg_deinit                 OK
+[sym] mpp_enc_cfg_set_s32                OK
+[sym] mpp_enc_cfg_show                   OK
+[sym] mpp_buffer_group_get               OK
+[sym] mpp_buffer_group_put               OK
+[sym] mpp_buffer_get_with_tag            OK
+[sym] mpp_buffer_put_with_caller         OK
+[sym] mpp_buffer_get_ptr_with_caller     OK
+[sym] mpp_buffer_get_size_with_caller    OK
+[sym] mpp_frame_init                     OK
+[sym] mpp_frame_deinit                   OK
+[sym] mpp_frame_set_width                OK
+[sym] mpp_frame_set_height               OK
+[sym] mpp_frame_set_hor_stride           OK
+[sym] mpp_frame_set_ver_stride           OK
+[sym] mpp_frame_set_fmt                  OK
+[sym] mpp_frame_set_eos                  OK
+[sym] mpp_frame_set_buffer               OK
+[sym] mpp_frame_get_meta                 OK
+[sym] mpp_packet_init_with_buffer        OK
+[sym] mpp_packet_deinit                  OK
+[sym] mpp_packet_set_length              OK
+[sym] mpp_packet_get_pos                 OK
+[sym] mpp_packet_get_length              OK
+[sym] mpp_meta_set_packet                OK
+[sym] mpp_meta_set_buffer                OK
+mpp[2356]: mpp_info: mpp version: b2ee155 author: liyunjian      2021-11-19 project platform/external/mpp initialized
+[create] ret=0 ctx=0x4b9360 mpi=0xa6dcd41c
+[layout] mpi->size=128 (compile sizeof=128) mpi->version=0
+[layout] fn ptrs: encode_put_frame=0xa6cc5d54 encode_get_packet=0xa6cc5c40 control=0xa6cc56d8 reset=0xa6cc57c0
+mpp[2356]: mpp_rt: NOT found ion allocator
+mpp[2356]: mpp_rt: found drm allocator
+[init] MPP_CTX_ENC / AVC ret=0 OK
+[cfg] init ret=0 cfg=0x4c5000
+[cfg] MPP_ENC_GET_CFG ret=0
+[cfg] prep:width               = 640        ret=0
+[cfg] prep:height              = 360        ret=0
+[cfg] prep:hor_stride          = 640        ret=0
+[cfg] prep:ver_stride          = 368        ret=0
+[cfg] prep:format              = 0          ret=0
+[cfg] rc:mode                  = 1          ret=0
+[cfg] rc:fps_in_num            = 25         ret=0
+mpp[2356]: mpp_enc_cfg: mpp_enc_cfg_set_s32 failed to set rc:fps_in_denom to 1
+[cfg] rc:fps_in_denom          = 1          ret=-1
+[cfg] rc:fps_out_num           = 25         ret=0
+mpp[2356]: mpp_enc_cfg: mpp_enc_cfg_set_s32 failed to set rc:fps_out_denom to 1
+[cfg] rc:fps_out_denom         = 1          ret=-1
+[cfg] rc:gop                   = 25         ret=0
+[cfg] rc:bps_target            = 1500000    ret=0
+[cfg] codec:type               = 7          ret=0
+mpp[2356]: mpp_enc: MPP_ENC_SET_RC_CFG bps 1500000 [1500000 : 2500000] fps [25:25] gop 25
+mpp[2356]: h264e_api_v2: MPP_ENC_SET_PREP_CFG w:h [640:360] stride [640:368]
+mpp[2356]: mpp_enc: send header for set cfg change input/format 
+[cfg] MPP_ENC_SET_CFG ret=0 OK
+[buf] requesting type=0x1 (mode 0), frame_size=353280
+[buf] group_get ret=0 grp=0x4d45f4
+[buf] -> mpp_buffer_get_with_tag(grp, &frm_buf, 353280)
+[buf] <- get ret=0 frm_buf=0x4d46f4
+[buf] -> mpp_buffer_get_ptr_with_caller(frm_buf)
+[buf] <- ptr=0xa6258000
+[buf] -> allocating pkt_buf / md_buf
+[buf] pkt=0x4d47d4 md=0x4d48b4 combined ret=0
+mpp[2356]: mpp_enc: mode cbr bps [1500000:1500000:2500000] fps fix [25/1] -> fix [25/1] gop i [25] v [0]
+[hdr] GET_HDR_SYNC ret=0 len=36 first8=00 00 00 01 67 42 c0 1f 
+[frame] init ret=0
+[encode] put_frame ret=0
+[encode] get_packet ret=0 pkt=0x4d4994
+[encode] H264 packet len=898 first16=00 00 00 01 06 05 63 3d 07 6d 45 73 0f 41 a8 b1 
+[RESULT] *** HARDWARE H.264 ANNEX-B STREAM OK ***
+
+==== type 0x3 (DRM) ====
+[mppprobe] MPP raw-MPI hardware encoder probe
+[mppprobe] sizeof(MppApi)=128  MPP_ENC_SET_CFG=0x320001 GET_CFG=0x320002 GET_HDR_SYNC=0x32000d AVC=7 YUV420SP=0
+[ok] dlopen /tmp/factory/lib/librockchip_mpp.so.1
+[sym] mpp_create                         OK
+[sym] mpp_init                           OK
+[sym] mpp_destroy                        OK
+[sym] mpp_enc_cfg_init                   OK
+[sym] mpp_enc_cfg_deinit                 OK
+[sym] mpp_enc_cfg_set_s32                OK
+[sym] mpp_enc_cfg_show                   OK
+[sym] mpp_buffer_group_get               OK
+[sym] mpp_buffer_group_put               OK
+[sym] mpp_buffer_get_with_tag            OK
+[sym] mpp_buffer_put_with_caller         OK
+[sym] mpp_buffer_get_ptr_with_caller     OK
+[sym] mpp_buffer_get_size_with_caller    OK
+[sym] mpp_frame_init                     OK
+[sym] mpp_frame_deinit                   OK
+[sym] mpp_frame_set_width                OK
+[sym] mpp_frame_set_height               OK
+[sym] mpp_frame_set_hor_stride           OK
+[sym] mpp_frame_set_ver_stride           OK
+[sym] mpp_frame_set_fmt                  OK
+[sym] mpp_frame_set_eos                  OK
+[sym] mpp_frame_set_buffer               OK
+[sym] mpp_frame_get_meta                 OK
+[sym] mpp_packet_init_with_buffer        OK
+[sym] mpp_packet_deinit                  OK
+[sym] mpp_packet_set_length              OK
+[sym] mpp_packet_get_pos                 OK
+[sym] mpp_packet_get_length              OK
+[sym] mpp_meta_set_packet                OK
+[sym] mpp_meta_set_buffer                OK
+mpp[2363]: mpp_info: mpp version: b2ee155 author: liyunjian      2021-11-19 project platform/external/mpp initialized
+[create] ret=0 ctx=0x42d360 mpi=0xa6e6d41c
+[layout] mpi->size=128 (compile sizeof=128) mpi->version=0
+[layout] fn ptrs: encode_put_frame=0xa6d65d54 encode_get_packet=0xa6d65c40 control=0xa6d656d8 reset=0xa6d657c0
+mpp[2363]: mpp_rt: NOT found ion allocator
+mpp[2363]: mpp_rt: found drm allocator
+[init] MPP_CTX_ENC / AVC ret=0 OK
+[cfg] init ret=0 cfg=0x439000
+[cfg] MPP_ENC_GET_CFG ret=0
+[cfg] prep:width               = 640        ret=0
+[cfg] prep:height              = 360        ret=0
+[cfg] prep:hor_stride          = 640        ret=0
+[cfg] prep:ver_stride          = 368        ret=0
+[cfg] prep:format              = 0          ret=0
+[cfg] rc:mode                  = 1          ret=0
+[cfg] rc:fps_in_num            = 25         ret=0
+mpp[2363]: mpp_enc_cfg: mpp_enc_cfg_set_s32 failed to set rc:fps_in_denom to 1
+[cfg] rc:fps_in_denom          = 1          ret=-1
+[cfg] rc:fps_out_num           = 25         ret=0
+mpp[2363]: mpp_enc_cfg: mpp_enc_cfg_set_s32 failed to set rc:fps_out_denom to 1
+[cfg] rc:fps_out_denom         = 1          ret=-1
+[cfg] rc:gop                   = 25         ret=0
+[cfg] rc:bps_target            = 1500000    ret=0
+[cfg] codec:type               = 7          ret=0
+mpp[2363]: mpp_enc: MPP_ENC_SET_RC_CFG bps 1500000 [1500000 : 2500000] fps [25:25] gop 25
+mpp[2363]: h264e_api_v2: MPP_ENC_SET_PREP_CFG w:h [640:360] stride [640:368]
+mpp[2363]: mpp_enc: send header for set cfg change input/format 
+[cfg] MPP_ENC_SET_CFG ret=0 OK
+[buf] requesting type=0x3 (mode 0), frame_size=353280
+[buf] group_get ret=0 grp=0x4485f4
+[buf] -> mpp_buffer_get_with_tag(grp, &frm_buf, 353280)
+[buf] <- get ret=0 frm_buf=0x4486f4
+[buf] -> mpp_buffer_get_ptr_with_caller(frm_buf)
+[buf] <- ptr=0xa62f8000
+[buf] -> allocating pkt_buf / md_buf
+[buf] pkt=0x4487d4 md=0x4488b4 combined ret=0
+mpp[2363]: mpp_enc: mode cbr bps [1500000:1500000:2500000] fps fix [25/1] -> fix [25/1] gop i [25] v [0]
+[hdr] GET_HDR_SYNC ret=0 len=36 first8=00 00 00 01 67 42 c0 1f 
+[frame] init ret=0
+[encode] put_frame ret=0
+[encode] get_packet ret=0 pkt=0x448994
+[encode] H264 packet len=898 first16=00 00 00 01 06 05 63 3d 07 6d 45 73 0f 41 a8 b1 
+[RESULT] *** HARDWARE H.264 ANNEX-B STREAM OK ***
+

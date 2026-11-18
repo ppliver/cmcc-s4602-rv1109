@@ -1,6 +1,6 @@
 # S4602 救砖与 OpenIPC 移植（实证版）
 
-前置阅读：[`INCIDENT.md`](INCIDENT.md)（变砖根因与备份清单）、[`PORTING.md`](PORTING.md)（差距矩阵）、
+前置阅读：[`INCIDENT.md`](INCIDENT.md)（变砖根因与备份清单）、[`PORTING.md`](../openipc/PORTING.md)（差距矩阵）、
 [`FULL_BACKUP.md`](FULL_BACKUP.md)（完整备份的分通道 SOP 与双来源归档）。
 
 > **当前设备是半砖**：SPL 能运行，但进不了 U-Boot 控制台。
@@ -176,7 +176,7 @@ chosen bootargs。做 OpenIPC 版 DTS 时应以它为板级事实来源，
 把 OpenIPC `rockchip-rv11xx` 分支的 `rv1109-38-v10-spi-nand.dts` 当功能基线：
 
 - `sensor` → SC5338（i2c1@0x30，2-lane MIPI，HDR_X2）；OpenIPC 分支**没有** `sc5338.c`，
-  但 [`SC5338.md`](SC5338.md) 已备齐驱动资料与寄存器表，按第 6 节编码即可（不需原厂内核源码）
+  但 [`SC5338.md`](../openipc/SC5338.md) 已备齐驱动资料与寄存器表，按第 6 节编码即可（不需原厂内核源码）
 - `bootargs` → `earlycon=uart8250,mmio32,0xff570000 console=ttyFIQ0 ubi.mtd=8 root=ubi0:rootfs rootfstype=ubifs`
   （`system_a` = MTD **8**；官方基线写的是 `ubi.mtd=3`，必须改）
 - `mtdparts` → 原厂 14 分区完整串，见 `board/s4602/board.yaml`
@@ -193,7 +193,7 @@ chosen bootargs。做 OpenIPC 版 DTS 时应以它为板级事实来源，
 `Device Tree Blob version 17, size=1536`，`-p 0x800` 与原厂数据区偏移一致），
 让 `mkimg` 用 OpenIPC zImage + S4602 DTB 重新打包成同构 FIT，hash 由 mkimage 重算。
 `tools/build_s4602.sh` 已按此实现（`BOOT_IMG=boot-template.img`），并校验产物
-magic `d00dfeed` 与 ≤ 4 MiB。完整推导见 [`BOOT_FEASIBILITY.md`](BOOT_FEASIBILITY.md) 第 1 节。
+magic `d00dfeed` 与 ≤ 4 MiB。完整推导见 [`BOOT_FEASIBILITY.md`](../openipc/BOOT_FEASIBILITY.md) 第 1 节。
 
 写入 flash 之前仍在 RAM 里试，`iminfo` 必须能列出 kernel/fdt/hash OK：
 
@@ -225,7 +225,7 @@ bootm 0x1000000               # 或 boot_fit，以 iminfo 结果为准
 
 `tools/build_s4602.sh` 用 `SLOT=a|b` 切换 `ubi.mtd` 与写入偏移。
 未实测确认前，`openipc_blockers.slot_strategy_confirmed` 保持 `false`，
-`make_flash_plan.py` 会拒绝放行。详见 [`BOOT_FEASIBILITY.md`](BOOT_FEASIBILITY.md) 4.1。
+`make_flash_plan.py` 会拒绝放行。详见 [`BOOT_FEASIBILITY.md`](../openipc/BOOT_FEASIBILITY.md) 4.1。
 
 RAM 里从任一槽试启动（不改 A/B 标记，纯验证）：
 
@@ -252,7 +252,7 @@ U-Boot 把 `vendor-kernel.dtb` 的 `chosen bootargs` 与 env 合并、按 slot �
 可靠的做法是**内核 `CONFIG_CMDLINE_FORCE=y`**，把完整 cmdline 写进 `CONFIG_CMDLINE`
 （必须含 `mtdparts`，因为 `CONFIG_MTD_CMDLINE_PARTS=y` 依赖它），彻底忽略 bootloader
 传参。`tools/build_s4602.sh` 第 3 步已实现；构建后须实测打印的
-`Kernel command line` 确认 FORCE 生效。详见 [`BOOT_FEASIBILITY.md`](BOOT_FEASIBILITY.md) 第 2 节。
+`Kernel command line` 确认 FORCE 生效。详见 [`BOOT_FEASIBILITY.md`](../openipc/BOOT_FEASIBILITY.md) 第 2 节。
 
 ---
 

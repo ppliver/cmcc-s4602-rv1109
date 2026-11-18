@@ -1,0 +1,82 @@
+RC=0
+[vencprobe] official SDK struct sizes (armhf)
+  sizeof(VENC_CHN_ATTR_S)   = 100
+  sizeof(VENC_ATTR_S)       = 52
+  sizeof(VENC_RC_ATTR_S)    = 28
+  sizeof(VENC_GOP_ATTR_S)   = 20
+  offset VENC_ATTR.enType   = 0
+  offset VENC_ATTR.picW     = 24
+  offset CHN.stRcAttr       = 52
+  offset CHN.stGopAttr      = 80
+  enum RK_CODEC_TYPE_H264   = 6
+  enum IMAGE_TYPE_NV12      = 4
+  enum RK_ID_VENC           = 4
+##RKMEDIA Log level: 2
+[RKMEDIA][SYS][Info]:text is all=2
+[RKMEDIA][SYS][Info]:module is all, log_level is 2
+media get entity by name: stream_cif_dvp_id0 is null
+media get entity by name: stream_cif_dvp_id1 is null
+media get entity by name: stream_cif_dvp_id2 is null
+media get entity by name: stream_cif_dvp_id3 is null
+media get entity by name: rkcif-lvds-subdev is null
+media get entity by name: rkcif-lite-lvds-subdev is null
+media get entity by name: stream_cif is null
+media get entity by name: rkcif-dvp-sof is null
+media get entity by name: rkisp-mpfbc-subdev is null
+media get entity by name: rkisp_dmapath is null
+media get entity by name: rockchip-mipi-dphy-rx is null
+media get entity by name: rkcif_dvp is null
+media get entity by name: rkcif_dvp is null
+media get entity by name: rkcif_lite_mipi_lvds is null
+[03:57:33.217171][CAMHW]:XCAM ERROR CamHwIsp20.cpp:1022: No free isp&ispp needed by fake camera!
+register factory : rkmpp
+register factory : rkmpp
+register factory : video_enc
+register factory : audio_enc
+register factory : video_dec
+register factory : file_read_flow
+register factory : file_write_flow
+register factory : filter
+register factory : link_flow
+register factory : source_stream
+register factory : muxer_flow
+register factory : audio_dec
+register factory : output_stream
+register factory : move_detec
+register factory : occlusion_detec
+register factory : file_write_stream
+register factory : file_read_stream
+register factory : alsa_playback_stream
+register factory : alsa_capture_stream
+register factory : v4l2_capture_stream
+register factory : v4l2_output_stream
+register factory : drm_output_stream
+Rga built version:1.04 2874628+2021-04-04 23:47:11
+register factory : rkrga
+register factory : through_guard
+register factory : ANR
+register factory : AEC
+  SYS_Init -> 0
+  CreateChn(chn=0, codec=6, 1920x1080, rc=1) -> [RKMEDIA][SYS][Info]:RK_MPI_VENC_CreateChn: Enable VENC[0], Type:6 Start...
+[RKMEDIA][SYS][Info]:ParseMediaConfigFromMap: rect_x = 0, rect_y = 0, rect.w = 1920, rect.h = 1080 
+[RKMEDIA][SYS][Error]:MediaCfg: fps: KEY_FPS is null!
+-33 [BUSY]
+[RKMEDIA][SYS][Info]:RK_MPI_VENC_DestroyChn: Disable VENC[0] Start...
+[RKMEDIA][SYS][Info]:RK_MPI_VENC_DestroyChn: Disable VENC[0] End...
+  CreateChn(chn=1, codec=6, 1280x720, rc=1) -> [RKMEDIA][SYS][Info]:RK_MPI_VENC_CreateChn: Enable VENC[1], Type:6 Start...
+[RKMEDIA][SYS][Info]:ParseMediaConfigFromMap: rect_x = 0, rect_y = 0, rect.w = 1280, rect.h = 720 
+[RKMEDIA][SYS][Error]:MediaCfg: fps: KEY_FPS is null!
+-33 [BUSY]
+[RKMEDIA][SYS][Info]:RK_MPI_VENC_DestroyChn: Disable VENC[1] Start...
+[RKMEDIA][SYS][Info]:RK_MPI_VENC_DestroyChn: Disable VENC[1] End...
+  CreateChn(chn=2, codec=9, 1280x720, rc=4) -> [RKMEDIA][SYS][Info]:RK_MPI_VENC_CreateChn: Enable VENC[2], Type:9 Start...
+[RKMEDIA][SYS][Error]:gen_datatype_rule: miss output_data_type
+-33 [BUSY]
+[RKMEDIA][SYS][Info]:RK_MPI_VENC_DestroyChn: Disable VENC[2] Start...
+[RKMEDIA][SYS][Info]:RK_MPI_VENC_DestroyChn: Disable VENC[2] End...
+  CreateJpegLightChn(chn=3, codec=9, 1280x720, rc=4) -> -21 [ILLEGAL_PARAM]
+[RKMEDIA][SYS][Info]:RK_MPI_VENC_DestroyChn: Disable VENC[3] Start...
+[RKMEDIA][SYS][Info]:RK_MPI_VENC_DestroyChn: Disable VENC[3] End...
+
+  created 0/4 channels
+  RESULT: VENC_STRUCT_OK_BUT_CHANNEL_BLOCKED

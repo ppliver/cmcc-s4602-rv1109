@@ -1,0 +1,125 @@
+/dev/video0        drv=rkcif            card=rkcif                      caps=0x04201000 [CAPTURE_MPLANE STREAMING ]
+    CAPTURE         ENUM_FMT: ERR errno=22 (Invalid argument)
+    CAPTURE         G_FMT ERR errno=22 (Invalid argument)
+    CAPTURE_MPLANE  ENUM_FMT: NV16 NV61 NV12 NV21 YUYV YVYU UYVY VYUY RGB3 RGBP BGRH RGGB GRBG GBRG BA81 RG10 
+    CAPTURE_MPLANE  G_FMT OK  2880x1616 fourcc=BG10 planes=1 field=1
+/dev/video1        drv=rkcif            card=rkcif                      caps=0x04201000 [CAPTURE_MPLANE STREAMING ]
+    CAPTURE         ENUM_FMT: ERR errno=22 (Invalid argument)
+    CAPTURE         G_FMT ERR errno=22 (Invalid argument)
+    CAPTURE_MPLANE  ENUM_FMT: NV16 NV61 NV12 NV21 YUYV YVYU UYVY VYUY RGB3 RGBP BGRH RGGB GRBG GBRG BA81 RG10 
+    CAPTURE_MPLANE  G_FMT OK  2880x1616 fourcc=BG10 planes=1 field=1
+/dev/video2        drv=rkcif            card=rkcif                      caps=0x04201000 [CAPTURE_MPLANE STREAMING ]
+    CAPTURE         ENUM_FMT: ERR errno=22 (Invalid argument)
+    CAPTURE         G_FMT ERR errno=22 (Invalid argument)
+    CAPTURE_MPLANE  ENUM_FMT: NV16 NV61 NV12 NV21 YUYV YVYU UYVY VYUY RGB3 RGBP BGRH RGGB GRBG GBRG BA81 RG10 
+    CAPTURE_MPLANE  G_FMT OK  2880x1616 fourcc=BG10 planes=1 field=1
+/dev/video3        drv=rkcif            card=rkcif                      caps=0x04201000 [CAPTURE_MPLANE STREAMING ]
+    CAPTURE         ENUM_FMT: ERR errno=22 (Invalid argument)
+    CAPTURE         G_FMT ERR errno=22 (Invalid argument)
+    CAPTURE_MPLANE  ENUM_FMT: NV16 NV61 NV12 NV21 YUYV YVYU UYVY VYUY RGB3 RGBP BGRH RGGB GRBG GBRG BA81 RG10 
+    CAPTURE_MPLANE  G_FMT OK  2880x1616 fourcc=BG10 planes=1 field=1
+/dev/video4        drv=rkcif            card=rkcif                      caps=0x04a00000 [META_CAPTURE STREAMING ]
+    CAPTURE         ENUM_FMT: ERR errno=22 (Invalid argument)
+    CAPTURE         G_FMT ERR errno=22 (Invalid argument)
+    CAPTURE_MPLANE  ENUM_FMT: ERR errno=22 (Invalid argument)
+    CAPTURE_MPLANE  G_FMT ERR errno=22 (Invalid argument)
+/dev/video5        drv=rkisp_v4         card=rkisp_mainpath             caps=0x04201000 [CAPTURE_MPLANE STREAMING ]
+    CAPTURE         ENUM_FMT: ERR errno=22 (Invalid argument)
+    CAPTURE         G_FMT ERR errno=22 (Invalid argument)
+    CAPTURE_MPLANE  ENUM_FMT: UYVY 422P NV16 NV61 YM16 NV21 NV12 NM21 NM12 YU12 YM24 RGGB GRBG GBRG BA81 RG10 
+    CAPTURE_MPLANE  G_FMT OK  2880x1616 fourcc=NV12 planes=1 field=1
+/dev/video6        drv=rkisp_v4         card=rkisp_selfpath             caps=0x04201000 [CAPTURE_MPLANE STREAMING ]
+    CAPTURE         ENUM_FMT: ERR errno=22 (Invalid argument)
+    CAPTURE         G_FMT ERR errno=22 (Invalid argument)
+    CAPTURE_MPLANE  ENUM_FMT: UYVY 422P NV16 NV61 YM16 NV21 NV12 NM21 NM12 YU12 YM24 GREY XR24 RGBP FBCG(C) 
+    CAPTURE_MPLANE  G_FMT OK  1920x1080 fourcc=NV12 planes=1 field=1
+/dev/video7        drv=rkisp_v4         card=rkisp_rawwr0               caps=0x04201000 [CAPTURE_MPLANE STREAMING ]
+    CAPTURE         ENUM_FMT: ERR errno=22 (Invalid argument)
+    CAPTURE         G_FMT ERR errno=22 (Invalid argument)
+    CAPTURE_MPLANE  ENUM_FMT: RGGB GRBG GBRG BA81 GREY RG10 BA10 GB10 BG10 Y10  RG12 BA12 GB12 BG12 Y12  YUYV 
+    CAPTURE_MPLANE  G_FMT OK  2880x1616 fourcc=BG10 planes=1 field=1
+/dev/video8        drv=rkisp_v4         card=rkisp_rawwr1               caps=0x04201000 [CAPTURE_MPLANE STREAMING ]
+    CAPTURE         ENUM_FMT: ERR errno=22 (Invalid argument)
+    CAPTURE         G_FMT ERR errno=22 (Invalid argument)
+    CAPTURE_MPLANE  ENUM_FMT: RGGB GRBG GBRG BA81 GREY RG10 BA10 GB10 BG10 Y10  RG12 BA12 GB12 BG12 Y12  YUYV 
+    CAPTURE_MPLANE  G_FMT OK  2880x1616 fourcc=BG10 planes=1 field=1
+/dev/video9        drv=rkisp_v4         card=rkisp_rawwr2               caps=0x04201000 [CAPTURE_MPLANE STREAMING ]
+    CAPTURE         ENUM_FMT: ERR errno=22 (Invalid argument)
+    CAPTURE         G_FMT ERR errno=22 (Invalid argument)
+    CAPTURE_MPLANE  ENUM_FMT: RGGB GRBG GBRG BA81 GREY RG10 BA10 GB10 BG10 Y10  RG12 BA12 GB12 BG12 Y12  YUYV 
+    CAPTURE_MPLANE  G_FMT OK  2880x1616 fourcc=BG10 planes=1 field=1
+/dev/video10       drv=rkisp_v4         card=rkisp_rawwr3               caps=0x04201000 [CAPTURE_MPLANE STREAMING ]
+    CAPTURE         ENUM_FMT: ERR errno=22 (Invalid argument)
+    CAPTURE         G_FMT ERR errno=22 (Invalid argument)
+    CAPTURE_MPLANE  ENUM_FMT: RGGB GRBG GBRG BA81 GREY RG10 BA10 GB10 BG10 Y10  RG12 BA12 GB12 BG12 Y12  YUYV 
+    CAPTURE_MPLANE  G_FMT OK  2880x1616 fourcc=BG10 planes=1 field=1
+/dev/video11       drv=rkisp_v4         card=rkisp_rawrd0_m             caps=0x04202000 [OUTPUT_MPLANE STREAMING ]
+    CAPTURE         ENUM_FMT: ERR errno=22 (Invalid argument)
+    CAPTURE         G_FMT ERR errno=22 (Invalid argument)
+    CAPTURE_MPLANE  ENUM_FMT: ERR errno=22 (Invalid argument)
+    CAPTURE_MPLANE  G_FMT ERR errno=22 (Invalid argument)
+/dev/video12       drv=rkisp_v4         card=rkisp_rawrd2_s             caps=0x04202000 [OUTPUT_MPLANE STREAMING ]
+    CAPTURE         ENUM_FMT: ERR errno=22 (Invalid argument)
+    CAPTURE         G_FMT ERR errno=22 (Invalid argument)
+    CAPTURE_MPLANE  ENUM_FMT: ERR errno=22 (Invalid argument)
+    CAPTURE_MPLANE  G_FMT ERR errno=22 (Invalid argument)
+/dev/video13       drv=rkisp_v4         card=rkisp_rawrd1_l             caps=0x04202000 [OUTPUT_MPLANE STREAMING ]
+    CAPTURE         ENUM_FMT: ERR errno=22 (Invalid argument)
+    CAPTURE         G_FMT ERR errno=22 (Invalid argument)
+    CAPTURE_MPLANE  ENUM_FMT: ERR errno=22 (Invalid argument)
+    CAPTURE_MPLANE  G_FMT ERR errno=22 (Invalid argument)
+/dev/video14       drv=rkisp_v4         card=rkisp-statistics           caps=0x04a00000 [META_CAPTURE STREAMING ]
+    CAPTURE         ENUM_FMT: ERR errno=22 (Invalid argument)
+    CAPTURE         G_FMT ERR errno=22 (Invalid argument)
+    CAPTURE_MPLANE  ENUM_FMT: ERR errno=22 (Invalid argument)
+    CAPTURE_MPLANE  G_FMT ERR errno=22 (Invalid argument)
+/dev/video15       drv=rkisp_v4         card=rkisp-input-params         caps=0x0c200000 [STREAMING ]
+    CAPTURE         ENUM_FMT: ERR errno=22 (Invalid argument)
+    CAPTURE         G_FMT ERR errno=22 (Invalid argument)
+    CAPTURE_MPLANE  ENUM_FMT: ERR errno=22 (Invalid argument)
+    CAPTURE_MPLANE  G_FMT ERR errno=22 (Invalid argument)
+/dev/video16       drv=rkisp_v4         card=rkisp-mipi-luma            caps=0x04a00000 [META_CAPTURE STREAMING ]
+    CAPTURE         ENUM_FMT: ERR errno=22 (Invalid argument)
+    CAPTURE         G_FMT ERR errno=22 (Invalid argument)
+    CAPTURE_MPLANE  ENUM_FMT: ERR errno=22 (Invalid argument)
+    CAPTURE_MPLANE  G_FMT ERR errno=22 (Invalid argument)
+/dev/video17       drv=rkispp_v0        card=rkispp_input_image         caps=0x04202000 [OUTPUT_MPLANE STREAMING ]
+    CAPTURE         ENUM_FMT: ERR errno=22 (Invalid argument)
+    CAPTURE         G_FMT ERR errno=22 (Invalid argument)
+    CAPTURE_MPLANE  ENUM_FMT: ERR errno=22 (Invalid argument)
+    CAPTURE_MPLANE  G_FMT ERR errno=22 (Invalid argument)
+/dev/video18       drv=rkispp_v0        card=rkispp_m_bypass            caps=0x04201000 [CAPTURE_MPLANE STREAMING ]
+    CAPTURE         ENUM_FMT: ERR errno=22 (Invalid argument)
+    CAPTURE         G_FMT ERR errno=22 (Invalid argument)
+    CAPTURE_MPLANE  ENUM_FMT: YUYV UYVY NV16 NV12 FBC2(C) FBC0(C) 
+    CAPTURE_MPLANE  G_FMT OK  0x0 fourcc=???? planes=0 field=0
+/dev/video19       drv=rkispp_v0        card=rkispp_scale0              caps=0x04201000 [CAPTURE_MPLANE STREAMING ]
+    CAPTURE         ENUM_FMT: ERR errno=22 (Invalid argument)
+    CAPTURE         G_FMT ERR errno=22 (Invalid argument)
+    CAPTURE_MPLANE  ENUM_FMT: NV16 NV12 GREY YUYV UYVY 
+    CAPTURE_MPLANE  G_FMT OK  0x0 fourcc=???? planes=0 field=0
+/dev/video20       drv=rkispp_v0        card=rkispp_scale1              caps=0x04201000 [CAPTURE_MPLANE STREAMING ]
+    CAPTURE         ENUM_FMT: ERR errno=22 (Invalid argument)
+    CAPTURE         G_FMT ERR errno=22 (Invalid argument)
+    CAPTURE_MPLANE  ENUM_FMT: NV16 NV12 GREY YUYV UYVY 
+    CAPTURE_MPLANE  G_FMT OK  0x0 fourcc=???? planes=0 field=0
+/dev/video21       drv=rkispp_v0        card=rkispp_scale2              caps=0x04201000 [CAPTURE_MPLANE STREAMING ]
+    CAPTURE         ENUM_FMT: ERR errno=22 (Invalid argument)
+    CAPTURE         G_FMT ERR errno=22 (Invalid argument)
+    CAPTURE_MPLANE  ENUM_FMT: NV16 NV12 GREY YUYV UYVY 
+    CAPTURE_MPLANE  G_FMT OK  0x0 fourcc=???? planes=0 field=0
+/dev/video22       drv=rkispp_v0        card=rkispp_iqtool              caps=0x04201000 [CAPTURE_MPLANE STREAMING ]
+    CAPTURE         ENUM_FMT: ERR errno=22 (Invalid argument)
+    CAPTURE         G_FMT ERR errno=22 (Invalid argument)
+    CAPTURE_MPLANE  ENUM_FMT: YUYV UYVY NV16 NV12 
+    CAPTURE_MPLANE  G_FMT OK  0x0 fourcc=???? planes=0 field=0
+/dev/video23       drv=rkispp_v0        card=rkispp_input_params        caps=0x0c200000 [STREAMING ]
+    CAPTURE         ENUM_FMT: ERR errno=22 (Invalid argument)
+    CAPTURE         G_FMT ERR errno=22 (Invalid argument)
+    CAPTURE_MPLANE  ENUM_FMT: ERR errno=22 (Invalid argument)
+    CAPTURE_MPLANE  G_FMT ERR errno=22 (Invalid argument)
+/dev/video24       drv=rkispp_v0        card=rkispp-stats               caps=0x04a00000 [META_CAPTURE STREAMING ]
+    CAPTURE         ENUM_FMT: ERR errno=22 (Invalid argument)
+    CAPTURE         G_FMT ERR errno=22 (Invalid argument)
+    CAPTURE_MPLANE  ENUM_FMT: ERR errno=22 (Invalid argument)
+    CAPTURE_MPLANE  G_FMT ERR errno=22 (Invalid argument)

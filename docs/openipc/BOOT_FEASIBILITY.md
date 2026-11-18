@@ -1,8 +1,8 @@
 # 能不能刷 OpenIPC？U-Boot 能不能引导？—— 三层判定
 
 > 2026-11-11 按现场串口日志、14 个分区备份、OpenIPC firmware/linux 源码重新核算。
-> 前置阅读：[`INCIDENT.md`](INCIDENT.md)（砖态）、[`RECOVERY.md`](RECOVERY.md)（救砖）、
-> [`FULL_BACKUP.md`](FULL_BACKUP.md)（完整备份）、[`UBOOT.md`](UBOOT.md)（引导链）。
+> 前置阅读：[`INCIDENT.md`](../shared/INCIDENT.md)（砖态）、[`RECOVERY.md`](../shared/RECOVERY.md)（救砖）、
+> [`FULL_BACKUP.md`](../shared/FULL_BACKUP.md)（完整备份）、[`UBOOT.md`](../shared/UBOOT.md)（引导链）。
 
 ## 0. 一句话结论
 
@@ -206,10 +206,14 @@ mtdparts=spi-nand0:<原厂 14 分区串>
 3. OpenIPC 内核树里的 `sc500ai.c` / `sc5239.c` 骨架 + `rk-camera-module.h`
    （`hdr:5 == HDR_X2`）+ Kconfig/Makefile 写法。
 
-**结论仍是：即使 L1/L2 全通，现在也只会得到一个能 SSH、没有视频流的 OpenIPC** ——
-因为 `sc5338.c` 还没写、没编译、没实板验证。但瓶颈已从「缺资料」变成「待编码」。
-移植改动清单与逐级验收见 `docs/SC5338.md` 第 6 节；唯一仍缺的资料是
-**rkaiq 的 IQ/3A tuning XML**（原厂 `system_a.img` 是 squashfs-in-UBI，尚未解包）。
+**当时的结论是：即使 L1/L2 全通，也只会得到一个能 SSH、没有视频流的 OpenIPC** ——
+因为 `sc5338.c` 还没写、没编译、没实板验证。瓶颈已从「缺资料」变成「待编码」。
+
+> **状态更新 2026-11-13（本节已被后续实证超越）**：`sc5338.c` 已编入内核并实板
+> `Detected SCce50 sensor`；**设备已出图**（rkcif MPLANE 抓帧成功，sensor 真正 streaming）；
+> rkaiq IQ/3A tuning XML 也已从原厂 rootfs 解出。此前「唯一仍缺的资料」不再成立。
+> 当前剩余阻塞是 rkisp 需要 `can not get first iq setting in stream on` 的 IQ 注入，
+> 详见 [`FIRST_LIGHT.md`](FIRST_LIGHT.md)。
 
 同理，`uboot/` 里的验收标准不能只写「内核起来、ubi attach」，必须写「majestic 能出流」。
 
@@ -265,10 +269,12 @@ mtdparts=spi-nand0:<原厂 14 分区串>
 设备 2026-06-29 起是半砖（SPL 正常、找不到 U-Boot FIT），
 **以上全部是「救砖 → 恢复原厂 → 完整备份」之后的事**。
 
-1. **P0** 按 [`RECOVERY.md`](RECOVERY.md) 救砖并补完整备份（[`FULL_BACKUP.md`](FULL_BACKUP.md)）。
+1. **P0** 按 [`RECOVERY.md`](../shared/RECOVERY.md) 救砖并补完整备份（[`FULL_BACKUP.md`](../shared/FULL_BACKUP.md)）。
 2. **P1** 按 [`docs/SC5338.md`](SC5338.md) 第 6 节编写 `sc5338.c`（骨架 `sc500ai.c`
    + 已导出的原厂寄存器表），加 `CONFIG_VIDEO_SC5338=y` 并构建 ——
-   **原厂内核源码已不再是必需材料**；剩余材料缺口是 rkaiq 的 IQ/3A tuning XML。
+   **原厂内核源码已不再是必需材料**；~~剩余材料缺口是 rkaiq 的 IQ/3A tuning XML~~
+   → 2026-11-13 该 XML 已从原厂 rootfs 解出，且 `sc5338.c` 已实板出图，
+   见 [`FIRST_LIGHT.md`](FIRST_LIGHT.md)。
 3. **P1** 在 Ubuntu 构建机跑改好的 `tools/build_s4602.sh`：FIT 模板 + S4602 DTB +
    `CMDLINE_FORCE`，产出真正的 FIT `zboot.img`，核对 ≤ 4 MiB。
 4. **P1** 现场定夺 A/B 槽方向（4.1），同步更新 `board.yaml` 的 `flash_plan`。

@@ -1,0 +1,73 @@
+=== 2026-11-13 rkispp 全黑根因取证（S4602 / OpenIPC 4.19 vendor）===
+
+--- 内核启动日志 ---
+[    0.295776] rkisp rkisp-vir0: Entity type for entity rkisp-bridge-ispp was not initialized!
+[    0.299962] iommu: Adding device ffb60000.rkispp to group 2
+[    0.300023] rkispp_hw ffb60000.rkispp: Linked as a consumer to ffb60e00.iommu
+[    0.300449] rkispp_hw ffb60000.rkispp: max input:0x0@0fps
+[    0.300495] rkispp_hw ffb60000.rkispp: can't request region for resource [mem 0xffb60000-0xffb7ffff]
+[    0.300747] rkispp_hw ffb60000.rkispp: failed to get cru reset
+[    0.301033] rkispp rkispp-vir0: rkispp driver version: v01.06.02
+
+--- /dev/media1 拓扑（/tmp/mediaent /dev/media1, exact-id scan）---
+  id=1   rkisp-isp-subdev             pads=4 links=5
+      LINK src=1:p2 -> sink=13:p0 flags=0x1 ENABLED   (rkisp-bridge-ispp)
+      LINK src=1:p2 -> sink=17:p0 flags=0x0 off       (rkisp_mainpath)
+      LINK src=1:p2 -> sink=23:p0 flags=0x1 ENABLED   (rkisp_selfpath)
+      LINK src=1:p3 -> sink=71:p0 flags=0x1 ENABLED
+      LINK src=1:p3 -> sink=83:p0 flags=0x1 ENABLED
+  id=89  rkcif_mipi_lvds
+      LINK src=89:p0 -> sink=1:p0 flags=0x1 ENABLED
+
+--- SETUP_LINK 尝试（IQ + sender 仍在 streaming）---
+/tmp/linksetup /dev/media1 1 2 17 0 1
+[linksetup] sizeof(media_link_desc)=52 sizeof(media_pad_desc)=20 MEDIA_IOC_SETUP_LINK=0xc0347c03
+[SETUP_LINK] ent1:pad2 -> ent17:pad0 flags=0x1 : Device or resource busy (errno=16)
+
+--- 停掉 sender / IQ 后再试 ---
+[SETUP_LINK] ent1:pad2 -> ent17:pad0 flags=0x1 : Invalid argument (errno=22)
+dmesg:
+[  946.180141] rkisp-isp-subdev: link error rkisp-isp-subdev -> rkisp_mainpath
+[  946.180141]     csi dvp lvds dmaread can't work together
+[  946.180141]     rawrd can't work with dvp lvds dmaread
+[  946.180141]     bridge can't work with mainpath/selfpath
+
+--- 正确顺序：先关 bridge，再开 mainpath（干净重启后，IQ 启动之前）---
+/tmp/linksetup /dev/media1 1 2 13 0 0
+[SETUP_LINK] ent1:pad2 -> ent13:pad0 flags=0x0 : OK (errno=0)
+[RESULT] link is now off
+/tmp/linksetup /dev/media1 1 2 17 0 1
+[SETUP_LINK] ent1:pad2 -> ent17:pad0 flags=0x1 : OK (errno=0)
+[RESULT] link is now ENABLED
+
+IQ daemon 启动后复查拓扑（IQ 未改回链路）：
+      LINK src=1:p2 -> sink=13:p0 flags=0x0 off
+      LINK src=1:p2 -> sink=17:p0 flags=0x1 ENABLED
+      LINK src=1:p2 -> sink=23:p0 flags=0x1 ENABLED
+[iq] sysctl_start() -> 0 OK / AIQ ENGINE RUNNING / HOLD FOREVER
+
+--- video5 (rkisp_mainpath) 抓帧 ---
+[i] /dev/video5 drv=rkisp_v4 card=rkisp_mainpath
+[i] G_FMT 2880x1616 fourcc=NV12 planes=1 sizeimage=6981120 bpl=2880
+[i] REQBUFS got 4 buffers
+[i] STREAMON ok, waiting 8000 ms
+[i] DQBUF index=0 bytesused=6981120 seq=0 flags=0x2001 ts=41.542233
+[+] wrote 6981120 bytes -> /tmp/v5.raw
+
+--- 本地分析 v5.raw 的 Y 平面（2880x1616）---
+bytes 6981120
+Y min/max/mean 0 0 0.0 nonzero>16 0
+=> 出帧节奏正常，但 ISP 硬件没有写入任何图像数据。结论：内核/DT 层缺陷。
+
+--- 对照：/dev/video19 (rkispp_scale0) ---
+干净重启 --with-iq 后 h264out --dump：
+out/captures/nv12_clean.pgm : min 0 max 0 mean 0.00 nonzero>16 0
+
+--- 关键旁证：rkaiq 会占住 rkcif ---
+IQ daemon 存活时 /tmp/mjpegout /dev/video0 -> FATAL REQBUFS
+kill -9 IQ 后同一命令：
+[mjpegout] G_FMT 2880x1616 fourcc=BG10 planes=1 sizeimage=6205440 bpl=3840
+[mjpegout] REQBUFS got 4
+[mjpegout] STREAMON ok
+[mjpegout] first JPEG 15758 bytes -> /tmp/f.jpg
+[mjpegout] RESULT frames=3 rtp_pkts=40 last_jpeg=14967

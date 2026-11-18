@@ -1,8 +1,8 @@
 # S4602 完整备份 SOP
 
 前置阅读：[`INCIDENT.md`](INCIDENT.md)（变砖根因、现有备份清单）、[`RECOVERY.md`](RECOVERY.md)（救砖流程）。
-配套工具：[`tools/make_backup_plan.py`](../tools/make_backup_plan.py)、[`tools/verify_full_dump.py`](../tools/verify_full_dump.py)。
-参数账本：[`board/s4602/board.yaml`](../board/s4602/board.yaml)。
+配套工具：[`tools/make_backup_plan.py`](../../tools/make_backup_plan.py)、[`tools/verify_full_dump.py`](../../tools/verify_full_dump.py)。
+参数账本：[`board/s4602/board.yaml`](../../board/s4602/board.yaml)。
 
 > 本文只讨论**只读**操作。生成的命令里不含 `mtd write` / `mtd erase` / `wl` / `ef`。
 > 当前设备是半砖（SPL 能跑、进不了 `=>`），所以**备份通道要先选对**。
@@ -129,7 +129,7 @@ data abort ... ### ERROR ### Please RESET the board ###
 - off 全部 `0x2000000` 对齐，size 是 `0x800` 的倍数。
 - `fatwrite` 的 size **必须等于** `mtd read` 的 size（小于会截断，大于会写出 RAM 垃圾）。
 
-生成好的完整命令清单见 [`uboot/01-full-backup.txt`](../uboot/01-full-backup.txt)，
+生成好的完整命令清单见 [`uboot/01-full-backup.txt`](../../uboot/01-full-backup.txt)，
 由 `python tools/make_backup_plan.py --mode uboot --out uboot/01-full-backup.txt` 生成，避免手敲错偏移。
 
 ### 5.2 前置（只读）

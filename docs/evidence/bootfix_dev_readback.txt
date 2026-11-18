@@ -1,0 +1,108 @@
+# /data/www/bootfix.sh v3 -- self-heal on every power-on, launched detached by
+# /etc/init.d/S99local.sh (shipped in the read-only system_b squashfs).
+#
+# ROOT CAUSES PROVEN 2026-11-17 (serial evidence):
+#  - h264out on /dev/video21 must NOT start until swapp's IQ engine is fully
+#    settled: early start -> RkLumaCoreTh/mipi_tx_poll user-space page fault
+#    -> swapp dies -> guard reboots / hw watchdog unfed -> 17s bootloop.
+#  - deploy-proven flow: swapp up -> wait 30s -> h264out. Replicate exactly.
+#  - swapp_patched opens AND feeds /dev/watchdog (crash log shows
+#    "watchdog did not stop!" on its exit). So: swap original->patched EARLY
+#    (sub-second gap; hw timeout ~15s from original's arm at boot+2.5s).
+#
+# Order: fast wins (shadow/dropbear/webd/tmp) -> wait swap> swap EARLY
+#        -> 30s IQ settle -> alive re-check -> h264out.
+
+LOG=/data/www/bootfix.log
+exec >>"$LOG" 2>&1
+echo "=== bootfix $(date) pid $$ ==="
+
+# /data must be up + writable (S30mountfs runs before S99local in rcS)
+i=0
+while [ $i -lt 20 ]; do
+  [ -w /data ] && break
+  sleep 1; i=$((i+1))
+done
+
+# ---- 1) fast wins: shadow, faillock, dropbear, webd (no ISP involvement) ----
+cp -f /data/.shadow /data/.shadow.factory 2>/dev/null
+printf '%s\n' \
+  'root:$1$s4602ab$BvWIoXqRYt0y6IxsQvccW/::0:99999:7:::' \
+  'sshd:*::0:99999:7:::' \
+  'admin:$1$s4602ab$BvWIoXqRYt0y6IxsQvccW/::0:99999:7:::' > /data/.shadow
+sync
+echo "shadow -> $(grep -c '^root:\$1' /data/.shadow) md5 lines"
+rm -f /var/run/faillock/* 2>/dev/null
+mkdir -p /data/dropbear
+[ -f /data/dropbear/dropbear_rsa_host_key ] || \
+  cp /etc/dropbear/dropbear_rsa_host_key /data/dropbear/ 2>/dev/null
+if ! ps w | grep '[d]ropbear' >/dev/null 2>&1; then
+  /usr/sbin/dropbear -r /data/dropbear/dropbear_rsa_host_key -p 22 >/dev/null 2>&1 &
+  echo "dropbear started"
+fi
+if ! ps w | grep '[w]ebd' >/dev/null 2>&1; then
+  /data/www/webd >/tmp/webd.log 2>&1 &
+  echo "webd started"
+fi
+
+# ---- 2) rebuild /tmp runtime assets (lost on power-off, tmpfs) ----
+if [ ! -x /tmp/rtlib/rtlib/ld-linux-armhf.so.3 ]; then
+  mkdir -p /tmp/rtlib && tar xzf /data/www/rtlib.tar.gz -C /tmp/rtlib 2>/dev/null
+fi
+mkdir -p /tmp/factory/lib
+ln -sf /system/lib/librockchip_mpp.so.1 /tmp/factory/lib/librockchip_mpp.so.1
+cp /data/www/h264out_v4 /tmp/h264out_v4 2>/dev/null
+chmod +x /tmp/h264out_v4 2>/dev/null
+
+# ---- 3) wait for factory chain: any swapp process (original or patched) ----
+i=0
+while [ $i -lt 45 ]; do
+  ps w | grep '[s]wapp' >/dev/null 2>&1 && break
+  sleep 2; i=$((i+1))
+done
+echo "swapp seen after ~$((i*2))s of waiting"
+
+# ---- 4) swap EARLY: original -> patched (sub-second gap, watchdog takeover) ----
+if [ -x /data/www/swapp_patched ]; then
+  if ps w | grep '[s]wapp' | grep -v 'swapp_patched' | grep -v grep >/dev/null 2>&1; then
+    P=$(ps w | grep '[s]wapp' | grep -v 'swapp_patched' | grep -v grep | head -1 | awk '{print $1}')
+    kill -9 "$P" 2>/dev/null
+    RKFPS=25 LIBRNNN_RUNTIME_PATH=/system/lib/librknn_runtime.so \
+    LD_LIBRARY_PATH=/system/lib/algorithms:/system/lib:/system/lib \
+    /data/www/swapp_patched > /tmp/swapp.log 2>&1 &
+    echo "swapped original(pid $P) -> patched(pid $!)"
+  else
+    echo "patched-only (or none); no swap needed"
+  fi
+else
+  echo "WARN: /data/www/swapp_patched missing; h264out will be skipped"
+fi
+
+# ---- 5) IQ settle window: deploy-proven 30s (+5s margin over deploy's flow) ----
+sleep 35
+if ! ps w | grep '[s]wapp_patched' >/dev/null 2>&1; then
+  echo "SKIP h264out: swapp_patched died during IQ settle window"
+  echo "=== bootfix done (degraded) ==="
+  exit 0
+fi
+echo "IQ settle done, swapp_patched alive"
+
+# ---- 6) h264out per /data/www/stream.conf (only if not already running) ----
+if ! ps w | grep '[h]264out_v4' >/dev/null 2>&1; then
+  . /data/www/stream.conf 2>/dev/null
+  if [ "$w" = "1920" ]; then CAPW="--capw 2560 --caph 1440"; else CAPW=""; fi
+  rm -f /tmp/h264out.log
+  /tmp/rtlib/rtlib/ld-linux-armhf.so.3 \
+    --library-path /tmp/rtlib/rtlib:/system/lib:/lib \
+    /tmp/h264out_v4 --src nv12 --dev /dev/video21 \
+    --ip ${ip:-192.168.6.88} --port ${port:-5600} \
+    --w ${w:-1280} --h ${h:-720} --fps ${fps:-25} \
+    --kbps ${kbps:-1500} --gop ${gop:-25} \
+    --codec ${codec:-h264} --pace ${pace:-3} --cir ${cir:-2} $CAPW \
+    > /tmp/h264out.log 2>&1 &
+  echo "h264out started (conf: ${w:-1280}x${h:-720} ${codec:-h264} ${kbps:-1500}k)"
+else
+  echo "h264out already running, skip"
+fi
+
+echo "=== bootfix done ==="

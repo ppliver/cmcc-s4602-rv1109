@@ -1,0 +1,30 @@
+===== /dev/video0 =====
+RC=1
+
+===== /dev/video6 =====
+[dmabuf_link] device=/dev/video6
+  G_FMT: 1280x720 planes=1 pixfmt=0x3231564e sizeimage=1843200
+  MB_BLK=0x466160 size=1843200 ptr=0xa416d000 dma_fd=7
+  sentinel before: cc cc cc cc ...
+  REQBUFS(DMABUF,3) -> 0 OK (count=3)
+  QBUF(fd=7) -> 0 OK
+  STREAMON -> 0 OK
+  poll(4s) -> 0 revents=0x0 TIMEOUT
+  DQBUF -> -1 Resource temporarily unavailable index=0 bytesused=0 seq=0
+  sentinel after : cc cc cc cc ...
+  DMA wrote into MMZ buffer: NO
+  RESULT: DQBUF_FAILED
+RC=0
+
+===== dmesg =====
+[ 5301.514048] rockchip-mipi-dphy-rx ff4b0000.csi-dphy: stream on:0
+[ 5301.515139] rockchip-mipi-dphy-rx ff4b0000.csi-dphy: stream on:0
+[ 5301.519513] rkcif_mipi_lvds: stream[0] stopping finished
+[ 5301.606028] rkisp rkisp-vir0: can not get first iq setting in stream on
+[ 5308.623704] rkisp0: rkisp_stream_stop id:1 timeout
+[ 5308.716487] rkisp0: check video link or isp input
+[ 7028.580793] clk_mipicsi_out2io_fracdiv p_rate(297000000) is low than rate(24000000)*20, use integer or half-div
+[ 8121.545079] clk_mipicsi_out2io_fracdiv p_rate(297000000) is low than rate(24000000)*20, use integer or half-div
+[ 8121.737970] rkisp rkisp-vir0: can not get first iq setting in stream on
+[ 8126.765661] rkisp0: rkisp_stream_stop id:1 timeout
+
