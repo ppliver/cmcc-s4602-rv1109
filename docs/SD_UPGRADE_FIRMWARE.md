@@ -128,3 +128,31 @@ U-Boot 下用原厂 `system_b.img`（crc 0x38df701f, md5 458bc1e3）fatload +
 - TUN 模式在原硬锁根因（CONFIG_IPV6 布局）解决后已稳定，但 `easytier_ltecar.toml` 的
   `mtu=1380`、UDP peer us01.225284.xyz 不通（TCP peers 正常）仍为已知边界。
 - swapp_patched 智能侦测固定开销 ~30% 单核（云端 HEMU 强制下发，改不掉，已评估可接受）。
+
+## 7. 原厂升级通道考古（2026-11-18，对话检索 + 二进制铁证）
+
+**对话记录**：conversation_search 3 次检索（SD 卡升级/TF 刷机/U-Boot bootdelay）0 命中——
+历史上从未讨论过"原厂预留 SD 升级"，此前刷机一直是串口 fatload+mtd write 手工路线。
+
+**U-Boot 层：无 SD 升级预留**。`bootcmd=boot_fit;boot_android ${devtype} ${devnum}`，
+boot_fit 从 mtd boot 分区读 FIT 且恒成功（boot_android 是 fallback 走不到）；无 saveenv。
+
+**但 swapp 运行时层有完整原厂升级通道**（二进制字符串铁证）：
+- SD 卡路径：swapp 扫描 SD 卡目录找 **`security_boot_update.zip`**（`open %s dir err` +
+  `scandir` + `not dir need to scan`）；云端 OTA 走 **FTP**（`ftp://user:pass@host/` +
+  ftpget）下载到 `/usr/upgrade/%s` → `/tmp/update.zip`
+- **签名硬门**：`swsignature` whole-file RSA(e=3) 验签，硬编码公钥指纹
+  `37FCE8CBE38705C2783C9085FA4D5A6E54310292667C8E00`——无私钥，自签包必被
+  `swsignature not match !!` 拒绝
+- 执行链：杀 swapp/swnetservice/swsyscmd → `/system/etc/init.d/recovery.sh`（等 swapp
+  退出，8s 强杀）→ `/usr/sbin/recovery --update_package=/tmp/update.zip` → Android
+  recovery 式解包，**按分区名**（/proc/mtd 的 boot_b/system_b...）MTD 写入：坏块规避、
+  回读校验、UBI 卷支持（`mtd_write_ubi_data`/`ubi_clear_volume`）、`RSA_e_3_verify` 整包
+  验签；`upgrade_security_uboot` 串证实**连 U-Boot 都能刷**；状态落 /data/status、/data/progress
+- 本机实测：SD 挂载点 = **/tmp/udisk0**（mmcblk1；startup.sh 挂的是 mmcblk0→/tmp/sdcard，
+  本机 mmcblk0 不存在所以 /tmp/sdcard 恒空）；`/usr/sbin/recovery`、`recovery.sh`、
+  `/usr/upgrade` 均在位；mount 带 `noexec`（SD 上不能直接跑二进制，拷贝不受影响）
+
+**结论**：原厂 SD 升级通道存在且活着，但被 RSA 签名硬门挡住（拿不到原厂私钥即无法自签包）。
+对我们的 bootfix 方案而言它只是"可选未来增强"（除非逆向 recovery 验签漏洞），不改变现方案；
+写包格式时可参考其"按分区名的 zip"结构。
