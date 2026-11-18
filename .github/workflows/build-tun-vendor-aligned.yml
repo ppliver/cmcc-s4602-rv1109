@@ -82,6 +82,10 @@ jobs:
           # HOSTLDFLAGS 解决 GA 新版 gcc 的 dtc -fno-common 多重定义。
           make prepare ARCH=arm CROSS_COMPILE="$CROSS" \
             HOSTLDFLAGS="-Wl,--allow-multiple-definition"
+          # 外部模块 MODPOST 阶段要 scripts/mod/modpost（树内编译会自动带出，
+          # make prepare 不含）。make scripts 编译 host 工具，缺它会报 modpost: not found。
+          make scripts ARCH=arm CROSS_COMPILE="$CROSS" \
+            HOSTLDFLAGS="-Wl,--allow-multiple-definition"
 
       - name: Build layout probe + tun.ko (external module mode)
         working-directory: /opt/fl-kernel
