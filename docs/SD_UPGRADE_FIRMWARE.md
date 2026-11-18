@@ -156,3 +156,58 @@ boot_fit 从 mtd boot 分区读 FIT 且恒成功（boot_android 是 fallback 走
 **结论**：原厂 SD 升级通道存在且活着，但被 RSA 签名硬门挡住（拿不到原厂私钥即无法自签包）。
 对我们的 bootfix 方案而言它只是"可选未来增强"（除非逆向 recovery 验签漏洞），不改变现方案；
 写包格式时可参考其"按分区名的 zip"结构。
+
+## 8. recovery 验签逆向（2026-11-18，用户指令"先试试逆向 recovery 验签"）
+
+目标：判定全新原厂机能否免串口走原厂 SD 通道刷自制固件。结论先行：**不可行，验签链闭合**。
+分析产物在 `out/re_analysis/`（disasm.txt / verify_file.txt / install_flow.txt / rsa_e3.txt /
+swmodules_disasm.txt / swapp_updatesys2.txt 等），反汇编由 WSL `arm-linux-gnueabihf-objdump` 生成。
+
+### 8.1 recovery 侧（usr/sbin/recovery，150KB stripped ARM，crypto 全静态内联）
+
+`main(0x14e88) --update_package→ install_package(0x16624) → really_install_package(0x15d44..)
+→ load_keys("/etc/keys") + verify_file(0x17df8)`：
+
+- **load_keys 失败 → return 2 中止；verify_file 非零 → return 2 中止**。无任何跳过路径。
+- `/etc/keys` 是 squashfs 内的**文本格式** mincrypt RSAPublicKey（`v2 {64,0x137d4afb,{n[64]},{rr[64]}}`）。
+  已解析并数学验证：**RSA-2048，e=3，单钥**（rr = R² mod n ✓，n0inv = -n^-1 mod 2^32 ✓）。
+- `RSA_e_3_verify(0x255cc)`：签名 256B，先 `key->len==64`、`e==3` 硬校验，模幂后
+  **前 236 字节与 rodata 0x303b4 常量表逐字节比对**（即 `00 01 FF×215 00` 完整 PKCS#1 v1.5
+  填充），后 20 字节与 SHA-1 摘要比对。**填充检查逐字节严格 → Bleichenbacher e=3 伪造不可行**。
+- `verify_file`（老 AOSP whole-file 方案）：
+  - 末尾 6B footer `[B_lo,B_hi][FF FF][A_lo,A_hi]`：A=comment_size（决定 EOCD 位置与签名区）、
+    B=签名长度（仅做 ≥262 检查）；
+  - SHA-1 覆盖 `[0, eocd_start+20)`——**EOCD 前 20 字节在内，包含 central directory offset/size**
+    → 注释区（哈希区外）无论怎么改都重定向不了解包器，签名复用攻击无效；
+  - 签名 = comment 末尾 256B；逐 key 尝试；
+  - 防注释区藏第二个 EOCD 的扫描（i=4..eocd_size-3 找 PK\x05\x06）。
+- 交叉验证：recovery 里**没有** uboot 直刷/独立验签旁路（无 upgrade_security_uboot 字符串）。
+
+### 8.2 swapp 侧（sw_upgrade_file_verify → libswmodules.so swsignature）
+
+- swapp 对 SD 包（security_boot_update.zip→/tmp/update.zip）的验签 = libswmodules
+  `sw_swsignature_fp`：**HMAC-SHA256**（`sw_signature_create/update/final` 三个 72B 包装
+  直透 `sw_hmac256_*`，mbedtls `sha2_hmac_starts/finish`），密钥=**内嵌字符串**
+  （`sha2_hmac_starts(ctx, key=*(指针), strlen(key), 0)`，指针来自 pc-rel 混淆表）。
+- `sw_hmac256_signature_final`（0xc558）有**参数门控**：
+  `if (sw_parameter_get_int(混淆名)==0) return 1;`——参数为 0 时验签直接放行。
+  理论可提取 HMAC 密钥或操纵参数绕过此门，但：
+- **swapp 全程无 mtd 写调用**（mtd_scan_partitions/mtd_find_partition_by_name/
+  mtd_read_partition/mtd_read_close 仅读）→ U-Boot 刷写也必须经 recovery → 即使绕过
+  swsignature，仍死在 recovery 的 RSA 门上。
+- libswkey.so 与升级无关（设备授权证书 X.509 链校验：PEM_read_X509/有效期/keylen）。
+- recovery.sh 实锤固定执行 `/usr/sbin/recovery --update_package=/tmp/update.zip`，
+  之后读 /data/status 等 "success"（swapp 侧 strncmp 铁证 @0xbd6c→0x85f64）。
+
+### 8.3 最终判定
+
+| 环节 | 实现 | 可绕过性 |
+|---|---|---|
+| swapp 包验签 | HMAC-SHA256，内嵌密钥 + 参数门控 | 理论可（提取密钥/改参数），但无意义 |
+| recovery 包验签 | mincrypt RSA-2048 e=3，逐字节填充，强制 | **不可**（无私钥；填充严格；哈希含 cd_offset） |
+| 旁路刷写 | 无（swapp 不写 mtd；recovery 无跳过路径） | 无 |
+
+**免拆机免串口刷自制固件到全新原厂机 = 不可行**。串口首刷（一次性写入钩子镜像 v2）仍是
+唯一路径；装上钩子后 SSH/webd 常驻，此后升级走 bootfix v7 换 SD 重启，永久免串口。
+
+分析中间产物保留在 `out/re_analysis/`（含 libswkey/libswmodules 反汇编与公钥解析脚本输出）。
