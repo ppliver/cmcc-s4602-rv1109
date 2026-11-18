@@ -1,0 +1,109 @@
+name: Build patched go2rtc for S4602 (fix mp4 WriteBuffer panic)
+
+# 目标：给 CMCC S4602 / RV1109 (linux/arm, GOARM=7 / armhf) 编译一个打过补丁的
+# go2rtc v1.9.15，修掉一播放就崩的 mp4 panic。
+#
+# 背景：
+#   go2rtc v1.9.15（当前最新正式版，设备已在用）在客户端播放触发
+#   mp4 Consumer -> h264.RepairAVCC -> core.WriteBuffer.Write 时 nil pointer
+#   SIGSEGV（addr=0xc），崩在 bufio.Writer 被 net/http 回收后的延迟写。
+#   上游修复在 PR #2339（至今 open 未合并）：core.WriteBuffer.Close() 在持锁时
+#   把 Writer 标记为 io.ErrClosedPipe，阻止 handler 返回后的迟到写入。
+#
+# 本 workflow 从原始 v1.9.15 源码套用该补丁，交叉编译 armv7 并上传 artifact。
+# 双重 Gate：
+#   1) go test 跑 PR 自带回归测试 TestWriteBufferCloseBlocksLateWrites —— 该测试
+#      用 recyclableWriter 模拟 net/http 回收，补丁版必须 PASS（未补丁会 FAIL）。
+#   2) ELF 头断言为 32-bit ARM EABI5（GOARM=7 armhf），杜绝编错架构。
+#
+# 详细排障见 docs/GO2RTC_MP4_PANIC.md。
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'board/s4602/go2rtc/**'
+      - '.github/workflows/build-go2rtc-patched.yml'
+
+permissions:
+  contents: read
+
+env:
+  GO2RTC_TAG: "v1.9.15"
+  GO_VER: "1.27"
+
+jobs:
+  build-go2rtc:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout project (holds patch + test)
+        uses: actions/checkout@v4
+
+      - name: Setup Go ${{ env.GO_VER }}
+        uses: actions/setup-go@v5
+        with:
+          go-version: ${{ env.GO_VER }}
+
+      - name: Clone go2rtc v1.9.15
+        run: |
+          git clone --depth 1 --branch "$GO2RTC_TAG" https://github.com/AlexxIT/go2rtc.git /tmp/go2rtc
+          cd /tmp/go2rtc
+          echo "go2rtc HEAD: $(git rev-parse --short HEAD)"
+          grep '^go ' go.mod
+
+      - name: Apply WriteBuffer panic patch (PR #2339)
+        run: |
+          set -e
+          cd /tmp/go2rtc
+          git apply --verbose "$GITHUB_WORKSPACE/board/s4602/go2rtc/writebuffer-close.patch"
+          echo ">>> patched Close() body:"
+          sed -n '49,72p' pkg/core/writebuffer.go
+
+      - name: Install regression test (PR #2339)
+        run: |
+          cp "$GITHUB_WORKSPACE/board/s4602/go2rtc/writebuffer_test.go" /tmp/go2rtc/pkg/core/writebuffer_test.go
+          ls -l /tmp/go2rtc/pkg/core/writebuffer_test.go
+
+      - name: Gate 1 - regression test must pass (native amd64)
+        working-directory: /tmp/go2rtc
+        run: |
+          set -e
+          go test ./pkg/core/ -run TestWriteBufferCloseBlocksLateWrites -count=1 -v
+
+      - name: Build armv7 binary (linux/arm GOARM=7 armhf, CGO off)
+        working-directory: /tmp/go2rtc
+        env:
+          CGO_ENABLED: "0"
+          GOOS: linux
+          GOARCH: arm
+          GOARM: "7"
+        run: |
+          set -e
+          go build -ldflags "-s -w" -trimpath -o /tmp/go2rtc_linux_arm_patched .
+          ls -l /tmp/go2rtc_linux_arm_patched
+
+      - name: Gate 2 - verify ELF is 32-bit ARM EABI5 (armhf)
+        run: |
+          set -e
+          echo "=== file ==="
+          file /tmp/go2rtc_linux_arm_patched
+          file /tmp/go2rtc_linux_arm_patched | grep -q 'ELF 32-bit LSB executable, ARM, EABI5' \
+            || { echo "ERROR: not armv7 EABI5 binary"; exit 1; }
+          # ELF32 机器码 e_machine=40 (EM_ARM)
+          python3 - <<'PY'
+          import struct
+          d=open('/tmp/go2rtc_linux_arm_patched','rb').read(20)
+          assert d[:4]==b'\x7fELF', 'not ELF'
+          assert d[4]==1, 'not ELF32'
+          machine=struct.unpack_from('<H',d,18)[0]
+          assert machine==40, f'e_machine={machine}, want 40 (EM_ARM)'
+          print(f'OK: ELF32 EM_ARM ({machine}), size verified')
+          PY
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: go2rtc-linux-arm-patched
+          path: /tmp/go2rtc_linux_arm_patched
+          if-no-files-found: error
