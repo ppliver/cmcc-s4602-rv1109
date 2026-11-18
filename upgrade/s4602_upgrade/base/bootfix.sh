@@ -155,11 +155,30 @@ if [ "$easytier" = "1" ]; then
      [ -f /data/www/easytier_ltecar.toml ]; then
     if ! ps w | grep '[e]asytier-mini' >/dev/null 2>&1; then
       cd /data/www
-      "$ETBIN" -c /data/www/easytier_ltecar.toml > /tmp/easytier_ltecar.log 2>&1 &
-      echo "easytier-mini TUN started (LTE_CAR) from $ETBIN"
+      # RUST_LOG=off: easytier-mini has no --log-level flag; without this it
+      # writes INFO/WARN reconnect spam (~400B/s when a peer is dead) which
+      # filled the 17.5MB /data partition to 100% on 2026-11-18 and silently
+      # broke every write (shadow truncated -> root/admin888 auth failure).
+      RUST_LOG=off "$ETBIN" -c /data/www/easytier_ltecar.toml > /tmp/easytier_ltecar.log 2>&1 &
+      echo $! > /tmp/easytier.pid
+      echo "easytier-mini TUN started (LTE_CAR) from $ETBIN (RUST_LOG=off)"
     else
       echo "easytier-mini already running, skip"
     fi
+    # hard stop: cap the log at 512K. In-place truncate is useless (fd offset
+    # keeps growing on tmpfs), so restart easytier with a fresh log.
+    (while true; do
+      sleep 60
+      if [ "$(wc -c < /tmp/easytier_ltecar.log 2>/dev/null || echo 0)" -gt 524288 ]; then
+        echo "$(date) easytier log >512K, restart+truncate" >> /data/www/bootfix.log
+        [ -s /tmp/easytier.pid ] && kill "$(cat /tmp/easytier.pid)" 2>/dev/null
+        : > /tmp/easytier_ltecar.log
+        sleep 1
+        cd /data/www
+        RUST_LOG=off "$ETBIN" -c /data/www/easytier_ltecar.toml >> /tmp/easytier_ltecar.log 2>&1 &
+        echo $! > /tmp/easytier.pid
+      fi
+    done) &
   else
     echo "SKIP easytier: tun module or mini/config unavailable"
   fi
