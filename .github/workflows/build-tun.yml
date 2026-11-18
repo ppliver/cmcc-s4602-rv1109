@@ -34,18 +34,7 @@ jobs:
           if grep -qE "^menuconfig TUN|^config TUN" drivers/net/Kconfig; then
             echo "TUN Kconfig entry already present"
           else
-            cat >> drivers/net/Kconfig <<'EOF'
-
-config TUN
-	tristate "Universal TUN/TAP device driver support"
-	depends on INET
-	select CRC32
-	---help---
-	  TUN/TAP provides packet reception and transmission for user space
-	  programs.  It can be viewed as a simple Point-to-Point or Ethernet
-	  device, which receives packets from and sends packets to the user
-	  space application.
-EOF
+            printf '\nconfig TUN\n\ttristate "Universal TUN/TAP device driver support"\n\tdepends on INET\n\tselect CRC32\n\t---help---\n\t  TUN/TAP provides packet reception and transmission for user space\n\t  programs.\n\n' >> drivers/net/Kconfig
             echo "TUN Kconfig entry appended"
           fi
           grep -n "config TUN" drivers/net/Kconfig
@@ -59,10 +48,9 @@ EOF
           [ -f "$MC" ] || MC=scripts/merge_config.sh
           bash "$MC" -m .config "$GITHUB_WORKSPACE/board/s4602/s4602_kernel_fragment.config"
           bash "$MC" -m .config "$GITHUB_WORKSPACE/board/s4602/tun_fragment.config"
-          echo "CONFIG_TUN=m" >> .config
           make ARCH=arm olddefconfig
           echo "=== TUN state after olddefconfig (diagnosis) ==="
-          grep -n "TUN" .config | head -5 || echo "TUN absent"
+          grep -n "CONFIG_TUN" .config | head -5 || echo "TUN absent"
           echo "=== force TUN=m via scripts/config, then syncconfig ==="
           ./scripts/config --set-val TUN m
           make ARCH=arm syncconfig
