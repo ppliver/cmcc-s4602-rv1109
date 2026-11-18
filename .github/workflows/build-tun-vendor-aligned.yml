@@ -53,7 +53,11 @@ jobs:
           git clone --depth 1 -b "$FL_TAG" "$FL_GROUP/kernel.git" /opt/fl-kernel
           cd /opt/fl-kernel
           echo "kernel HEAD: $(git rev-parse --short HEAD)"
-          grep -m1 -E 'Linux 4\.19' Makefile
+          # Linux Makefile 把版本拆成 VERSION / PATCHLEVEL / SUBLEVEL 三行，
+          # 没有整行 "Linux 4.19" —— 拼接后再断言，避免 grep 空匹配 exit 1 白跑一轮。
+          KVER=$(awk '/^VERSION = /{v=$3}/^PATCHLEVEL = /{p=$3}/^SUBLEVEL = /{s=$3}END{print v"."p"."s}' Makefile)
+          echo "kernel version: $KVER"
+          echo "$KVER" | grep -q '^4\.19\.' || { echo "ERROR: expected kernel 4.19.x, got $KVER"; exit 1; }
 
       - name: Clone Firefly cross toolchain (gcc-linaro 6.3.1 = vendor 同系)
         run: |
@@ -85,8 +89,9 @@ jobs:
           cp "$GITHUB_WORKSPACE/board/s4602/tun/layout_probe.c" /tmp/modbuild/
           printf 'obj-m += tun.o\nobj-m += layout_probe.o\n' > /tmp/modbuild/Makefile
           # 外部模块方式绕开 `make drivers/net/tun.ko` 触发的 dtc -fno-common 多重定义。
-          # CONFIG_TUN_MODULE 满足 if_tun.h:23 守卫；Firefly 工具链默认 armv7，无需 -march。
-          make M=/tmp/modbuild modules
+          # CONFIG_TUN_MODULE 满足 if_tun.h:23 守卫；-march=armv7-a 与成功构建机一致。
+          make M=/tmp/modbuild modules ARCH=arm CROSS_COMPILE="$CROSS" \
+            KCFLAGS="-DCONFIG_TUN_MODULE -march=armv7-a"
           ls -l /tmp/modbuild/tun.ko /tmp/modbuild/layout_probe.ko
           echo "VERMAGIC=$(strings /tmp/modbuild/tun.ko | grep '^vermagic=' | head -1)" | tee -a "$GITHUB_ENV"
 
