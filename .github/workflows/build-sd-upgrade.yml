@@ -1,0 +1,76 @@
+name: build-sd-upgrade
+
+# S4602 SD 升级固件整包复现：
+#   入库源头 upgrade/factory/system_b.img (crc 0x38df701f, 原厂 mtd9)
+#   → build_hook_image.sh（解包→注入 S99local v2→mksquashfs→ubinize→0xFF 填充）
+#   → make_sd_upgrade.py（组装 base/optional + MANIFEST → out/s4602_sd_upgrade）
+# 产物 artifact = SD 卡 FAT32 根目录的直接内容。
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "upgrade/**"
+      - "tools/make_sd_upgrade.py"
+      - ".github/workflows/build-sd-upgrade.yml"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install repack toolchain
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq squashfs-tools mtd-utils
+          python3 -m pip install --quiet --user ubi-reader
+          echo "PATH=$HOME/.local/bin:$PATH" >> "$GITHUB_ENV"
+          mksquashfs -version | head -1
+          ubinize 2>&1 | head -1 || true
+          ubireader_display_info 2>&1 | head -1 || true
+
+      - name: Rebuild hook image v2 from factory source
+        run: bash upgrade/build_hook_image.sh
+
+      - name: Validate image geometry (ubireader)
+        run: |
+          IMG=upgrade/s4602_upgrade/flash/system_b.img
+          test "$(stat -c%s $IMG)" = "46137344"
+          ubireader_display_info $IMG | tee /tmp/ubi_info.txt
+          grep -q "reserved_pebs: 332" /tmp/ubi_info.txt || { echo "FATAL: reserved_pebs != 332"; exit 1; }
+          grep -q "1734217813" /tmp/ubi_info.txt || { echo "FATAL: wrong image seq"; exit 1; }
+          tail -c 4096 $IMG | od -An -tx1 | grep -qv "00 00" || true
+          python3 - <<'EOF'
+          d = open("upgrade/s4602_upgrade/flash/system_b.img", "rb").read()
+          assert len(d) == 46137344
+          assert all(b == 0xFF for b in d[-4096:]), "tail not 0xFF"
+          import zlib; print("image crc32 =", hex(zlib.crc32(d) & 0xFFFFFFFF))
+          EOF
+
+      - name: Assemble SD upgrade package
+        run: python3 tools/make_sd_upgrade.py --verify
+
+      - name: Sanity-check package layout
+        run: |
+          P=out/s4602_sd_upgrade
+          test -f "$P/system_b.img"                # U-Boot fatload 必须在 FAT 根
+          test -f "$P/s4602_upgrade/VERSION"
+          test -f "$P/s4602_upgrade/MANIFEST.sizes"
+          test "$(ls "$P/s4602_upgrade/base" | wc -l)" -eq 10
+          test "$(ls "$P/s4602_upgrade/optional" | wc -l)" -eq 6
+          bash -n "$P/s4602_upgrade/base/bootfix.sh"
+          echo "package layout OK"
+
+      - name: Record checksums
+        run: |
+          cd out/s4602_sd_upgrade
+          find . -type f -exec md5sum {} \; | sort -k2 | tee MD5SUMS.txt
+          cat s4602_upgrade/MANIFEST.sizes
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: s4602_sd_upgrade_${{ github.run_number }}
+          path: out/s4602_sd_upgrade/
+          if-no-files-found: error
