@@ -131,3 +131,46 @@ rootfs 暂沿用已有 `firmware/rootfs.ubi.rv1109`（OpenIPC）或 vendor rootf
 > **硬件约束（2026-11-17 用户）**：板上有 USB 口、要插 4G 无线网卡 RNDIS 模式 → **USB host 子系统绝不能裁**，
 > 内核须含 USB host(XHCI/EHCI/OHCI) + `USB_USBNET`/`USB_NET_RNDIS_HOST`/`CDC_NCM`/`CDCETHER`/`USB_SERIAL_WWAN/OPTION/QUALCOMM`。
 > 仍关 USB 设备角色（GADGET/CONFIGFS）。
+
+## 7. 2026-11-18 重审（当天其他任务大更新后，路线再定位）
+
+### 7.1 今天发生的事对 Firefly 路线的影响
+
+| 事实 | 出处 | 对本路线的影响 |
+|---|---|---|
+| **SD 升级固件 v20261118.1 已 GA 产品化**（vendor 运行态：swapp_patched+h264out_v4 UDP 推流+webd+bootfix v7 自愈） | `docs/vendor/SD_UPGRADE_FIRMWARE.md`、当日日志 | vendor 路线已交付"硬件 ISP 画质"（swapp 原生出图，h264out 旁路编码）。**Firefly 路线的增量价值要重新表述**（见 7.2） |
+| **tun.ko ABI saga：Firefly rv1126_defconfig 内核与 vendor 内核 struct 布局系统性不同**（net_device 差 4 字节，根因 CONFIG_IPV6 缺失；反推 config 重编后彻底解决并上机 PASS） | `docs/vendor/TUN_ABI_SAGA.md`、`board/s4602/tun/vendor-aligned.config` | ① 方法论资产：布局探测模块 + vendor-vmlinux 反汇编可反推 vendor config；② `vendor-aligned.config`（3600 行，已实测与 vendor 布局对齐）是比 rv1126_defconfig **更接近 vendor 的内核 config 起点**（如需 Firefly 内核跑 vendor 用户态时启用）；③ 若走 Firefly buildroot rootfs（内部自洽）则无此约束 |
+| **U-Boot 启动通道铁证（OpenIPC 时代实证，本机 U-Boot 2017.09）**：`bootm` 启动 FIT **无视 FIT 内 fdt@1**（回退控制 DTB）；`boot_fit` 能正确取 fdt@1 但只读 boot_b NAND；**可靠零风险上机路径 = SD legacy uImage(raw Image) + 显式 DTB 三参 bootm**（`fatload mmc 1 0x02008000 s4602_uImage.bin` / `fatload mmc 1 0x08300000 vendor-kernel.dtb` / `bootm 0x02008000 - 0x08300000`，OpenIPC 同机制产物实测过） | `tools/sd_bootz_openipc.py` 头注释、`docs/shared/UBOOT.md` | Stage 1 上机方案修正：首选 **SD bootm 三参**（不碰 NAND）；`build-firefly.yml` 已增补产出 `s4602-firefly_uImage.bin`（raw Image 包裹，header CI 门控）|
+| `build-firefly.yml` 已改 manual dispatch（commit 9b0044b，消除 push CI 噪音） | 当日日志 | 启动 Stage 1 实验前需 API dispatch 手动触发 |
+
+### 7.2 路线价值重定位（相对已交付的 vendor 运行态）
+
+vendor 运行态（SD 产品）已实现：硬件 ISP 画质（原厂 swapp+IQ）、UDP 推流、WEB 后台、go2rtc、自愈。
+Firefly 路线剩余的增量价值：
+
+1. **完全自主固件**：无 swapp 云依赖（现状 swapp 必须连移动云 36.213.184.74:50661，断网=不可控）、标准 RTSP 直出（`rkmedia_vi_venc_rtsp_test`）、可二次开发。
+2. **CPU 解放**：vendor swapp 固定成本 ~30% 单核（智能侦测栈，云端配置管不掉，已实验两次证实）+ RkAiqCore 13%。Firefly BSP 走 `rkmedia` demo 链路无此负担。
+3. **内核自主**：可自由加驱动/功能（4G RNDIS 已就位），不必寄生于 vendor 内核的 hook 体系。
+
+代价/风险：数天适配（DTS、IQ 迁移、camera_info 注入逻辑参考 swapp 逆向）；参考板 DTS 与 S4602 硬件差异需逐项核对；全量换 rootfs 的回归风险。**两条路线不互斥**：Firefly Stage 1 内核 FIT 也可作为 vendor 运行态的"内核升级件"（换内核不换 rootfs，保留 bootfix 自愈），此时须用 `vendor-aligned.config` 保 ABI。
+
+### 7.3 Stage 1 上机弹药已备齐（GA 产物，2026-11-18 r7）
+
+`build-firefly.yml`（commit `9234af8`，run 44285694372 dispatch）一次产出 **5 件**：
+
+| 文件 | 用途 |
+|---|---|
+| `s4602-firefly_uImage.bin` | **SD bootm 三参内核**（raw Image 10.7MB 包 legacy uImage，load/entry=0x02008000，头字段 CI 门控）——首选上机路径，零风险不碰 NAND |
+| `vendor-kernel.dtb` | SD bootm 三参之 DTB（金标硬件描述；OpenIPC 时代 s4602.dtb=85,937B 即此文件，实证可用） |
+| `rv1109-38-v10-spi-nand.dtb` | 备选 DTB（Firefly 参考板，若 vendor dtb 与 Firefly 驱动树冲突时换） |
+| `zboot.img` | FIT（参考板 DTS），boot_b 刷写候选 |
+| `zboot-vendor-dtb.img` | FIT（**vendor DTS**），boot_b 刷写首选变体（2.82 MiB < 4 MiB） |
+
+> r6 教训：uImage 头 os/arch 门控初版把 offset 28/29 写反（ih_os@28、ih_arch@29），产物其实全对——校验代码也要过实验。
+
+### 7.4 上机实验设计（待用户拍板时机；SD 卡 FAT 需先重格）
+
+1. **首选（零风险）**：SD 卡 FAT32 放 `s4602-firefly_uImage.bin` + `vendor-kernel.dtb` → 串口（1500000 8N1）U-Boot 三参 bootm → 看 Firefly 内核起、`dmesg`：sc5338 Detected / sfc_nand e5f2e5 / mtd 14 分区 / 插 4G 卡出 usb0。**不写 NAND，断电即回原厂。**
+2. **次选**：刷 `zboot-vendor-dtb.img` 进 boot_b（红线：四参数+回读 CRC+全片备份已在；vendor 用户态要跑则 fragment 换 `vendor-aligned.config` 重编保 ABI）。
+3. 通过后开 Stage 2：buildroot（`rockchip_rv1126_rv1109_spi_nand`）+ `rkmedia_vi_venc_rtsp_test` + `COMMON_sc5338.xml`（vendor rootfs 内已提取）→ 完整 updateimg。
+4. 验收 = `vlc rtsp://<ip>/live/main_stream` 硬件 ISP 画质直出。
