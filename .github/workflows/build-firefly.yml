@@ -113,37 +113,53 @@ jobs:
           make ARCH=arm rv1109-38-v10-spi-nand.dtb
           ls -l arch/arm/boot/zImage arch/arm/boot/dts/rv1109-38-v10-spi-nand.dtb
 
-      - name: Package FIT (zboot.img) with the built reference DTS
+      - name: Package boot images (FIT zboot.img + SD-bootm uImage, x2 DTB variants)
         run: |
           mkdir -p firmware
-          bash tools/make_fit.sh /opt/fl-kernel/arch/arm/boot/zImage \
-               /opt/fl-kernel/arch/arm/boot/dts/rv1109-38-v10-spi-nand.dtb \
-               firmware/zboot.img
-          cp /opt/fl-kernel/arch/arm/boot/dts/rv1109-38-v10-spi-nand.dtb firmware/rv1109-38-v10-spi-nand.dtb
-          cp docs/evidence/vendor-kernel.dtb firmware/vendor-kernel.dtb   # 上机替换候选
-          ls -l firmware/zboot.img firmware/rv1109-38-v10-spi-nand.dtb firmware/vendor-kernel.dtb
+          REF_DTB=/opt/fl-kernel/arch/arm/boot/dts/rv1109-38-v10-spi-nand.dtb
+          VEN_DTB=docs/evidence/vendor-kernel.dtb
+          # --- A) FIT (boot_b 用) × 2 个 DTS 变体 ---
+          bash tools/make_fit.sh /opt/fl-kernel/arch/arm/boot/zImage "$REF_DTB" firmware/zboot.img
+          bash tools/make_fit.sh /opt/fl-kernel/arch/arm/boot/zImage "$VEN_DTB" firmware/zboot-vendor-dtb.img
+          cp "$REF_DTB" firmware/rv1109-38-v10-spi-nand.dtb
+          cp "$VEN_DTB" firmware/vendor-kernel.dtb
+          # --- B) SD bootm 三件套之内核（OpenIPC 时代已在本机 U-Boot 实证）---
+          # 本机 U-Boot 2017.09 (Rockchip) 实测：
+          #   bootm 启动 FIT 无视 FIT 内 fdt@1（回退控制 DTB）；boot_fit 只读 boot_b NAND。
+          # 可靠上机路径 = SD legacy uImage(raw Image) + 显式 DTB 三参 bootm：
+          #   fatload mmc 1 0x02008000 s4602-firefly_uImage.bin
+          #   fatload mmc 1 0x08300000 vendor-kernel.dtb
+          #   bootm 0x02008000 - 0x08300000
+          # 参数沿标准 legacy uImage；OpenIPC 时代同机制产物 s4602_uImage.bin(3,293,456B) 实证可被 bootm 识别。
+          test -f /opt/fl-kernel/arch/arm/boot/Image || make -C /opt/fl-kernel ARCH=arm Image
+          mkimage -A arm -O linux -T kernel -C none \
+            -a 0x02008000 -e 0x02008000 -n "s4602-firefly-4.19.111" \
+            -d /opt/fl-kernel/arch/arm/boot/Image firmware/s4602-firefly_uImage.bin
+          ls -l firmware/
           python3 - <<'PY'
           import os
-          p='firmware/zboot.img'
-          magic=open(p,'rb').read(4)
-          print('FIT magic: %s (expect d00dfeed)' % magic.hex())
-          # FIT 魔数在头部前 4 字节（u32 大端 0xd00dfeed）。
-          # 旧写法 d.hex().endswith('d00dfeed') 是对整个 8 字节 hex 串判断，
-          # 而第 4-8 字节是 image_header.timestamp（本例 00 00 02 d8=728，
-          # image_size 在 offset 8）→ 整个串不以 d00dfeed 结尾，误报 invalid。
-          # 只判前 4 字节 magic 即可。
-          assert magic.hex() == 'd00dfeed', 'not a valid FIT'
-          size=os.path.getsize(p)
           BOOT_B=0x400000
-          print('zboot.img size: %d B (%.2f MiB) vs boot_b = %d B (%.1f MiB)'
-                % (size, size/1048576.0, BOOT_B, BOOT_B/1048576.0))
-          if size > BOOT_B:
-            # 容量缺口是真实约束，但不是「产物无效」——降级为告警，让 artifact 照常产出，
-            # 由计划文档跟踪「换精简 defconfig / 缩小 zImage」作为 Stage 1 收尾前置项。
-            print('WARNING: zboot.img > boot_b(4MiB)；无法直接写 boot_b，'
-                  '上机前需精简内核 defconfig（当前 rv1126_defconfig 偏大）。')
-          else:
-            print('OK: zboot.img fits in boot_b(4MiB).')
+          for p in ('firmware/zboot.img','firmware/zboot-vendor-dtb.img'):
+            magic=open(p,'rb').read(4)
+            print('%s FIT magic: %s' % (p, magic.hex()))
+            # FIT 魔数在头部前 4 字节（u32 大端 0xd00dfeed）。
+            # 旧写法 d.hex().endswith('d00dfeed') 是对整个 8 字节 hex 串判断，
+            # 而第 4-8 字节是 image_header.timestamp（image_size 在 offset 8）→ 误报 invalid。
+            # 只判前 4 字节 magic 即可。
+            assert magic.hex() == 'd00dfeed', 'not a valid FIT: '+p
+            size=os.path.getsize(p)
+            print('  size: %d B (%.2f MiB) vs boot_b = %d B (%.1f MiB) -> %s'
+                  % (size, size/1048576.0, BOOT_B, BOOT_B/1048576.0,
+                     'OK fits' if size <= BOOT_B else 'WARNING over'))
+          # uImage 头校验：magic 0x27051956 大端 + type=kernel(2) + os=linux(5) + arch=arm(2)
+          h=open('firmware/s4602-firefly_uImage.bin','rb').read(64)
+          import struct
+          magic, = struct.unpack('>I', h[0:4])
+          assert magic == 0x27051956, 'bad uImage magic'
+          os_, arch, typ, comp = h[29], h[28], h[30], h[31]
+          print('uImage header: os=%d(linux=5) arch=%d(arm=2) type=%d(kernel=2) comp=%d(none=0)' % (os_,arch,typ,comp))
+          assert (os_,arch,typ,comp) == (5,2,2,0), 'unexpected uImage header fields'
+          print('uImage size: %d B' % os.path.getsize('firmware/s4602-firefly_uImage.bin'))
           PY
 
       - name: Upload build artifacts
@@ -152,6 +168,8 @@ jobs:
           name: firefly-s4602-rv1109
           path: |
             firmware/zboot.img
+            firmware/zboot-vendor-dtb.img
+            firmware/s4602-firefly_uImage.bin
             firmware/rv1109-38-v10-spi-nand.dtb
             firmware/vendor-kernel.dtb
           if-no-files-found: error
