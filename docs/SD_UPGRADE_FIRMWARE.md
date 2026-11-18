@@ -13,6 +13,7 @@
 | `base/modules.conf` | 本地编写（可选模块开关，本次新增） | bootfix v7 消费 |
 | `optional/go2rtc.xz` | GA 构建（workflow build-go2rtc-patched，v1.9.15+close+flush-guard 增强 patch） | 实机 3+5 轮播放/压力 0 panic |
 | `optional/go2rtc.yaml` `easytier_ltecar.toml` | 实机回拉 | 实机在役 |
+| `optional/rtp2pipe` | 源码 `tools/rtp2pipe.c`（本库）经构建服务器 `arm-linux-gnueabihf-gcc -O2 -std=gnu99 -w -static -s` 编译（`tools/armbuild.py` SSH 辅助，当时未走 GA）。GA 复现：build-sd-upgrade 内 "Rebuild rtp2pipe from source" 步骤，产物单独 artifact；包内默认保留实机验证版（gcc 版本差异字节会漂移），dispatch 输入 `use_rebuilt_rtp2pipe` 可切换为新编版 | 实机在役（go2rtc exec 源） |
 | `optional/rtp2pipe` `tun.ko` `easytier-mini` | 实机回拉（tun.ko=GA 构建的 vendor ABI 对齐版；easytier-mini 落 data_bk） | 实机在役 |
 | `VERSION` `MANIFEST.sizes` `MANIFEST.md5` `README.txt` | `tools/make_sd_upgrade.py` 生成 | — |
 

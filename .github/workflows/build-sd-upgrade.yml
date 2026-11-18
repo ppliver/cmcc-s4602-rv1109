@@ -8,6 +8,11 @@ name: build-sd-upgrade
 
 on:
   workflow_dispatch:
+    inputs:
+      use_rebuilt_rtp2pipe:
+        description: "Package freshly-compiled rtp2pipe (source tools/rtp2pipe.c) instead of the device-verified binary"
+        type: boolean
+        default: false
   push:
     paths:
       - "upgrade/**"
@@ -24,12 +29,28 @@ jobs:
       - name: Install repack toolchain
         run: |
           sudo apt-get update -qq
-          sudo apt-get install -y -qq squashfs-tools mtd-utils
+          sudo apt-get install -y -qq squashfs-tools mtd-utils gcc-arm-linux-gnueabihf
           python3 -m pip install --quiet --user ubi-reader
           echo "PATH=$HOME/.local/bin:$PATH" >> "$GITHUB_ENV"
           mksquashfs -version | head -1
-          ubinize 2>&1 | head -1 || true
-          ubireader_display_info 2>&1 | head -1 || true
+          arm-linux-gnueabihf-gcc --version | head -1
+
+      - name: Rebuild rtp2pipe from source (static armhf)
+        run: |
+          arm-linux-gnueabihf-gcc -O2 -std=gnu99 -w -static -s \
+            -o /tmp/rtp2pipe_rebuilt tools/rtp2pipe.c
+          F=$(file /tmp/rtp2pipe_rebuilt)
+          echo "$F"
+          echo "$F" | grep -q "ELF 32-bit.*ARM.*statically linked" || { echo "FATAL: not static ARM ELF"; exit 1; }
+          mkdir -p out/rtp2pipe_rebuilt
+          cp /tmp/rtp2pipe_rebuilt out/rtp2pipe_rebuilt/rtp2pipe
+          md5sum out/rtp2pipe_rebuilt/rtp2pipe
+
+      - name: Optionally substitute rebuilt rtp2pipe into package source
+        if: ${{ inputs.use_rebuilt_rtp2pipe }}
+        run: |
+          cp /tmp/rtp2pipe_rebuilt upgrade/s4602_upgrade/optional/rtp2pipe
+          echo "NOTE: package will ship freshly-built rtp2pipe (not the device-verified binary)"
 
       - name: Rebuild hook image v2 from factory source
         run: bash upgrade/build_hook_image.sh
@@ -73,4 +94,10 @@ jobs:
         with:
           name: s4602_sd_upgrade_${{ github.run_number }}
           path: out/s4602_sd_upgrade/
+          if-no-files-found: error
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rtp2pipe_rebuilt_${{ github.run_number }}
+          path: out/rtp2pipe_rebuilt/rtp2pipe
           if-no-files-found: error
