@@ -62,6 +62,11 @@ jobs:
 
       - name: Install regression test (PR #2339)
         run: |
+          set -e
+          # v1.9.15 tag 自带坏测试 core_test.go:128 引用了未定义的 StripUserinfo
+          # （该函数在 master 有但未进 tag），会让 go test 整包编译失败。
+          # 删掉它，pkg/core 只保留我们要跑的回归测试，与本次补丁无关。
+          rm -f /tmp/go2rtc/pkg/core/core_test.go
           cp "$GITHUB_WORKSPACE/board/s4602/go2rtc/writebuffer_test.go" /tmp/go2rtc/pkg/core/writebuffer_test.go
           ls -l /tmp/go2rtc/pkg/core/writebuffer_test.go
 
