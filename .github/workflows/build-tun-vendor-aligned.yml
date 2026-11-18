@@ -77,6 +77,11 @@ jobs:
           make syncconfig ARCH=arm
           echo ">>> autoconf.h IPV6:"
           grep -E '^#define CONFIG_IPV6 ' include/generated/autoconf.h
+          # 外部模块模式仍需 prepared 树：prepare 生成 arch/arm/include/generated/asm/*
+          # 软链（bitsperlong.h 等），否则编译报 "asm/bitsperlong.h: No such file"。
+          # HOSTLDFLAGS 解决 GA 新版 gcc 的 dtc -fno-common 多重定义。
+          make prepare ARCH=arm CROSS_COMPILE="$CROSS" \
+            HOSTLDFLAGS="-Wl,--allow-multiple-definition"
 
       - name: Build layout probe + tun.ko (external module mode)
         working-directory: /opt/fl-kernel
@@ -84,6 +89,7 @@ jobs:
           set -e
           export ARCH=arm
           export CROSS_COMPILE="$CROSS"
+          export HOSTLDFLAGS="-Wl,--allow-multiple-definition"
           mkdir -p /tmp/modbuild
           cp drivers/net/tun.c /tmp/modbuild/
           cp "$GITHUB_WORKSPACE/board/s4602/tun/layout_probe.c" /tmp/modbuild/
