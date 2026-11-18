@@ -1,0 +1,20 @@
+hostname = "s4602-ipcam"
+instance_name = "default"
+ipv4 = "10.123.123.77/24"
+dhcp = false
+listeners = ["tcp://0.0.0.0:11010", "udp://0.0.0.0:11010"]
+[network_identity]
+network_name = "LTE_CAR"
+network_secret = "1300274500"
+[[peer]]
+uri = "tcp://easytier.weiai.org.cn:11010"
+[[peer]]
+uri = "tcp://et.sumnight.top:11010"
+[[peer]]
+uri = "udp://us01.225284.xyz:11010"
+[flags]
+default_protocol = "tcp"
+enable_encryption = true
+enable_ipv6 = false
+mtu = 1380
+latency_first = true

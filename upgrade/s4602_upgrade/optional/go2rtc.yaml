@@ -1,0 +1,10 @@
+api:
+  listen: ":1984"
+rtsp:
+  listen: ":8554"
+webrtc:
+  listen: ":8555"
+
+streams:
+  # h264out(--mirror 127.0.0.1:5602) -> rtp2pipe 解包 -> 裸 H265/H264 码流
+  camera1: exec:/data/www/rtp2pipe 5602#killsignal=15#killtimeout=5

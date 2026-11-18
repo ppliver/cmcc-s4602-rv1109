@@ -1,4 +1,13 @@
-# CMCC S4602 (RV1109 / SPI-NAND) → OpenIPC 移植工程
+# CMCC S4602 (RV1109 / SPI-NAND) → 原厂固件增强 / SD 卡升级固件
+
+> **★ 当前主线（2026-11-18）：已放弃 OpenIPC 路线，转 vendor 原厂栈增强。**
+> 设备在原厂移动固件上稳定运行：UDP 推流（h264out 720p25 → QGC）、WEB 后台（webd:8080）、
+> go2rtc（RTSP/WebRTC，mp4 panic 增强补丁版）、easytier TUN 组网（vendor ABI 对齐 tun.ko）、
+> 云端 APP 并存。产品化交付见 **[`docs/SD_UPGRADE_FIRMWARE.md`](docs/SD_UPGRADE_FIRMWARE.md)**——
+> 两层结构 SD 卡升级固件（base=UDP+WEB 后台，optional=go2rtc/easytier），
+> 首装只刷 system_b 一个分区（boot_b/U-Boot/内核不动），之后"换 SD 卡即升级"。
+> OpenIPC 内容保留在下方作历史参考（画质结论边界见项目笔记：硬件 100% 正常，
+> 问题只在 OpenIPC 预编译 librkaiq 缺 camera_info 的软件路径）。
 
 **当前状态：设备是半砖（2026-06-29 刷写失败），离线工程 + 实证取证已完成，设备侧未执行。**
 SPL/DDR 仍正常，但进不了 U-Boot 控制台。完整复盘见 [`docs/INCIDENT.md`](docs/INCIDENT.md)，

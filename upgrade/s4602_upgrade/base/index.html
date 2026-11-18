@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>S4602 流媒体控制台</title>
+<style>
+  :root{
+    --bg:#0f1117; --card:#171a23; --card2:#1d212d; --line:#2a2f3d;
+    --fg:#e8eaf0; --dim:#8b93a7; --acc:#4f8cff; --ok:#3ecf8e; --warn:#ffb454; --bad:#ff6b6b;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--fg);font:14px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",sans-serif;padding:16px;max-width:760px;margin:0 auto}
+  h1{font-size:18px;margin-bottom:4px}
+  .sub{color:var(--dim);font-size:12px;margin-bottom:16px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-bottom:14px}
+  .card h2{font-size:14px;margin-bottom:10px;color:var(--acc);display:flex;align-items:center;gap:8px}
+  .dot{width:8px;height:8px;border-radius:50%;background:var(--dim);flex:none}
+  .dot.on{background:var(--ok);box-shadow:0 0 6px var(--ok)}
+  .dot.off{background:var(--bad)}
+  .kv{display:grid;grid-template-columns:auto 1fr;gap:2px 14px;font-size:13px}
+  .kv .k{color:var(--dim)}
+  .kv .v{font-family:ui-monospace,Consolas,monospace;word-break:break-all}
+  .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  .field{flex:1;min-width:130px}
+  .field label{display:block;font-size:12px;color:var(--dim);margin-bottom:4px}
+  select,input[type=number],input[type=text]{width:100%;background:var(--card2);color:var(--fg);border:1px solid var(--line);border-radius:6px;padding:8px 10px;font-size:14px}
+  input[type=text]{font-family:ui-monospace,Consolas,monospace}
+  input[type=range]{width:100%;accent-color:var(--acc)}
+  button{background:var(--acc);color:#fff;border:0;border-radius:6px;padding:9px 18px;font-size:14px;cursor:pointer;font-weight:600}
+  button.ghost{background:var(--card2);color:var(--fg);border:1px solid var(--line)}
+  button.stop{background:var(--bad)}
+  button:active{opacity:.8}
+  .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--card2);border:1px solid var(--line);padding:10px 18px;border-radius:8px;font-size:13px;opacity:0;transition:.25s;pointer-events:none;max-width:90vw}
+  .toast.show{opacity:1}
+  .live{color:var(--ok);font-family:ui-monospace,monospace;font-size:13px}
+  .hint{color:var(--dim);font-size:12px;margin-top:8px}
+  .pill{display:inline-block;padding:1px 10px;border-radius:10px;font-size:12px;border:1px solid var(--line)}
+  .pill.on{color:var(--ok);border-color:var(--ok)}
+  .pill.off{color:var(--bad);border-color:var(--bad)}
+</style>
+</head>
+<body>
+  <h1>S4602 流媒体控制台</h1>
+  <div class="sub">内网 UDP 推流（h264out → QGC/PixelPilot） · <span id="devip">--</span> · 运行 <span id="up">--</span>s</div>
+
+  <div class="card">
+    <h2><span class="dot" id="dot"></span>推流状态</h2>
+    <div class="kv">
+      <span class="k">进程</span><span class="v" id="st_pid">未运行</span>
+      <span class="k">实测输出</span><span class="v live" id="st_stat">--</span>
+      <span class="k">延迟账目</span><span class="v" id="st_lat">--</span>
+      <span class="k">当前配置</span><span class="v" id="st_conf">--</span>
+    </div>
+    <div class="hint">实测行来自 /tmp/h264out.log，2 秒自动刷新</div>
+  </div>
+
+  <div class="card">
+    <h2>推流设置</h2>
+    <div class="row">
+      <div class="field"><label>分辨率</label>
+        <select id="res">
+          <option value="1440p" selected>2560×1440 (1440p·旁路, ~20fps)</option>
+          <option value="1080p">1920×1080 (1080p·裁切, ~20fps)</option>
+          <option value="720p">1280×720 (720p, ~23fps)</option>
+        </select>
+      </div>
+      <div class="field"><label>帧率 <span style="color:var(--warn)">720p≈23 · 1440p/1080p≈20</span></label>
+        <select id="fps">
+          <option value="25" selected>25</option>
+          <option value="20">20</option>
+          <option value="15">15</option>
+          <option value="30">30</option>
+        </select>
+      </div>
+    </div>
+    <div class="row" style="margin-top:10px">
+      <div class="field" style="flex:2"><label>码率 <b id="kbps_v">1500</b> kbps</label>
+        <input type="range" id="kbps" min="500" max="6000" step="100" value="1500" oninput="kbps_v.textContent=this.value">
+      </div>
+      <div class="field"><label>GOP</label>
+        <input type="number" id="gop" min="10" max="120" value="25">
+      </div>
+      <div class="field"><label>编码</label>
+        <select id="codec">
+          <option value="h264" selected>H.264 (PT96)</option>
+          <option value="h265">H.265 (PT97)</option>
+        </select>
+      </div>
+    </div>
+    <div class="row" style="margin-top:12px">
+      <div class="field" style="flex:2"><label>推流目标 IP（UDP，QGC/PixelPilot 所在电脑）</label>
+        <input type="text" id="dstip" value="192.168.6.88" spellcheck="false">
+      </div>
+      <div class="field"><label>端口</label>
+        <input type="number" id="dstport" min="1024" max="65535" value="5600">
+      </div>
+      <div class="field"><label>弱网平滑 (ms)</label>
+        <input type="number" id="pace" min="0" max="20" value="3">
+      </div>
+      <div class="field"><label>帧内刷新 (行)</label>
+        <input type="number" id="cir" min="0" max="8" value="2">
+      </div>
+    </div>
+    <div class="row" style="margin-top:12px">
+      <button onclick="apply()">应用并重启推流</button>
+      <button class="ghost" onclick="stopStream()">停止</button>
+    </div>
+    <div class="hint">修改写入 /data/www/stream.conf（断电保留），切换约 5 秒黑屏。<b>分辨率/编码可随意来回切换，无需重启设备</b>（行 stride 残留问题已修复）。通道规格：<b>1440p</b>=ISPP 旁路直通（全视野 ~20fps）；<b>1080p</b>=1440p 旁路采集后中心裁切（视野略窄）；<b>720p</b> 走硬件缩放（视野最广，≈23fps）。真·1080p 缩放需占用云端流的主通道（scale0），未启用。<b>弱网平滑</b>：把一帧的数据包在窗口内均匀发送，降低 WiFi 突发丢包——链路好设 0（突发，延迟最低），弱网/花屏时试 5~10，默认 3。<b>帧内刷新</b>：每帧渐进刷新 N 行宏块，丢包花屏自动逐步愈合、不再依赖整帧 IDR——花屏严重时调大（3~4），链路好设 0（画质最优）。推流目标改非默认值时，QGC/PixelPilot 视频源地址需同步修改。</div>
+  </div>
+
+  <div class="card">
+    <h2><span class="dot" id="cdot"></span>云链路（移动千里眼）</h2>
+    <div class="row">
+      <span class="pill" id="cloud_pill">--</span>
+      <button class="ghost" id="cloud_btn" onclick="toggleCloud()">--</button>
+    </div>
+    <div class="hint">开关 = 增删默认路由。云端流走 swapp（2560×1440 档，gat1400 上报），与本页控制的内网 UDP 流相互独立。</div>
+  </div>
+
+  <div class="card">
+    <h2>云端流参数（para 只读）</h2>
+    <div class="kv" id="para_kv"><span class="k">--</span><span class="v">--</span></div>
+    <div class="hint">来源 /data/.swdb/para。修改云端流档位需重启 swapp，暂不在此页开放。</div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+<script>
+const $ = id => document.getElementById(id);
+let lastStat = "";
+function toast(m){ const t=$("toast"); t.textContent=m; t.classList.add("show"); clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove("show"),2600); }
+async function refresh(){
+  try{
+    const d = await (await fetch("/api/status")).json();
+    $("devip").textContent = d.ip || "--";
+    $("up").textContent = d.uptime || "--";
+    $("st_pid").textContent = d.pid ? ("运行中 PID "+d.pid) : "未运行";
+    $("dot").className = "dot " + (d.pid ? "on" : "off");
+    $("st_stat").textContent = d.stat || "--";
+    $("st_lat").textContent = d.lat || "--";
+    $("st_conf").textContent = (d.conf||"").replace(/\n/g," ");
+    const cloudOn = d.cloud === "on";
+    $("cloud_pill").textContent = cloudOn ? "云端已连接" : "云端已断开";
+    $("cloud_pill").className = "pill " + (cloudOn ? "on" : "off");
+    $("cloud_btn").textContent = cloudOn ? "断开云链路" : "恢复云链路";
+    $("cloud_btn").dataset.on = cloudOn ? "1" : "0";
+    $("cdot").className = "dot " + (cloudOn ? "on" : "off");
+    /* para: "k = v;k = v;..." */
+    const kv = $("para_kv"); kv.innerHTML = "";
+    (d.para||"").split(";").filter(Boolean).forEach(s=>{
+      const i = s.indexOf("=");
+      if(i<0) return;
+      kv.insertAdjacentHTML("beforeend", `<span class="k">${s.slice(0,i).trim()}</span><span class="v">${s.slice(i+1).trim()}</span>`);
+    });
+    /* 从 conf 回填表单（仅首次） */
+    if(!refresh._filled && d.conf){
+      const m = Object.fromEntries(d.conf.trim().split("\n").map(l=>l.split("=")));
+      if(m.w==2560)$("res").value="1440p"; else if(m.w==1920)$("res").value="1080p"; else $("res").value="720p";
+      $("fps").value = m.fps; $("kbps").value = m.kbps; $("kbps_v").textContent = m.kbps; $("gop").value = m.gop;
+      if(m.codec) $("codec").value = m.codec;
+      if(m.ip) $("dstip").value = m.ip;
+      if(m.port) $("dstport").value = m.port;
+      if(m.pace) $("pace").value = m.pace;
+      if(m.cir) $("cir").value = m.cir;
+      refresh._filled = true;
+    }
+  }catch(e){ $("dot").className="dot off"; $("st_pid").textContent = "连接失败"; }
+}
+async function apply(){
+  const btn = event ? event.target : null;
+  if(btn) { btn.disabled = true; btn.textContent = "重启中..."; }
+  const q = `action=apply&res=${$("res").value}&fps=${$("fps").value}&kbps=${$("kbps").value}&gop=${$("gop").value}&codec=${$("codec").value}&ip=${encodeURIComponent($("dstip").value.trim())}&port=${$("dstport").value}&pace=${$("pace").value}&cir=${$("cir").value}`;
+  try{
+    const d = await (await fetch("/api/stream?"+q)).json();
+    toast(d.ok ? d.msg : ("失败: "+d.msg));
+  }catch(e){ toast("请求失败（可能超时，请等几秒看状态卡）"); }
+  if(btn) { btn.disabled = false; btn.textContent = "应用并重启推流"; }
+  setTimeout(refresh, 6000);
+}
+async function stopStream(){
+  const btn = event ? event.target : null;
+  if(!confirm("停止推流？")) return;
+  if(btn) { btn.disabled = true; }
+  try{ const d = await (await fetch("/api/stream?action=stop")).json(); toast(d.msg); }catch(e){ toast("请求失败"); }
+  if(btn) { btn.disabled = false; }
+  setTimeout(refresh, 3000);
+}
+async function toggleCloud(){
+  const on = $("cloud_btn").dataset.on === "1" ? 0 : 1;
+  if(!confirm(on ? "恢复云链路（加默认路由）？" : "断开云链路（删默认路由）？")) return;
+  try{ const d = await (await fetch("/api/cloud?on="+on)).json(); toast(d.msg); }catch(e){ toast("请求失败"); }
+  setTimeout(refresh, 1500);
+}
+refresh(); setInterval(refresh, 2000);
+</script>
+</body>
+</html>
