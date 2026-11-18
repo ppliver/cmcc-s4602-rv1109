@@ -13,6 +13,10 @@ on:
         description: "Package freshly-compiled rtp2pipe (source tools/rtp2pipe.c) instead of the device-verified binary"
         type: boolean
         default: false
+      use_rebuilt_bins:
+        description: "Also package freshly-compiled webd + h264out_v4 (gcc-version drift, bytes differ from device-verified builds)"
+        type: boolean
+        default: false
   push:
     paths:
       - "upgrade/**"
@@ -35,22 +39,41 @@ jobs:
           mksquashfs -version | head -1
           arm-linux-gnueabihf-gcc --version | head -1
 
-      - name: Rebuild rtp2pipe from source (static armhf)
+      - name: Rebuild binaries from source (rtp2pipe / webd / h264out_v4 / swapp_patched)
         run: |
+          mkdir -p out/rebuilt_bins
+          # rtp2pipe: static, no deps
           arm-linux-gnueabihf-gcc -O2 -std=gnu99 -w -static -s \
-            -o /tmp/rtp2pipe_rebuilt tools/rtp2pipe.c
-          F=$(file /tmp/rtp2pipe_rebuilt)
-          echo "$F"
-          echo "$F" | grep -q "ELF 32-bit.*ARM.*statically linked" || { echo "FATAL: not static ARM ELF"; exit 1; }
-          mkdir -p out/rtp2pipe_rebuilt
-          cp /tmp/rtp2pipe_rebuilt out/rtp2pipe_rebuilt/rtp2pipe
-          md5sum out/rtp2pipe_rebuilt/rtp2pipe
+            -o out/rebuilt_bins/rtp2pipe tools/rtp2pipe.c
+          # webd: static, pure POSIX
+          arm-linux-gnueabihf-gcc -O2 -std=gnu99 -w -static -s \
+            -o out/rebuilt_bins/webd tools/webd.c
+          # h264out: PIE dynamic, vendor MPP headers (repo third_party/), runtime libs from rtlib.tar.gz
+          arm-linux-gnueabihf-gcc -O2 -std=gnu99 -w \
+            -o out/rebuilt_bins/h264out_v4 tools/h264out.c \
+            -Ithird_party/mpp/inc-1.0.9 -ldl -lpthread -lm
+          for f in rtp2pipe webd h264out_v4; do
+            F=$(file out/rebuilt_bins/$f); echo "$F"
+            echo "$F" | grep -q "ELF 32-bit.*ARM" || { echo "FATAL: $f not ARM ELF"; exit 1; }
+          done
+          file out/rebuilt_bins/webd | grep -q "statically linked" || { echo "FATAL: webd not static"; exit 1; }
+          file out/rebuilt_bins/h264out_v4 | grep -q "dynamically linked" || { echo "FATAL: h264out not dynamic"; exit 1; }
+          # swapp_patched: byte-deterministic patch chain over the committed runtime swapp
+          python3 tools/patch_swapp.py   # asserts base md5 + patched md5 488b51c2... == device-verified
+          md5sum out/rebuilt_bins/*
 
-      - name: Optionally substitute rebuilt rtp2pipe into package source
-        if: ${{ inputs.use_rebuilt_rtp2pipe }}
+      - name: Optionally substitute rebuilt binaries into package source
+        if: ${{ inputs.use_rebuilt_rtp2pipe || inputs.use_rebuilt_bins }}
         run: |
-          cp /tmp/rtp2pipe_rebuilt upgrade/s4602_upgrade/optional/rtp2pipe
-          echo "NOTE: package will ship freshly-built rtp2pipe (not the device-verified binary)"
+          if [ "${{ inputs.use_rebuilt_rtp2pipe }}" = "true" ]; then
+            cp out/rebuilt_bins/rtp2pipe upgrade/s4602_upgrade/optional/rtp2pipe
+            echo "NOTE: shipping freshly-built rtp2pipe"
+          fi
+          if [ "${{ inputs.use_rebuilt_bins }}" = "true" ]; then
+            cp out/rebuilt_bins/webd upgrade/s4602_upgrade/base/webd
+            cp out/rebuilt_bins/h264out_v4 upgrade/s4602_upgrade/base/h264out_v4
+            echo "NOTE: shipping freshly-built webd + h264out_v4"
+          fi
 
       - name: Rebuild hook image v2 from factory source
         run: bash upgrade/build_hook_image.sh
@@ -98,6 +121,6 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          name: rtp2pipe_rebuilt_${{ github.run_number }}
-          path: out/rtp2pipe_rebuilt/rtp2pipe
+          name: rebuilt_bins_${{ github.run_number }}
+          path: out/rebuilt_bins/
           if-no-files-found: error

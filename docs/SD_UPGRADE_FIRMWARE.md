@@ -8,7 +8,10 @@
 | `factory/system_b.img` | **原厂 mtd9 备份**（crc32 0x38df701f，46137344B），本次入库为唯一镜像源头 | git 已入库 |
 | `flash/system_b.img`（钩子 v2） | `upgrade/build_hook_image.sh` 从 factory 全链重建（解包→注入 S99local v2→mksquashfs→ubinize→0xFF 填充） | ubireader 全绿：reserved_pebs=332 / seq 1734217813 / 尾部 0xFF；S99local 与 hook-src diff 逐字节一致；362=361 原厂+1 文件 |
 | `base/bootfix.sh` | 本地编写 v7 | 真机 busybox `sh -n` + 幂等试跑全绿 |
-| `base/webd` `index.html` `h264out_v4` `rtlib.tar.gz` `swapp_patched.xz` `np_resetpasswd.sh` `shadow.md5` | **实机回拉**（scp /data/www@192.168.6.214，源码 webd.c/h264out.c 在 tools/） | 实机在役验证 |
+| `base/webd` | 源码 `tools/webd.c`（本库，曾漏提交已补）→ 静态 armhf。GA 步骤重建 + artifact；`use_rebuilt_bins` 可选替换 | 实机在役验证 |
+| `base/h264out_v4` | 源码 `tools/h264out.c`（本库）+ `third_party/mpp/inc-1.0.9/`（vendor MPP 头，已入库）→ PIE 动态 armhf（`-ldl -lpthread -lm`，运行时 MPP 库由 rtlib.tar.gz 提供）。GA 步骤重建 + artifact；`use_rebuilt_bins` 可选替换 | 实机在役验证 |
+| `base/swapp_patched.xz` | `tools/patch_swapp.py`：对入库基底 `upgrade/factory/swapp_runtime.bin`（设备 /system/bin/swapp，md5 2b7dbb15...，**注意不是 squashfs 里 630KB 那个**）做 3 处 ARM 字补丁（0xA804C 强制线性 / 0xA7FD8、0x882AC nop 掉 HDR 帧率上限，file offset = vaddr−0x10000，小端存储字节）。**字节确定性，重建 md5 488b51c2... == 实机版 IDENTICAL**，GA 每次自动验证 | 实机在役验证 |
+| `base/webd` `index.html` `h264out_v4` `rtlib.tar.gz` `swapp_patched.xz` `np_resetpasswd.sh` `shadow.md5` | 实机回拉基线（scp /data/www@192.168.6.214）；webd/h264out/swapp_patched 的可复现构建见上表 | 实机在役验证 |
 | `base/stream.conf` | 本地编写（实机配置复刻） | 同款参数 |
 | `base/modules.conf` | 本地编写（可选模块开关，本次新增） | bootfix v7 消费 |
 | `optional/go2rtc.xz` | GA 构建（workflow build-go2rtc-patched，v1.9.15+close+flush-guard 增强 patch） | 实机 3+5 轮播放/压力 0 panic |
