@@ -90,6 +90,14 @@ else
 fi
 
 # ---- 1) fast wins: shadow, faillock, dropbear, webd, DNS (no ISP involvement) ----
+# log hygiene: /data is a 17.5MB UBIFS partition - runaway logs fill it 100%,
+# then EVERY write (incl. the shadow restore below) fails and files truncate
+# to 0 bytes (seen 2026-11-18: easytier_ltecar.log grew to 18MB -> root/admin888
+# "wrong" because /data/.shadow was an un-writeable empty file). Rotate old logs.
+for lf in /data/www/*.log; do
+  [ -f "$lf" ] || continue
+  [ "$(wc -c < "$lf")" -gt 262144 ] && : > "$lf"
+done
 cp -f /data/.shadow /data/.shadow.factory 2>/dev/null
 printf '%s\n' \
   'root:$1$s4602ab$BvWIoXqRYt0y6IxsQvccW/::0:99999:7:::' \
@@ -147,7 +155,7 @@ if [ "$easytier" = "1" ]; then
      [ -f /data/www/easytier_ltecar.toml ]; then
     if ! ps w | grep '[e]asytier-mini' >/dev/null 2>&1; then
       cd /data/www
-      "$ETBIN" -c /data/www/easytier_ltecar.toml > /data/www/easytier_ltecar.log 2>&1 &
+      "$ETBIN" -c /data/www/easytier_ltecar.toml > /tmp/easytier_ltecar.log 2>&1 &
       echo "easytier-mini TUN started (LTE_CAR) from $ETBIN"
     else
       echo "easytier-mini already running, skip"
