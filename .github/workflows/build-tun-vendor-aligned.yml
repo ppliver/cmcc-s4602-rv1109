@@ -1,0 +1,153 @@
+name: Build vendor-ABI-aligned tun.ko for S4602 (EasyTier TUN)
+
+# 目标：给 CMCC S4602 / RV1109 vendor 内核 4.19.111 #47 编译 ABI 对齐的 tun.ko。
+#
+# 与旧 workflow build-tun-firefly.yml 的关键区别：
+#   旧版用 rv1126_defconfig —— 那是导致 netdev_ops 偏移错位(+0x12c vs vendor +0x120)
+#   的 config，编出来的 tun.ko 需要 p120/p88 二进制 patch 才能勉强跑，且 MTU 永远=0。
+#   本版用 board/s4602/tun/vendor-aligned.config —— 从成功构建机固化的完整 .config，
+#   关键差异是 CONFIG_IPV6=y（vendor 开了 IPV6，多一个 ndisc_ops 指针，mtu 在 0x140）。
+#
+# 双重自检：
+#   1) vermagic == "4.19.111 SMP preempt mod_unload ARMv7 p2v8"
+#   2) 编译期 offsetof(struct net_device) 布局 == vendor 目标值
+#      (netdev_ops=0x120, mtu=0x140, min_mtu=0x144, max_mtu=0x148)
+#   任一不符直接 fail，杜绝"能 insmod 但收发包硬锁"的模块再次产出。
+#
+# 排障全记录见 docs/TUN_ABI_SAGA.md。
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'board/s4602/tun/**'
+      - '.github/workflows/build-tun-vendor-aligned.yml'
+
+permissions:
+  contents: read
+
+env:
+  FL_TAG: "rv1126_rv1109/linux_release_v2.2.5g"
+  FL_GROUP: "https://gitlab.com/firefly-linux"
+  FL_TC_BRANCH: "rv1126_rv1109/firefly"
+  FL_TC_REPO: "prebuilts/gcc/linux-x86/arm/gcc-linaro-6.3.1-2017.05-x86_64_arm-linux-gnueabihf"
+
+jobs:
+  build-tun:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Checkout project
+        uses: actions/checkout@v4
+
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y make gcc bison flex bc libelf-dev
+          # 4.19 kconfig 目标链走 `#!/usr/bin/env python`；GA 只有 python3。
+          sudo ln -sf "$(which python3)" /usr/local/bin/python
+          python --version 2>&1 | head -1
+
+      - name: Clone Firefly kernel (pinned BSP tag, 4.19.111)
+        run: |
+          git clone --depth 1 -b "$FL_TAG" "$FL_GROUP/kernel.git" /opt/fl-kernel
+          cd /opt/fl-kernel
+          echo "kernel HEAD: $(git rev-parse --short HEAD)"
+          grep -m1 -E 'Linux 4\.19' Makefile
+
+      - name: Clone Firefly cross toolchain (gcc-linaro 6.3.1 = vendor 同系)
+        run: |
+          git clone --depth 1 -b "$FL_TC_BRANCH" "$FL_GROUP/$FL_TC_REPO.git" /opt/fl-tc
+          /opt/fl-tc/bin/arm-linux-gnueabihf-gcc --version | head -1
+          echo "CROSS=/opt/fl-tc/bin/arm-linux-gnueabihf-" >> "$GITHUB_ENV"
+
+      - name: Install vendor-aligned .config and regenerate autoconf.h
+        working-directory: /opt/fl-kernel
+        run: |
+          set -e
+          cp "$GITHUB_WORKSPACE/board/s4602/tun/vendor-aligned.config" .config
+          echo ">>> 固化 config 关键项:"
+          grep -E '^CONFIG_(IPV6|SMP|PREEMPT|XFRM)=' .config
+          # 关键坑：必须重生成 include/generated/autoconf.h，否则 kbuild 仍用旧 header，
+          # 改 .config 不生效（偏移不变）。syncconfig 只更新 generated 文件，不重排其它选项。
+          make syncconfig ARCH=arm
+          echo ">>> autoconf.h IPV6:"
+          grep -E '^#define CONFIG_IPV6 ' include/generated/autoconf.h
+
+      - name: Build layout probe + tun.ko (external module mode)
+        working-directory: /opt/fl-kernel
+        run: |
+          set -e
+          export ARCH=arm
+          export CROSS_COMPILE="$CROSS"
+          mkdir -p /tmp/modbuild
+          cp drivers/net/tun.c /tmp/modbuild/
+          cp "$GITHUB_WORKSPACE/board/s4602/tun/layout_probe.c" /tmp/modbuild/
+          printf 'obj-m += tun.o\nobj-m += layout_probe.o\n' > /tmp/modbuild/Makefile
+          # 外部模块方式绕开 `make drivers/net/tun.ko` 触发的 dtc -fno-common 多重定义。
+          # CONFIG_TUN_MODULE 满足 if_tun.h:23 守卫；Firefly 工具链默认 armv7，无需 -march。
+          make M=/tmp/modbuild modules
+          ls -l /tmp/modbuild/tun.ko /tmp/modbuild/layout_probe.ko
+          echo "VERMAGIC=$(strings /tmp/modbuild/tun.ko | grep '^vermagic=' | head -1)" | tee -a "$GITHUB_ENV"
+
+      - name: Gate 1 - verify vermagic
+        run: |
+          set -e
+          echo "vermagic: $VERMAGIC"
+          echo "$VERMAGIC" | grep -q '^vermagic=4\.19\.111 SMP preempt mod_unload ARMv7 p2v8' \
+            || { echo "ERROR: vermagic mismatch"; exit 1; }
+          echo "OK: vermagic matches vendor #47"
+
+      - name: Gate 2 - verify net_device layout (offsetof)
+        run: |
+          set -e
+          export LC_ALL=C   # 强制英文输出，避免 objdump 的本地化中文行干扰解析
+          NM="$CROSS"nm
+          OBJDUMP="$CROSS"objdump
+          # 关键：.rodata 里常量的排列顺序由编译器决定，不等于源码声明顺序。
+          # 必须用 nm 拿到每个符号的实际 .rodata 偏移，再去对应位置读 4 字节小端值。
+          "$NM" -n /tmp/modbuild/layout_probe.o | grep ' lay_' > /tmp/laysyms.txt
+          "$OBJDUMP" -s -j .rodata /tmp/modbuild/layout_probe.o > /tmp/rodata.txt
+          cat /tmp/laysyms.txt; echo '---'; cat /tmp/rodata.txt
+          python3 - <<'PY'
+          import re, sys
+          # 解析 nm: "00000010 R lay_mtu" -> offset 0x10
+          syms = {}
+          for line in open('/tmp/laysyms.txt'):
+              m = re.match(r'\s*([0-9a-f]+)\s+\w+\s+(lay_\w+)', line)
+              if m:
+                  syms[m.group(2)] = int(m.group(1), 16)
+          # 解析 objdump .rodata: 每行 "0010 40010000 20010000 ..."
+          rodata = bytearray()
+          for line in open('/tmp/rodata.txt'):
+              m = re.match(r'\s*[0-9a-f]+\s+((?:[0-9a-f]{8}\s*)+)', line)
+              if m:
+                  for h in m.group(1).split():
+                      rodata += bytes.fromhex(h)
+          def val(name):
+              off = syms[name]
+              return int.from_bytes(rodata[off:off+4], 'little')
+          keys = ['lay_size','lay_netdev_ops','lay_mtu','lay_min_mtu',
+                  'lay_max_mtu','lay_flags','lay_txqlen']
+          got = {k: val(k) for k in keys}
+          for k in keys:
+              print(f'  {k:18s} = 0x{got[k]:x}')
+          want = {'lay_netdev_ops':0x120, 'lay_mtu':0x140,
+                  'lay_min_mtu':0x144, 'lay_max_mtu':0x148}
+          bad = [f'{k}: got 0x{got[k]:x} want 0x{v:x}'
+                 for k, v in want.items() if got.get(k) != v]
+          if bad:
+              print('ERROR: net_device layout mismatch (config 漂移 / 缺 CONFIG_IPV6?):')
+              for b in bad: print('  ', b)
+              sys.exit(1)
+          print('OK: net_device layout matches vendor #47 (MTU cluster at 0x140)')
+          PY
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: tun-vendor-aligned
+          path: |
+            /tmp/modbuild/tun.ko
+            /tmp/modbuild/layout_probe.ko
+          if-no-files-found: error
