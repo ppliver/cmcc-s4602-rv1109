@@ -1,0 +1,71 @@
+name: Build tun.ko module for S4602 (vendor 4.19.111 vermagic)
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-tun-kmod:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y bc bison flex libssl-dev wget xz-utils
+
+      - name: Download OpenIPC toolchain (rockchip-rv11xx)
+        run: |
+          wget -q https://github.com/openipc/firmware/releases/download/toolchain/toolchain.rockchip-rv11xx.tgz -O /tmp/toolchain.tgz
+          mkdir -p /opt/openipc-toolchain
+          tar xzf /tmp/toolchain.tgz -C /opt/openipc-toolchain
+          echo "TOOLCHAIN_DIR=$(dirname $(find /opt/openipc-toolchain -name arm-openipc-linux-gnueabihf-gcc | head -1))" >> "$GITHUB_ENV"
+
+      - name: Clone OpenIPC linux (rockchip-rv11xx)
+        run: git clone --depth 1 --branch rockchip-rv11xx https://github.com/OpenIPC/linux.git /opt/linux
+
+      - name: Prepare kernel config (generic + s4602 fragment + TUN=m)
+        working-directory: /opt/linux
+        run: |
+          wget -q "https://raw.githubusercontent.com/OpenIPC/firmware/master/br-ext-chip-rockchip/board/rv11xx/rv1126.generic.config" -O /tmp/rv1126.generic.config
+          cp /tmp/rv1126.generic.config .config
+          MC=scripts/kconfig/merge_config.sh
+          [ -f "$MC" ] || MC=scripts/merge_config.sh
+          bash "$MC" -m .config "$GITHUB_WORKSPACE/board/s4602/s4602_kernel_fragment.config"
+          bash "$MC" -m .config "$GITHUB_WORKSPACE/board/s4602/tun_fragment.config"
+          echo "CONFIG_TUN=m" >> .config
+          make ARCH=arm olddefconfig
+          echo "=== resolved ==="
+          grep -E "^CONFIG_TUN=|^CONFIG_MODULES=|^CONFIG_MODULE_UNLOAD|^CONFIG_MODVERSIONS|^CONFIG_SMP=|^CONFIG_PREEMPT=" .config
+          # vendor kernel is 4.19.111 SMP PREEMPT, MODVERSIONS off; ensure vermagic base matches
+          grep -E "^CONFIG_PREEMPT=y|^CONFIG_SMP=y" .config
+
+      - name: modules_prepare
+        working-directory: /opt/linux
+        run: |
+          export ARCH=arm
+          export CROSS_COMPILE="$TOOLCHAIN_DIR/arm-openipc-linux-gnueabihf-"
+          export PATH="$TOOLCHAIN_DIR:$PATH"
+          make -j$(nproc) modules_prepare
+
+      - name: Build tun.ko
+        working-directory: /opt/linux
+        run: |
+          export ARCH=arm
+          export CROSS_COMPILE="$TOOLCHAIN_DIR/arm-openipc-linux-gnueabihf-"
+          export PATH="$TOOLCHAIN_DIR:$PATH"
+          make drivers/net/tun.ko
+          ls -l drivers/net/tun.ko
+          echo "=== vermagic ==="
+          grep -a vermagic drivers/net/tun.ko || true
+
+      - name: Upload tun.ko artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: tun-kmod
+          path: /opt/linux/drivers/net/tun.ko
+          if-no-files-found: error
