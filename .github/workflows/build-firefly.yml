@@ -156,7 +156,8 @@ jobs:
           import struct
           magic, = struct.unpack('>I', h[0:4])
           assert magic == 0x27051956, 'bad uImage magic'
-          os_, arch, typ, comp = h[29], h[28], h[30], h[31]
+          # legacy uImage 头布局：ih_os@28, ih_arch@29, ih_type@30, ih_comp@31
+          os_, arch, typ, comp = h[28], h[29], h[30], h[31]
           print('uImage header: os=%d(linux=5) arch=%d(arm=2) type=%d(kernel=2) comp=%d(none=0)' % (os_,arch,typ,comp))
           assert (os_,arch,typ,comp) == (5,2,2,0), 'unexpected uImage header fields'
           print('uImage size: %d B' % os.path.getsize('firmware/s4602-firefly_uImage.bin'))
