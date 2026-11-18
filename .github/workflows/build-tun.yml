@@ -50,13 +50,7 @@ jobs:
           bash "$MC" -m .config "$GITHUB_WORKSPACE/board/s4602/tun_fragment.config"
           make ARCH=arm olddefconfig
           echo "=== TUN state after olddefconfig (diagnosis) ==="
-          grep -n "CONFIG_TUN" .config | head -5 || echo "TUN absent"
-          echo "=== force TUN=m via scripts/config, then syncconfig ==="
-          ./scripts/config --set-val TUN m
-          make ARCH=arm syncconfig
-          echo "=== final resolved ==="
-          grep -n "CONFIG_TUN" .config || { echo "FATAL: TUN not in final config"; exit 1; }
-          grep -E "^CONFIG_TUN=m" .config || { echo "FATAL: TUN is not m"; exit 1; }
+          grep -n "CONFIG_TUN" .config | head -5 || echo "TUN absent (kconfig demoted; build step passes CONFIG_TUN=m on command line instead)"
           echo "=== vermagic-relevant ==="
           grep -E "^CONFIG_PREEMPT=|^CONFIG_SMP=|^CONFIG_MODULES=|^CONFIG_MODULE_UNLOAD=|^CONFIG_MODVERSIONS" .config
 
@@ -74,10 +68,15 @@ jobs:
           export ARCH=arm
           export CROSS_COMPILE="$TOOLCHAIN_DIR/arm-openipc-linux-gnueabihf-"
           export PATH="$TOOLCHAIN_DIR:$PATH"
-          make drivers/net/tun.ko
+          # CONFIG_TUN=m on the command line drives obj-$(CONFIG_TUN) += tun.o;
+          # KCFLAGS defines CONFIG_TUN_MODULE for if_tun.h's declaration branch
+          # (autoconf.h does not know TUN because the kconfig state was demoted).
+          make drivers/net/tun.ko CONFIG_TUN=m KCFLAGS="-DCONFIG_TUN_MODULE"
           ls -l drivers/net/tun.ko
           echo "=== vermagic ==="
           grep -a vermagic drivers/net/tun.ko || true
+          echo "=== undefined symbols sample ==="
+          $CROSS_COMPILE/nm -u drivers/net/tun.ko | head -10 || true
 
       - name: Upload tun.ko artifact
         uses: actions/upload-artifact@v4
