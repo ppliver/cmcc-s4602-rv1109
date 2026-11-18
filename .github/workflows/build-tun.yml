@@ -39,10 +39,16 @@ jobs:
           bash "$MC" -m .config "$GITHUB_WORKSPACE/board/s4602/tun_fragment.config"
           echo "CONFIG_TUN=m" >> .config
           make ARCH=arm olddefconfig
-          echo "=== resolved ==="
-          grep -E "^CONFIG_TUN=|^CONFIG_MODULES=|^CONFIG_MODULE_UNLOAD|^CONFIG_MODVERSIONS|^CONFIG_SMP=|^CONFIG_PREEMPT=" .config
-          # vendor kernel is 4.19.111 SMP PREEMPT, MODVERSIONS off; ensure vermagic base matches
-          grep -E "^CONFIG_PREEMPT=y|^CONFIG_SMP=y" .config
+          echo "=== TUN state after olddefconfig (diagnosis) ==="
+          grep -n "TUN" .config | head -5 || echo "TUN absent"
+          echo "=== force TUN=m via scripts/config, then syncconfig ==="
+          ./scripts/config --set-val TUN m
+          make ARCH=arm syncconfig
+          echo "=== final resolved ==="
+          grep -n "CONFIG_TUN" .config || { echo "FATAL: TUN not in final config"; exit 1; }
+          grep -E "^CONFIG_TUN=m" .config || { echo "FATAL: TUN is not m"; exit 1; }
+          echo "=== vermagic-relevant ==="
+          grep -E "^CONFIG_PREEMPT=|^CONFIG_SMP=|^CONFIG_MODULES=|^CONFIG_MODULE_UNLOAD=|^CONFIG_MODVERSIONS" .config
 
       - name: modules_prepare
         working-directory: /opt/linux
