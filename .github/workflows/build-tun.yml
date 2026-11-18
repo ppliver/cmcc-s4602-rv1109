@@ -28,6 +28,28 @@ jobs:
       - name: Clone OpenIPC linux (rockchip-rv11xx)
         run: git clone --depth 1 --branch rockchip-rv11xx https://github.com/OpenIPC/linux.git /opt/linux
 
+      - name: Re-add TUN Kconfig entry (OpenIPC branch removed it; tun.c still present)
+        working-directory: /opt/linux
+        run: |
+          if grep -qE "^menuconfig TUN|^config TUN" drivers/net/Kconfig; then
+            echo "TUN Kconfig entry already present"
+          else
+            cat >> drivers/net/Kconfig <<'EOF'
+
+config TUN
+	tristate "Universal TUN/TAP device driver support"
+	depends on INET
+	select CRC32
+	---help---
+	  TUN/TAP provides packet reception and transmission for user space
+	  programs.  It can be viewed as a simple Point-to-Point or Ethernet
+	  device, which receives packets from and sends packets to the user
+	  space application.
+EOF
+            echo "TUN Kconfig entry appended"
+          fi
+          grep -n "config TUN" drivers/net/Kconfig
+
       - name: Prepare kernel config (generic + s4602 fragment + TUN=m)
         working-directory: /opt/linux
         run: |
