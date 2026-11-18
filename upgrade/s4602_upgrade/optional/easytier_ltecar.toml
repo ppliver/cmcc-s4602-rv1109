@@ -10,8 +10,6 @@ network_secret = "1300274500"
 uri = "tcp://easytier.weiai.org.cn:11010"
 [[peer]]
 uri = "tcp://et.sumnight.top:11010"
-[[peer]]
-uri = "udp://us01.225284.xyz:11010"
 [flags]
 default_protocol = "tcp"
 enable_encryption = true
