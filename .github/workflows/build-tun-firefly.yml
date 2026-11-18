@@ -1,0 +1,98 @@
+name: Build tun.ko for S4602 vendor kernel (Firefly gcc 6.3.1 ABI)
+
+# 目标：给 vendor 4.19.111 (#47, lunwenkang@sw, gcc 6.3.1) 编一个 ABI 对齐的 tun.ko，
+#       供 EasyTier 使用。上轮 OpenIPC gcc 13.3 + rv1126.generic.config 编的 tun.ko
+#       vermagic patch 后 insmod 成功，但 easytier 创建 tun 设备后设备网络栈僵死
+#       —— 判定为 struct net_device / sk_buff 布局与 vendor config 不一致。
+# 本 workflow 关键点：
+#   1) 同款工具链：Firefly prebuilt gcc-linaro 6.3.1（vendor kernel 同系）
+#   2) 同系内核源：Firefly BSP 4.19.111（tag v2.2.5g），与 vendor 同为 Rockchip 4.19
+#   3) config 用 rv1126_defconfig 原样（不叠加 slim fragment）——
+#      fragment 裁的是 DRM/SND/WLAN/CRYPTO，与网络结构体布局无关；原样 defconfig
+#      最接近 Rockchip 原厂 #47 的网络选项（CONFIG_NET_NS / RPS / SCHED 等）。
+#   4) 只输出 tun.ko artifact，不刷机、不注入 S4602 驱动 patch（与 tun ABI 无关）。
+#   5) vermagic 校验：期望 "4.19.111 SMP preempt mod_unload ARMv7 p2v8"。
+#      若带 "+"（LOCALVERSION dirty）则需在 artifact 侧 patch 掉。
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  FL_TAG: "rv1126_rv1109/linux_release_v2.2.5g"
+  FL_GROUP: "https://gitlab.com/firefly-linux"
+  FL_TC_BRANCH: "rv1126_rv1109/firefly"
+  FL_TC_REPO: "prebuilts/gcc/linux-x86/arm/gcc-linaro-6.3.1-2017.05-x86_64_arm-linux-gnueabihf"
+
+jobs:
+  build-tun-firefly:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Checkout project
+        uses: actions/checkout@v4
+
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y make gcc bison flex bc libelf-dev
+          # 4.19 kconfig 目标链走 `#!/usr/bin/env python`；GA 只有 python3。
+          sudo ln -sf "$(which python3)" /usr/local/bin/python
+          python --version 2>&1 | head -1
+
+      - name: Clone Firefly kernel (pinned BSP tag, 4.19.111)
+        run: |
+          git clone --depth 1 -b "$FL_TAG" "$FL_GROUP/kernel.git" /opt/fl-kernel
+          cd /opt/fl-kernel
+          git log -1 --format='kernel HEAD %H | %ci'
+          grep -E 'Linux 4\.19' Makefile | head -1
+
+      - name: Clone Firefly cross toolchain (gcc-linaro 6.3.1)
+        run: |
+          git clone --depth 1 -b "$FL_TC_BRANCH" "$FL_GROUP/$FL_TC_REPO.git" /opt/fl-tc
+          /opt/fl-tc/bin/arm-linux-gnueabihf-gcc --version | head -1
+
+      - name: Configure kernel (rv1126_defconfig + TUN=m)
+        working-directory: /opt/fl-kernel
+        run: |
+          set -e
+          export ARCH=arm
+          export CROSS_COMPILE=/opt/fl-tc/bin/arm-linux-gnueabihf-
+          export HOSTLDFLAGS="-Wl,--allow-multiple-definition"
+          make rv1126_defconfig
+          # CONFIG_TUN 在 defconfig 里通常未设；直接追加，olddefconfig 保留则最好。
+          echo "CONFIG_TUN=m" >> .config
+          make olddefconfig
+          echo ">>> TUN state after olddefconfig:"
+          grep -E '^CONFIG_TUN' .config || echo "TUN MISSING -> will pass on command line"
+          echo ">>> key ABI configs (compare with vendor where possible):"
+          grep -E '^CONFIG_(SMP|PREEMPT|PREEMPT_RT|MODULES|MODVERSIONS|NET|NET_NS|INET|LOCALVERSION|ARM_P2V8|ARM_ARCH_TIMER)=' .config || true
+          # kbuild 需要 prepare 生成 autoconf.h / Module.symvers 骨架。
+          make prepare
+
+      - name: Build tun.ko
+        working-directory: /opt/fl-kernel
+        run: |
+          set -e
+          export ARCH=arm
+          export CROSS_COMPILE=/opt/fl-tc/bin/arm-linux-gnueabihf-
+          export HOSTLDFLAGS="-Wl,--allow-multiple-definition"
+          # 命令行变量驱动 obj-$(CONFIG_TUN) 展开，绕开 kconfig 静默丢弃；
+          # KCFLAGS 的 -DCONFIG_TUN_MODULE 满足 if_tun.h:23 的守卫。
+          make drivers/net/tun.ko CONFIG_TUN=m KCFLAGS="-DCONFIG_TUN_MODULE"
+          ls -l drivers/net/tun.ko
+          echo ">>> vermagic (expect 4.19.111 SMP preempt mod_unload ARMv7 p2v8):"
+          strings drivers/net/tun.ko | grep '^vermagic=' || true
+          echo ">>> undefined symbols (should all be core net exports):"
+          ${CROSS_COMPILE}nm -u drivers/net/tun.ko 2>/dev/null | head -30 || true
+          mkdir -p "$GITHUB_WORKSPACE/firmware"
+          cp drivers/net/tun.ko "$GITHUB_WORKSPACE/firmware/tun-firefly.ko"
+
+      - name: Upload tun.ko artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: tun-firefly
+          path: firmware/tun-firefly.ko
+          if-no-files-found: error
