@@ -216,13 +216,14 @@ max_mtu    == 0x148
 
 ---
 
-## 5. GitHub Actions 可行性评估
+## 5. GitHub Actions 实跑结论（已验证通过）
 
-**结论：可以，且建议做。** 详见 workflow `build-tun-vendor-aligned.yml`。
+**结论：可以，且已在 GA 真机跑通。** workflow `build-tun-vendor-aligned.yml`，commit `d7f773f`，run **44251168949**（success，10/10 步全绿）。见第 7 节完整踩坑链。
 
 - 现有 `build-tun-firefly.yml` 用 `rv1126_defconfig`——正是导致 netdev_ops 错位、需要 p120 patch 的那套 config，**不能直接用**。
 - 新 workflow 用固化的 `vendor-aligned.config`，从源码拉起到编译全在 GA 完成，产出 artifact 前做 vermagic + 布局双重自检。
-- 唯一注意：GA 上 gcc-linaro 6.3.1 是公开仓可拉（现成 workflow 已验证），无需 NDA。`-march=armv7-a` 用 Firefly prebuilt 工具链默认就带，无需额外处理。
+- GA 上 gcc-linaro 6.3.1 公开仓可拉，无需 NDA；`-march=armv7-a` 需显式传 `KCFLAGS`（见 8.4）。
+- 产物 artifact `tun-vendor-aligned`（474608B）：vermagic 精确匹配 `4.19.111 SMP preempt mod_unload ARMv7 p2v8`，布局断言 7 项全过，与实机验证成功版 ABI 一致（体积差 1464B 仅构建环境差异）。
 
 ---
 
@@ -237,10 +238,55 @@ max_mtu    == 0x148
 | `.stage_tun/tun-firefly*.ko` | p120 / p88 / p1500 各版二进制补丁（历史） |
 | `.stage_tun/tun-vendor-aligned-final.ko` | 最终成功模块 |
 | `board/s4602/tun/vendor-aligned.config` | 成功构建用的内核 config（GA 输入） |
+| `docs/evidence/ga_run_44250520799.log` | GA 轮1：版本断言 grep 空匹配失败 |
+| `docs/evidence/ga_run_44250776897.log` | GA 轮2：缺 bitsperlong.h（未 prepare） |
+| `docs/evidence/ga_run_44250963746.log` | GA 轮3：缺 modpost（未 make scripts） |
+| `docs/evidence/ga_run_44251168949_SUCCESS.log` | GA 轮4：全绿，含 vermagic + 布局断言输出 |
 | `.workbuddy/memory/2026-11-18.md` | 逐时段实测记录（本报告素材来源） |
 
 ---
 
-## 7. 一句话教训
+## 7. GA 首次真跑的四轮踩坑（2026-11-18，从白跑到全绿）
+
+workflow 静态检查通过 ≠ GA 能跑。首次推送后连挂 3 轮，每轮都是"编译环境"而非 ABI 本身的问题，逐轮记录如下——这也是把本地成功构建"翻译"成 CI 时必须补齐的隐性步骤。
+
+| 轮次 | run id | 失败步骤 | 报错 | 根因 | 修法 |
+|---|---|---|---|---|---|
+| 1 | 44250520799 | Clone kernel | `grep -m1 'Linux 4.19' Makefile` 返回 1 | Linux Makefile 版本号拆在 `VERSION`/`PATCHLEVEL`/`SUBLEVEL` 三行，没有整行 "Linux 4.19" | awk 拼三段成 `KVER` 再断言 `^4\.19\.` |
+| 2 | 44250776897 | Build module | `asm/bitsperlong.h: No such file or directory` | 外部模块模式 `make M=` 要求 prepared 树；构建服务器 `fl-kernel` 事先完整编译过，GA 新 clone 只有 `syncconfig` | config 步骤补 `make prepare`（带 `HOSTLDFLAGS=-Wl,--allow-multiple-definition` 防 host dtc 多重定义） |
+| 3 | 44250963746 | Build module | `scripts/mod/modpost: not found` | `make prepare` 不生成 host 工具 modpost；旧 workflow 用树内 `make drivers/net/tun.ko` 会自动带出，外部模块模式不会 | config 步骤再补 `make scripts` |
+| 4 | 44251168949 | — | 全绿 success | — | — |
+
+### 7.1 教训：外部模块模式 `M=` 的隐性前置
+本地构建服务器能一次成功，是因为那棵 `fl-kernel` 之前跑过完整内核编译，`include/generated/asm/*`、host 工具 `scripts/mod/modpost`、`Module.symvers` 全都在。GA 从零 clone 只有源码。所以 CI 里必须显式补齐三步前置：
+
+```
+make syncconfig ARCH=arm              # 重生成 autoconf.h（改 .config 后才生效）
+make prepare  ARCH=arm CROSS_COMPILE=... HOSTLDFLAGS="-Wl,--allow-multiple-definition"
+make scripts  ARCH=arm CROSS_COMPILE=... HOSTLDFLAGS="-Wl,--allow-multiple-definition"
+```
+
+缺一即分别触发轮 2（头文件）、轮 3（modpost）的失败。`HOSTLDFLAGS` 是 GA 新版 gcc 的 `dtc -fno-common` 多重定义解药，构建服务器老工具链不需要、所以本地复现不出来。
+
+### 7.2 教训：版本号断言别假设文本格式
+轮 1 纯粹是自设的"验证闸门"写错——`grep 'Linux 4.19' Makefile` 想当然以为有一整行。正确做法是读 Makefile 的结构化变量。这类"验证步骤自身 bug"最容易误导，看起来像源码问题，实则是 CI 脚本问题。
+
+### 7.3 教训：Gate 用符号偏移取值，不用 `.rodata` 顺序
+早先在构建服务器验证解析脚本时发现：`.rodata` 里常量的排列顺序由编译器决定，**不等于源码声明顺序**。因此 Gate 2 用 `nm -n` 拿每个 `lay_*` 符号的实际偏移，再去 `.rodata` 对应位置读 4 字节小端值——而不是按源码顺序硬读。加 `LC_ALL=C` 防 objdump 本地化行干扰正则。GA 实跑确认这套解析稳定输出 `ops=0x120/mtu=0x140/min=0x144/max=0x148`。
+
+### 7.4 教训：`-march=armv7-a` 要显式传
+注释里原以为 Firefly prebuilt 工具链默认 armv7-a 无需指定，但为保证与构建服务器产物字节级一致，仍在 `KCFLAGS` 显式加 `-march=armv7-a`，一并传 `ARCH=arm CROSS_COMPILE=...`。GA 产物 vermagic 与实机版完全一致，布局断言全过。
+
+### 7.5 产物核验（run 44251168949）
+```
+Gate 1: vermagic=4.19.111 SMP preempt mod_unload ARMv7 p2v8   OK
+Gate 2: lay_size=0x500  ops=0x120  mtu=0x140  min=0x144  max=0x148  flags=0x130  txqlen=0x250   OK
+artifact tun-vendor-aligned: tun.ko 474608B + layout_probe.ko 192900B
+```
+artifact 下载注意：GitHub API 的 `archive_download_url` 会 302 到 blob 签名 URL，重定向时**必须去掉 Authorization 头**，否则签名校验失败报 403。
+
+---
+
+## 8. 一句话教训
 
 > `vermagic` 匹配 + 符号齐全 + insmod 成功 + 能创建设备 + 能配 IP，**都不等于 ABI 兼容**；真正的试金石是**真实收发包**。而结构体布局由**编译 config**决定，不是工具链版本——差一个 `CONFIG_IPV6` 就是 4 字节偏移、就是 MTU=0、就是整机硬锁。遇到这类问题，与其逐字段二进制 patch（打地鼠），不如**反推 config 用同树从头重编**。

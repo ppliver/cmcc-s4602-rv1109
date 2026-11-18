@@ -1,0 +1,561 @@
+﻿2026-11-18T06:23:25.3302411Z Current runner version: '2.338.2'
+2026-11-18T06:23:25.3325243Z ##[group]Runner Image Provisioner
+2026-11-18T06:23:25.3326058Z Hosted Compute Agent
+2026-11-18T06:23:25.3326534Z Version: 20261103.629
+2026-11-18T06:23:25.3327083Z Commit: 15dbd9ccb5dbf34fae002b6ed1a2670f52df37bc
+2026-11-18T06:23:25.3327688Z Build Date: 2026-11-03T17:26:59Z
+2026-11-18T06:23:25.3328232Z Worker ID: {bb5893b7-8742-47c5-b883-243e2bcea721}
+2026-11-18T06:23:25.3329111Z Region: southcentralus
+2026-11-18T06:23:25.3329597Z Cloud: Azure
+2026-11-18T06:23:25.3330022Z ##[endgroup]
+2026-11-18T06:23:25.3331276Z ##[group]Operating System
+2026-11-18T06:23:25.3331792Z Ubuntu
+2026-11-18T06:23:25.3332312Z 26.04.1
+2026-11-18T06:23:25.3332732Z LTS
+2026-11-18T06:23:25.3333140Z ##[endgroup]
+2026-11-18T06:23:25.3333635Z ##[group]Runner Image
+2026-11-18T06:23:25.3334115Z Image: ubuntu-26.04
+2026-11-18T06:23:25.3334996Z Version: 20261111.196.1
+2026-11-18T06:23:25.3336052Z Included Software: https://github.com/actions/runner-images/blob/ubuntu26/20261111.196/images/ubuntu/Ubuntu2604-Readme.md
+2026-11-18T06:23:25.3337379Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu26%2F20261111.196
+2026-11-18T06:23:25.3338166Z ##[endgroup]
+2026-11-18T06:23:25.3339296Z ##[group]GITHUB_TOKEN Permissions
+2026-11-18T06:23:25.3340848Z Contents: read
+2026-11-18T06:23:25.3341396Z Metadata: read
+2026-11-18T06:23:25.3341917Z ##[endgroup]
+2026-11-18T06:23:25.3344060Z Secret source: Actions
+2026-11-18T06:23:25.3344894Z Cache mode: write
+2026-11-18T06:23:25.3345623Z Prepare workflow directory
+2026-11-18T06:23:25.3712310Z Prepare all required actions
+2026-11-18T06:23:25.3751991Z Getting action download info
+2026-11-18T06:23:25.6440395Z Download action repository 'actions/checkout@v4' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+2026-11-18T06:23:25.7615893Z Download action repository 'actions/upload-artifact@v4' (SHA:ea165f8d65b6e75b540449e92b4886f43607fa02)
+2026-11-18T06:23:25.9848135Z Complete job name: build-tun
+2026-11-18T06:23:26.0603315Z ##[group]Run actions/checkout@v4
+2026-11-18T06:23:26.0604021Z with:
+2026-11-18T06:23:26.0604406Z   repository: ppliver/cmcc-s4602-rv1109
+2026-11-18T06:23:26.0607376Z   token: ***
+2026-11-18T06:23:26.0607746Z   ssh-strict: true
+2026-11-18T06:23:26.0608107Z   ssh-user: git
+2026-11-18T06:23:26.0608489Z   persist-credentials: true
+2026-11-18T06:23:26.0609025Z   clean: true
+2026-11-18T06:23:26.0609392Z   sparse-checkout-cone-mode: true
+2026-11-18T06:23:26.0609818Z   fetch-depth: 1
+2026-11-18T06:23:26.0610172Z   fetch-tags: false
+2026-11-18T06:23:26.0610538Z   show-progress: true
+2026-11-18T06:23:26.0610906Z   lfs: false
+2026-11-18T06:23:26.0611244Z   submodules: false
+2026-11-18T06:23:26.0611607Z   set-safe-directory: true
+2026-11-18T06:23:26.0612013Z   allow-unsafe-pr-checkout: false
+2026-11-18T06:23:26.0612577Z env:
+2026-11-18T06:23:26.0612937Z   FL_TAG: rv1126_rv1109/linux_release_v2.2.5g
+2026-11-18T06:23:26.0613449Z   FL_GROUP: https://gitlab.com/firefly-linux
+2026-11-18T06:23:26.0613960Z   FL_TC_BRANCH: rv1126_rv1109/firefly
+2026-11-18T06:23:26.0614630Z   FL_TC_REPO: prebuilts/gcc/linux-x86/arm/gcc-linaro-6.3.1-2017.05-x86_64_arm-linux-gnueabihf
+2026-11-18T06:23:26.0615273Z ##[endgroup]
+2026-11-18T06:23:26.3486047Z Syncing repository: ppliver/cmcc-s4602-rv1109
+2026-11-18T06:23:26.3488171Z ##[group]Getting Git version info
+2026-11-18T06:23:26.3489455Z Working directory is '/home/runner/work/cmcc-s4602-rv1109/cmcc-s4602-rv1109'
+2026-11-18T06:23:26.3490812Z [command]/usr/bin/git version
+2026-11-18T06:23:26.3627768Z git version 2.56.1
+2026-11-18T06:23:26.3650588Z ##[endgroup]
+2026-11-18T06:23:26.3670005Z Temporarily overriding HOME='/home/runner/work/_temp/3dda9b43-6338-4c33-8c3b-1bb5104478bc' before making global git config changes
+2026-11-18T06:23:26.3672292Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-18T06:23:26.3674721Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/cmcc-s4602-rv1109/cmcc-s4602-rv1109
+2026-11-18T06:23:26.3748230Z Deleting the contents of '/home/runner/work/cmcc-s4602-rv1109/cmcc-s4602-rv1109'
+2026-11-18T06:23:26.3754757Z ##[group]Initializing the repository
+2026-11-18T06:23:26.3759908Z [command]/usr/bin/git init /home/runner/work/cmcc-s4602-rv1109/cmcc-s4602-rv1109
+2026-11-18T06:23:26.3902123Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-11-18T06:23:26.3903648Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-11-18T06:23:26.3905211Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-11-18T06:23:26.3906010Z hint: call:
+2026-11-18T06:23:26.3906695Z hint:
+2026-11-18T06:23:26.3907524Z hint: 	git config --global init.defaultBranch <name>
+2026-11-18T06:23:26.3908082Z hint:
+2026-11-18T06:23:26.3908788Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-11-18T06:23:26.3909713Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-11-18T06:23:26.3910809Z hint:
+2026-11-18T06:23:26.3911425Z hint: 	git branch -m <name>
+2026-11-18T06:23:26.3912092Z hint:
+2026-11-18T06:23:26.3912983Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-11-18T06:23:26.3917308Z Initialized empty Git repository in /home/runner/work/cmcc-s4602-rv1109/cmcc-s4602-rv1109/.git/
+2026-11-18T06:23:26.3941286Z [command]/usr/bin/git remote add origin https://github.com/ppliver/cmcc-s4602-rv1109
+2026-11-18T06:23:26.3996837Z ##[endgroup]
+2026-11-18T06:23:26.3998203Z ##[group]Disabling automatic garbage collection
+2026-11-18T06:23:26.4000249Z [command]/usr/bin/git config --local gc.auto 0
+2026-11-18T06:23:26.4040552Z ##[endgroup]
+2026-11-18T06:23:26.4041919Z ##[group]Setting up auth
+2026-11-18T06:23:26.4051062Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-18T06:23:26.4090554Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-18T06:23:26.4769977Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-18T06:23:26.4802922Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-18T06:23:26.5064580Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-18T06:23:26.5099676Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-18T06:23:26.5376559Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-11-18T06:23:26.5639016Z ##[endgroup]
+2026-11-18T06:23:26.5640351Z ##[group]Fetching the repository
+2026-11-18T06:23:26.5649685Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +2064a99849da84bc64c96c61035cba535b8d58ac:refs/remotes/origin/main
+2026-11-18T06:23:27.0804216Z From https://github.com/ppliver/cmcc-s4602-rv1109
+2026-11-18T06:23:27.0805741Z  * [new ref]         2064a99849da84bc64c96c61035cba535b8d58ac -> origin/main
+2026-11-18T06:23:27.0809073Z ##[endgroup]
+2026-11-18T06:23:27.0810570Z ##[group]Determining the checkout info
+2026-11-18T06:23:27.0811703Z ##[endgroup]
+2026-11-18T06:23:27.0813997Z [command]/usr/bin/git sparse-checkout disable
+2026-11-18T06:23:27.0862843Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-11-18T06:23:27.0894981Z ##[group]Checking out the ref
+2026-11-18T06:23:27.0897981Z [command]/usr/bin/git checkout --progress --force -B main refs/remotes/origin/main
+2026-11-18T06:23:27.1095114Z Switched to a new branch 'main'
+2026-11-18T06:23:27.1097970Z branch 'main' set up to track 'origin/main'.
+2026-11-18T06:23:27.1106113Z ##[endgroup]
+2026-11-18T06:23:27.1153051Z [command]/usr/bin/git log -1 --format=%H
+2026-11-18T06:23:27.1178024Z 2064a99849da84bc64c96c61035cba535b8d58ac
+2026-11-18T06:23:27.1422245Z ##[group]Run sudo apt-get update
+2026-11-18T06:23:27.1423464Z [36;1msudo apt-get update[0m
+2026-11-18T06:23:27.1424711Z [36;1msudo apt-get install -y make gcc bison flex bc libelf-dev[0m
+2026-11-18T06:23:27.1426309Z [36;1m# 4.19 kconfig 目标链走 `#!/usr/bin/env python`；GA 只有 python3。[0m
+2026-11-18T06:23:27.1427801Z [36;1msudo ln -sf "$(which python3)" /usr/local/bin/python[0m
+2026-11-18T06:23:27.1429307Z [36;1mpython --version 2>&1 | head -1[0m
+2026-11-18T06:23:27.1481114Z shell: /usr/bin/bash -e {0}
+2026-11-18T06:23:27.1482119Z env:
+2026-11-18T06:23:27.1482955Z   FL_TAG: rv1126_rv1109/linux_release_v2.2.5g
+2026-11-18T06:23:27.1484207Z   FL_GROUP: https://gitlab.com/firefly-linux
+2026-11-18T06:23:27.1485360Z   FL_TC_BRANCH: rv1126_rv1109/firefly
+2026-11-18T06:23:27.1486963Z   FL_TC_REPO: prebuilts/gcc/linux-x86/arm/gcc-linaro-6.3.1-2017.05-x86_64_arm-linux-gnueabihf
+2026-11-18T06:23:27.1488738Z ##[endgroup]
+2026-11-18T06:23:27.2971171Z Get:1 file:/etc/apt/apt-mirrors.txt Mirrorlist [144 B]
+2026-11-18T06:23:27.3261579Z Hit:2 http://azure.archive.ubuntu.com/ubuntu resolute InRelease
+2026-11-18T06:23:27.3267805Z Get:6 https://packages.microsoft.com/ubuntu/26.04/prod resolute InRelease [3964 B]
+2026-11-18T06:23:27.3288933Z Get:3 http://azure.archive.ubuntu.com/ubuntu resolute-updates InRelease [137 kB]
+2026-11-18T06:23:27.3314557Z Get:4 http://azure.archive.ubuntu.com/ubuntu resolute-backports InRelease [137 kB]
+2026-11-18T06:23:27.3327010Z Get:5 http://azure.archive.ubuntu.com/ubuntu resolute-security InRelease [137 kB]
+2026-11-18T06:23:27.3564061Z Get:7 https://packages.microsoft.com/ubuntu/26.04/prod resolute/main arm64 Packages [151 kB]
+2026-11-18T06:23:27.3751580Z Get:8 http://azure.archive.ubuntu.com/ubuntu resolute-updates/main amd64v3 Packages [874 kB]
+2026-11-18T06:23:27.3794861Z Get:12 https://packages.microsoft.com/ubuntu/26.04/prod resolute/main amd64 Packages [165 kB]
+2026-11-18T06:23:27.3885203Z Get:9 http://azure.archive.ubuntu.com/ubuntu resolute-updates/main Translation-en [196 kB]
+2026-11-18T06:23:27.3912001Z Get:10 http://azure.archive.ubuntu.com/ubuntu resolute-updates/universe amd64v3 Packages [391 kB]
+2026-11-18T06:23:27.3931971Z Get:11 http://azure.archive.ubuntu.com/ubuntu resolute-updates/universe Translation-en [123 kB]
+2026-11-18T06:23:27.4031468Z Get:13 http://azure.archive.ubuntu.com/ubuntu resolute-security/main amd64v3 Packages [719 kB]
+2026-11-18T06:23:27.4050040Z Get:14 http://azure.archive.ubuntu.com/ubuntu resolute-security/main Translation-en [158 kB]
+2026-11-18T06:23:27.4059475Z Get:15 http://azure.archive.ubuntu.com/ubuntu resolute-security/universe amd64v3 Packages [221 kB]
+2026-11-18T06:23:27.4082360Z Get:16 http://azure.archive.ubuntu.com/ubuntu resolute-security/universe Translation-en [72.6 kB]
+2026-11-18T06:23:27.4105327Z Get:17 http://azure.archive.ubuntu.com/ubuntu resolute-security/restricted amd64v3 Packages [590 kB]
+2026-11-18T06:23:27.4133440Z Get:18 http://azure.archive.ubuntu.com/ubuntu resolute-security/restricted Translation-en [122 kB]
+2026-11-18T06:23:31.2634915Z Fetched 4197 kB in 0s (13.5 MB/s)
+2026-11-18T06:23:31.9204685Z Reading package lists...
+2026-11-18T06:23:31.9499108Z Reading package lists...
+2026-11-18T06:23:32.1452525Z Building dependency tree...
+2026-11-18T06:23:32.1459197Z Reading state information...
+2026-11-18T06:23:32.1789693Z make is already the newest version (4.4.1-3).
+2026-11-18T06:23:32.1790107Z gcc is already the newest version (4:15.2.0-5ubuntu1).
+2026-11-18T06:23:32.1790520Z bison is already the newest version (2:3.8.2+dfsg-1ubuntu0.26.04.1).
+2026-11-18T06:23:32.1790934Z flex is already the newest version (2.6.4-8.2build2).
+2026-11-18T06:23:32.1791285Z bc is already the newest version (1.07.1-4build1).
+2026-11-18T06:23:32.1791618Z bc set to manually installed.
+2026-11-18T06:23:32.2421197Z Solving dependencies...
+2026-11-18T06:23:32.4765500Z The following NEW packages will be installed:
+2026-11-18T06:23:32.4773117Z   libelf-dev
+2026-11-18T06:23:32.4975126Z 0 upgraded, 1 newly installed, 0 to remove and 29 not upgraded.
+2026-11-18T06:23:32.4975631Z Need to get 124 kB of archives.
+2026-11-18T06:23:32.4975908Z After this operation, 529 kB of additional disk space will be used.
+2026-11-18T06:23:32.4976236Z Get:1 file:/etc/apt/apt-mirrors.txt Mirrorlist [144 B]
+2026-11-18T06:23:32.5572746Z Get:2 http://azure.archive.ubuntu.com/ubuntu resolute/main amd64v3 libelf-dev amd64 0.194-4 [124 kB]
+2026-11-18T06:23:33.6224213Z Fetched 124 kB in 0s (1722 kB/s)
+2026-11-18T06:23:33.7064235Z Selecting previously unselected package libelf-dev:amd64.
+2026-11-18T06:23:33.7541016Z (Reading database ... 
+2026-11-18T06:23:33.7541279Z (Reading database ... 5%
+2026-11-18T06:23:33.7541484Z (Reading database ... 10%
+2026-11-18T06:23:33.7541796Z (Reading database ... 15%
+2026-11-18T06:23:33.7542075Z (Reading database ... 20%
+2026-11-18T06:23:33.7542354Z (Reading database ... 25%
+2026-11-18T06:23:33.7542642Z (Reading database ... 30%
+2026-11-18T06:23:33.7542924Z (Reading database ... 35%
+2026-11-18T06:23:33.7543279Z (Reading database ... 40%
+2026-11-18T06:23:33.7543491Z (Reading database ... 45%
+2026-11-18T06:23:33.7543701Z (Reading database ... 50%
+2026-11-18T06:23:34.1723919Z (Reading database ... 55%
+2026-11-18T06:23:34.6126763Z (Reading database ... 60%
+2026-11-18T06:23:34.8600103Z (Reading database ... 65%
+2026-11-18T06:23:35.0918989Z (Reading database ... 70%
+2026-11-18T06:23:35.2567136Z (Reading database ... 75%
+2026-11-18T06:23:35.4177436Z (Reading database ... 80%
+2026-11-18T06:23:35.6572234Z (Reading database ... 85%
+2026-11-18T06:23:35.8082981Z (Reading database ... 90%
+2026-11-18T06:23:36.0661214Z (Reading database ... 95%
+2026-11-18T06:23:36.0661622Z (Reading database ... 100%
+2026-11-18T06:23:36.0662066Z (Reading database ... 213946 files and directories currently installed.)
+2026-11-18T06:23:36.0713131Z Preparing to unpack .../libelf-dev_0.194-4_amd64v3.deb ...
+2026-11-18T06:23:36.1702228Z Unpacking libelf-dev:amd64 (0.194-4) ...
+2026-11-18T06:23:36.2495715Z Setting up libelf-dev:amd64 (0.194-4) ...
+2026-11-18T06:23:36.2536909Z Processing triggers for man-db (2.13.1-1build1) ...
+2026-11-18T06:23:36.2557397Z Not building database; man-db/auto-update is not 'true'.
+2026-11-18T06:23:37.0720914Z 
+2026-11-18T06:23:37.0721553Z Running kernel seems to be up-to-date.
+2026-11-18T06:23:37.0721857Z 
+2026-11-18T06:23:37.0721958Z Restarting services...
+2026-11-18T06:23:37.0810680Z 
+2026-11-18T06:23:37.0811423Z Service restarts being deferred:
+2026-11-18T06:23:37.0813674Z  systemctl restart hosted-compute-agent.service
+2026-11-18T06:23:37.0813997Z 
+2026-11-18T06:23:37.0814936Z No containers need to be restarted.
+2026-11-18T06:23:37.0815174Z 
+2026-11-18T06:23:37.0815438Z No user sessions are running outdated binaries.
+2026-11-18T06:23:37.0815687Z 
+2026-11-18T06:23:37.0816006Z No VM guests are running outdated hypervisor (qemu) binaries on this host.
+2026-11-18T06:23:38.4108092Z Python 3.14.4
+2026-11-18T06:23:38.4153756Z ##[group]Run git clone --depth 1 -b "$FL_TAG" "$FL_GROUP/kernel.git" /opt/fl-kernel
+2026-11-18T06:23:38.4154343Z [36;1mgit clone --depth 1 -b "$FL_TAG" "$FL_GROUP/kernel.git" /opt/fl-kernel[0m
+2026-11-18T06:23:38.4154647Z [36;1mcd /opt/fl-kernel[0m
+2026-11-18T06:23:38.4154896Z [36;1mecho "kernel HEAD: $(git rev-parse --short HEAD)"[0m
+2026-11-18T06:23:38.4155234Z [36;1m# Linux Makefile 把版本拆成 VERSION / PATCHLEVEL / SUBLEVEL 三行，[0m
+2026-11-18T06:23:38.4155598Z [36;1m# 没有整行 "Linux 4.19" —— 拼接后再断言，避免 grep 空匹配 exit 1 白跑一轮。[0m
+2026-11-18T06:23:38.4156024Z [36;1mKVER=$(awk '/^VERSION = /{v=$3}/^PATCHLEVEL = /{p=$3}/^SUBLEVEL = /{s=$3}END{print v"."p"."s}' Makefile)[0m
+2026-11-18T06:23:38.4156401Z [36;1mecho "kernel version: $KVER"[0m
+2026-11-18T06:23:38.4156744Z [36;1mecho "$KVER" | grep -q '^4\.19\.' || { echo "ERROR: expected kernel 4.19.x, got $KVER"; exit 1; }[0m
+2026-11-18T06:23:38.4206779Z shell: /usr/bin/bash -e {0}
+2026-11-18T06:23:38.4207017Z env:
+2026-11-18T06:23:38.4207306Z   FL_TAG: rv1126_rv1109/linux_release_v2.2.5g
+2026-11-18T06:23:38.4207607Z   FL_GROUP: https://gitlab.com/firefly-linux
+2026-11-18T06:23:38.4208102Z   FL_TC_BRANCH: rv1126_rv1109/firefly
+2026-11-18T06:23:38.4208449Z   FL_TC_REPO: prebuilts/gcc/linux-x86/arm/gcc-linaro-6.3.1-2017.05-x86_64_arm-linux-gnueabihf
+2026-11-18T06:23:38.4208970Z ##[endgroup]
+2026-11-18T06:23:38.5080691Z Cloning into '/opt/fl-kernel'...
+2026-11-18T06:23:45.9876873Z Note: switching to '21f69dad23a593f4c96f39ffb8acd97b0558fd22'.
+2026-11-18T06:23:45.9877323Z 
+2026-11-18T06:23:45.9877581Z You are in 'detached HEAD' state. You can look around, make experimental
+2026-11-18T06:23:45.9878209Z changes and commit them, and you can discard any commits you make in this
+2026-11-18T06:23:45.9878963Z state without impacting any branches by switching back to a branch.
+2026-11-18T06:23:45.9879304Z 
+2026-11-18T06:23:45.9879546Z If you want to create a new branch to retain commits you create, you may
+2026-11-18T06:23:45.9880134Z do so (now or later) by using -c with the switch command. Example:
+2026-11-18T06:23:45.9880461Z 
+2026-11-18T06:23:45.9880587Z   git switch -c <new-branch-name>
+2026-11-18T06:23:45.9880834Z 
+2026-11-18T06:23:45.9880952Z Or undo this operation with:
+2026-11-18T06:23:45.9881159Z 
+2026-11-18T06:23:45.9881259Z   git switch -
+2026-11-18T06:23:45.9881411Z 
+2026-11-18T06:23:45.9881671Z Turn off this advice by setting config variable advice.detachedHead to false
+2026-11-18T06:23:45.9882049Z 
+2026-11-18T06:23:47.0287317Z Updating files:  28% (21061/72889)
+2026-11-18T06:23:47.0716770Z Updating files:  29% (21138/72889)
+2026-11-18T06:23:47.1178004Z Updating files:  30% (21867/72889)
+2026-11-18T06:23:47.1784249Z Updating files:  31% (22596/72889)
+2026-11-18T06:23:47.2240266Z Updating files:  32% (23325/72889)
+2026-11-18T06:23:47.2682496Z Updating files:  33% (24054/72889)
+2026-11-18T06:23:47.3202078Z Updating files:  34% (24783/72889)
+2026-11-18T06:23:47.3636679Z Updating files:  35% (25512/72889)
+2026-11-18T06:23:47.4148760Z Updating files:  36% (26241/72889)
+2026-11-18T06:23:47.6086566Z Updating files:  37% (26969/72889)
+2026-11-18T06:23:47.6657001Z Updating files:  38% (27698/72889)
+2026-11-18T06:23:47.6966387Z Updating files:  39% (28427/72889)
+2026-11-18T06:23:47.7437536Z Updating files:  40% (29156/72889)
+2026-11-18T06:23:47.7881880Z Updating files:  41% (29885/72889)
+2026-11-18T06:23:47.8321595Z Updating files:  42% (30614/72889)
+2026-11-18T06:23:47.8862700Z Updating files:  43% (31343/72889)
+2026-11-18T06:23:47.9417431Z Updating files:  44% (32072/72889)
+2026-11-18T06:23:47.9946898Z Updating files:  45% (32801/72889)
+2026-11-18T06:23:48.0253847Z Updating files:  46% (33529/72889)
+2026-11-18T06:23:48.0523336Z Updating files:  46% (33868/72889)
+2026-11-18T06:23:48.1120991Z Updating files:  47% (34258/72889)
+2026-11-18T06:23:48.1714282Z Updating files:  48% (34987/72889)
+2026-11-18T06:23:48.2222636Z Updating files:  49% (35716/72889)
+2026-11-18T06:23:48.2713436Z Updating files:  50% (36445/72889)
+2026-11-18T06:23:48.3259769Z Updating files:  51% (37174/72889)
+2026-11-18T06:23:48.3840841Z Updating files:  52% (37903/72889)
+2026-11-18T06:23:48.4632425Z Updating files:  53% (38632/72889)
+2026-11-18T06:23:48.6558073Z Updating files:  54% (39361/72889)
+2026-11-18T06:23:48.7243877Z Updating files:  55% (40089/72889)
+2026-11-18T06:23:48.7950318Z Updating files:  56% (40818/72889)
+2026-11-18T06:23:48.8640178Z Updating files:  57% (41547/72889)
+2026-11-18T06:23:48.9450409Z Updating files:  58% (42276/72889)
+2026-11-18T06:23:49.0256139Z Updating files:  59% (43005/72889)
+2026-11-18T06:23:49.0272682Z Updating files:  59% (43707/72889)
+2026-11-18T06:23:49.0786869Z Updating files:  60% (43734/72889)
+2026-11-18T06:23:49.1176752Z Updating files:  61% (44463/72889)
+2026-11-18T06:23:49.1755331Z Updating files:  62% (45192/72889)
+2026-11-18T06:23:49.2120359Z Updating files:  63% (45921/72889)
+2026-11-18T06:23:49.2490121Z Updating files:  64% (46649/72889)
+2026-11-18T06:23:49.3204205Z Updating files:  65% (47378/72889)
+2026-11-18T06:23:49.3727446Z Updating files:  66% (48107/72889)
+2026-11-18T06:23:49.4179996Z Updating files:  67% (48836/72889)
+2026-11-18T06:23:49.4779778Z Updating files:  68% (49565/72889)
+2026-11-18T06:23:49.5379067Z Updating files:  69% (50294/72889)
+2026-11-18T06:23:49.6017796Z Updating files:  70% (51023/72889)
+2026-11-18T06:23:49.6780420Z Updating files:  71% (51752/72889)
+2026-11-18T06:23:49.7248182Z Updating files:  72% (52481/72889)
+2026-11-18T06:23:49.7773760Z Updating files:  73% (53209/72889)
+2026-11-18T06:23:49.8247867Z Updating files:  74% (53938/72889)
+2026-11-18T06:23:49.8738948Z Updating files:  75% (54667/72889)
+2026-11-18T06:23:49.9379741Z Updating files:  76% (55396/72889)
+2026-11-18T06:23:49.9939446Z Updating files:  77% (56125/72889)
+2026-11-18T06:23:50.0253181Z Updating files:  78% (56854/72889)
+2026-11-18T06:23:50.0466325Z Updating files:  78% (57347/72889)
+2026-11-18T06:23:50.1074269Z Updating files:  79% (57583/72889)
+2026-11-18T06:23:50.1690833Z Updating files:  80% (58312/72889)
+2026-11-18T06:23:50.2102170Z Updating files:  81% (59041/72889)
+2026-11-18T06:23:50.2433189Z Updating files:  82% (59769/72889)
+2026-11-18T06:23:50.2864193Z Updating files:  83% (60498/72889)
+2026-11-18T06:23:50.3238367Z Updating files:  84% (61227/72889)
+2026-11-18T06:23:50.3615795Z Updating files:  85% (61956/72889)
+2026-11-18T06:23:50.3991864Z Updating files:  86% (62685/72889)
+2026-11-18T06:23:50.4360411Z Updating files:  87% (63414/72889)
+2026-11-18T06:23:50.4941376Z Updating files:  88% (64143/72889)
+2026-11-18T06:23:50.5600854Z Updating files:  89% (64872/72889)
+2026-11-18T06:23:50.6164604Z Updating files:  90% (65601/72889)
+2026-11-18T06:23:50.6839182Z Updating files:  91% (66329/72889)
+2026-11-18T06:23:50.7204464Z Updating files:  92% (67058/72889)
+2026-11-18T06:23:50.7683149Z Updating files:  93% (67787/72889)
+2026-11-18T06:23:50.8365861Z Updating files:  94% (68516/72889)
+2026-11-18T06:23:50.8803381Z Updating files:  95% (69245/72889)
+2026-11-18T06:23:50.9142671Z Updating files:  96% (69974/72889)
+2026-11-18T06:23:50.9526189Z Updating files:  97% (70703/72889)
+2026-11-18T06:23:50.9902738Z Updating files:  98% (71432/72889)
+2026-11-18T06:23:51.0208272Z Updating files:  99% (72161/72889)
+2026-11-18T06:23:51.0208807Z Updating files: 100% (72889/72889)
+2026-11-18T06:23:51.0209094Z Updating files: 100% (72889/72889), done.
+2026-11-18T06:23:51.0829512Z kernel HEAD: 21f69dad2
+2026-11-18T06:23:51.0853366Z kernel version: 4.19.111
+2026-11-18T06:23:51.0899434Z ##[group]Run git clone --depth 1 -b "$FL_TC_BRANCH" "$FL_GROUP/$FL_TC_REPO.git" /opt/fl-tc
+2026-11-18T06:23:51.0899918Z [36;1mgit clone --depth 1 -b "$FL_TC_BRANCH" "$FL_GROUP/$FL_TC_REPO.git" /opt/fl-tc[0m
+2026-11-18T06:23:51.0900299Z [36;1m/opt/fl-tc/bin/arm-linux-gnueabihf-gcc --version | head -1[0m
+2026-11-18T06:23:51.0900671Z [36;1mecho "CROSS=/opt/fl-tc/bin/arm-linux-gnueabihf-" >> "$GITHUB_ENV"[0m
+2026-11-18T06:23:51.0944822Z shell: /usr/bin/bash -e {0}
+2026-11-18T06:23:51.0945030Z env:
+2026-11-18T06:23:51.0945219Z   FL_TAG: rv1126_rv1109/linux_release_v2.2.5g
+2026-11-18T06:23:51.0945492Z   FL_GROUP: https://gitlab.com/firefly-linux
+2026-11-18T06:23:51.0945734Z   FL_TC_BRANCH: rv1126_rv1109/firefly
+2026-11-18T06:23:51.0946089Z   FL_TC_REPO: prebuilts/gcc/linux-x86/arm/gcc-linaro-6.3.1-2017.05-x86_64_arm-linux-gnueabihf
+2026-11-18T06:23:51.0946445Z ##[endgroup]
+2026-11-18T06:23:51.1020268Z Cloning into '/opt/fl-tc'...
+2026-11-18T06:23:56.7896884Z Updating files:  31% (2220/7054)
+2026-11-18T06:23:56.8012135Z Updating files:  32% (2258/7054)
+2026-11-18T06:23:56.8140255Z Updating files:  33% (2328/7054)
+2026-11-18T06:23:56.9313316Z Updating files:  34% (2399/7054)
+2026-11-18T06:23:56.9931329Z Updating files:  35% (2469/7054)
+2026-11-18T06:23:57.0011393Z Updating files:  36% (2540/7054)
+2026-11-18T06:23:57.0037234Z Updating files:  37% (2610/7054)
+2026-11-18T06:23:57.0095427Z Updating files:  38% (2681/7054)
+2026-11-18T06:23:57.0132371Z Updating files:  39% (2752/7054)
+2026-11-18T06:23:57.0168531Z Updating files:  40% (2822/7054)
+2026-11-18T06:23:57.0261929Z Updating files:  41% (2893/7054)
+2026-11-18T06:23:57.0311951Z Updating files:  42% (2963/7054)
+2026-11-18T06:23:57.0562406Z Updating files:  43% (3034/7054)
+2026-11-18T06:23:57.2221417Z Updating files:  44% (3104/7054)
+2026-11-18T06:23:57.2674796Z Updating files:  45% (3175/7054)
+2026-11-18T06:23:57.2727440Z Updating files:  46% (3245/7054)
+2026-11-18T06:23:57.2773933Z Updating files:  47% (3316/7054)
+2026-11-18T06:23:57.2838751Z Updating files:  48% (3386/7054)
+2026-11-18T06:23:57.2898832Z Updating files:  49% (3457/7054)
+2026-11-18T06:23:57.2949740Z Updating files:  50% (3527/7054)
+2026-11-18T06:23:57.5597653Z Updating files:  51% (3598/7054)
+2026-11-18T06:23:57.5640148Z Updating files:  52% (3669/7054)
+2026-11-18T06:23:57.5692237Z Updating files:  53% (3739/7054)
+2026-11-18T06:23:57.5731369Z Updating files:  54% (3810/7054)
+2026-11-18T06:23:57.5766755Z Updating files:  55% (3880/7054)
+2026-11-18T06:23:57.5802433Z Updating files:  56% (3951/7054)
+2026-11-18T06:23:57.5836933Z Updating files:  57% (4021/7054)
+2026-11-18T06:23:57.5868878Z Updating files:  58% (4092/7054)
+2026-11-18T06:23:57.5904585Z Updating files:  59% (4162/7054)
+2026-11-18T06:23:57.5937129Z Updating files:  60% (4233/7054)
+2026-11-18T06:23:57.5984898Z Updating files:  61% (4303/7054)
+2026-11-18T06:23:57.6043392Z Updating files:  62% (4374/7054)
+2026-11-18T06:23:57.6087558Z Updating files:  63% (4445/7054)
+2026-11-18T06:23:57.6139683Z Updating files:  64% (4515/7054)
+2026-11-18T06:23:57.6195794Z Updating files:  65% (4586/7054)
+2026-11-18T06:23:57.6252619Z Updating files:  66% (4656/7054)
+2026-11-18T06:23:57.6313067Z Updating files:  67% (4727/7054)
+2026-11-18T06:23:57.6350361Z Updating files:  68% (4797/7054)
+2026-11-18T06:23:57.6392314Z Updating files:  69% (4868/7054)
+2026-11-18T06:23:57.6452164Z Updating files:  70% (4938/7054)
+2026-11-18T06:23:57.6496077Z Updating files:  71% (5009/7054)
+2026-11-18T06:23:57.6533765Z Updating files:  72% (5079/7054)
+2026-11-18T06:23:57.6576524Z Updating files:  73% (5150/7054)
+2026-11-18T06:23:57.6621553Z Updating files:  74% (5220/7054)
+2026-11-18T06:23:57.6658368Z Updating files:  75% (5291/7054)
+2026-11-18T06:23:57.6706343Z Updating files:  76% (5362/7054)
+2026-11-18T06:23:57.6750895Z Updating files:  77% (5432/7054)
+2026-11-18T06:23:57.6793945Z Updating files:  78% (5503/7054)
+2026-11-18T06:23:57.6832454Z Updating files:  79% (5573/7054)
+2026-11-18T06:23:57.6870668Z Updating files:  80% (5644/7054)
+2026-11-18T06:23:57.6909075Z Updating files:  81% (5714/7054)
+2026-11-18T06:23:57.6951028Z Updating files:  82% (5785/7054)
+2026-11-18T06:23:57.6985829Z Updating files:  83% (5855/7054)
+2026-11-18T06:23:57.7009441Z Updating files:  84% (5926/7054)
+2026-11-18T06:23:57.7040457Z Updating files:  85% (5996/7054)
+2026-11-18T06:23:57.7074691Z Updating files:  86% (6067/7054)
+2026-11-18T06:23:57.7105111Z Updating files:  87% (6137/7054)
+2026-11-18T06:23:57.7139557Z Updating files:  88% (6208/7054)
+2026-11-18T06:23:57.7178267Z Updating files:  89% (6279/7054)
+2026-11-18T06:23:57.7213552Z Updating files:  90% (6349/7054)
+2026-11-18T06:23:57.7244189Z Updating files:  91% (6420/7054)
+2026-11-18T06:23:57.7280275Z Updating files:  92% (6490/7054)
+2026-11-18T06:23:57.7319561Z Updating files:  93% (6561/7054)
+2026-11-18T06:23:57.7347924Z Updating files:  94% (6631/7054)
+2026-11-18T06:23:57.7376389Z Updating files:  95% (6702/7054)
+2026-11-18T06:23:57.7424106Z Updating files:  96% (6772/7054)
+2026-11-18T06:23:57.7820322Z Updating files:  97% (6843/7054)
+2026-11-18T06:23:57.7958897Z Updating files:  97% (6886/7054)
+2026-11-18T06:23:57.8251816Z Updating files:  98% (6913/7054)
+2026-11-18T06:23:57.8473799Z Updating files:  99% (6984/7054)
+2026-11-18T06:23:57.8474169Z Updating files: 100% (7054/7054)
+2026-11-18T06:23:57.8603208Z Updating files: 100% (7054/7054), done.
+2026-11-18T06:23:57.8603555Z arm-linux-gnueabihf-gcc (Linaro GCC 6.3-2017.05) 6.3.1 20170404
+2026-11-18T06:23:57.8693528Z ##[group]Run set -e
+2026-11-18T06:23:57.8693761Z [36;1mset -e[0m
+2026-11-18T06:23:57.8694022Z [36;1mcp "$GITHUB_WORKSPACE/board/s4602/tun/vendor-aligned.config" .config[0m
+2026-11-18T06:23:57.8694343Z [36;1mecho ">>> 固化 config 关键项:"[0m
+2026-11-18T06:23:57.8694615Z [36;1mgrep -E '^CONFIG_(IPV6|SMP|PREEMPT|XFRM)=' .config[0m
+2026-11-18T06:23:57.8695144Z [36;1m# 关键坑：必须重生成 include/generated/autoconf.h，否则 kbuild 仍用旧 header，[0m
+2026-11-18T06:23:57.8695513Z [36;1m# 改 .config 不生效（偏移不变）。syncconfig 只更新 generated 文件，不重排其它选项。[0m
+2026-11-18T06:23:57.8695790Z [36;1mmake syncconfig ARCH=arm[0m
+2026-11-18T06:23:57.8696014Z [36;1mecho ">>> autoconf.h IPV6:"[0m
+2026-11-18T06:23:57.8696284Z [36;1mgrep -E '^#define CONFIG_IPV6 ' include/generated/autoconf.h[0m
+2026-11-18T06:23:57.8696634Z [36;1m# 外部模块模式仍需 prepared 树：prepare 生成 arch/arm/include/generated/asm/*[0m
+2026-11-18T06:23:57.8696976Z [36;1m# 软链（bitsperlong.h 等），否则编译报 "asm/bitsperlong.h: No such file"。[0m
+2026-11-18T06:23:57.8697338Z [36;1m# HOSTLDFLAGS 解决 GA 新版 gcc 的 dtc -fno-common 多重定义。[0m
+2026-11-18T06:23:57.8697628Z [36;1mmake prepare ARCH=arm CROSS_COMPILE="$CROSS" \[0m
+2026-11-18T06:23:57.8697922Z [36;1m  HOSTLDFLAGS="-Wl,--allow-multiple-definition"[0m
+2026-11-18T06:23:57.8743250Z shell: /usr/bin/bash -e {0}
+2026-11-18T06:23:57.8743482Z env:
+2026-11-18T06:23:57.8743668Z   FL_TAG: rv1126_rv1109/linux_release_v2.2.5g
+2026-11-18T06:23:57.8743940Z   FL_GROUP: https://gitlab.com/firefly-linux
+2026-11-18T06:23:57.8744174Z   FL_TC_BRANCH: rv1126_rv1109/firefly
+2026-11-18T06:23:57.8744516Z   FL_TC_REPO: prebuilts/gcc/linux-x86/arm/gcc-linaro-6.3.1-2017.05-x86_64_arm-linux-gnueabihf
+2026-11-18T06:23:57.8744885Z   CROSS: /opt/fl-tc/bin/arm-linux-gnueabihf-
+2026-11-18T06:23:57.8745101Z ##[endgroup]
+2026-11-18T06:23:57.8860581Z >>> 固化 config 关键项:
+2026-11-18T06:23:57.8874662Z CONFIG_PREEMPT=y
+2026-11-18T06:23:57.8874935Z CONFIG_SMP=y
+2026-11-18T06:23:57.8875179Z CONFIG_XFRM=y
+2026-11-18T06:23:57.8875409Z CONFIG_IPV6=y
+2026-11-18T06:23:58.8855185Z   HOSTCC  scripts/basic/fixdep
+2026-11-18T06:23:59.2217578Z   HOSTCC  scripts/kconfig/conf.o
+2026-11-18T06:23:59.3832167Z   YACC    scripts/kconfig/zconf.tab.c
+2026-11-18T06:23:59.5553274Z   LEX     scripts/kconfig/zconf.lex.c
+2026-11-18T06:23:59.5994451Z   HOSTCC  scripts/kconfig/zconf.tab.o
+2026-11-18T06:24:01.0679556Z   HOSTLD  scripts/kconfig/conf
+2026-11-18T06:24:01.0859676Z scripts/kconfig/conf  --syncconfig Kconfig
+2026-11-18T06:24:01.9771045Z 
+2026-11-18T06:24:01.9771577Z Error in reading or end of file.
+2026-11-18T06:24:01.9771965Z *
+2026-11-18T06:24:01.9772472Z * Restart config...
+2026-11-18T06:24:01.9773039Z *
+2026-11-18T06:24:01.9773269Z *
+2026-11-18T06:24:01.9773492Z * Memory initialization
+2026-11-18T06:24:01.9773770Z *
+2026-11-18T06:24:01.9774035Z Initialize kernel stack variables at function entry
+2026-11-18T06:24:01.9774356Z > 1. no automatic initialization (weakest) (INIT_STACK_NONE)
+2026-11-18T06:24:01.9774732Z   2. 0xAA-init everything on the stack (strongest) (INIT_STACK_ALL) (NEW)
+2026-11-18T06:24:02.0087338Z choice[1-2?]: Enable heap memory zeroing on allocation by default (INIT_ON_ALLOC_DEFAULT_ON) [N/y/?] n
+2026-11-18T06:24:02.0088101Z Enable heap memory zeroing on free by default (INIT_ON_FREE_DEFAULT_ON) [N/y/?] n
+2026-11-18T06:24:02.0113496Z >>> autoconf.h IPV6:
+2026-11-18T06:24:02.0126524Z #define CONFIG_IPV6 1
+2026-11-18T06:24:05.8619927Z   HOSTCC  scripts/basic/fixdep
+2026-11-18T06:24:06.0205098Z   HOSTLD  scripts/kconfig/conf
+2026-11-18T06:24:06.0368511Z scripts/kconfig/conf  --syncconfig Kconfig
+2026-11-18T06:24:09.9851500Z   SYSHDR  arch/arm/include/generated/uapi/asm/unistd-common.h
+2026-11-18T06:24:10.0086139Z   SYSHDR  arch/arm/include/generated/uapi/asm/unistd-oabi.h
+2026-11-18T06:24:10.0210765Z   SYSHDR  arch/arm/include/generated/uapi/asm/unistd-eabi.h
+2026-11-18T06:24:10.1526966Z   UPD     include/config/kernel.release
+2026-11-18T06:24:10.2694645Z   WRAP    arch/arm/include/generated/uapi/asm/bitsperlong.h
+2026-11-18T06:24:10.2701711Z   WRAP    arch/arm/include/generated/uapi/asm/bpf_perf_event.h
+2026-11-18T06:24:10.2708915Z   WRAP    arch/arm/include/generated/uapi/asm/errno.h
+2026-11-18T06:24:10.2716042Z   WRAP    arch/arm/include/generated/uapi/asm/ioctl.h
+2026-11-18T06:24:10.2723177Z   WRAP    arch/arm/include/generated/uapi/asm/ipcbuf.h
+2026-11-18T06:24:10.2730336Z   WRAP    arch/arm/include/generated/uapi/asm/msgbuf.h
+2026-11-18T06:24:10.2737315Z   WRAP    arch/arm/include/generated/uapi/asm/param.h
+2026-11-18T06:24:10.2744659Z   WRAP    arch/arm/include/generated/uapi/asm/poll.h
+2026-11-18T06:24:10.2751697Z   WRAP    arch/arm/include/generated/uapi/asm/resource.h
+2026-11-18T06:24:10.2758497Z   WRAP    arch/arm/include/generated/uapi/asm/sembuf.h
+2026-11-18T06:24:10.2765884Z   WRAP    arch/arm/include/generated/uapi/asm/shmbuf.h
+2026-11-18T06:24:10.2772997Z   WRAP    arch/arm/include/generated/uapi/asm/siginfo.h
+2026-11-18T06:24:10.2780069Z   WRAP    arch/arm/include/generated/uapi/asm/socket.h
+2026-11-18T06:24:10.2786932Z   WRAP    arch/arm/include/generated/uapi/asm/sockios.h
+2026-11-18T06:24:10.2793842Z   WRAP    arch/arm/include/generated/uapi/asm/termbits.h
+2026-11-18T06:24:10.2800725Z   WRAP    arch/arm/include/generated/uapi/asm/termios.h
+2026-11-18T06:24:10.3981286Z   WRAP    arch/arm/include/generated/asm/compat.h
+2026-11-18T06:24:10.3988088Z   WRAP    arch/arm/include/generated/asm/current.h
+2026-11-18T06:24:10.3995248Z   WRAP    arch/arm/include/generated/asm/early_ioremap.h
+2026-11-18T06:24:10.4002451Z   WRAP    arch/arm/include/generated/asm/emergency-restart.h
+2026-11-18T06:24:10.4009530Z   WRAP    arch/arm/include/generated/asm/exec.h
+2026-11-18T06:24:10.4016377Z   WRAP    arch/arm/include/generated/asm/extable.h
+2026-11-18T06:24:10.4023332Z   WRAP    arch/arm/include/generated/asm/irq_regs.h
+2026-11-18T06:24:10.4030397Z   WRAP    arch/arm/include/generated/asm/kdebug.h
+2026-11-18T06:24:10.4037390Z   WRAP    arch/arm/include/generated/asm/local.h
+2026-11-18T06:24:10.4044312Z   WRAP    arch/arm/include/generated/asm/local64.h
+2026-11-18T06:24:10.4051218Z   WRAP    arch/arm/include/generated/asm/mm-arch-hooks.h
+2026-11-18T06:24:10.4058341Z   WRAP    arch/arm/include/generated/asm/msi.h
+2026-11-18T06:24:10.4065284Z   WRAP    arch/arm/include/generated/asm/parport.h
+2026-11-18T06:24:10.4072515Z   WRAP    arch/arm/include/generated/asm/preempt.h
+2026-11-18T06:24:10.4079393Z   WRAP    arch/arm/include/generated/asm/rwsem.h
+2026-11-18T06:24:10.4086163Z   WRAP    arch/arm/include/generated/asm/seccomp.h
+2026-11-18T06:24:10.4094203Z   WRAP    arch/arm/include/generated/asm/segment.h
+2026-11-18T06:24:10.4101299Z   WRAP    arch/arm/include/generated/asm/serial.h
+2026-11-18T06:24:10.4108377Z   WRAP    arch/arm/include/generated/asm/simd.h
+2026-11-18T06:24:10.4115382Z   WRAP    arch/arm/include/generated/asm/sizes.h
+2026-11-18T06:24:10.4122442Z   WRAP    arch/arm/include/generated/asm/timex.h
+2026-11-18T06:24:10.4129564Z   WRAP    arch/arm/include/generated/asm/trace_clock.h
+2026-11-18T06:24:10.6431465Z   UPD     include/generated/uapi/linux/version.h
+2026-11-18T06:24:10.8647277Z   UPD     include/generated/utsrelease.h
+2026-11-18T06:24:11.2445542Z   SYSNR   arch/arm/include/generated/asm/unistd-nr.h
+2026-11-18T06:24:11.2567288Z   GEN     arch/arm/include/generated/asm/mach-types.h
+2026-11-18T06:24:11.2634021Z   SYSTBL  arch/arm/include/generated/calls-oabi.S
+2026-11-18T06:24:11.2818959Z   SYSTBL  arch/arm/include/generated/calls-eabi.S
+2026-11-18T06:24:11.4175186Z   CC      kernel/bounds.s
+2026-11-18T06:24:11.4744225Z   UPD     include/generated/bounds.h
+2026-11-18T06:24:11.4915967Z   UPD     include/generated/timeconst.h
+2026-11-18T06:24:11.4935948Z   CC      arch/arm/kernel/asm-offsets.s
+2026-11-18T06:24:11.6521924Z   UPD     include/generated/asm-offsets.h
+2026-11-18T06:24:11.6541109Z   CALL    scripts/checksyscalls.sh
+2026-11-18T06:24:11.6925739Z ##[group]Run set -e
+2026-11-18T06:24:11.6925976Z [36;1mset -e[0m
+2026-11-18T06:24:11.6926153Z [36;1mexport ARCH=arm[0m
+2026-11-18T06:24:11.6926362Z [36;1mexport CROSS_COMPILE="$CROSS"[0m
+2026-11-18T06:24:11.6926655Z [36;1mexport HOSTLDFLAGS="-Wl,--allow-multiple-definition"[0m
+2026-11-18T06:24:11.6927031Z [36;1mmkdir -p /tmp/modbuild[0m
+2026-11-18T06:24:11.6943537Z [36;1mcp drivers/net/tun.c /tmp/modbuild/[0m
+2026-11-18T06:24:11.6943892Z [36;1mcp "$GITHUB_WORKSPACE/board/s4602/tun/layout_probe.c" /tmp/modbuild/[0m
+2026-11-18T06:24:11.6944483Z [36;1mprintf 'obj-m += tun.o\nobj-m += layout_probe.o\n' > /tmp/modbuild/Makefile[0m
+2026-11-18T06:24:11.6944873Z [36;1m# 外部模块方式绕开 `make drivers/net/tun.ko` 触发的 dtc -fno-common 多重定义。[0m
+2026-11-18T06:24:11.6945249Z [36;1m# CONFIG_TUN_MODULE 满足 if_tun.h:23 守卫；-march=armv7-a 与成功构建机一致。[0m
+2026-11-18T06:24:11.6945609Z [36;1mmake M=/tmp/modbuild modules ARCH=arm CROSS_COMPILE="$CROSS" \[0m
+2026-11-18T06:24:11.6945980Z [36;1m  KCFLAGS="-DCONFIG_TUN_MODULE -march=armv7-a"[0m
+2026-11-18T06:24:11.6946286Z [36;1mls -l /tmp/modbuild/tun.ko /tmp/modbuild/layout_probe.ko[0m
+2026-11-18T06:24:11.6946706Z [36;1mecho "VERMAGIC=$(strings /tmp/modbuild/tun.ko | grep '^vermagic=' | head -1)" | tee -a "$GITHUB_ENV"[0m
+2026-11-18T06:24:11.6990177Z shell: /usr/bin/bash -e {0}
+2026-11-18T06:24:11.6990380Z env:
+2026-11-18T06:24:11.6990566Z   FL_TAG: rv1126_rv1109/linux_release_v2.2.5g
+2026-11-18T06:24:11.6990835Z   FL_GROUP: https://gitlab.com/firefly-linux
+2026-11-18T06:24:11.6991069Z   FL_TC_BRANCH: rv1126_rv1109/firefly
+2026-11-18T06:24:11.6991422Z   FL_TC_REPO: prebuilts/gcc/linux-x86/arm/gcc-linaro-6.3.1-2017.05-x86_64_arm-linux-gnueabihf
+2026-11-18T06:24:11.6991788Z   CROSS: /opt/fl-tc/bin/arm-linux-gnueabihf-
+2026-11-18T06:24:11.6992010Z ##[endgroup]
+2026-11-18T06:24:15.0183989Z 
+2026-11-18T06:24:15.0184624Z   WARNING: Symbol version dump ./Module.symvers
+2026-11-18T06:24:15.0185069Z            is missing; modules will have no dependencies and modversions.
+2026-11-18T06:24:15.0185305Z 
+2026-11-18T06:24:15.1375013Z   CC [M]  /tmp/modbuild/tun.o
+2026-11-18T06:24:15.9339985Z   CC [M]  /tmp/modbuild/layout_probe.o
+2026-11-18T06:24:16.3206039Z   Building modules, stage 2.
+2026-11-18T06:24:16.3270764Z   MODPOST 2 modules
+2026-11-18T06:24:16.3286451Z /bin/sh: 1: scripts/mod/modpost: not found
+2026-11-18T06:24:16.3303940Z sed: couldn't flush stdout: Broken pipe
+2026-11-18T06:24:16.3306772Z make[1]: *** [scripts/Makefile.modpost:108: __modpost] Error 127
+2026-11-18T06:24:16.3308038Z make: *** [Makefile:1645: modules] Error 2
+2026-11-18T06:24:16.3324137Z ##[error]Process completed with exit code 2.
+2026-11-18T06:24:16.3439650Z Post job cleanup.
+2026-11-18T06:24:16.4164199Z [command]/usr/bin/git version
+2026-11-18T06:24:16.4202939Z git version 2.56.1
+2026-11-18T06:24:16.4238999Z Temporarily overriding HOME='/home/runner/work/_temp/ecc34a10-9f2e-483e-9c16-240098f4c4f9' before making global git config changes
+2026-11-18T06:24:16.4240127Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-18T06:24:16.4243471Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/cmcc-s4602-rv1109/cmcc-s4602-rv1109
+2026-11-18T06:24:16.4280199Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-18T06:24:16.4312758Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-18T06:24:16.4586094Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-18T06:24:16.4612226Z http.https://github.com/.extraheader
+2026-11-18T06:24:16.4621752Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-11-18T06:24:16.4655140Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-18T06:24:16.4922225Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-18T06:24:16.4954952Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-18T06:24:16.5343227Z Cleaning up orphan processes
+2026-11-18T06:24:16.5666287Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
