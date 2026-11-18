@@ -10,10 +10,17 @@ name: Build patched go2rtc for S4602 (fix mp4 WriteBuffer panic)
 #   上游修复在 PR #2339（至今 open 未合并）：core.WriteBuffer.Close() 在持锁时
 #   把 Writer 标记为 io.ErrClosedPipe，阻止 handler 返回后的迟到写入。
 #
-# 本 workflow 从原始 v1.9.15 源码套用该补丁，交叉编译 armv7 并上传 artifact。
+# 实机验证：仅套 PR#2339 的补丁**无效** —— 播放断开后崩溃点从 writebuffer.go:33
+# (w.Writer.Write) 转移到 :37 (f.Flush)。因为 Close() 设 err 挡不住 TOCTOU 竞态：
+# net/http 在 handler 返回时就回收 response，早于我方 Close 拿锁，sender 的
+# 异步 Write 此时进到 f.Flush() 访问已回收的 bufio.Writer → SIGSEGV addr=0xc。
+# 故本 workflow 套两个补丁：
+#   A) writebuffer-close.patch      —— PR#2339 原文，Close() 设 ErrClosedPipe
+#   B) writebuffer-flush-guard.patch —— S4602 自研，给 Write() 加 defer recover，
+#      同时堵住 Write 与 Flush 两个崩溃点，panic 时标记 closed + 释放锁
 # 双重 Gate：
-#   1) go test 跑 PR 自带回归测试 TestWriteBufferCloseBlocksLateWrites —— 该测试
-#      用 recyclableWriter 模拟 net/http 回收，补丁版必须 PASS（未补丁会 FAIL）。
+#   1) go test 跑三个回归测试（Close 挡迟到写 / Flush panic 被 recover / panic
+#      后锁释放），全部 PASS 才继续。
 #   2) ELF 头断言为 32-bit ARM EABI5（GOARM=7 armhf），杜绝编错架构。
 #
 # 详细排障见 docs/GO2RTC_MP4_PANIC.md。
@@ -60,7 +67,18 @@ jobs:
           echo ">>> patched Close() body:"
           sed -n '49,72p' pkg/core/writebuffer.go
 
-      - name: Install regression test (PR #2339)
+      - name: Apply enhanced Flush-panic guard (S4602 custom)
+        run: |
+          set -e
+          cd /tmp/go2rtc
+          # 必须在本步之前先套 writebuffer-close.patch：本补丁的 hunk 基线是
+          # "Close 已改、Write 未改" 的状态。它给 Write() 加 defer recover，
+          # 堵住 PR#2339 遗漏的 f.Flush() 崩溃点（S4602 实机第二次崩溃处）。
+          git apply --verbose "$GITHUB_WORKSPACE/board/s4602/go2rtc/writebuffer-flush-guard.patch"
+          echo ">>> patched Write() body:"
+          sed -n '29,58p' pkg/core/writebuffer.go
+
+      - name: Install regression tests
         run: |
           set -e
           # v1.9.15 tag 自带坏测试 core_test.go:128 引用了未定义的 StripUserinfo
@@ -70,11 +88,12 @@ jobs:
           cp "$GITHUB_WORKSPACE/board/s4602/go2rtc/writebuffer_test.go" /tmp/go2rtc/pkg/core/writebuffer_test.go
           ls -l /tmp/go2rtc/pkg/core/writebuffer_test.go
 
-      - name: Gate 1 - regression test must pass (native amd64)
+      - name: Gate 1 - all WriteBuffer regression tests must pass (native amd64)
         working-directory: /tmp/go2rtc
         run: |
           set -e
-          go test ./pkg/core/ -run TestWriteBufferCloseBlocksLateWrites -count=1 -v
+          # 三个测试：Close 挡迟到写 / Flush panic 被 recover / panic 后锁释放
+          go test ./pkg/core/ -run 'TestWriteBuffer' -count=1 -v
 
       - name: Build armv7 binary (linux/arm GOARM=7 armhf, CGO off)
         working-directory: /tmp/go2rtc

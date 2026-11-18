@@ -1,0 +1,35 @@
+diff --git a/pkg/core/writebuffer.go b/pkg/core/writebuffer.go
+index 5d60865..3352166 100644
+--- a/pkg/core/writebuffer.go
++++ b/pkg/core/writebuffer.go
+@@ -28,6 +28,22 @@ func NewWriteBuffer(wr io.Writer) *WriteBuffer {
+ 
+ func (w *WriteBuffer) Write(p []byte) (n int, err error) {
+ 	w.mu.Lock()
++	defer func() {
++		// net/http recycles the ResponseWriter's bufio.Writer as soon as the
++		// HTTP handler returns, while an async track sender may still be
++		// inside Write()/Flush() here (a TOCTOU race). Recover that panic so
++		// it cannot kill the process: mark closed so all later writes bail
++		// out early, wake WriteTo, and always Unlock (panic skips the old
++		// trailing Unlock). Worst case is one dropped frame on disconnect.
++		if r := recover(); r != nil {
++			if w.err == nil {
++				w.err = io.ErrClosedPipe
++			}
++			w.done()
++			n, err = 0, io.ErrClosedPipe
++		}
++		w.mu.Unlock()
++	}()
+ 	if w.err != nil {
+ 		err = w.err
+ 	} else if n, err = w.Writer.Write(p); err != nil {
+@@ -36,7 +52,6 @@ func (w *WriteBuffer) Write(p []byte) (n int, err error) {
+ 	} else if f, ok := w.Writer.(http.Flusher); ok {
+ 		f.Flush()
+ 	}
+-	w.mu.Unlock()
+ 	return
+ }
+ 
