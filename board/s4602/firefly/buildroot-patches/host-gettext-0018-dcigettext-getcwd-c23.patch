@@ -1,0 +1,12 @@
+From: S4602 CI <ci@s4602.local>
+--- a/gettext-runtime/intl/dcigettext.c
++++ b/gettext-runtime/intl/dcigettext.c
+@@ -144,7 +144,7 @@
+ #  if VMS
+ #   define getcwd(buf, max) (getcwd) (buf, max, 0)
+ #  else
+-char *getcwd ();
++/* getcwd is declared in <unistd.h> (old-style () decl conflicts with C23) */
+ #  endif
+ # endif
+ # ifndef HAVE_STPCPY

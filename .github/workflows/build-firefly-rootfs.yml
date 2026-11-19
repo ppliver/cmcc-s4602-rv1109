@@ -131,6 +131,10 @@ jobs:
           # host-ninja 1.8.2: configure.py imports 'pipes' (removed in Python 3.13)
           cp -v "$GITHUB_WORKSPACE/board/s4602/firefly/buildroot-patches/host-ninja-"*.patch \
                 "$SDK_DIR/buildroot/package/ninja/"
+          # host-gettext 0.19.8.1: old-style 'char *getcwd ();' conflicts with
+          # glibc fortify prototype under C23-default gcc
+          cp -v "$GITHUB_WORKSPACE/board/s4602/firefly/buildroot-patches/host-gettext-"*.patch \
+                "$SDK_DIR/buildroot/package/gettext/"
           ls "$SDK_DIR/buildroot/package/m4/" "$SDK_DIR/buildroot/package/python/" "$SDK_DIR/buildroot/package/ninja/" | head -25
           # Prefetch stale distro sources (sourceforge wiped libpng 1.6.37;
           # buildroot.net keeps it under package subdir). NOTE: this old
