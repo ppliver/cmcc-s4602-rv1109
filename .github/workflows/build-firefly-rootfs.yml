@@ -202,6 +202,11 @@ jobs:
           # glibc fortify prototype under C23-default gcc
           cp -v "$GITHUB_WORKSPACE/board/s4602/firefly/buildroot-patches/host-gettext-"*.patch \
                 "$SDK_DIR/buildroot/package/gettext/"
+          # libgpg-error 1.27 uses 'namespace' as an awk variable, which is a
+          # reserved keyword in gawk 5 (shipped by ubuntu:20.04) -> fatal at
+          # mkstrtable.awk. Rename it to 'nspace' in Makefile.in + awk script.
+          cp -v "$GITHUB_WORKSPACE/board/s4602/firefly/buildroot-patches/libgpg-error-"*.patch \
+                "$SDK_DIR/buildroot/package/libgpg-error/"
           # firefly_rkmedia_demo's CMakeLists.txt hardcodes gcc-linaro-6.3.1
           # for CMAKE_C/CXX_COMPILER. From buildroot/output/build/<pkg> those
           # 5x '../' resolve to /mnt/prebuilts/... (outside SDK_DIR), which we
