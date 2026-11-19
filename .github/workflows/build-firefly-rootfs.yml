@@ -49,8 +49,15 @@ jobs:
       # git fallback covers checkout, but install explicitly to be safe
       - name: Bootstrap container (git + sudo + certs)
         run: |
-          # archive.ubuntu.com sometimes times out from GH runner IPs; make apt
-          # retry transient connection failures (applies to all later apt calls).
+          # GH-hosted runners live on Azure: public archive.ubuntu.com IPs were
+          # unreachable (all timed out) for two runs straight. Switch to the
+          # Azure in-network mirror, which resolves to Azure-internal IPs.
+          sed -i \
+            -e 's|http://archive.ubuntu.com|http://azure.archive.ubuntu.com|g' \
+            -e 's|http://security.ubuntu.com|http://azure.archive.ubuntu.com|g' \
+            /etc/apt/sources.list
+          cat /etc/apt/sources.list | grep -v '^#' | head -5
+          # retry any remaining transient hiccups (all later apt calls).
           printf 'Acquire::Retries "5";\nAcquire::http::Timeout "60";\nAcquire::https::Timeout "60";\n' \
             > /etc/apt/apt.conf.d/99retry
           apt-get update -qq
