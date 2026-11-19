@@ -45,7 +45,9 @@ jobs:
 
       - name: repo init (pinned BSP manifest)
         run: |
-          mkdir -p "$SDK_DIR"
+          # /mnt is root-owned on ubuntu-latest: create + hand to runner user
+          sudo mkdir -p "$SDK_DIR"
+          sudo chown -R "$(id -u):$(id -g)" /mnt
           cd "$SDK_DIR"
           repo init -u "$FL_GROUP/manifests.git" -b master \
             -m rv1126_rv1109/rv1126_rv1109_linux_release_20241011_v2.2.5g.xml \
