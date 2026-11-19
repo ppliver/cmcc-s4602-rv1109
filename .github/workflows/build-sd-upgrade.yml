@@ -43,20 +43,26 @@ jobs:
         run: |
           mkdir -p out/rebuilt_bins
           # rtp2pipe: static, no deps
+          # TIME ABI: Ubuntu 24.04 (noble) switched its armhf port to 64-bit-time
+          # by default -> plain compile links __ioctl_time64/__clock_gettime64,
+          # which mangles v4l2 ioctl request codes -> VIDIOC_STREAMON EINVAL ->
+          # h264out dies with "[FATAL] STREAMON failed" (verified on device).
+          # Fix: force the classic ABI with -D_TIME_BITS=32 (verified 2026-11-19
+          # on gcc 15.2/noble sysroot: time64 symbols gone, classic ioctl kept).
+          # CAVEAT: do NOT use this flag with the OLD gcc-9.5 sysroot on the
+          # build server 192.168.219.177 - there the toolchain default (32-bit)
+          # is correct and the flag perversely ENABLES time64.
+          # The symbol gates below still verify every produced binary.
           arm-linux-gnueabihf-gcc -O2 -std=gnu99 -w -static -s \
+            -D_TIME_BITS=32 -D_FILE_OFFSET_BITS=32 \
             -o out/rebuilt_bins/rtp2pipe tools/rtp2pipe.c
           # webd: static, pure POSIX
           arm-linux-gnueabihf-gcc -O2 -std=gnu99 -w -static -s \
+            -D_TIME_BITS=32 -D_FILE_OFFSET_BITS=32 \
             -o out/rebuilt_bins/webd tools/webd.c
           # h264out: PIE dynamic, vendor MPP headers (repo third_party/), runtime libs from rtlib.tar.gz
-          # NOTE on time ABI: modern armhf gcc (>=13, e.g. ubuntu-latest 24.04) defaults to
-          # _TIME_BITS=64 -> links __ioctl_time64/__clock_gettime64 -> v4l2 ioctl request
-          # codes get mangled -> VIDIOC_STREAMON returns EINVAL -> h264out dies with
-          # "[FATAL] STREAMON failed". Verified on device 2026-11-19.
-          # Do NOT force -D_TIME_BITS=32: on gcc 9.5 that flag *enables* time64 instead.
-          # Correct approach = compile with the toolchain default, then GATE on symbols
-          # (the gate below fails the build if a 64-bit-time toolchain is used).
           arm-linux-gnueabihf-gcc -O2 -std=gnu99 -w -s \
+            -D_TIME_BITS=32 -D_FILE_OFFSET_BITS=32 \
             -o out/rebuilt_bins/h264out_v4 tools/h264out.c \
             -Ithird_party/mpp/inc-1.0.9 -ldl -lpthread -lm
           for f in rtp2pipe webd h264out_v4; do
