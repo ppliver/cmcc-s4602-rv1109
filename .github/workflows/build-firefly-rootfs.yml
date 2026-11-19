@@ -140,6 +140,17 @@ jobs:
             app/smart_display_service app/startup_app_ipc \
             app/storage_manager app/video 2>&1 | tail -30
           df -h /mnt
+          # Several Firefly app Makefiles (e.g. rkaiq_switch_mode) invoke the
+          # compiler via '../../../../../prebuilts/...' relative to
+          # buildroot/output/build/<pkg>, which resolves one level ABOVE
+          # SDK_DIR, i.e. /mnt/prebuilts. Mirror the synced toolchain there so
+          # every such reference works without patching each package.
+          if [ ! -e /mnt/prebuilts ]; then
+            ln -s "$SDK_DIR/prebuilts" /mnt/prebuilts
+          fi
+          ls -ld /mnt/prebuilts
+          test -x /mnt/prebuilts/gcc/linux-x86/arm/gcc-arm-8.3-2019.03-x86_64-arm-linux-gnueabihf/bin/arm-linux-gnueabihf-g++ \
+            || { echo "FATAL: toolchain unreachable via /mnt/prebuilts"; exit 1; }
 
       - name: Gate - verify local-site package sources present
         run: |
