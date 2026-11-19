@@ -58,7 +58,7 @@ jobs:
           sudo apt-get install -y \
             repo build-essential bc bison flex libssl-dev libncurses-dev \
             file rsync unzip wget cpio gawk xz-utils device-tree-compiler \
-            python3-dev perl patch swig libconfuse-dev curl cmake
+            python3-dev perl patch swig libconfuse-dev curl cmake gettext
           # ubuntu-26.04 ships gcc-15 whose DEFAULT -std is C23: old-style
           # K&R declarations break in every 2022-era host tool (m4, python,
           # ninja, gettext, bash mkbuiltins, ...). Per-package patches are
@@ -93,9 +93,14 @@ jobs:
           # link error. Inject the aliases via CFLAGS (verified locally).
           make -j$(nproc) CFLAGS="-g -O2 -D__alloca=__builtin_alloca -D__stat=stat" >/dev/null
           sudo make install >/dev/null
+          # autotools packages (attr, gstreamer, ...) probe 'gmake' via
+          # AC_PATH_PROG and use it for their own install rules. /usr/bin/gmake
+          # is still 4.3 -> same variable-expansion bug as gstreamer. Shadow it too.
+          sudo ln -sf /usr/local/bin/make /usr/bin/gmake
           hash -r
           cd "$GITHUB_WORKSPACE"
           command -v make && make --version | head -1
+          command -v gmake && gmake --version | head -1
           repo --version 2>/dev/null || {
             curl -s https://storage.googleapis.com/git-repo-downloads/repo \
               | sudo tee /usr/local/bin/repo >/dev/null
