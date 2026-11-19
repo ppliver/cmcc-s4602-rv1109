@@ -191,6 +191,19 @@ jobs:
           # glibc fortify prototype under C23-default gcc
           cp -v "$GITHUB_WORKSPACE/board/s4602/firefly/buildroot-patches/host-gettext-"*.patch \
                 "$SDK_DIR/buildroot/package/gettext/"
+          # firefly_rkmedia_demo's CMakeLists.txt hardcodes gcc-linaro-6.3.1
+          # for CMAKE_C/CXX_COMPILER. From buildroot/output/build/<pkg> those
+          # 5x '../' resolve to /mnt/prebuilts/... (outside SDK_DIR), which we
+          # do not sync. CMake already detected the buildroot gcc 8.3 toolchain
+          # via CMAKE_TOOLCHAIN_FILE at project() time; just drop the two SET()
+          # overrides so the demo uses the same compiler as the target sysroot.
+          DEMO_CMAKE="$SDK_DIR/app/firefly_rkmedia_demo/CMakeLists.txt"
+          test -f "$DEMO_CMAKE" || { echo "FATAL: $DEMO_CMAKE missing"; exit 1; }
+          sed -i '/gcc-linaro-6.3.1-2017.05-x86_64_arm-linux-gnueabihf/d' "$DEMO_CMAKE"
+          if grep -q 'gcc-linaro-6.3.1' "$DEMO_CMAKE"; then
+            echo "FATAL: demo compiler override still present"; exit 1
+          fi
+          echo "OK: firefly_rkmedia_demo uses buildroot toolchain"
           # gettext 0.19.8.1 has many old-style () declarations (x-javascript.c
           # phase5_scan_regexp, dcigettext getcwd, ...). Force gnu17 for the
           # whole host build instead of patching files one by one.
