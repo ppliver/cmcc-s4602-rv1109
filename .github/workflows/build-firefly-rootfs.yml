@@ -120,6 +120,14 @@ jobs:
           cp -v "$GITHUB_WORKSPACE/board/s4602/firefly/buildroot-patches/"*.patch \
                 "$SDK_DIR/buildroot/package/m4/"
           ls "$SDK_DIR/buildroot/package/m4/"
+          # Prefetch stale distro sources (sourceforge wiped libpng 1.6.37;
+          # buildroot.net keeps it under package subdir). Add more as found.
+          mkdir -p "$SDK_DIR/buildroot/dl/libpng"
+          test -f "$SDK_DIR/buildroot/dl/libpng/libpng-1.6.37.tar.xz" \
+            || curl -fsSL --retry 3 \
+                 -o "$SDK_DIR/buildroot/dl/libpng/libpng-1.6.37.tar.xz" \
+                 https://sources.buildroot.net/libpng/libpng-1.6.37.tar.xz
+          ls -la "$SDK_DIR/buildroot/dl/libpng/"
           ls "$SDK_DIR/external/camera_engine_rkaiq/iqfiles/" | grep sc5338
           # diagnostic: confirm which ref the sync actually checked out
           git -C "$SDK_DIR/external/camera_engine_rkaiq" log --oneline -1
