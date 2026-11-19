@@ -1,0 +1,26 @@
+#include "firefly_rv1126_rv1109_defconfig"
+
+# ==========================================================================
+# S4602 (CMCC, RV1109 + SC5338 + SPI-NAND) overrides — appended LAST (kconfig
+# last-wins). Base = Firefly proven firefly_rv1126_rv1109_defconfig; kernel
+# and u-boot come from our own FIT pipeline (see build-firefly.yml), the
+# buildroot kernel package is not enabled anywhere in the include chain.
+#
+# Stage 2 rootfs: doc/vendor/FIREFLY_BSP_BUILD_PLAN.md §7
+# IQ source: vendor /system/resource/scene_param/COMMON_sc5338.xml (matfile
+# rkaiq format, sensor_name SC5338, CMCC v1.55-1 tuning) stored at
+# board/s4602/firefly/iqfiles/sc5338_CMCC-S4602_DEFAULT.xml — injected into
+# external/camera_engine_rkaiq/iqfiles/ by CI before build.
+# ==========================================================================
+
+# identity / access
+BR2_TARGET_GENERIC_HOSTNAME="S4602-FIREFLY"
+BR2_TARGET_GENERIC_ISSUE="Welcome to S4602 Firefly buildroot (RV1126/RV1109)"
+BR2_TARGET_GENERIC_ROOT_PASSWD="s4602ab"
+BR2_TARGET_LOCALTIME="Asia/Shanghai"
+
+# IQ file: vendor SC5338 tuning (must exist in camera_engine_rkaiq/iqfiles/)
+BR2_PACKAGE_CAMERA_ENGINE_RKAIQ_IQFILE="sc5338_CMCC-S4602_DEFAULT.xml"
+
+# belt & braces: also ship the IQ xml inside the overlay
+BR2_ROOTFS_OVERLAY="board/rockchip/rv1126_rv1109/fs-overlay/ board/firefly/ipc/overlayfs board/s4602-overlay"

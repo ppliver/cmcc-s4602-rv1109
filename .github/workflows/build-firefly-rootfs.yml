@@ -1,0 +1,163 @@
+name: Build S4602 rootfs from Firefly buildroot (Stage 2)
+
+# 路线 P2 / docs/FIREFLY_BSP_BUILD_PLAN.md §7 —— Stage 2：
+#   用 Firefly 公开 manifest（rv1126_rv1109_linux_release_20241011_v2.2.5g.xml）
+#   repo sync SDK 仓库集，构建 buildroot rootfs（firefly_rv1126_rv1109_defconfig
+#   全量基线 + S4602 覆盖），产物 rootfs.ext4 / rootfs.squashfs。
+#   内核/zboot 仍走 build-firefly.yml（Stage 1 FIT），rootfs 通过 SD 卡 ext4
+#   分区引导（bootm root=/dev/mmcblk1p2）。
+#
+# IQ 文件来自 S4602 vendor /system/resource/scene_param/COMMON_sc5338.xml
+# （matfile 格式 rkaiq IQ，CMCC v1.55-1 调优），CI 注入 camera_engine_rkaiq/iqfiles。
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  FL_GROUP: "https://gitlab.com/firefly-linux"
+  SDK_DIR: /mnt/fl-sdk
+  BR_TAG: "rv1126_rv1109/linux_release_v2.2.5g"
+
+jobs:
+  build-rootfs:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Checkout project (S4602 assets)
+        uses: actions/checkout@v4
+
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            repo build-essential bc bison flex libssl-dev libncurses-dev \
+            file rsync unzip wget cpio gawk xz-utils device-tree-compiler \
+            python3-dev perl patch swig libconfuse-dev
+          repo --version 2>/dev/null || {
+            curl -s https://storage.googleapis.com/git-repo-downloads/repo \
+              | sudo tee /usr/local/bin/repo >/dev/null
+            sudo chmod a+x /usr/local/bin/repo
+            repo --version
+          }
+
+      - name: repo init (pinned BSP manifest)
+        run: |
+          mkdir -p "$SDK_DIR"
+          cd "$SDK_DIR"
+          repo init -u "$FL_GROUP/manifests.git" -b master \
+            -m rv1126_rv1109/rv1126_rv1109_linux_release_20241011_v2.2.5g.xml \
+            --depth=1 2>&1 | tail -5
+          grep -E 'revision|name="buildroot"' .repo/manifests/rv1126_rv1109/rv1126_rv1109_linux_release_20241011_v2.2.5g.xml
+
+      - name: repo sync (full project set minus host-only repos)
+        run: |
+          cd "$SDK_DIR"
+          time repo sync -c -j4 \
+            buildroot buildroot-dl device/rockchip rkbin \
+            external/CallFunIpc external/alsa-config external/app external/avb \
+            external/ble_wificonfig external/bluetooth_bsa external/broadcom_bsa \
+            external/camera_engine_rkaiq external/common_algorithm \
+            external/deviceio_release external/eq_drc_process \
+            external/gstreamer-rockchip external/isp2-ipc external/ladspaSDK \
+            external/linux-rga external/minilogger external/mpp \
+            external/pcba_adb_test external/recovery external/rk_pcba_test \
+            external/rkadk external/rkmedia external/rknpu external/rkscript \
+            external/rktoolkit external/rkupdate external/rkwifibt \
+            external/rockit external/rockx \
+            external/security/bin external/security/rk_tee_user \
+            external/uac_app external/uvc_app \
+            app/CameraFactoryTestServer app/QFacialGate app/QLauncher \
+            app/aiserver app/camera app/cvr_app app/dbserver app/dbtool \
+            app/firefly_rkmedia_demo app/firefly_rkmedia_uvc \
+            app/firefly_rockx_demo app/ipc-daemon app/ipcweb-backend \
+            app/ipcweb-ng app/libIPCProtocol app/libgdbus app/librkdb \
+            app/mediaserver app/minigui_demo app/multivideoplayer \
+            app/netserver app/qcamera app/qfm app/qplayer app/qsetting \
+            app/rkaiq_switch_mode app/rkaiq_tool_server \
+            app/smart_display_service app/startup_app_ipc \
+            app/storage_manager app/video 2>&1 | tail -30
+          df -h /mnt
+
+      - name: Gate - verify local-site package sources present
+        run: |
+          cd "$SDK_DIR"
+          for d in \
+            external/camera_engine_rkaiq external/rkmedia external/mpp \
+            external/linux-rga external/common_algorithm external/eq_drc_process \
+            external/ladspaSDK external/rkwifibt external/rockx external/rknpu \
+            external/rkscript external/isp2-ipc external/CallFunIpc \
+            external/minilogger external/pcba_adb_test external/rk_pcba_test \
+            external/rkupdate external/gstreamer-rockchip \
+            app/ipcweb-backend app/dbserver app/librkdb app/libIPCProtocol \
+            app/libgdbus app/netserver app/storage_manager app/mediaserver \
+            app/ipc-daemon app/rkaiq_switch_mode app/firefly_rkmedia_demo \
+            app/startup_app_ipc ; do
+            test -d "$d" || { echo "MISSING: $d"; exit 1; }
+          done
+          echo "all local-site sources present"
+
+      - name: Inject S4602 assets (IQ file + overlay)
+        run: |
+          cd "$SDK_DIR/buildroot"
+          # IQ file: vendor SC5338 tuning (rkaiq matfile xml)
+          cp -v "$GITHUB_WORKSPACE/board/s4602/firefly/iqfiles/sc5338_CMCC-S4602_DEFAULT.xml" \
+                external/camera_engine_rkaiq/iqfiles/
+          # S4602 overlay: ship IQ into /etc/iqfiles too (belt & braces)
+          mkdir -p board/s4602-overlay/etc/iqfiles
+          cp -v "$GITHUB_WORKSPACE/board/s4602/firefly/iqfiles/sc5338_CMCC-S4602_DEFAULT.xml" \
+                board/s4602-overlay/etc/iqfiles/
+          ls -la external/camera_engine_rkaiq/iqfiles/ | grep sc5338
+
+      - name: Expand defconfig includes + configure buildroot
+        run: |
+          cd "$SDK_DIR/buildroot"
+          python3 "$GITHUB_WORKSPACE/tools/expand_buildroot_defconfig.py" \
+            . s4602_rootfs_defconfig s4602_rootfs_expanded_defconfig
+          # sanity: expansion must NOT contain residual #include lines
+          ! grep -c '^#include' configs/s4602_rootfs_expanded_defconfig || {
+            echo "ERROR: residual #include in expanded defconfig"; exit 1; }
+          # key overrides must be present AFTER the included base (last-wins)
+          tail -8 configs/s4602_rootfs_expanded_defconfig
+          grep -q 'BR2_PACKAGE_CAMERA_ENGINE_RKAIQ_IQFILE="sc5338_CMCC-S4602_DEFAULT.xml"' \
+            configs/s4602_rootfs_expanded_defconfig \
+            || { echo "ERROR: IQ override lost in expansion"; exit 1; }
+          make s4602_rootfs_expanded_defconfig 2>&1 | tail -5
+          # verify final .config kept the S4602 overrides
+          grep -E 'BR2_TARGET_GENERIC_ROOT_PASSWD|RKAIQ_IQFILE|HOSTNAME' .config
+
+      - name: Build rootfs
+        run: |
+          cd "$SDK_DIR/buildroot"
+          make -j$(nproc) 2>&1 | tail -40
+          echo "=== images ==="
+          ls -la output/images/
+
+      - name: Gate - image + installed payload checks
+        run: |
+          cd "$SDK_DIR/buildroot"
+          test -f output/images/rootfs.ext4 || { echo "no rootfs.ext4"; exit 1; }
+          test -f output/images/rootfs.squashfs || { echo "no rootfs.squashfs"; exit 1; }
+          echo "=== target payload ==="
+          test -d output/target/etc/iqfiles && ls output/target/etc/iqfiles/ | grep -i sc5338 \
+            || echo "WARN: no sc5338 xml in target /etc/iqfiles (check rkaiq install path)"
+          for p in \
+            output/target/usr/lib/librkaiq.so* \
+            output/target/usr/lib/librkmedia.so* \
+            output/target/usr/lib/librockchip_mpp.so* \
+            output/target/usr/bin/dropbearmulti ; do
+            ls $p 2>/dev/null || echo "WARN: missing $p"
+          done
+          du -sh output/images/rootfs.ext4 output/images/rootfs.squashfs output/target
+
+      - name: Upload rootfs artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: s4602-firefly-rootfs
+          path: |
+            /mnt/fl-sdk/buildroot/output/images/rootfs.ext4
+            /mnt/fl-sdk/buildroot/output/images/rootfs.squashfs
+          retention-days: 30
+          compression-level: 6
