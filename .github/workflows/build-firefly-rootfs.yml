@@ -36,6 +36,22 @@ jobs:
             repo build-essential bc bison flex libssl-dev libncurses-dev \
             file rsync unzip wget cpio gawk xz-utils device-tree-compiler \
             python3-dev perl patch swig libconfuse-dev
+          # ubuntu-26.04 ships gcc-15 whose DEFAULT -std is C23: old-style
+          # K&R declarations break in every 2022-era host tool (m4, python,
+          # ninja, gettext, bash mkbuiltins, ...). Per-package patches are
+          # whack-a-mole; instead force the system default gcc to a gnu17
+          # compiler (gcc-14/13/12 all default to gnu17). Existing per-package
+          # patches stay as harmless double insurance.
+          for V in 14 13 12; do
+            if sudo apt-get install -y "gcc-$V" "g++-$V" 2>/dev/null; then
+              sudo update-alternatives --install /usr/bin/gcc gcc "/usr/bin/gcc-$V" 200
+              sudo update-alternatives --install /usr/bin/g++ g++ "/usr/bin/g++-$V" 200
+              echo "default host gcc switched to gcc-$V"
+              break
+            fi
+          done
+          gcc --version | head -1
+          g++ --version | head -1
           repo --version 2>/dev/null || {
             curl -s https://storage.googleapis.com/git-repo-downloads/repo \
               | sudo tee /usr/local/bin/repo >/dev/null
