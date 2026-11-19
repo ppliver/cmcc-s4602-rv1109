@@ -248,6 +248,9 @@ jobs:
           # 2022-era SDK packages (mpp/rkaiq/rkmedia/QT5 ...) all declare old
           # minimums. Env var (supported by CMake >= 4.0) exempts them all.
           export CMAKE_POLICY_VERSION_MINIMUM=3.5
+          # container runs as root; GNU tar 1.29 configure refuses root
+          # (buildroot's documented Docker workaround)
+          export FORCE_UNSAFE_CONFIGURE=1
           cmake --version | head -1
           # full log to file; never let -e/pipefail skip diagnostics
           set +e
