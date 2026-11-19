@@ -206,7 +206,18 @@ jobs:
           grep -q 'BR2_PACKAGE_CAMERA_ENGINE_RKAIQ_IQFILE="sc5338_CMCC-S4602_DEFAULT.xml"' \
             configs/s4602_rootfs_expanded_defconfig \
             || { echo "ERROR: IQ override lost in expansion"; exit 1; }
-          make s4602_rootfs_expanded_defconfig 2>&1 | tail -5
+          # diagnostics: env probe + FULL defconfig log (tail -5 swallowed the
+          # real error last round - "No rule to make target .br-external.mk")
+          make --version | head -1
+          umask
+          ls -l support/scripts/br2-external
+          bash --version | head -1
+          make s4602_rootfs_expanded_defconfig > /tmp/defconfig.log 2>&1 || {
+            echo "=== make defconfig failed, FULL log ==="
+            cat /tmp/defconfig.log
+            exit 1
+          }
+          tail -5 /tmp/defconfig.log
           # verify final .config kept the S4602 overrides
           grep -E 'BR2_TARGET_GENERIC_ROOT_PASSWD|RKAIQ_IQFILE|HOSTNAME' .config
 
