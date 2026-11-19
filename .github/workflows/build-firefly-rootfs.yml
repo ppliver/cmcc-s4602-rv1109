@@ -60,6 +60,7 @@ jobs:
           set -o pipefail
           time repo sync -c -j4 \
             buildroot buildroot-dl device/rockchip rkbin \
+            prebuilts/gcc/linux-x86/arm/gcc-arm-8.3-2019.03-x86_64-arm-linux-gnueabihf \
             external/CallFunIpc external/alsa-config external/app external/avb \
             external/ble_wificonfig external/bluetooth_bsa external/broadcom_bsa \
             external/camera_engine_rkaiq external/common_algorithm \
@@ -140,6 +141,11 @@ jobs:
       - name: Build rootfs
         run: |
           cd "$SDK_DIR/buildroot"
+          # hard gate: external toolchain must exist before make (fail fast)
+          TC="$SDK_DIR/prebuilts/gcc/linux-x86/arm/gcc-arm-8.3-2019.03-x86_64-arm-linux-gnueabihf/bin/arm-linux-gnueabihf-gcc"
+          test -x "$TC" || { echo "FATAL: external cross-compiler missing at $TC (prebuilts not synced?)"; exit 1; }
+          "$TC" --version | head -1
+          set -o pipefail
           make -j$(nproc) 2>&1 | tail -40
           echo "=== images ==="
           ls -la output/images/
