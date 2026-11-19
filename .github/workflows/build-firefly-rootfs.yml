@@ -121,13 +121,15 @@ jobs:
                 "$SDK_DIR/buildroot/package/m4/"
           ls "$SDK_DIR/buildroot/package/m4/"
           # Prefetch stale distro sources (sourceforge wiped libpng 1.6.37;
-          # buildroot.net keeps it under package subdir). Add more as found.
-          mkdir -p "$SDK_DIR/buildroot/dl/libpng"
-          test -f "$SDK_DIR/buildroot/dl/libpng/libpng-1.6.37.tar.xz" \
+          # buildroot.net keeps it under package subdir). NOTE: this old
+          # buildroot (2022.x) uses FLAT dl dir - no per-package subdir.
+          mkdir -p "$SDK_DIR/buildroot/dl"
+          test -f "$SDK_DIR/buildroot/dl/libpng-1.6.37.tar.xz" \
             || curl -fsSL --retry 3 \
-                 -o "$SDK_DIR/buildroot/dl/libpng/libpng-1.6.37.tar.xz" \
+                 -o "$SDK_DIR/buildroot/dl/libpng-1.6.37.tar.xz" \
                  https://sources.buildroot.net/libpng/libpng-1.6.37.tar.xz
-          ls -la "$SDK_DIR/buildroot/dl/libpng/"
+          ls -la "$SDK_DIR/buildroot/dl/libpng-1.6.37.tar.xz"
+          sha256sum "$SDK_DIR/buildroot/dl/libpng-1.6.37.tar.xz"
           ls "$SDK_DIR/external/camera_engine_rkaiq/iqfiles/" | grep sc5338
           # diagnostic: confirm which ref the sync actually checked out
           git -C "$SDK_DIR/external/camera_engine_rkaiq" log --oneline -1
