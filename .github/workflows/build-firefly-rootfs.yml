@@ -277,6 +277,17 @@ jobs:
             grep -nE 'BR2_LINUX_KERNEL|HOST_LINUX_HEADERS' configs/s4602_rootfs_expanded_defconfig
             exit 1
           fi
+          # rkwifibt builds board WiFi/BT .ko via make -C ../kernel (absent here).
+          # kconfig is last-wins: base has RKWIFIBT=y (wifi.config) and
+          # RKWIFIBT_ALL=y (top level); our wrapper appends "=n" last. Check the
+          # LAST assignment of each symbol, not mere presence of any "=y".
+          for sym in BR2_PACKAGE_RKWIFIBT BR2_PACKAGE_RKWIFIBT_ALL; do
+            last=$(grep -E "^${sym}=" configs/s4602_rootfs_expanded_defconfig | tail -1)
+            if [ "$last" != "${sym}=n" ]; then
+              echo "ERROR: $sym last assignment is '$last', expected '${sym}=n'"
+              exit 1
+            fi
+          done
           # diagnostics: env probe + FULL defconfig log (tail -5 swallowed the
           # real error last round - "No rule to make target .br-external.mk")
           make --version | head -1
@@ -315,6 +326,9 @@ jobs:
             test -f "$CF" || continue
             if grep -qE '^BR2_LINUX_KERNEL_CUSTOM_LOCAL=y$|^BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y$' "$CF"; then
               echo "ERROR: kernel package still enabled in $CF"; grep -nE 'BR2_LINUX_KERNEL|HOST_LINUX_HEADERS' "$CF"; exit 1
+            fi
+            if grep -qE '^BR2_PACKAGE_RKWIFIBT=y$|^BR2_PACKAGE_RKWIFIBT_ALL=y$' "$CF"; then
+              echo "ERROR: rkwifibt still enabled in $CF (builds .ko via ../kernel)"; grep -nE 'BR2_PACKAGE_RKWIFIBT' "$CF"; exit 1
             fi
           done
 

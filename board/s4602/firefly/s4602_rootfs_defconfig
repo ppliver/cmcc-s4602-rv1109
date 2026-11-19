@@ -41,3 +41,14 @@ BR2_PACKAGE_FIREFLY_RKMEDIA_DEMO=n
 # BR2_LINUX_KERNEL is not set
 # BR2_LINUX_KERNEL_CUSTOM_LOCAL is not set
 # BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4 is not set
+
+# rkwifibt (from wifi.config/bt.config and top-level BR2_PACKAGE_RKWIFIBT_ALL=y)
+# installs board WiFi/BT firmware + .ko drivers and its build calls
+#   make -C $(TOPDIR)/../kernel M=.../realtek/bluetooth_uart_driver
+# S4602 has no onboard WiFi/BT (4G RNDIS instead) and no kernel tree in this
+# rootfs-only job, so disable it explicitly. Use "=n" (not an "is not set"
+# comment): the trailing RKWIFIBT_ALL=y in the base is a real assignment and
+# only a later real assignment reliably wins after defconfig_hook re-emits.
+# No other package depends on/selects BR2_PACKAGE_RKWIFIBT.
+BR2_PACKAGE_RKWIFIBT=n
+BR2_PACKAGE_RKWIFIBT_ALL=n
