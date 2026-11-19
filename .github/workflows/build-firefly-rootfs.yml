@@ -20,6 +20,10 @@ env:
   FL_GROUP: "https://gitlab.com/firefly-linux"
   SDK_DIR: /mnt/fl-sdk
   BR_TAG: "rv1126_rv1109/linux_release_v2.2.5g"
+  # apt installs tzdata transitively; without this it blocks on the
+  # interactive geographic-area prompt in the non-TTY CI container.
+  DEBIAN_FRONTEND: noninteractive
+  TZ: Asia/Shanghai
 
 jobs:
   build-rootfs:
