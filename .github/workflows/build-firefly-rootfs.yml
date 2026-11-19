@@ -123,7 +123,8 @@ jobs:
         run: |
           cd "$SDK_DIR/buildroot"
           python3 "$GITHUB_WORKSPACE/tools/expand_buildroot_defconfig.py" \
-            . s4602_rootfs_defconfig s4602_rootfs_expanded_defconfig
+            . "$GITHUB_WORKSPACE/board/s4602/firefly/s4602_rootfs_defconfig" \
+            s4602_rootfs_expanded_defconfig
           # sanity: expansion must NOT contain residual #include lines
           ! grep -c '^#include' configs/s4602_rootfs_expanded_defconfig || {
             echo "ERROR: residual #include in expanded defconfig"; exit 1; }

@@ -70,7 +70,13 @@ def main():
         sys.exit(2)
     br_dir, in_name, out_name = sys.argv[1], sys.argv[2], sys.argv[3]
     br_dir = os.path.abspath(br_dir)
-    in_path = find_fragment(br_dir, in_name, [])
+    # accept either a name resolvable inside buildroot/configs, or a direct
+    # path to a wrapper defconfig living outside the buildroot tree (e.g.
+    # a board dir of another repo); nested #include resolution is unchanged
+    if os.path.isfile(in_name):
+        in_path = os.path.abspath(in_name)
+    else:
+        in_path = find_fragment(br_dir, in_name, [])
     out_lines = []
     expand(br_dir, in_path, set(), out_lines)
 
