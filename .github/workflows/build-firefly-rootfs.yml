@@ -117,9 +117,12 @@ jobs:
                 "$SDK_DIR/buildroot/board/s4602-overlay/etc/iqfiles/"
           # host tool patches for modern glibc (glibc >= 2.34: SIGSTKSZ is a
           # function call, breaks old gnulib #if in host-m4 1.4.18)
-          cp -v "$GITHUB_WORKSPACE/board/s4602/firefly/buildroot-patches/"*.patch \
+          cp -v "$GITHUB_WORKSPACE/board/s4602/firefly/buildroot-patches/m4-"*.patch \
                 "$SDK_DIR/buildroot/package/m4/"
-          ls "$SDK_DIR/buildroot/package/m4/"
+          # host-python 2.7.16: C23 keyword clash in Include/asdl.h
+          cp -v "$GITHUB_WORKSPACE/board/s4602/firefly/buildroot-patches/host-python-"*.patch \
+                "$SDK_DIR/buildroot/package/python/"
+          ls "$SDK_DIR/buildroot/package/m4/" "$SDK_DIR/buildroot/package/python/" | head -20
           # Prefetch stale distro sources (sourceforge wiped libpng 1.6.37;
           # buildroot.net keeps it under package subdir). NOTE: this old
           # buildroot (2022.x) uses FLAT dl dir - no per-package subdir.
