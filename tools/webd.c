@@ -92,13 +92,19 @@ static void stream_start(int w, int h, int fps, int kbps, int gop, const char *c
     run("cp " BIN " /tmp/h264out_v4 && chmod +x /tmp/h264out_v4");
     char cmd[640];
     /* 1080p = 1440p 旁路采集 + 中心裁切（scale2 缩放档上限 1280 宽，无法直接出 1080p） */
+    char capw[64] = "";
+    if (w == 1920 && h == 1080) snprintf(capw, sizeof capw, " --capw 2560 --caph 1440");
+    /* --mirror 127.0.0.1:5602: go2rtc camera1 源 (exec:rtp2pipe 5602) 全靠 h264out 的
+     * 第二个 UDP 目的(127.0.0.1:5602)喂裸流。bootfix.sh 有、webd 重启路径漏了 ->
+     * 只要 h264out 被 /api/stream 重启过, rtp2pipe 收不到流, webrtc 空屏。补齐。
+     * 注意: 必须写成 IP:PORT 单 token（不能拆成 "IP PORT"），h264out.c 只认单 token。 */
     snprintf(cmd, sizeof cmd,
         "/tmp/rtlib/rtlib/ld-linux-armhf.so.3 "
         "--library-path /tmp/rtlib/rtlib:/system/lib:/lib "
         "/tmp/h264out_v4 --src nv12 --dev /dev/video21 --ip %s --port %d "
-        "--w %d --h %d --fps %d --kbps %d --gop %d --codec %s --pace %d --cir %d%s > " LOG " 2>&1 &",
-        ip, port, w, h, fps, kbps, gop, codec, pace_ms * 1000, cir,
-        (w == 1920 && h == 1080) ? " --capw 2560 --caph 1440" : "");
+        "--w %d --h %d --fps %d --kbps %d --gop %d --codec %s --pace %d --cir %d%s "
+        "--mirror 127.0.0.1:5602 > " LOG " 2>&1 &",
+        ip, port, w, h, fps, kbps, gop, codec, pace_ms * 1000, cir, capw);
     run(cmd);
     /* 启动确认：2s 后检查进程在不在，不在则重试一次 */
     sleep(2);

@@ -99,14 +99,26 @@ for lf in /data/www/*.log; do
   [ "$(wc -c < "$lf")" -gt 262144 ] && : > "$lf"
 done
 cp -f /data/.shadow /data/.shadow.factory 2>/dev/null
-printf '%s\n' \
-  'root:$1$s4602ab$BvWIoXqRYt0y6IxsQvccW/::0:99999:7:::' \
-  'sshd:*::0:99999:7:::' \
-  'admin:$1$s4602ab$BvWIoXqRYt0y6IxsQvccW/::0:99999:7:::' > /data/.shadow
-sync
-echo "shadow -> $(grep -c '^root:\$1' /data/.shadow) md5 lines"
-rm -f /var/run/faillock/* 2>/dev/null
+# bind-mount FIRST: neutralize vendor resetPasswd.sh before any swapp call
 mount -o bind /data/www/np_resetpasswd.sh /etc/init.d/resetPasswd.sh 2>/dev/null
+# shadow write with VERIFY + retry (2026-11-19 fix): early boot may run while
+# /data is not yet writable -> the plain write left an EMPTY shadow and dropbear
+# served wrong creds -> first SSH auth failed until the 30s guard healed it.
+# rcS may also fire S99local twice (both runs write the SAME bytes, harmless and
+# historically the 2nd run rescued a failed 1st) -> do NOT add a single-instance
+# lock, it would block the rescue run. Verify before starting dropbear.
+i=0
+while [ $i -lt 30 ]; do
+  printf '%s\n' \
+    'root:$1$s4602ab$BvWIoXqRYt0y6IxsQvccW/::0:99999:7:::' \
+    'sshd:*::0:99999:7:::' \
+    'admin:$1$s4602ab$BvWIoXqRYt0y6IxsQvccW/::0:99999:7:::' > /data/.shadow 2>/dev/null
+  sync
+  grep -q 's4602ab' /data/.shadow 2>/dev/null && break
+  sleep 2; i=$((i+1))
+done
+echo "shadow -> $(grep -c 's4602ab' /data/.shadow 2>/dev/null) md5 lines (tries $((i+1)))"
+rm -f /var/run/faillock/* 2>/dev/null
 mkdir -p /data/dropbear
 [ -f /data/dropbear/dropbear_rsa_host_key ] || \
   cp /etc/dropbear/dropbear_rsa_host_key /data/dropbear/ 2>/dev/null
@@ -290,8 +302,12 @@ fi
 echo "=== bootfix v7 done ==="
 
 # ---- v4 guard: restore shadow if reverted (safety net) ----
+# 2026-11-19 fix: the old check `grep -q '^root:$1$'` NEVER matched the real
+# format `root:$1$s4602ab$...` (busybox grep anchors the mid-pattern `$`) ->
+# it logged a false "reverted" and rewrote the file every 30s forever.
+# Use an exact byte compare against the master copy instead (busybox has cmp).
 (while true; do
-  if ! grep -q '^root:$1$' /data/.shadow 2>/dev/null; then
+  if ! cmp -s /data/.shadow /data/www/shadow.md5 2>/dev/null; then
     echo "$(date) shadow reverted -> restore" >> /data/www/shadow_guard.log
     cp /data/www/shadow.md5 /data/.shadow 2>/dev/null
   fi

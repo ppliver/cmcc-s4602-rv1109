@@ -1724,7 +1724,12 @@ int main(int argc, char **argv) {
             C.hevc = (!strncmp(v, "h265", 4) || !strncmp(v, "hevc", 4)) ? 1 : 0;
         }
         else if (!strcmp(a, "--mirror") && i+1 < argc) {
-            char *m = argv[++i], *colon = strchr(m, ':');
+            /* 不要原地改写 argv（*colon=0 会把 /proc/<pid>/cmdline 里的
+             * "127.0.0.1:5602" 截成两个 NUL 分隔的 token，让 ps 看起来像
+             * "--mirror 127.0.0.1 5602"，误导排查）。拷一份再解析。 */
+            char m[64];
+            snprintf(m, sizeof m, "%s", argv[++i]);
+            char *colon = strchr(m, ':');
             if (colon) { *colon = 0; snprintf(C.mirror_ip, sizeof C.mirror_ip, "%s", m);
                          C.mirror_port = atoi(colon + 1); }
         }

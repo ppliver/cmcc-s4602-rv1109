@@ -1,0 +1,2 @@
+# 设备端 shell 脚本必须保持 LF：CRLF 会让 busybox sh 报错（bootfix.sh 直接部署到设备 /data/www）
+*.sh text eol=lf
