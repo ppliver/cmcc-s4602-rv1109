@@ -240,6 +240,12 @@ jobs:
           grep -q 'BR2_PACKAGE_CAMERA_ENGINE_RKAIQ_IQFILE="sc5338_CMCC-S4602_DEFAULT.xml"' \
             configs/s4602_rootfs_expanded_defconfig \
             || { echo "ERROR: IQ override lost in expansion"; exit 1; }
+          # the SDK demo bundle is not a firmware dependency and its prebuilt
+          # libffrtsp.so cannot link against gcc 8.3; make sure the disable
+          # override survived include expansion (last-wins).
+          grep -q '^BR2_PACKAGE_FIREFLY_RKMEDIA_DEMO=n$' \
+            configs/s4602_rootfs_expanded_defconfig \
+            || { echo "ERROR: demo disable override lost in expansion"; exit 1; }
           # diagnostics: env probe + FULL defconfig log (tail -5 swallowed the
           # real error last round - "No rule to make target .br-external.mk")
           make --version | head -1
@@ -266,6 +272,9 @@ jobs:
           tail -5 /tmp/defconfig.log
           # verify final .config kept the S4602 overrides
           grep -E 'BR2_TARGET_GENERIC_ROOT_PASSWD|RKAIQ_IQFILE|HOSTNAME' .config
+          if grep -q '^BR2_PACKAGE_FIREFLY_RKMEDIA_DEMO=y$' .config; then
+            echo "ERROR: firefly_rkmedia_demo still enabled in .config"; exit 1
+          fi
 
       - name: Build rootfs
         run: |

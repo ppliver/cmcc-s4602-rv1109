@@ -24,3 +24,10 @@ BR2_PACKAGE_CAMERA_ENGINE_RKAIQ_IQFILE="sc5338_CMCC-S4602_DEFAULT.xml"
 
 # belt & braces: also ship the IQ xml inside the overlay
 BR2_ROOTFS_OVERLAY="board/rockchip/rv1126_rv1109/fs-overlay/ board/firefly/ipc/overlayfs board/s4602-overlay"
+
+# firefly_rkmedia_demo is only a bundle of test binaries (zbar/rtsp/vdec
+# demos). It hardcodes the old gcc-linaro-6.3.1 toolchain and ships a
+# prebuilt libffrtsp.so with unresolved C++ ABI symbols against gcc 8.3.
+# The real firmware libraries (rkaiq / rkmedia / mpp) come from their own
+# packages and are unaffected, so drop this package from the target.
+BR2_PACKAGE_FIREFLY_RKMEDIA_DEMO=n
