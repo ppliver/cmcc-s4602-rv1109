@@ -22,12 +22,18 @@ output/.rockchipconfig, where a "=y" from the fragment wins over our comment
 the whole #include at expansion time. E.g. kernel.config selects the buildroot
 kernel package (kernel source lives outside this rootfs-only CI job).
 
+For symbols scattered across many fragments (and kconfig choice symbols that
+refuse to be all-"n"), use --drop SYMBOL_PREFIX: every assignment line whose
+config symbol starts with the prefix is removed at expansion time, before the
+hook ever sees it. E.g. BR2_PACKAGE_RKWIFIBT removes the whole wifi/bt choice.
+
 Usage:
   python3 expand_buildroot_defconfig.py <buildroot_dir> <in_name> <out_name> \
-      [--exclude <fragment.basename> ...]
+      [--exclude <fragment.basename> ...] [--drop <symbol-prefix> ...]
 """
 
 import os
+import re
 import sys
 
 SEARCH_SUBDIRS = ("rockchip", "")
@@ -47,7 +53,19 @@ def find_fragment(br_dir, name, extra_dirs):
     )
 
 
-def expand(br_dir, path, visited, out_lines, depth=0, exclude=()):
+def drop_line(line, drops):
+    """True if this assignment line's config symbol matches a --drop prefix."""
+    if not drops:
+        return False
+    s = line.strip()
+    # match a bare config symbol at line start: SYMBOL=... or "# SYMBOL is not set"
+    m = re.match(r'^(?:#\s*)?([A-Za-z0-9_]+)\s*(?:=|is not set)', s)
+    if not m:
+        return False
+    return any(m.group(1) == d or m.group(1).startswith(d + "_") for d in drops)
+
+
+def expand(br_dir, path, visited, out_lines, depth=0, exclude=(), drops=()):
     path = os.path.abspath(path)
     if path in visited:
         raise RuntimeError(
@@ -74,8 +92,12 @@ def expand(br_dir, path, visited, out_lines, depth=0, exclude=()):
                 frag = find_fragment(br_dir, inc, [base])
                 print("  " * depth + "[%s] -> include %s (%s)" % (
                     os.path.basename(path), inc, os.path.relpath(frag, br_dir)))
-                expand(br_dir, frag, visited, out_lines, depth + 1, exclude)
+                expand(br_dir, frag, visited, out_lines, depth + 1, exclude, drops)
             else:
+                if drop_line(line, drops):
+                    print("  " * depth + "[%s] -> DROP %s" % (
+                        os.path.basename(path), line.strip()))
+                    continue
                 out_lines.append(line)
     visited.discard(path)
 
@@ -83,13 +105,15 @@ def expand(br_dir, path, visited, out_lines, depth=0, exclude=()):
 def main():
     args = sys.argv[1:]
     exclude = set()
-    while "--exclude" in args:
-        i = args.index("--exclude")
-        if i + 1 >= len(args):
-            print("ERROR: --exclude needs a fragment basename")
-            sys.exit(2)
-        exclude.add(args[i + 1])
-        del args[i:i + 2]
+    drops = set()
+    for opt, store in (("--exclude", exclude), ("--drop", drops)):
+        while opt in args:
+            i = args.index(opt)
+            if i + 1 >= len(args):
+                print("ERROR: %s needs a value" % opt)
+                sys.exit(2)
+            store.add(args[i + 1])
+            del args[i:i + 2]
     if len(args) != 3:
         print(__doc__)
         sys.exit(2)
@@ -103,9 +127,11 @@ def main():
     else:
         in_path = find_fragment(br_dir, in_name, [])
     out_lines = []
-    expand(br_dir, in_path, set(), out_lines, exclude=exclude)
+    expand(br_dir, in_path, set(), out_lines, exclude=exclude, drops=drops)
     if exclude:
         print("excluded fragments: %s" % ", ".join(sorted(exclude)))
+    if drops:
+        print("dropped symbols: %s" % ", ".join(sorted(drops)))
 
     out_path = os.path.join(br_dir, "configs", out_name)
     with open(out_path, "w", encoding="utf-8") as f:

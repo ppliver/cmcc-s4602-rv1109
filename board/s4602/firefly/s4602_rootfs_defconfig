@@ -46,9 +46,7 @@ BR2_PACKAGE_FIREFLY_RKMEDIA_DEMO=n
 # installs board WiFi/BT firmware + .ko drivers and its build calls
 #   make -C $(TOPDIR)/../kernel M=.../realtek/bluetooth_uart_driver
 # S4602 has no onboard WiFi/BT (4G RNDIS instead) and no kernel tree in this
-# rootfs-only job, so disable it explicitly. Use "=n" (not an "is not set"
-# comment): the trailing RKWIFIBT_ALL=y in the base is a real assignment and
-# only a later real assignment reliably wins after defconfig_hook re-emits.
+# rootfs-only job. It is a kconfig CHOICE, so "=n"/"is not set" are ignored
+# (kconfig re-selects the default). CI drops the whole symbol at defconfig
+# expansion via --drop BR2_PACKAGE_RKWIFIBT; no assignment here can do it.
 # No other package depends on/selects BR2_PACKAGE_RKWIFIBT.
-BR2_PACKAGE_RKWIFIBT=n
-BR2_PACKAGE_RKWIFIBT_ALL=n

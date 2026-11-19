@@ -253,7 +253,8 @@ jobs:
           # where it wins over kconfig comments ("override: reassigning...").
           python3 "$GITHUB_WORKSPACE/tools/expand_buildroot_defconfig.py" \
             . "$GITHUB_WORKSPACE/board/s4602/firefly/s4602_rootfs_defconfig" \
-            s4602_rootfs_expanded_defconfig --exclude kernel.config
+            s4602_rootfs_expanded_defconfig \
+            --exclude kernel.config --drop BR2_PACKAGE_RKWIFIBT
           # sanity: expansion must NOT contain residual #include lines
           ! grep -c '^#include' configs/s4602_rootfs_expanded_defconfig || {
             echo "ERROR: residual #include in expanded defconfig"; exit 1; }
@@ -278,16 +279,15 @@ jobs:
             exit 1
           fi
           # rkwifibt builds board WiFi/BT .ko via make -C ../kernel (absent here).
-          # kconfig is last-wins: base has RKWIFIBT=y (wifi.config) and
-          # RKWIFIBT_ALL=y (top level); our wrapper appends "=n" last. Check the
-          # LAST assignment of each symbol, not mere presence of any "=y".
-          for sym in BR2_PACKAGE_RKWIFIBT BR2_PACKAGE_RKWIFIBT_ALL; do
-            last=$(grep -E "^${sym}=" configs/s4602_rootfs_expanded_defconfig | tail -1)
-            if [ "$last" != "${sym}=n" ]; then
-              echo "ERROR: $sym last assignment is '$last', expected '${sym}=n'"
-              exit 1
-            fi
-          done
+          # It is a kconfig CHOICE (RKWIFIBT_ALL=y): setting it "=n" is ignored
+          # and kconfig re-selects the default ("override: reassigning"). The
+          # only reliable disable is to --drop the symbol at expansion time so
+          # the choice never exists. Assert NO rkwifibt symbol survived.
+          if grep -q '^BR2_PACKAGE_RKWIFIBT' configs/s4602_rootfs_expanded_defconfig; then
+            echo "ERROR: rkwifibt symbols survived expansion (--drop failed?)"
+            grep -n '^BR2_PACKAGE_RKWIFIBT' configs/s4602_rootfs_expanded_defconfig
+            exit 1
+          fi
           # diagnostics: env probe + FULL defconfig log (tail -5 swallowed the
           # real error last round - "No rule to make target .br-external.mk")
           make --version | head -1
