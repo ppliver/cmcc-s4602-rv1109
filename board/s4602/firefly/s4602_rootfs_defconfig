@@ -3,8 +3,9 @@
 # ==========================================================================
 # S4602 (CMCC, RV1109 + SC5338 + SPI-NAND) overrides — appended LAST (kconfig
 # last-wins). Base = Firefly proven firefly_rv1126_rv1109_defconfig; kernel
-# and u-boot come from our own FIT pipeline (see build-firefly.yml), the
-# buildroot kernel package is not enabled anywhere in the include chain.
+# and u-boot come from our own FIT pipeline (see build-firefly.yml), so the
+# buildroot kernel package is explicitly disabled at the end of this file
+# (the base fragment kernel.config would otherwise enable it).
 #
 # Stage 2 rootfs: doc/vendor/FIREFLY_BSP_BUILD_PLAN.md §7
 # IQ source: vendor /system/resource/scene_param/COMMON_sc5338.xml (matfile
@@ -31,3 +32,12 @@ BR2_ROOTFS_OVERLAY="board/rockchip/rv1126_rv1109/fs-overlay/ board/firefly/ipc/o
 # The real firmware libraries (rkaiq / rkmedia / mpp) come from their own
 # packages and are unaffected, so drop this package from the target.
 BR2_PACKAGE_FIREFLY_RKMEDIA_DEMO=n
+
+# The Firefly base fragment includes kernel.config, which selects
+# BR2_LINUX_KERNEL_CUSTOM_LOCAL pointing at $(TOPDIR)/../kernel. This CI job
+# builds the rootfs only (kernel/zboot come from the Stage 1 FIT workflow),
+# so the local kernel source tree is intentionally not synced. Disable the
+# buildroot kernel package rather than cloning a full kernel tree here.
+# BR2_LINUX_KERNEL is not set
+# BR2_LINUX_KERNEL_CUSTOM_LOCAL is not set
+# BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4 is not set

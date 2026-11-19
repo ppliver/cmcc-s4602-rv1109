@@ -291,6 +291,9 @@ jobs:
           if grep -q '^BR2_PACKAGE_FIREFLY_RKMEDIA_DEMO=y$' .config; then
             echo "ERROR: firefly_rkmedia_demo still enabled in .config"; exit 1
           fi
+          if grep -q '^BR2_LINUX_KERNEL=y$' .config; then
+            echo "ERROR: buildroot kernel package still enabled in .config"; exit 1
+          fi
 
       - name: Build rootfs
         run: |
