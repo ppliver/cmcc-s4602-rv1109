@@ -115,6 +115,11 @@ jobs:
           mkdir -p "$SDK_DIR/buildroot/board/s4602-overlay/etc/iqfiles"
           cp -v "$GITHUB_WORKSPACE/board/s4602/firefly/iqfiles/sc5338_CMCC-S4602_DEFAULT.xml" \
                 "$SDK_DIR/buildroot/board/s4602-overlay/etc/iqfiles/"
+          # host tool patches for modern glibc (glibc >= 2.34: SIGSTKSZ is a
+          # function call, breaks old gnulib #if in host-m4 1.4.18)
+          cp -v "$GITHUB_WORKSPACE/board/s4602/firefly/buildroot-patches/"*.patch \
+                "$SDK_DIR/buildroot/package/m4/"
+          ls "$SDK_DIR/buildroot/package/m4/"
           ls "$SDK_DIR/external/camera_engine_rkaiq/iqfiles/" | grep sc5338
           # diagnostic: confirm which ref the sync actually checked out
           git -C "$SDK_DIR/external/camera_engine_rkaiq" log --oneline -1
