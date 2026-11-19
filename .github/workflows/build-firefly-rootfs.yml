@@ -122,6 +122,12 @@ jobs:
           # host-python 2.7.16: C23 keyword clash in Include/asdl.h
           cp -v "$GITHUB_WORKSPACE/board/s4602/firefly/buildroot-patches/host-python-"*.patch \
                 "$SDK_DIR/buildroot/package/python/"
+          # host-python vs modern gcc (C23 default): force gnu17 for the whole
+          # host build (asdl.h fixed by patch; math module and other exts need
+          # this too). CFLAGS flows from configure into Makefile + sharedmods.
+          sed -i 's|ac_cv_prog_HAS_HG=/bin/false \\|ac_cv_prog_HAS_HG=/bin/false \\\n\tCFLAGS="$(HOST_CFLAGS) -std=gnu17" \\|' \
+                "$SDK_DIR/buildroot/package/python/python.mk"
+          grep -n "std=gnu17" "$SDK_DIR/buildroot/package/python/python.mk"
           ls "$SDK_DIR/buildroot/package/m4/" "$SDK_DIR/buildroot/package/python/" | head -20
           # Prefetch stale distro sources (sourceforge wiped libpng 1.6.37;
           # buildroot.net keeps it under package subdir). NOTE: this old
@@ -164,7 +170,8 @@ jobs:
           test -x "$TC" || { echo "FATAL: external cross-compiler missing at $TC (prebuilts not synced?)"; exit 1; }
           "$TC" --version | head -1
           set -o pipefail
-          make -j$(nproc) 2>&1 | tail -40
+          make -j$(nproc) 2>&1 | tee /tmp/make.log | tail -40
+          grep -E "error:|Failed to build" /tmp/make.log | tail -20 || true
           echo "=== images ==="
           ls -la output/images/
 
