@@ -57,6 +57,7 @@ jobs:
       - name: repo sync (full project set minus host-only repos)
         run: |
           cd "$SDK_DIR"
+          set -o pipefail
           time repo sync -c -j4 \
             buildroot buildroot-dl device/rockchip rkbin \
             external/CallFunIpc external/alsa-config external/app external/avb \
@@ -103,15 +104,20 @@ jobs:
 
       - name: Inject S4602 assets (IQ file + overlay)
         run: |
-          cd "$SDK_DIR/buildroot"
-          # IQ file: vendor SC5338 tuning (rkaiq matfile xml)
+          set -e
+          # IQ file lives in the rkaiq repo at SDK ROOT, not under buildroot/
+          test -d "$SDK_DIR/external/camera_engine_rkaiq/iqfiles" \
+            || { echo "FATAL: $SDK_DIR/external/camera_engine_rkaiq/iqfiles missing"; exit 1; }
           cp -v "$GITHUB_WORKSPACE/board/s4602/firefly/iqfiles/sc5338_CMCC-S4602_DEFAULT.xml" \
-                external/camera_engine_rkaiq/iqfiles/
-          # S4602 overlay: ship IQ into /etc/iqfiles too (belt & braces)
-          mkdir -p board/s4602-overlay/etc/iqfiles
+                "$SDK_DIR/external/camera_engine_rkaiq/iqfiles/"
+          # S4602 overlay (BR2_ROOTFS_OVERLAY is relative to buildroot root)
+          mkdir -p "$SDK_DIR/buildroot/board/s4602-overlay/etc/iqfiles"
           cp -v "$GITHUB_WORKSPACE/board/s4602/firefly/iqfiles/sc5338_CMCC-S4602_DEFAULT.xml" \
-                board/s4602-overlay/etc/iqfiles/
-          ls -la external/camera_engine_rkaiq/iqfiles/ | grep sc5338
+                "$SDK_DIR/buildroot/board/s4602-overlay/etc/iqfiles/"
+          ls "$SDK_DIR/external/camera_engine_rkaiq/iqfiles/" | grep sc5338
+          # diagnostic: confirm which ref the sync actually checked out
+          git -C "$SDK_DIR/external/camera_engine_rkaiq" log --oneline -1
+          git -C "$SDK_DIR/buildroot" log --oneline -1
 
       - name: Expand defconfig includes + configure buildroot
         run: |
