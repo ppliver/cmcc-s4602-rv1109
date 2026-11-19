@@ -24,8 +24,22 @@ env:
 jobs:
   build-rootfs:
     runs-on: ubuntu-latest
+    # Pin the whole build inside an ubuntu:22.04 container: this 2022-era SDK
+    # needs gnu17-default gcc (12), glibc 2.35, python 3.10, cmake 3.22.
+    # Hosted runner images keep moving (ubuntu-26.04/gc15 C23 caused 14 failed
+    # rounds); the container freezes the environment at the SDK's era.
+    container:
+      image: ubuntu:22.04
     timeout-minutes: 360
     steps:
+      # bare ubuntu image lacks git/sudo/ca-certificates; runner's portable
+      # git fallback covers checkout, but install explicitly to be safe
+      - name: Bootstrap container (git + sudo + certs)
+        run: |
+          apt-get update -qq
+          apt-get install -y -qq git sudo ca-certificates python3
+          git --version
+
       - name: Checkout project (S4602 assets)
         uses: actions/checkout@v4
 
