@@ -267,6 +267,30 @@ def inject_motorcomm(linux, patch_dir):
     print("  Kconfig: added 'config MOTORCOMM_PHY'")
 
 
+def patch_kconfig_success_macro(linux):
+    """Firefly v2.2.5g (4.19.111) 的 kconfig 引擎只认 $(shell,...)，但 init/Kconfig
+    被 backport 成 5.x 的 $(success,...) -> conf 语法错，menu 嵌套恢复时会把
+    drivers/net/Kconfig 的 config TUN 整个吞掉（CONFIG_TUN=y 写进 fragment 也被
+    olddefconfig 删除，2026-11-19 在 177 实证）。把 $(success, 统一降级为等价的
+    $(shell,（语义相同：命令成功=y/真）。幂等。"""
+    n = 0
+    for root, _dirs, files in os.walk(os.path.join(linux)):
+        for fn in files:
+            if fn != "Kconfig":
+                continue
+            p = os.path.join(root, fn)
+            with open(p, "r", encoding="utf-8", errors="replace") as f:
+                data = f.read()
+            if "$(success," not in data:
+                continue
+            patched = data.replace("$(success,", "$(shell,")
+            with open(p, "w", encoding="utf-8") as f:
+                f.write(patched)
+            n += 1
+            print("  Kconfig macro: $(success->$(shell in %s" % os.path.relpath(p, linux))
+    print("  Kconfig macro: patched %d file(s)" % n)
+
+
 def main():
     ap = argparse.ArgumentParser(description="Inject S4602 board support into OpenIPC/linux")
     ap.add_argument("--linux", required=True, help="path to OpenIPC/linux tree")
@@ -289,6 +313,7 @@ def main():
     patch_kconfig(i2c_dir)
     patch_spi_nand_tbl(linux)
     inject_motorcomm(linux, patch_dir)
+    patch_kconfig_success_macro(linux)
     print("Done.")
 
 

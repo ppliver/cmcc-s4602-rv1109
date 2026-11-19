@@ -67,6 +67,9 @@ ON = [
     "CONFIG_USB_NET_CDC_NCM", "CONFIG_USB_NET_CDCETHER",
     "CONFIG_USB_SERIAL", "CONFIG_USB_SERIAL_WWAN",
     "CONFIG_USB_SERIAL_OPTION", "CONFIG_USB_SERIAL_QUALCOMM",
+    # 2026-11-19: squashfs-in-UBI root mount + easytier networking (user req)
+    "CONFIG_MTD_UBI_BLOCK", "CONFIG_SQUASHFS_XZ",
+    "CONFIG_TUN", "CONFIG_IPV6",
 ]
 # round4: LZ4 must be OFF (replaced by XZ)
 OFF_COMP = ["CONFIG_KERNEL_LZ4"]
