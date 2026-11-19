@@ -106,6 +106,18 @@ jobs:
           # SC5338 是注入符号，必须 builtin，否则内核起来 sensor 探测不了
           grep -q '^CONFIG_VIDEO_SC5338=y$' .config \
             || { echo "ERROR: CONFIG_VIDEO_SC5338 != y"; exit 1; }
+          # 2026-11-19 上机硬门：rootfs 挂载（squashfs-in-UBI）+ easytier 组网需求。
+          # 这四个符号任何一个丢了，内核起来也挂 rootfs 失败 / tun 缺失：
+          grep -q '^CONFIG_MTD_UBI_BLOCK=y$' .config \
+            || { echo "ERROR: CONFIG_MTD_UBI_BLOCK != y (ubiblock needed for squashfs-in-UBI rootfs)"; exit 1; }
+          grep -q '^CONFIG_TUN=y$' .config \
+            || { echo "ERROR: CONFIG_TUN != y (easytier needs /dev/net/tun built-in)"; exit 1; }
+          grep -q '^CONFIG_IPV6=y$' .config \
+            || { echo "ERROR: CONFIG_IPV6 != y (easytier networking needs IPv6)"; exit 1; }
+          grep -q '^CONFIG_SQUASHFS_XZ=y$' .config \
+            || { echo "ERROR: CONFIG_SQUASHFS_XZ != y (rootfs.sqfs is xz-compressed)"; exit 1; }
+          grep -q '^CONFIG_USB_NET_RNDIS_HOST=y$' .config \
+            || { echo "ERROR: CONFIG_USB_NET_RNDIS_HOST != y (4G RNDIS card, user requirement)"; exit 1; }
           # SPI-NAND：Firefly 树已内置 DS35Q2GB(0xE5 0xF2) 表项（sfc_nand.c 实测），无需再注
           echo ">>> building zImage"
           make ARCH=arm -j"$(nproc)" zImage

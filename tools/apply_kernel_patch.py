@@ -313,7 +313,11 @@ def main():
     patch_kconfig(i2c_dir)
     patch_spi_nand_tbl(linux)
     inject_motorcomm(linux, patch_dir)
-    patch_kconfig_success_macro(linux)
+    # NOTE: do NOT patch $(success)->$(shell. The Firefly tree is self-consistent:
+    # GA (fresh conf) parses $(success,...) cleanly, while 177's stale host tools
+    # choke on it and swallow config TUN from drivers/net/Kconfig (2026-11-19 r8:
+    # the "fix" created 6 NEW syntax errors on GA and failed defconfig). See
+    # r7 run 44285694372 (clean) vs r8 run 44454471555 (6 errors, exit 1).
     print("Done.")
 
 
