@@ -124,6 +124,15 @@
     <div class="hint">来源 /data/.swdb/para。修改云端流档位需重启 swapp，暂不在此页开放。</div>
   </div>
 
+  <div class="card">
+    <h2><span class="dot" id="mdot"></span>预览服务（go2rtc + rtp2pipe）</h2>
+    <div class="row">
+      <span class="pill" id="mod_pill">--</span>
+      <button class="ghost" id="mod_btn" onclick="toggleModules()">--</button>
+    </div>
+    <div class="hint">go2rtc = WEB 预览（stream.html 的 WebRTC/HLS/MSE）+ RTSP :8554，rtp2pipe 是其拉流子进程，随开关一起启停。<b>关闭可显著降低 CPU</b>，重启设备后仍保持关闭；内网 UDP 推流（QGC）与云链路不受影响。开启即刻生效。</div>
+  </div>
+
   <div class="toast" id="toast"></div>
 
 <script>
@@ -145,6 +154,16 @@ async function refresh(){
     $("cloud_pill").className = "pill " + (cloudOn ? "on" : "off");
     $("cloud_btn").textContent = cloudOn ? "断开云链路" : "恢复云链路";
     $("cloud_btn").dataset.on = cloudOn ? "1" : "0";
+    /* 预览服务状态（第二个请求，轻量 JSON） */
+    try{
+      const m = await (await fetch("/api/modules")).json();
+      const on = m.go2rtc === "on";
+      $("mod_pill").textContent = on ? "运行中" : "已关闭";
+      $("mod_pill").className = "pill " + (on ? "on" : "off");
+      $("mdot").className = "dot " + (on ? "on" : "off");
+      $("mod_btn").textContent = on ? "关闭预览服务" : "开启预览服务";
+      $("mod_btn").dataset.on = on ? "1" : "0";
+    }catch(e){ $("mod_pill").textContent = "--"; }
     $("cdot").className = "dot " + (cloudOn ? "on" : "off");
     /* para: "k = v;k = v;..." */
     const kv = $("para_kv"); kv.innerHTML = "";
@@ -191,6 +210,18 @@ async function toggleCloud(){
   if(!confirm(on ? "恢复云链路（加默认路由）？" : "断开云链路（删默认路由）？")) return;
   try{ const d = await (await fetch("/api/cloud?on="+on)).json(); toast(d.msg); }catch(e){ toast("请求失败"); }
   setTimeout(refresh, 1500);
+}
+async function toggleModules(){
+  const btn = event ? event.target : null;
+  const on = $("mod_btn").dataset.on === "1";
+  if(!confirm(on ? "关闭 go2rtc + rtp2pipe？（WEB 预览/RTSP 将不可用，重启后保持关闭）" : "开启 go2rtc 预览服务？")) return;
+  if(btn) { btn.disabled = true; btn.textContent = on ? "关闭中..." : "启动中..."; }
+  try{
+    const d = await (await fetch("/api/modules?go2rtc=" + (on ? "off" : "on"))).json();
+    toast(d.ok ? d.msg : ("失败: " + d.msg));
+  }catch(e){ toast("请求失败"); }
+  if(btn) { btn.disabled = false; }
+  setTimeout(refresh, 2500);
 }
 refresh(); setInterval(refresh, 2000);
 </script>

@@ -4,6 +4,8 @@
  *   GET /api/status      → JSON 状态（推流进程/实测fps/延迟/云链路/para）
  *   GET /api/stream      → ?action=start|stop&res=720p|1080p|1440p&kbps=500..6000&fps=15|20|25|30&gop=10..120
  *   GET /api/cloud       → ?on=1|0  (默认路由开关 = 云链路开关)
+ *   GET /api/modules     → ?go2rtc=on|off  (go2rtc+rtp2pipe 开关, 持久化 modules.conf;
+ *                          无参数 = 查询两者状态)
  * 静态编译，busybox sh 执行外部动作。仅限内网使用。
  */
 #include <stdio.h>
@@ -329,6 +331,111 @@ static void api_cloud(int fd, const char *q) {
     }
 }
 
+/* ---------- /api/modules：go2rtc(+rtp2pipe) 服务开关 ----------
+ * rtp2pipe 是 go2rtc 的 exec producer 子进程，单独开关无意义，
+ * 一个开关控两个。持久化写 /data/www/modules.conf 的 go2rtc=0|1：
+ * bootfix 开机段与 20s watchdog 都会重读该文件，off 后重启/守护
+ * 都不会再拉起（省 CPU），on 后由本接口立即拉起。 */
+#define MODCONF "/data/www/modules.conf"
+
+static int pid_of(const char *name) {
+    /* name 传入裸名，grep 用 [x]name 防自匹配：
+     * [%c] 放首字符、%s 放 name+1（其余部分），拼出 [g]o2rtc 这类模式。
+     * 坑：若 %s 传完整 name 会得到 [g]go2rtc（双 g）恒不匹配。 */
+    char cmd[128];
+    snprintf(cmd, sizeof cmd, "ps w | grep '[%c]%s' | grep -v grep", name[0], name + 1);
+    FILE *f = popen(cmd, "r");
+    if (!f) return 0;
+    char line[512]; int pid = 0;
+    while (fgets(line, sizeof line, f)) {
+        char *p = line; while (*p == ' ' || *p == '\t') p++;
+        pid = atoi(p);
+        if (pid > 1) break;
+    }
+    pclose(f); return pid;
+}
+static void proc_stop(const char *name) {
+    for (int i = 0; i < 6; i++) {
+        int pid = pid_of(name);
+        if (pid <= 1) return;
+        char cmd[64];
+        snprintf(cmd, sizeof cmd, "kill %d 2>/dev/null", pid);
+        run(cmd);
+        sleep(1);
+    }
+    int pid = pid_of(name);
+    if (pid > 1) {
+        char cmd[64];
+        snprintf(cmd, sizeof cmd, "kill -9 %d 2>/dev/null", pid);
+        run(cmd);
+    }
+}
+/* 改 k=v 行（保留其它行），文件不存在则创建 */
+static void conf_set(const char *path, const char *key, const char *val) {
+    enum { MAXL = 16, LEN = 96 };
+    static char lines[MAXL][LEN];
+    int n = 0, found = 0;
+    size_t kl = strlen(key);
+    FILE *f = fopen(path, "r");
+    if (f) {
+        char line[128];
+        while (fgets(line, sizeof line, f) && n < MAXL) {
+            line[strcspn(line, "\r\n")] = 0;
+            if (!strncmp(line, key, kl) && line[kl] == '=') {
+                snprintf(lines[n++], LEN, "%s=%s", key, val);
+                found = 1;
+            } else if (line[0]) {
+                snprintf(lines[n++], LEN, "%s", line);
+            }
+        }
+        fclose(f);
+    }
+    if (!found && n < MAXL) snprintf(lines[n++], LEN, "%s=%s", key, val);
+    f = fopen(path, "w");
+    if (f) {
+        for (int i = 0; i < n; i++) fprintf(f, "%s\n", lines[i]);
+        fclose(f);
+        sync();
+    }
+}
+static void go2rtc_start(void) {
+    if (pid_of("go2rtc") > 1) return;
+    if (access("/tmp/go2rtc_linux_arm", X_OK) != 0) {
+        if (access("/data/www/go2rtc.xz", R_OK) == 0)
+            run("xz -dkc /data/www/go2rtc.xz > /tmp/go2rtc_linux_arm && chmod +x /tmp/go2rtc_linux_arm");
+        else if (access("/data/www/go2rtc_linux_arm", X_OK) == 0)
+            run("cp /data/www/go2rtc_linux_arm /tmp/go2rtc_linux_arm && chmod +x /tmp/go2rtc_linux_arm");
+    }
+    if (access("/tmp/go2rtc_linux_arm", X_OK) != 0) return;
+    /* 必须 cd /data/www：go2rtc 用相对路径找 go2rtc.yaml */
+    run("cd /data/www && /tmp/go2rtc_linux_arm > /tmp/go2rtc.log 2>&1 &");
+}
+static void api_modules(int fd, const char *q) {
+    if (strstr(q, "go2rtc=off")) {
+        conf_set(MODCONF, "go2rtc", "0");
+        proc_stop("go2rtc");            /* 退出时由 killtimeout=5 回收 exec producer */
+        sleep(2);
+        proc_stop("rtp2pipe");          /* 兜底孤儿（go2rtc 未正常回收时） */
+        send_json(fd, "{\"ok\":1,\"msg\":\"go2rtc+rtp2pipe stopped (go2rtc=0 persisted)\"}");
+        return;
+    }
+    if (strstr(q, "go2rtc=on")) {
+        conf_set(MODCONF, "go2rtc", "1");
+        go2rtc_start();
+        sleep(2);
+        send_json(fd, pid_of("go2rtc") > 1
+            ? "{\"ok\":1,\"msg\":\"go2rtc started (go2rtc=1 persisted)\"}"
+            : "{\"ok\":0,\"msg\":\"go2rtc binary missing (go2rtc.xz?)\"}");
+        return;
+    }
+    int g = pid_of("go2rtc"), r = pid_of("rtp2pipe");
+    char j[160];
+    snprintf(j, sizeof j,
+        "{\"ok\":1,\"go2rtc\":\"%s\",\"go2rtc_pid\":%d,\"rtp2pipe_pid\":%d}",
+        g > 1 ? "on" : "off", g > 1 ? g : 0, r > 1 ? r : 0);
+    send_json(fd, j);
+}
+
 /* ---------- 连接处理 ---------- */
 static void handle(int fd) {
     /* 防 fd 泄漏：connection socket 不允许被 system() 的子进程（h264out）继承 */
@@ -354,6 +461,7 @@ static void handle(int fd) {
     else if (!strcmp(path, "/api/status")) api_status(fd);
     else if (!strcmp(path, "/api/stream")) api_stream(fd, query);
     else if (!strcmp(path, "/api/cloud"))  api_cloud(fd, query);
+    else if (!strcmp(path, "/api/modules")) api_modules(fd, query);
     else if (!strcmp(path, "/api/log"))    api_log(fd);
     else if (!strcmp(path, "/api/exec"))   api_exec(fd, query);
     else { hdr(fd, 404, "text/plain"); write(fd, "not found", 9); }
