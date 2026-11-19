@@ -24,14 +24,18 @@ env:
 jobs:
   build-rootfs:
     runs-on: ubuntu-latest
-    # Pin the whole build inside an ubuntu:22.04 container: this 2022-era SDK
-    # needs gnu17-default gcc (12), glibc 2.35, python 3.10, cmake 3.22.
-    # Hosted runner images keep moving (ubuntu-26.04/gc15 C23 caused 14 failed
-    # rounds); the container freezes the environment at the SDK's era.
+    # Pin the whole build inside an ubuntu:20.04 container. Firefly officially
+    # targets 18.04, but GitHub Actions' node24 runtime needs glibc >= 2.28
+    # (18.04 ships 2.27) so an 18.04 container cannot run checkout/artifact
+    # actions at all. 20.04 is the closest workable fit: glibc 2.31, make 4.2.1,
+    # gcc 9 (K&R decls OK), python 3.8 (pipes present), cmake 3.16 - and is
+    # community-verified for this SDK. The 22.04 compatibility patches
+    # (make4.3 '\#', gcc C23, glibc sinpi, py3.13 pipes, cmake4) are all
+    # structurally unnecessary here.
     container:
-      image: ubuntu:22.04
+      image: ubuntu:20.04
     # container jobs default to sh (dash): 'set -o pipefail' is illegal there.
-    # Force bash (present in ubuntu:22.04) for every run step.
+    # Force bash (present in ubuntu:20.04) for every run step.
     defaults:
       run:
         shell: bash
@@ -44,7 +48,7 @@ jobs:
           apt-get update -qq
           apt-get install -y -qq git sudo ca-certificates python3
           # SDK scripts (defconfig_hook.py, repo, build helpers) use
-          # '#!/usr/bin/env python'; bare 22.04 only ships python3.
+          # '#!/usr/bin/env python'; bare 20.04 only ships python3.
           ln -sf /usr/bin/python3 /usr/bin/python
           python --version
           git --version
@@ -56,51 +60,19 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y \
-            repo build-essential bc bison flex libssl-dev libncurses-dev \
+            build-essential bc bison flex libssl-dev libncurses-dev \
             file rsync unzip wget cpio gawk xz-utils device-tree-compiler \
             python3-dev perl patch swig libconfuse-dev curl cmake gettext
-          # ubuntu-26.04 ships gcc-15 whose DEFAULT -std is C23: old-style
-          # K&R declarations break in every 2022-era host tool (m4, python,
-          # ninja, gettext, bash mkbuiltins, ...). Per-package patches are
-          # whack-a-mole; instead force the system default gcc to a gnu17
-          # compiler (gcc-14/13/12 all default to gnu17). Existing per-package
-          # patches stay as harmless double insurance.
-          for V in 14 13 12; do
-            if sudo apt-get install -y "gcc-$V" "g++-$V" 2>/dev/null; then
-              sudo update-alternatives --install /usr/bin/gcc gcc "/usr/bin/gcc-$V" 200
-              sudo update-alternatives --install /usr/bin/g++ g++ "/usr/bin/g++-$V" 200
-              echo "default host gcc switched to gcc-$V"
-              break
-            fi
-          done
+          # ubuntu:20.04 (focal) IS the SDK's native era. No gcc switch needed
+          # (gcc 9 defaults to gnu11 - K&R decls fine), no make 4.2.1 source
+          # build (focal ships make 4.2.1 natively), no gmake shadow, no CMAKE
+          # policy workaround (cmake 3.16). All the 22.04 compatibility hacks
+          # are structurally unnecessary here. Keep per-package patches as
+          # harmless double insurance.
           gcc --version | head -1
           g++ --version | head -1
-          # gstreamer 1.14.x (gstreamer1/gst1-plugins-base/good/bad/ugly)
-          # relies on make <=4.2 eating the '\#' escape in glib-mkenums
-          # --fhead templates. make 4.3 (22.04 default) leaves it in the
-          # generated code -> stray '\#include' (Gentoo bug 705974).
-          # Build make 4.2.1 into /usr/local/bin so it shadows /usr/bin/make.
-          cd /tmp
-          curl -fsSL --retry 3 -o make-4.2.1.tar.gz \
-            https://ftp.gnu.org/gnu/make/make-4.2.1.tar.gz \
-            || curl -fsSL --retry 3 -o make-4.2.1.tar.gz \
-            https://sources.buildroot.net/make/make-4.2.1.tar.gz
-          tar xzf make-4.2.1.tar.gz
-          cd make-4.2.1
-          ./configure --prefix=/usr/local >/dev/null
-          # make 4.2.1's bundled glob.c references __alloca/__stat whose #define
-          # block is skipped when glibc defines __GNU_LIBRARY__ (glibc>=2.27) ->
-          # link error. Inject the aliases via CFLAGS (verified locally).
-          make -j$(nproc) CFLAGS="-g -O2 -D__alloca=__builtin_alloca -D__stat=stat" >/dev/null
-          sudo make install >/dev/null
-          # autotools packages (attr, gstreamer, ...) probe 'gmake' via
-          # AC_PATH_PROG and use it for their own install rules. /usr/bin/gmake
-          # is still 4.3 -> same variable-expansion bug as gstreamer. Shadow it too.
-          sudo ln -sf /usr/local/bin/make /usr/bin/gmake
-          hash -r
-          cd "$GITHUB_WORKSPACE"
-          command -v make && make --version | head -1
-          command -v gmake && gmake --version | head -1
+          make --version | head -1
+          cmake --version | head -1
           repo --version 2>/dev/null || {
             curl -s https://storage.googleapis.com/git-repo-downloads/repo \
               | sudo tee /usr/local/bin/repo >/dev/null
@@ -135,7 +107,7 @@ jobs:
             external/pcba_adb_test external/recovery external/rk_pcba_test \
             external/rkadk external/rkmedia external/rknpu external/rkscript \
             external/rktoolkit external/rkupdate external/rkwifibt \
-            external/rockit external/rockx \
+            external/rockit external/rockface external/rockx \
             external/security/bin external/security/rk_tee_user \
             external/uac_app external/uvc_app \
             app/CameraFactoryTestServer app/QFacialGate app/QLauncher \
@@ -156,7 +128,7 @@ jobs:
           for d in \
             external/camera_engine_rkaiq external/rkmedia external/mpp \
             external/linux-rga external/common_algorithm external/eq_drc_process \
-            external/ladspaSDK external/rkwifibt external/rockx external/rknpu \
+            external/ladspaSDK external/rkwifibt external/rockface external/rockx external/rknpu \
             external/rkscript external/isp2-ipc external/CallFunIpc \
             external/minilogger external/pcba_adb_test external/rk_pcba_test \
             external/rkupdate external/gstreamer-rockchip \
