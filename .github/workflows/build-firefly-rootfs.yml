@@ -30,6 +30,11 @@ jobs:
     # rounds); the container freezes the environment at the SDK's era.
     container:
       image: ubuntu:22.04
+    # container jobs default to sh (dash): 'set -o pipefail' is illegal there.
+    # Force bash (present in ubuntu:22.04) for every run step.
+    defaults:
+      run:
+        shell: bash
     timeout-minutes: 360
     steps:
       # bare ubuntu image lacks git/sudo/ca-certificates; runner's portable
