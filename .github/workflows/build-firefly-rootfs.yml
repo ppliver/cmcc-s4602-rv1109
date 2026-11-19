@@ -245,9 +245,15 @@ jobs:
       - name: Expand defconfig includes + configure buildroot
         run: |
           cd "$SDK_DIR/buildroot"
+          # kernel.config is EXCLUDED at expansion time: it selects the
+          # buildroot kernel package (BR2_LINUX_KERNEL_CUSTOM_LOCAL -> ../kernel)
+          # but this job builds rootfs only (kernel/zboot come from the FIT
+          # pipeline). A trailing "is not set" comment is NOT enough here:
+          # defconfig_hook.py re-emits the included "=y" into .rockchipconfig,
+          # where it wins over kconfig comments ("override: reassigning...").
           python3 "$GITHUB_WORKSPACE/tools/expand_buildroot_defconfig.py" \
             . "$GITHUB_WORKSPACE/board/s4602/firefly/s4602_rootfs_defconfig" \
-            s4602_rootfs_expanded_defconfig
+            s4602_rootfs_expanded_defconfig --exclude kernel.config
           # sanity: expansion must NOT contain residual #include lines
           ! grep -c '^#include' configs/s4602_rootfs_expanded_defconfig || {
             echo "ERROR: residual #include in expanded defconfig"; exit 1; }
@@ -262,6 +268,15 @@ jobs:
           grep -q '^BR2_PACKAGE_FIREFLY_RKMEDIA_DEMO=n$' \
             configs/s4602_rootfs_expanded_defconfig \
             || { echo "ERROR: demo disable override lost in expansion"; exit 1; }
+          # kernel.config must have been excluded at expansion time (last round
+          # a trailing "is not set" comment lost to the hook's .rockchipconfig
+          # re-emit and cost 35 min of build). Fail here, in seconds, instead.
+          if grep -qE '^BR2_LINUX_KERNEL=y$|^BR2_LINUX_KERNEL_CUSTOM_LOCAL=y$|^BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y$' \
+              configs/s4602_rootfs_expanded_defconfig; then
+            echo "ERROR: kernel package symbols survived expansion (kernel.config not excluded?)"
+            grep -nE 'BR2_LINUX_KERNEL|HOST_LINUX_HEADERS' configs/s4602_rootfs_expanded_defconfig
+            exit 1
+          fi
           # diagnostics: env probe + FULL defconfig log (tail -5 swallowed the
           # real error last round - "No rule to make target .br-external.mk")
           make --version | head -1
@@ -291,9 +306,17 @@ jobs:
           if grep -q '^BR2_PACKAGE_FIREFLY_RKMEDIA_DEMO=y$' .config; then
             echo "ERROR: firefly_rkmedia_demo still enabled in .config"; exit 1
           fi
-          if grep -q '^BR2_LINUX_KERNEL=y$' .config; then
-            echo "ERROR: buildroot kernel package still enabled in .config"; exit 1
-          fi
+          # The buildroot kernel package is driven by BR2_LINUX_KERNEL_CUSTOM_LOCAL
+          # (selected by kernel.config), NOT by a plain BR2_LINUX_KERNEL=y line.
+          # Check the real symbol in BOTH generated configs; the SDK hook writes
+          # .rockchipconfig and uses it for --defconfig, so a clean .config alone
+          # is not proof (last round .config passed but the hook re-enabled it).
+          for CF in .config output/.rockchipconfig; do
+            test -f "$CF" || continue
+            if grep -qE '^BR2_LINUX_KERNEL_CUSTOM_LOCAL=y$|^BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y$' "$CF"; then
+              echo "ERROR: kernel package still enabled in $CF"; grep -nE 'BR2_LINUX_KERNEL|HOST_LINUX_HEADERS' "$CF"; exit 1
+            fi
+          done
 
       - name: Build rootfs
         run: |
