@@ -100,6 +100,7 @@ jobs:
           make ARCH=arm olddefconfig
           echo ">>> symbol resolution:"
           for s in VIDEO_SC5338 MOTORCOMM_PHY REALTEK_PHY MICREL_PHY STMMAC_ETH \
+                   DRM DRM_ROCKCHIP DRM_ROCKCHIP_VOP \
                    CMDLINE_FORCE MTD_CMDLINE_PARTS RK_FLASH RK_SFC_NAND MTD_UBI UBIFS_FS SQUASHFS; do
             grep -E "^CONFIG_$s=" .config || echo "CONFIG_$s NOT SET"
           done
@@ -118,6 +119,14 @@ jobs:
             || { echo "ERROR: CONFIG_SQUASHFS_XZ != y (rootfs.sqfs is xz-compressed)"; exit 1; }
           grep -q '^CONFIG_USB_NET_RNDIS_HOST=y$' .config \
             || { echo "ERROR: CONFIG_USB_NET_RNDIS_HOST != y (4G RNDIS card, user requirement)"; exit 1; }
+          # 2026-11-20 on-device hard gate: rkmedia startup_app_ipc / VI pipeline
+          # allocates DRM buffers and needs /dev/dri/card0 (rockchip-drm display-subsystem + vop).
+          # Old fragment dropped DRM assuming ISP does not need it; userland rkmedia then failed
+          # with `Failed to open /dev/dri/card0` -> `Create vi[0] failed! ret=-11` (no image).
+          grep -q '^CONFIG_DRM=y$' .config \
+            || { echo "ERROR: CONFIG_DRM != y (rkmedia needs /dev/dri/card0 for VI buffers)"; exit 1; }
+          grep -q '^CONFIG_DRM_ROCKCHIP=y$' .config \
+            || { echo "ERROR: CONFIG_DRM_ROCKCHIP != y (rockchip-drm display-subsystem/vop)"; exit 1; }
           # SPI-NAND：Firefly 树已内置 DS35Q2GB(0xE5 0xF2) 表项（sfc_nand.c 实测），无需再注
           echo ">>> building zImage"
           make ARCH=arm -j"$(nproc)" zImage
@@ -162,7 +171,11 @@ jobs:
             size=os.path.getsize(p)
             print('  size: %d B (%.2f MiB) vs boot_b = %d B (%.1f MiB) -> %s'
                   % (size, size/1048576.0, BOOT_B, BOOT_B/1048576.0,
-                     'OK fits' if size <= BOOT_B else 'WARNING over'))
+                     'OK fits' if size <= BOOT_B else 'OVER boot_b!'))
+            # boot_b is 4 MiB only; restoring DRM enlarges zImage. Refuse to ship an
+            # oversized FIT that would brick boot_b on flash. zboot-vendor-dtb.img is
+            # the one actually flashed; zboot.img (REF) is gated too for consistency.
+            assert size <= BOOT_B, 'FIT over boot_b 4MiB: ' + p
           # uImage 头校验：magic 0x27051956 大端 + type=kernel(2) + os=linux(5) + arch=arm(2)
           h=open('firmware/s4602-firefly_uImage.bin','rb').read(64)
           import struct

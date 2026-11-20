@@ -82,7 +82,14 @@ for pat in 'librkaiq.so' 'libgstrockchipmpp.so' 'startup_app_ipc' 'libavcodec.so
 done
 find "$WORK/rootfs/etc/iqfiles" -name 'sc5338*' 2>/dev/null | grep -q . \
   || { echo "FATAL: SC5338 IQ file missing after trim" >&2; exit 1; }
-echo "  kept: SC5338 IQ xml"
+# 2026-11-20 hard gate: rkaiq on S4602 constructs the IQ name from the module
+# CMK-OT1607-FV1 / lens M12-40IRC-4MP-F16. Without this exact alias the device
+# reports `calibdb ... not exist` + `can't find sensor` and produces no image.
+test -f "$WORK/rootfs/etc/iqfiles/sc5338_CMK-OT1607-FV1_M12-40IRC-4MP-F16.xml" \
+  || { echo "FATAL: SC5338 CMK-OT1607 IQ alias missing (CI injection incomplete)" >&2
+       ls -1 "$WORK/rootfs/etc/iqfiles" 2>/dev/null
+       exit 1; }
+echo "  kept: SC5338 IQ xml (+ CMK-OT1607 alias)"
 
 # ---- 4. repack squashfs (factory geometry) ----
 # NOTE: mksquashfs 4.x may return exit 2 on "create_inode: could not create
