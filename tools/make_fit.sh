@@ -26,7 +26,7 @@ cat > "$ITS" <<EOF
 /dts-v1/;
 
 / {
-	description = "OpenIPC for CMCC S4602 (RV1109)";
+	description = "Firefly RV1109 kernel for CMCC S4602 (DRM enabled)";
 	images {
 		kernel@1 {
 			description = "Linux kernel";
