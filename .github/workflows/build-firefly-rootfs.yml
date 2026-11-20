@@ -195,7 +195,7 @@ jobs:
           for IQ_DIR in \
               "$SDK_DIR/external/camera_engine_rkaiq/iqfiles" \
               "$SDK_DIR/buildroot/board/s4602-overlay/etc/iqfiles"; do
-            for ALIAS IN \
+            for ALIAS in \
                 sc5338_CMK-OT1607-FV1_M12-40IRC-4MP-F16.xml \
                 sc5338_CMK-OT1607-FV1_M12-40IRC-4MP-F16_normal.xml \
                 m01_f_sc5338_CMK-OT1607-FV1_M12-40IRC-4MP-F16.xml \
