@@ -191,7 +191,11 @@ jobs:
           # Use HARD LINKS (ln) not symlinks: /etc is read-only at runtime so we
           # cannot alias after boot, and mksquashfs stores hard-linked files once
           # (one inode) -> 8 aliases cost ~0 bytes instead of 8x2.6MiB.
-          IQ_SRC="$GITHUB_WORKSPACE/board/s4602/firefly/iqfiles/sc5338_CMCC-S4602_DEFAULT.xml"
+          # Link FROM the copy already made inside each target dir above: the
+          # workspace (/__w, host bind mount) and /mnt/fl-sdk (docker volume)
+          # are different filesystems, and ln(1) cannot hard-link across them
+          # (run 44653424438 failed exactly there). Same-dir hard links are
+          # always same-fs -> always work.
           for IQ_DIR in \
               "$SDK_DIR/external/camera_engine_rkaiq/iqfiles" \
               "$SDK_DIR/buildroot/board/s4602-overlay/etc/iqfiles"; do
@@ -204,7 +208,7 @@ jobs:
                 m01_f_sc5338.xml \
                 COMMON_sc5338.xml \
                 sc5338.xml; do
-              ln -f "$IQ_SRC" "$IQ_DIR/$ALIAS"
+              ln -f "$IQ_DIR/sc5338_CMCC-S4602_DEFAULT.xml" "$IQ_DIR/$ALIAS"
             done
             echo "IQ aliases in $IQ_DIR:"; ls -1 "$IQ_DIR" | grep -i sc5338
           done
